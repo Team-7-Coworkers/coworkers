@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-import { Primary } from './stories/Button.stories';
 
 export default {
   content: [
