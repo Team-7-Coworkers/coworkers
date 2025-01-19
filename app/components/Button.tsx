@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
     }
 
     if (type === 'outlined-secondary') {
-      return 'bg-white border border-[#CBD5E1] text-[#CBD5E1] hover:border-[#E2E8F0] hover:text-[#E2E8F0] active:border-[#E2E8F0] active:text-[#E2E8F0]';
+      return 'bg-white border border-[#CBD5E1] text-t-secondary hover:border-[#E2E8F0] hover:text-t-tertiary active:border-[#E2E8F0] active:text-t-tertiary';
     }
 
     return type === 'outlined'
