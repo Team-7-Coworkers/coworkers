@@ -6,7 +6,7 @@ interface ButtonProps {
   text: string;
   styleType?: 'solid' | 'outlined' | 'outlined-secondary';
   size?: 'large' | 'X-small' | string;
-  state?: 'default' | 'danger';
+  state?: 'default' | 'danger' | 'floating';
   disabled?: boolean;
   onClick?: () => void;
 }
@@ -19,7 +19,9 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onClick,
 }) => {
-  const baseStyles = 'rounded-xl font-medium text-center';
+  const baseStyles = () =>
+    `font-semibold text-center ${state === 'floating' ? 'rounded-[40px] shadow-[0px_25px_50px_-12px_#00000040]' : 'rounded-xl'}`;
+
   const isDisabled = disabled ? 'cursor-not-allowed' : '';
   const sizeStyles =
     size === 'large'
@@ -31,31 +33,30 @@ const Button: React.FC<ButtonProps> = ({
   const getStyleByType = (type: string) => {
     if (disabled) {
       return type === 'outlined'
-        ? 'bg-white border-[1px] border-[var(--Interaction-Inactive,#94A3B8)] text-[var(--Interaction-Inactive,#94A3B8)]'
-        : 'bg-[var(--Interaction-Inactive,#94A3B8)] text-white';
+        ? 'bg-white border border-i-inactive text-i-inactive'
+        : 'bg-i-inactive text-t-inverse';
     }
 
     if (state === 'danger') {
-      return type === 'outlined'
-        ? 'bg-white border-[1px] border-[var(--Status-Danger,#EF4444)] text-[var(--Status-Danger,#EF4444)] hover:border-[var(--Status-Danger-Hover,#DC2626)] hover:text-[var(--Status-Danger-Hover,#DC2626)] active:border-[var(--Status-Danger-Pressed,#B91C1C)] active:text-[var(--Status-Danger-Pressed,#B91C1C)]'
-        : 'bg-[var(--Status-Danger,#EF4444)] text-white hover:bg-[var(--Status-Danger-Hover,#DC2626)] active:bg-[var(--Status-Danger-Pressed,#B91C1C)]';
+      return 'bg-danger text-t-inverse hover:bg-[#B91C1C] active:bg-[#7F1D1D]';
+    }
+
+    if (type === 'outlined-secondary') {
+      return 'bg-white border border-[#CBD5E1] text-[#CBD5E1] hover:border-[#E2E8F0] hover:text-[#E2E8F0] active:border-[#E2E8F0] active:text-[#E2E8F0]';
     }
 
     return type === 'outlined'
-      ? 'bg-white border-[1px] border-[var(--Color-Brand-Primary,#10B981)] text-[var(--Color-Brand-Primary,#10B981)] hover:border-[var(--Interaction-Hover,#059669)] hover:text-[var(--Interaction-Hover,#059669)] active:border-[var(--Interaction-Pressed,#047857)] active:text-[var(--Interaction-Pressed,#047857)]'
-      : 'bg-[var(--Color-Brand-Primary,#10B981)] text-white hover:bg-[var(--Interaction-Hover,#059669)] active:bg-[var(--Interaction-Pressed,#047857)]';
+      ? 'bg-white border border-primary text-primary hover:border-i-hover hover:text-i-hover active:border-i-pressed active:text-i-pressed'
+      : 'bg-primary text-t-inverse hover:bg-i-hover active:bg-i-pressed';
   };
 
   const styleTypes = {
     solid: getStyleByType('solid'),
     outlined: getStyleByType('outlined'),
-    'outlined-secondary': `
-      bg-white border-[1px] border-[var(--Text-Secondary,#CBD5E1)] text-[var(--Text-Secondary,#CBD5E1)]
-      hover:border-[var(--Text-Secondary-Hover,#94A3B8)] hover:text-[var(--Text-Secondary-Hover,#94A3B8)] active:border-[var(--Text-Secondary-Hover,#94A3B8)] active:text-[var(--Text-Secondary-Hover,#94A3B8)]
-    `,
+    'outlined-secondary': getStyleByType('outlined-secondary'),
   };
 
-  const styleClasses = `${baseStyles} ${sizeStyles} ${styleTypes[styleType]} ${isDisabled}`;
+  const styleClasses = `${baseStyles()} ${sizeStyles} ${styleTypes[styleType]} ${isDisabled}`;
 
   return (
     <button

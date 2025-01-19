@@ -18,6 +18,13 @@ export default function ButtonTest() {
         onClick={handleClick}
       />
 
+      <Button
+        text="Solid Default"
+        styleType="solid"
+        state="floating"
+        onClick={handleClick}
+      />
+
       {/* Solid - Danger */}
       <Button
         text="Danger"
@@ -64,6 +71,15 @@ export default function ButtonTest() {
         styleType="solid"
         state="default"
         size="X-small"
+        onClick={handleClick}
+      />
+
+      {/* 임의 크기 */}
+      <Button
+        text="임의"
+        styleType="solid"
+        state="default"
+        size="w-[200px]"
         onClick={handleClick}
       />
     </div>
