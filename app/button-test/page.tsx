@@ -9,7 +9,7 @@ export default function ButtonTest() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 gap-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 gap-4">
       {/* Solid - Default */}
       <Button
         text="Solid Default"
@@ -41,6 +41,31 @@ export default function ButtonTest() {
         state="default"
         onClick={handleClick}
       />
-    </main>
+
+      {/* Disabled - Solid */}
+      <Button
+        text="Disabled Solid"
+        styleType="solid"
+        state="default"
+        disabled={true}
+      />
+
+      {/* Disabled - Outlined */}
+      <Button
+        text="Disabled Outlined"
+        styleType="outlined"
+        state="default"
+        disabled={true}
+      />
+
+      {/* X-Small - Solid */}
+      <Button
+        text="생성하기"
+        styleType="solid"
+        state="default"
+        size="X-small"
+        onClick={handleClick}
+      />
+    </div>
   );
 }
