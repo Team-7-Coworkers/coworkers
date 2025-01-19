@@ -28,7 +28,7 @@ const Button: React.FC<ButtonProps> = ({
       ? 'w-[332px] h-[48px] text-lg p-3'
       : size === 'X-small'
         ? 'w-[74px] h-[32px] text-sm p-[6px]'
-        : size; // 사용자가 직접 크기와 패딩 등을 변경할 수 있게 추가했습니다
+        : size; // 사용자가 직접 크기와 패딩, radius 등을 변경할 수 있게 했습니다.
 
   const getStyleByType = (type: string) => {
     if (disabled) {
