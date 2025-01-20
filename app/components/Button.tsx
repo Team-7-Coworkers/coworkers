@@ -21,12 +21,11 @@ const Button = ({
     `font-semibold text-center ${state === 'floating' ? 'rounded-[40px] shadow-[0px_25px_50px_-12px_#00000040]' : 'rounded-xl'}`;
 
   const isDisabled = disabled ? 'cursor-not-allowed' : '';
-  const sizeStyles =
-    size === 'large'
-      ? 'w-[332px] h-[48px] text-lg p-3'
-      : size === 'X-small'
-        ? 'w-[74px] h-[32px] text-sm p-[6px]'
-        : size; // 사용자가 직접 크기와 패딩, radius 등을 변경할 수 있게 했습니다.
+  const sizeClass: Record<string, string> = {
+    large: 'w-[332px] h-[48px] text-lg p-3',
+    'X-small': 'w-[74px] h-[32px] text-sm p-[6px]',
+  };
+  const sizeStyles = sizeClass[size] || size;
 
   const getStyleByType = (type: string) => {
     if (disabled) {
