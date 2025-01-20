@@ -13,6 +13,7 @@ export interface authResponseType {
     };
   };
   postAuthSignIn: {
+    email: string;
     accessToken: string;
     refreshToken: string;
     user: {
