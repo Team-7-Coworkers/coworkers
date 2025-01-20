@@ -15,7 +15,7 @@ module.exports = {
     name: '@storybook/nextjs',
     options: {},
   },
-  staticDirs: ['../public'], // 경로 수정: '\\' 대신 '/' 사용
+  staticDirs: ['../public'],
 
   // Webpack 설정 추가
   webpackFinal: async (config) => {
