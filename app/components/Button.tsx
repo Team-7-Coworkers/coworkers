@@ -9,14 +9,14 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   text,
   styleType = 'solid',
   state = 'default',
   size = 'large',
   disabled = false,
   onClick,
-}) => {
+}: ButtonProps) => {
   const baseStyles = () =>
     `font-semibold text-center ${state === 'floating' ? 'rounded-[40px] shadow-[0px_25px_50px_-12px_#00000040]' : 'rounded-xl'}`;
 
