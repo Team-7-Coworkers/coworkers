@@ -8,7 +8,7 @@ interface TextFieldProps {
   height?: number;
   value: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export default function TextField({
