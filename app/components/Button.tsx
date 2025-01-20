@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ButtonProps {
-  text: string;
+  children: React.ReactNode;
   styleType?: 'solid' | 'outlined' | 'outlined-secondary';
   size?: 'large' | 'X-small' | string;
   state?: 'default' | 'danger' | 'floating';
@@ -10,7 +10,7 @@ interface ButtonProps {
 }
 
 const Button = ({
-  text,
+  children,
   styleType = 'solid',
   state = 'default',
   size = 'large',
@@ -61,7 +61,7 @@ const Button = ({
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
     >
-      {text}
+      {children}
     </button>
   );
 };

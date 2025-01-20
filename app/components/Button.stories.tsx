@@ -31,7 +31,7 @@ type Story = StoryObj<typeof Button>;
 
 export const SolidDefault: Story = {
   args: {
-    text: 'Solid Default',
+    children: 'Solid Default',
     styleType: 'solid',
     state: 'default',
   },
@@ -39,15 +39,28 @@ export const SolidDefault: Story = {
 
 export const SolidFloating: Story = {
   args: {
-    text: 'Solid Floating',
+    children: 'Solid Floating',
     styleType: 'solid',
     state: 'floating',
   },
 };
 
+export const WithIcon: Story = {
+  args: {
+    children: (
+      <div className="flex items-center w-[125px] justify-center">
+        <span className="mr-2">+</span> 할 일 추가
+      </div>
+    ),
+    styleType: 'solid',
+    state: 'floating',
+    size: 'h-[48px]',
+  },
+};
+
 export const Danger: Story = {
   args: {
-    text: 'Danger',
+    children: 'Danger',
     styleType: 'solid',
     state: 'danger',
   },
@@ -55,7 +68,7 @@ export const Danger: Story = {
 
 export const OutlinedDefault: Story = {
   args: {
-    text: 'Outlined Default',
+    children: 'Outlined Default',
     styleType: 'outlined',
     state: 'default',
   },
@@ -63,7 +76,7 @@ export const OutlinedDefault: Story = {
 
 export const OutlinedSecondary: Story = {
   args: {
-    text: 'Outlined Secondary',
+    children: 'Outlined Secondary',
     styleType: 'outlined-secondary',
     state: 'default',
   },
@@ -71,7 +84,7 @@ export const OutlinedSecondary: Story = {
 
 export const DisabledSolid: Story = {
   args: {
-    text: 'Disabled Solid',
+    children: 'Disabled Solid',
     styleType: 'solid',
     state: 'default',
     disabled: true,
@@ -80,7 +93,7 @@ export const DisabledSolid: Story = {
 
 export const DisabledOutlined: Story = {
   args: {
-    text: 'Disabled Outlined',
+    children: 'Disabled Outlined',
     styleType: 'outlined',
     state: 'default',
     disabled: true,
@@ -89,7 +102,7 @@ export const DisabledOutlined: Story = {
 
 export const XSmall: Story = {
   args: {
-    text: 'XSmall',
+    children: 'XSmall',
     styleType: 'solid',
     state: 'default',
     size: 'X-small',
@@ -98,7 +111,7 @@ export const XSmall: Story = {
 
 export const CustomSize: Story = {
   args: {
-    text: 'Custom Size',
+    children: 'Custom Size',
     styleType: 'solid',
     state: 'default',
     size: 'w-[200px] h-[60px] rounded-[14px]',
