@@ -7,16 +7,24 @@ const instance = axios.create({
   },
 });
 
-//할 일 추가하기
-const postGroupsTaskListsTasks = async (
-  groupId: number,
-  taskListId: number,
-  name: string,
-  description: string,
-  startDate: string,
-  frequencyType: string,
-  monthDay: number
-) => {
+// 할 일 추가하기
+const postGroupsTaskListsTasks = async ({
+  groupId,
+  taskListId,
+  name,
+  description,
+  startDate,
+  frequencyType,
+  monthDay,
+}: {
+  groupId: number;
+  taskListId: number;
+  name: string;
+  description: string;
+  startDate: string;
+  frequencyType: string;
+  monthDay: number;
+}) => {
   const response = await instance.post(
     `groups/${groupId}/task-list/${taskListId}/tasks`,
     {
@@ -30,42 +38,57 @@ const postGroupsTaskListsTasks = async (
   return response.data;
 };
 
-//특정 일자, 특정 할일 리스트의 할일 리스트 가져오기
-const getGroupsTaskListTasks = async (
-  groupId: number,
-  taskListId: number,
-  date?: string
-) => {
+// 특정 일자, 특정 할일 리스트의 할일 리스트 가져오기
+const getGroupsTaskListTasks = async ({
+  groupId,
+  taskListId,
+  date,
+}: {
+  groupId: number;
+  taskListId: number;
+  date?: string;
+}) => {
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks`,
     {
-      params: date ? { date } : {}, // date가 있을 경우 쿼리 파라미터에 추가
+      params: date ? { date } : {},
     }
   );
   return response.data;
 };
 
-//특정 할일 목록의 할일 리스트 가져오기
-const getGroupsTaskListsTasks = async (
-  groupId: number,
-  taskListId: number,
-  taskId: number
-) => {
+// 특정 할일 목록의 할일 리스트 가져오기
+const getGroupsTaskListsTasks = async ({
+  groupId,
+  taskListId,
+  taskId,
+}: {
+  groupId: number;
+  taskListId: number;
+  taskId: number;
+}) => {
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`
   );
   return response.data;
 };
 
-//특정 할일 목록의 할일 리스트 수정하기
-const patchGroupsTaskListsTasks = async (
-  groupId: number,
-  taskListId: number,
-  taskId: number,
-  name: string,
-  description: string,
-  done: boolean
-) => {
+// 특정 할일 목록의 할일 리스트 수정하기
+const patchGroupsTaskListsTasks = async ({
+  groupId,
+  taskListId,
+  taskId,
+  name,
+  description,
+  done,
+}: {
+  groupId: number;
+  taskListId: number;
+  taskId: number;
+  name: string;
+  description: string;
+  done: boolean;
+}) => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`,
     { name, description, done }
@@ -73,25 +96,34 @@ const patchGroupsTaskListsTasks = async (
   return response.data;
 };
 
-//특정 할일 목록의 할일 리스트 삭제하기
-const deleteGroupsTaskListsTasks = async (
-  groupId: number,
-  taskListId: number,
-  taskId: number
-) => {
+// 특정 할일 목록의 할일 리스트 삭제하기
+const deleteGroupsTaskListsTasks = async ({
+  groupId,
+  taskListId,
+  taskId,
+}: {
+  groupId: number;
+  taskListId: number;
+  taskId: number;
+}) => {
   const response = await instance.delete(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`
   );
   return response.data;
 };
 
-//특정 할일 목록의 할일 리스트 순서 변경하기
-const patchGroupsTaskListTasksOrder = async (
-  groupId: number,
-  taskListId: number,
-  id: number,
-  displayIndex: number
-) => {
+// 특정 할일 목록의 할일 리스트 순서 변경하기
+const patchGroupsTaskListTasksOrder = async ({
+  groupId,
+  taskListId,
+  id,
+  displayIndex,
+}: {
+  groupId: number;
+  taskListId: number;
+  id: number;
+  displayIndex: number;
+}) => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${id}/order`,
     { displayIndex }
@@ -99,14 +131,18 @@ const patchGroupsTaskListTasksOrder = async (
   return response.data;
 };
 
-//반복할 일 삭제하기
-//recurringId: 반복할일 id (task 객체의 recurringId 필드, 반복설정으로 생성된 할일이 아닌, 반복설정 자체를 삭제)
-const deleteGroupsTaskListsTasksRecurring = async (
-  groupId: number,
-  taskListId: number,
-  taskId: number,
-  recurringId: number
-) => {
+// 반복할 일 삭제하기
+const deleteGroupsTaskListsTasksRecurring = async ({
+  groupId,
+  taskListId,
+  taskId,
+  recurringId,
+}: {
+  groupId: number;
+  taskListId: number;
+  taskId: number;
+  recurringId: number;
+}) => {
   const response = await instance.delete(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}/recurring/${recurringId}`
   );

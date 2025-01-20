@@ -7,8 +7,8 @@ const instance = axios.create({
   },
 });
 
-//이미지 업로드하기
-const postImagesUpload = async (imageFile: File) => {
+// 이미지 업로드하기
+const postImagesUpload = async ({ imageFile }: { imageFile: File }) => {
   const formData = new FormData();
   formData.append('image', imageFile);
 

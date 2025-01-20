@@ -7,12 +7,16 @@ const instance = axios.create({
   },
 });
 
-//간편 로그인 App 등록/수정하기
-const postOauthApps = async (
-  appSecret: string,
-  appKey: string,
-  provider: 'GOOGLE' | 'KAKAO'
-) => {
+// 간편 로그인 App 등록/수정하기
+const postOauthApps = async ({
+  appSecret,
+  appKey,
+  provider,
+}: {
+  appSecret: string;
+  appKey: string;
+  provider: 'GOOGLE' | 'KAKAO';
+}) => {
   const response = await instance.post(`oauthApps`, {
     appSecret,
     appKey,

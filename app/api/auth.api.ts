@@ -7,13 +7,18 @@ const instance = axios.create({
   },
 });
 
-//회원가입
-const postAuthSignUp = async (
-  email: string,
-  nickname: string,
-  password: string,
-  passwordConfirmation: string
-) => {
+// 회원가입
+const postAuthSignUp = async ({
+  email,
+  nickname,
+  password,
+  passwordConfirmation,
+}: {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordConfirmation: string;
+}) => {
   const response = await instance.post(`auth/signUp`, {
     email,
     nickname,
@@ -23,25 +28,40 @@ const postAuthSignUp = async (
   return response.data;
 };
 
-//로그인
-const postAuthSignIn = async (email: string, password: string) => {
+// 로그인
+const postAuthSignIn = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
   const response = await instance.post(`auth/signIn`, { email, password });
   return response.data;
 };
 
-//액세스토큰 새로 받기
-const postAuthRefreshToken = async (refreshToken: string) => {
+// 액세스토큰 새로 받기
+const postAuthRefreshToken = async ({
+  refreshToken,
+}: {
+  refreshToken: string;
+}) => {
   const response = await instance.post(`auth/refresh-token`, { refreshToken });
   return response.data;
 };
 
-//간편 로그인(가입되어있지 않을 경우엔 가입됩니다.)
-const postAuthEasySignIn = async (
-  state: string,
-  redirectUri: string,
-  token: string,
-  provider: 'GOOGLE' | 'KAKAO'
-) => {
+// 간편 로그인(가입되어있지 않을 경우엔 가입됩니다.)
+const postAuthEasySignIn = async ({
+  state,
+  redirectUri,
+  token,
+  provider,
+}: {
+  state: string;
+  redirectUri: string;
+  token: string;
+  provider: 'GOOGLE' | 'KAKAO';
+}) => {
   const response = await instance.post(`auth/singIn/${provider}`, {
     state,
     redirectUri,
