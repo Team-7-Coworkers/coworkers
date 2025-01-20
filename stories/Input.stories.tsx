@@ -25,6 +25,10 @@ const meta: Meta<typeof InputField> = {
     value: {
       control: 'text',
     },
+    state: {
+      control: 'select',
+      options: ['default', 'default-disabled'],
+    },
   },
 };
 
@@ -36,7 +40,6 @@ export const Default: Story = {
     type: 'text',
     placeholder: '기본 인풋입니다.',
     value: '',
-    className: '',
   },
 };
 
@@ -44,9 +47,8 @@ export const WithErrorMessage: Story = {
   args: {
     type: 'email',
     placeholder: '이메일을 입력하세요.',
-    value: 'codeit@codeit.com',
-    errorMessage: '유효한 이메일 주소를 입력해주세요.',
-    className: 'w-[460px] h-[48px]',
+    value: '',
+    errorMessage: '유효한 이메일이 아닙니다.',
   },
 };
 
@@ -56,30 +58,46 @@ export const PasswordInput: Story = {
     placeholder: '비밀번호를 입력하세요.',
     value: '',
     isPassword: true,
-    className: 'w-[460px] h-[48px]',
+    errorMessage: '비밀번호를 입력해주세요.',
   },
 };
 
-export const CustomPlaceholder: Story = {
+export const TestPasswordInput: Story = {
   args: {
-    type: 'text',
-    placeholder: '커스텀 플레이스홀더',
+    type: 'password',
+    placeholder: '비밀번호를 입력하세요.',
+    value: '12341234',
+    isPassword: true,
+    errorMessage: '',
+  },
+};
+
+export const DisabledEmailInput: Story = {
+  args: {
+    type: 'email',
+    placeholder: '이메일을 입력하세요.',
     value: '',
+    errorMessage: '',
+    state: 'default-disabled',
   },
 };
 
-export const FilledValue: Story = {
+export const DisabledPasswordInput: Story = {
   args: {
-    type: 'text',
-    placeholder: '값이 입력된 인풋',
-    value: '미리 입력된 값',
-  },
-};
-
-export const SmallInput: Story = {
-  args: {
-    type: 'text',
-    placeholder: '작은 입력 필드',
-    className: 'w-64 h-10',
+    type: 'password',
+    placeholder: '입력이 비활성화되었습니다.',
+    value: '12341234',
+    isPassword: true,
+    errorMessage: '',
+    state: 'default-disabled',
+    children: (
+      <button
+        type="button"
+        className="text-white bg-primary text-sm hover:underline"
+        onClick={() => alert('변경하기 버튼 클릭')}
+      >
+        변경하기
+      </button>
+    ),
   },
 };
