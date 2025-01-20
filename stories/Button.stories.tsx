@@ -48,13 +48,13 @@ export const SolidFloating: Story = {
 export const WithIcon: Story = {
   args: {
     children: (
-      <div className="flex items-center w-[125px] justify-center">
+      <div className="flex items-center justify-center">
         <span className="mr-2">+</span> 할 일 추가
       </div>
     ),
     styleType: 'solid',
     state: 'floating',
-    size: 'h-[48px]',
+    size: 'w-[125px] h-[48px]',
   },
 };
 
