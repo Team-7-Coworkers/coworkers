@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { taskResponseType } from '../types/task';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -24,7 +25,7 @@ const postGroupsTaskListsTasks = async ({
   startDate: string;
   frequencyType: string;
   monthDay: number;
-}) => {
+}): Promise<taskResponseType['postGroupsTaskListsTasks']> => {
   const response = await instance.post(
     `groups/${groupId}/task-list/${taskListId}/tasks`,
     {
@@ -47,7 +48,7 @@ const getGroupsTaskListTasks = async ({
   groupId: number;
   taskListId: number;
   date?: string;
-}) => {
+}): Promise<taskResponseType['getGroupsTaskListTasks']> => {
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks`,
     {
@@ -66,7 +67,7 @@ const getGroupsTaskListsTasks = async ({
   groupId: number;
   taskListId: number;
   taskId: number;
-}) => {
+}): Promise<taskResponseType['getGroupsTaskListsTasks']> => {
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`
   );
@@ -88,7 +89,7 @@ const patchGroupsTaskListsTasks = async ({
   name: string;
   description: string;
   done: boolean;
-}) => {
+}): Promise<taskResponseType['patchGroupsTaskListsTasks']> => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`,
     { name, description, done }
@@ -123,7 +124,7 @@ const patchGroupsTaskListTasksOrder = async ({
   taskListId: number;
   id: number;
   displayIndex: number;
-}) => {
+}): Promise<taskResponseType['patchGroupsTaskListTasksOrder']> => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${id}/order`,
     { displayIndex }

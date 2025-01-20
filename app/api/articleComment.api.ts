@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { articleCommentResponseType } from '../types/articleComment';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -14,7 +15,7 @@ const postArticlesComments = async ({
 }: {
   articleId: number;
   content: string;
-}) => {
+}): Promise<articleCommentResponseType['postArticlesComments']> => {
   const response = await instance.post(`articles/${articleId}/comments`, {
     content,
   });
@@ -30,7 +31,7 @@ const getArticlesComment = async ({
   articleId: number;
   limit: number;
   cursor?: number;
-}) => {
+}): Promise<articleCommentResponseType['getArticlesComment']> => {
   const response = await instance.get(`articles/${articleId}/comments`, {
     params: {
       limit,
@@ -47,7 +48,7 @@ const patchComments = async ({
 }: {
   commentId: number;
   content: string;
-}) => {
+}): Promise<articleCommentResponseType['patchComments']> => {
   const response = await instance.patch(`comments/${commentId}`, { content });
   return response.data;
 };

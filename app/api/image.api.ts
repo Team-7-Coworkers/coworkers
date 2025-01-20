@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { imageResponseType } from '../types/image';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -8,7 +9,11 @@ const instance = axios.create({
 });
 
 // 이미지 업로드하기
-const postImagesUpload = async ({ imageFile }: { imageFile: File }) => {
+const postImagesUpload = async ({
+  imageFile,
+}: {
+  imageFile: File;
+}): Promise<imageResponseType> => {
   const formData = new FormData();
   formData.append('image', imageFile);
 

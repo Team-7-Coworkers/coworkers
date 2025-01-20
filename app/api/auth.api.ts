@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { authResponseType } from '../types/auth';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -18,7 +19,7 @@ const postAuthSignUp = async ({
   nickname: string;
   password: string;
   passwordConfirmation: string;
-}) => {
+}): Promise<authResponseType['postAuthSignUp']> => {
   const response = await instance.post(`auth/signUp`, {
     email,
     nickname,
@@ -35,7 +36,7 @@ const postAuthSignIn = async ({
 }: {
   email: string;
   password: string;
-}) => {
+}): Promise<authResponseType['postAuthSignIn']> => {
   const response = await instance.post(`auth/signIn`, { email, password });
   return response.data;
 };
@@ -45,7 +46,7 @@ const postAuthRefreshToken = async ({
   refreshToken,
 }: {
   refreshToken: string;
-}) => {
+}): Promise<authResponseType['postAuthRefreshToken']> => {
   const response = await instance.post(`auth/refresh-token`, { refreshToken });
   return response.data;
 };
@@ -61,7 +62,7 @@ const postAuthEasySignIn = async ({
   redirectUri: string;
   token: string;
   provider: 'GOOGLE' | 'KAKAO';
-}) => {
+}): Promise<authResponseType['postAuthEasySignIn']> => {
   const response = await instance.post(`auth/singIn/${provider}`, {
     state,
     redirectUri,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { articleResponseType } from '../types/article';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -16,7 +17,7 @@ const postArticles = async ({
   image: string;
   content: string;
   title: string;
-}) => {
+}): Promise<articleResponseType['postArticles']> => {
   const response = await instance.post(`articles`, { image, content, title });
   return response.data;
 };
@@ -32,7 +33,7 @@ const getArticles = async ({
   pageSize?: number;
   orderBy?: string;
   keyword?: string;
-}) => {
+}): Promise<articleResponseType['postArticles']> => {
   const response = await instance.get(`articles`, {
     params: {
       page,
@@ -45,7 +46,11 @@ const getArticles = async ({
 };
 
 // 게시글 상세 조회하기
-const getDetailsArticle = async ({ articleId }: { articleId: number }) => {
+const getDetailsArticle = async ({
+  articleId,
+}: {
+  articleId: number;
+}): Promise<articleResponseType['getDetailsArticle']> => {
   const response = await instance.get(`articles/${articleId}`);
   return response.data;
 };
@@ -61,7 +66,7 @@ const patchArticles = async ({
   image: string;
   content: string;
   title: string;
-}) => {
+}): Promise<articleResponseType['patchArticles']> => {
   const response = await instance.patch(`articles/${articleId}`, {
     image,
     content,
@@ -77,7 +82,11 @@ const deleteArticles = async ({ articleId }: { articleId: number }) => {
 };
 
 // 게시글 좋아요 달기
-const postArticlesLike = async ({ articleId }: { articleId: number }) => {
+const postArticlesLike = async ({
+  articleId,
+}: {
+  articleId: number;
+}): Promise<articleResponseType['postArticlesLike']> => {
   const response = await instance.post(`articles/${articleId}/like`);
   return response.data;
 };

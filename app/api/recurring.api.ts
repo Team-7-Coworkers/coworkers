@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { recurringResponseType } from '../types/recurring';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -24,7 +25,7 @@ const postGroupsTaskListsRecurring = async ({
   startDate: string;
   frequencyType: string;
   monthDay: number;
-}) => {
+}): Promise<recurringResponseType> => {
   const response = await instance.post(
     `groups/${groupId}/task-lists/${taskListId}/recurring`,
     {

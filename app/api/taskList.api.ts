@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { taskListResponseType } from '../types/taskList';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -14,7 +15,7 @@ const getGroupsTaskLists = async ({
 }: {
   groupId: number;
   id: number;
-}) => {
+}): Promise<taskListResponseType['getGroupsTaskLists']> => {
   const response = await instance.get(`groups/${groupId}/task-lists/${id}`);
   return response.data;
 };
@@ -28,7 +29,7 @@ const patchGroupsTaskLists = async ({
   name: string;
   groupId: number;
   id: number;
-}) => {
+}): Promise<taskListResponseType['patchGroupsTaskLists']> => {
   const response = await instance.patch(`groups/${groupId}/task-lists/${id}`, {
     name,
   });
@@ -54,7 +55,7 @@ const postGroupsTaskLists = async ({
 }: {
   name: string;
   groupId: number;
-}) => {
+}): Promise<taskListResponseType['postGroupsTaskLists']> => {
   const response = await instance.post(`groups/${groupId}/task-lists`, {
     name,
   });
@@ -70,7 +71,7 @@ const patchGroupsTaskListOrder = async ({
   displayIndex: number;
   groupId: number;
   id: number;
-}) => {
+}): Promise<taskListResponseType['patchGroupsTaskListOrder']> => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${id}/order`,
     { displayIndex }

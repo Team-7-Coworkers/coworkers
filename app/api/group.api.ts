@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { groupResponseType } from '../types/group';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -8,7 +9,11 @@ const instance = axios.create({
 });
 
 // 그룹 정보 가져오기
-const getGroups = async ({ id }: { id: number }) => {
+const getGroups = async ({
+  id,
+}: {
+  id: number;
+}): Promise<groupResponseType['getGroups']> => {
   const response = await instance.get(`groups/${id}`);
   return response.data;
 };
@@ -22,7 +27,7 @@ const patchGroups = async ({
   id: number;
   image: string;
   name: string;
-}) => {
+}): Promise<groupResponseType['patchGroups']> => {
   const response = await instance.patch(`groups/${id}`, { image, name });
   return response.data;
 };
@@ -34,7 +39,13 @@ const deleteGroups = async ({ id }: { id: number }) => {
 };
 
 // 그룹 추가하기
-const postGroups = async ({ image, name }: { image: string; name: string }) => {
+const postGroups = async ({
+  image,
+  name,
+}: {
+  image: string;
+  name: string;
+}): Promise<groupResponseType['postGroups']> => {
   const response = await instance.post(`groups`, { image, name });
   return response.data;
 };
@@ -46,7 +57,7 @@ const getGroupsMember = async ({
 }: {
   id: number;
   memberUserId: number;
-}) => {
+}): Promise<groupResponseType['getGroupsMember']> => {
   const response = await instance.get(`groups/${id}/member/${memberUserId}`);
   return response.data;
 };
@@ -64,7 +75,11 @@ const deleteGroupsMember = async ({
 };
 
 // 초대 링크용 토큰 생성
-const getGroupsInvitation = async ({ id }: { id: number }) => {
+const getGroupsInvitation = async ({
+  id,
+}: {
+  id: number;
+}): Promise<groupResponseType['getGroupsInvitation']> => {
   const response = await instance.get(`groups/${id}/invitation`);
   return response.data;
 };
@@ -76,7 +91,7 @@ const postGroupsAcceptInvitation = async ({
 }: {
   userEmail: string;
   token: string;
-}) => {
+}): Promise<groupResponseType['postGroupsAcceptInvitation']> => {
   const response = await instance.post(`groups/accept-invitation`, {
     userEmail,
     token,
@@ -85,19 +100,25 @@ const postGroupsAcceptInvitation = async ({
 };
 
 // 초대 링크 없이 그룹에 유저 추가하기
-const postGroupsMenber = async ({
+const postGroupsMember = async ({
   id,
   userEmail,
 }: {
   id: number;
   userEmail: string;
-}) => {
+}): Promise<groupResponseType['postGroupsMember']> => {
   const response = await instance.post(`groups/${id}/member`, { userEmail });
   return response.data;
 };
 
 // 특정 일자, 특정 할일 리스트 가져오기
-const getGroupsTasks = async ({ id, date }: { id: number; date?: string }) => {
+const getGroupsTasks = async ({
+  id,
+  date,
+}: {
+  id: number;
+  date?: string;
+}): Promise<groupResponseType['getGroupsTasks']> => {
   const response = await instance.get(`groups/${id}/tasks`, {
     params: date ? { date } : {},
   });
@@ -113,6 +134,6 @@ export {
   deleteGroupsMember,
   getGroupsInvitation,
   postGroupsAcceptInvitation,
-  postGroupsMenber,
+  postGroupsMember,
   getGroupsTasks,
 };

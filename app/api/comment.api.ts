@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { commentResponseType } from '../types/comment';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -8,7 +9,11 @@ const instance = axios.create({
 });
 
 // 댓글 가져오기
-const getTaskComments = async ({ taskId }: { taskId: number }) => {
+const getTaskComments = async ({
+  taskId,
+}: {
+  taskId: number;
+}): Promise<commentResponseType['getTaskComments']> => {
   const response = await instance.get(`tasks/${taskId}/comments`);
   return response.data;
 };
@@ -20,7 +25,7 @@ const postTasksComments = async ({
 }: {
   taskId: number;
   content: string;
-}) => {
+}): Promise<commentResponseType['postTasksComments']> => {
   const response = await instance.post(`tasks/${taskId}/comments`, {
     content,
   });
@@ -36,7 +41,7 @@ const patchTasksComments = async ({
   taskId: number;
   commentId: number;
   content: string;
-}) => {
+}): Promise<commentResponseType['patchTasksComments']> => {
   const response = await instance.patch(
     `tasks/${taskId}/comments/${commentId}`,
     { content }
