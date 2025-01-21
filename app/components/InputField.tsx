@@ -47,6 +47,7 @@ function InputField({
       type="button"
       onClick={togglePasswordVisibility}
       className="text-t-default hover:text-i-hover"
+      aria-label={inputType === 'password' ? 'Show password' : 'Hide password'}
     >
       <Image
         src={
