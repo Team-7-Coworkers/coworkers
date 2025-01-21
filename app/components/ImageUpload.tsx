@@ -55,14 +55,23 @@ function ImageUpload({
       {/* 이미지 미리보기 및 업로드 아이콘 */}
       {variant === 'circle' ? (
         // Circle 영역 (프로필/팀 이미지)
-        <div className="relative flex h-16 w-16 items-center justify-center">
+        <div
+          className="border-3 relative flex items-center justify-center rounded-full"
+          style={{
+            width: '64px',
+            height: '64px',
+            backgroundColor: 'var(--b-secondary)', // Circle 영역 배경 색상
+            borderWidth: '3px', // 테두리 두께 설정
+            borderColor: 'rgb(243 244 246 / 0.1)',
+          }}
+        >
           {/* ImagePreview 아이콘 */}
           <Image
             src={ic_imagePreview}
             alt="이미지 미리보기"
-            layout="fill"
-            objectFit="contain"
-            className="pointer-events-none rounded-full"
+            width={24}
+            height={24}
+            className="pointer-events-none"
           />
           {/* 업로드된 이미지 미리보기 */}
           {previewUrl && (
@@ -76,8 +85,13 @@ function ImageUpload({
             </div>
           )}
           <div
-            className="hover:text-blue-500 absolute bottom-0 right-0 cursor-pointer"
+            className="absolute bottom-0 cursor-pointer"
             onClick={triggerFileInput}
+            style={{
+              right: '-6px', // 위치 조정
+              border: '2px solid var(--b-primary)', // ic_imageUpload의 테두리 설정
+              borderRadius: '50%',
+            }}
           >
             <Image
               src={ic_imageUpload}
@@ -91,7 +105,14 @@ function ImageUpload({
       ) : (
         // Square 영역
         <div
-          className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-gray-100/10 sm:h-[240px] sm:w-[240px]"
+          className="relative flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg"
+          style={{
+            width: '160px',
+            height: '160px',
+            backgroundColor: 'var(--b-primary)', // Square 영역 배경 색상 설정
+            borderWidth: '3px', // Square 테두리 두께
+            borderColor: 'rgb(243 244 246 / 0.1)',
+          }}
           onClick={triggerFileInput}
         >
           {!previewUrl ? (
