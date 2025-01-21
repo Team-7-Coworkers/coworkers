@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
-import GNB from '@components/gnb/Gnb';
+import GNB from '@/app/components/Gnb';
 
 const meta: Meta<typeof GNB> = {
   title: 'Components/GNB',
-  component: GNB,
+  component: GNB
 };
 
 export default meta;

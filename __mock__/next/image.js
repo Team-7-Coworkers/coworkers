@@ -7,7 +7,7 @@ const MockedImage = ({ src, alt, width, height, layout, ...props }) => {
           position: 'absolute',
           width: '100%',
           height: '100%',
-          objectFit: props.objectFit || 'cover',
+          objectfit: props.objectFit || 'cover',
         }
       : { width: width || 'auto', height: height || 'auto' };
 
