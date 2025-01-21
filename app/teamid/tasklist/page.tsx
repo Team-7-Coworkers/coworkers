@@ -1,4 +1,3 @@
-'use client';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
 import ListHeader from './ListHeader';
