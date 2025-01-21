@@ -47,7 +47,7 @@ export default function ListDate() {
             />
           </button>
         </div>
-        {/* 캘린더 선택 기능은 후에 추가하겠습니다! 라이브러리 의논*/}
+        {/* 캘린더 선택 기능은 후에 추가하겠습니다! 라이브러리 사용할 지?*/}
         <button
           className="ml-3 flex h-6 w-6 items-center justify-center rounded-xl bg-b-secondary hover:bg-b-tertiary"
           onClick={() => alert('달력 기능은 아직 구현하지 않았습니다!')}
