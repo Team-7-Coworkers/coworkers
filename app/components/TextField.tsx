@@ -31,7 +31,7 @@ export default function TextField({
   // reply 타입 - 내용에 맞게 높이 설정
   const adjustHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'; // 먼저 높이를 자동으로 재설정
+      textareaRef.current.style.height = '0px'; // 먼저 높이를 자동으로 재설정
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 실제 내용에 맞는 높이로 설정
     }
   };
