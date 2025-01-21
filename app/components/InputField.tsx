@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import Image from 'next/image';
 
 interface InputProps {
+  id: string;
   type: 'text' | 'password' | 'email';
   placeholder: string;
   value?: string;
@@ -15,6 +16,7 @@ interface InputProps {
 }
 
 function InputField({
+  id,
   type,
   placeholder,
   value,
@@ -66,6 +68,8 @@ function InputField({
     <div className={`w-full ${className}`}>
       <div className="relative">
         <input
+          id={id}
+          name={id}
           type={inputType}
           placeholder={placeholder}
           value={value}
