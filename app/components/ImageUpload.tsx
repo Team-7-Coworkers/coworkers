@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import ic_imageUpload from '@/app/components/icons/ImageUpload.svg';
-import ic_imagePreview from '@/app/components/icons/image.svg';
+import ic_imageUpload from '@/app/components/icons/ic_imageUpload.svg';
+import ic_imagePreview from '@/app/components/icons/ic_image.svg';
 import Plus from '@/app/components/icons/ic_plus.svg';
 import React, { useRef, useState } from 'react';
 import { postImagesUpload } from '@/app/api/image.api';
