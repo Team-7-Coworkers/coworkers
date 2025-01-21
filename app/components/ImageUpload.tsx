@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import ImageUpload from '@/app/components/icons/ImageUpload.svg';
-import ImagePreview from '@/app/components/icons/image.svg';
+import ic_imageUpload from '@/app/components/icons/ImageUpload.svg';
+import ic_imagePreview from '@/app/components/icons/image.svg';
 import Plus from '@/app/components/icons/ic_plus.svg';
 import React, { useRef, useState } from 'react';
 import { postImagesUpload } from '@/app/api/image.api';
@@ -13,7 +13,7 @@ interface FileUploadProps {
   variant?: 'circle' | 'square'; // 'circle': 프로필/팀 이미지, 'square': 게시글 이미지
 }
 
-function FileUpload({
+function ImageUpload({
   onUploadSuccess,
   onUploadError,
   variant = 'circle',
@@ -59,7 +59,7 @@ function FileUpload({
         <div className="relative flex h-16 w-16 items-center justify-center">
           {/* ImagePreview 아이콘 */}
           <Image
-            src={ImagePreview}
+            src={ic_imagePreview}
             alt="이미지 미리보기"
             layout="fill"
             objectFit="contain"
@@ -81,7 +81,7 @@ function FileUpload({
             onClick={triggerFileInput}
           >
             <Image
-              src={ImageUpload}
+              src={ic_imageUpload}
               alt="이미지 업로드"
               width={18}
               height={18}
@@ -123,4 +123,4 @@ function FileUpload({
   );
 }
 
-export default FileUpload;
+export default ImageUpload;
