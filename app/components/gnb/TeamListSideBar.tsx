@@ -21,7 +21,7 @@ export default function TeamListSideBar({
       >
         X {/*임시*/}
       </div>
-      <div className="space-y-4 text-md">
+      <div className="space-y-4 text-md font-medium">
         {mockTeamList.map((team) => (
           <div key={team.id}>{team.name}</div>
         ))}
