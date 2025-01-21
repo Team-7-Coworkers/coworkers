@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+
 import TeamListDropDown from './TeamListDropDown';
 import TeamListSideBar from './TeamListSideBar';
+
 import { useState } from 'react';
 
 export default function GNB() {

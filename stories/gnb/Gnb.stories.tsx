@@ -3,7 +3,7 @@ import GNB from '@/app/components/Gnb';
 
 const meta: Meta<typeof GNB> = {
   title: 'Components/GNB',
-  component: GNB
+  component: GNB,
 };
 
 export default meta;
