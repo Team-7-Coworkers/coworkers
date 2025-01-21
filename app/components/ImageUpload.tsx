@@ -44,7 +44,6 @@ function ImageUpload({
 
   return (
     <div className="flex flex-col items-center">
-      {/* 숨겨진 파일 입력 */}
       <input
         type="file"
         ref={fileInputRef}
@@ -92,7 +91,7 @@ function ImageUpload({
       ) : (
         // Square 영역
         <div
-          className="relative flex h-[240px] w-[240px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-gray-100/10"
+          className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-gray-100/10 sm:h-[240px] sm:w-[240px]"
           onClick={triggerFileInput}
         >
           {!previewUrl ? (
