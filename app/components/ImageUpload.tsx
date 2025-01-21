@@ -60,8 +60,8 @@ function ImageUpload({
           style={{
             width: '64px',
             height: '64px',
-            backgroundColor: 'var(--b-secondary)', // Circle 영역 배경 색상
-            borderWidth: '3px', // 테두리 두께 설정
+            backgroundColor: 'var(--b-secondary)',
+            borderWidth: '3px',
             borderColor: 'rgb(243 244 246 / 0.1)',
           }}
         >
@@ -88,8 +88,8 @@ function ImageUpload({
             className="absolute bottom-0 cursor-pointer"
             onClick={triggerFileInput}
             style={{
-              right: '-6px', // 위치 조정
-              border: '2px solid var(--b-primary)', // ic_imageUpload의 테두리 설정
+              right: '-6px',
+              border: '2px solid var(--b-primary)',
               borderRadius: '50%',
             }}
           >
