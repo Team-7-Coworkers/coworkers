@@ -19,6 +19,15 @@ export const items = [
     frequency: '한 번',
   },
   {
+    id: 6,
+    category: '헤더 만들기',
+    title: '헤더 구현하기',
+    comments: 3,
+    date: '2025년 1월 25일',
+    frequency: '월 반 복',
+  },
+
+  {
     id: 3,
     category: '목록 나열',
     title: '목록을 직접 나열해보고 테스트하기',
