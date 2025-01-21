@@ -9,8 +9,17 @@ export default {
     './.storybook/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    screens: {
+      sm: '640px',
+      lg: '1024px',
+    },
     container: {
       center: true,
+      padding: '1.5rem',
+      screens: {
+        sm: '100%',
+        lg: '1248px',
+      },
     },
     extend: {
       colors: {
