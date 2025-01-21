@@ -109,8 +109,8 @@ function ImageUpload({
           style={{
             width: '160px',
             height: '160px',
-            backgroundColor: 'var(--b-primary)', // Square 영역 배경 색상 설정
-            borderWidth: '3px', // Square 테두리 두께
+            backgroundColor: 'var(--b-primary)',
+            borderWidth: '3px',
             borderColor: 'rgb(243 244 246 / 0.1)',
           }}
           onClick={triggerFileInput}
