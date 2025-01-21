@@ -1,9 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import ic_imageUpload from '@/app/components/icons/ic_imageUpload.svg';
-import ic_imagePreview from '@/app/components/icons/ic_image.svg';
-import Plus from '@/app/components/icons/ic_plus.svg';
 import React, { useRef, useState } from 'react';
 import { postImagesUpload } from '@/app/api/image.api';
 
@@ -67,7 +64,7 @@ function ImageUpload({
         >
           {/* ImagePreview 아이콘 */}
           <Image
-            src={ic_imagePreview}
+            src="/images/icons/ic_image.svg"
             alt="이미지 미리보기"
             width={24}
             height={24}
@@ -94,7 +91,7 @@ function ImageUpload({
             }}
           >
             <Image
-              src={ic_imageUpload}
+              src="/images/icons/ic_imageUpload.svg"
               alt="이미지 업로드"
               width={18}
               height={18}
@@ -118,7 +115,7 @@ function ImageUpload({
           {!previewUrl ? (
             <>
               <Image
-                src={Plus}
+                src="/images/icons/ic_plus.svg"
                 alt="플러스 아이콘"
                 width={48}
                 height={48}
