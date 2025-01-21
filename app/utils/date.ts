@@ -1,4 +1,4 @@
-export const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+import { DAYS } from '../constants/days';
 
 export const formatDate = (date: Date): string => {
   const month = String(date.getMonth() + 1).padStart(2, '0');

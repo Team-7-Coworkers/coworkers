@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { calculateDate, formatDate } from '../utils/date';
+import { calculateDate, formatDate } from '../../utils/date';
 
 export default function ListDate() {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
