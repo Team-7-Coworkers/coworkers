@@ -1,30 +1,33 @@
-name: Chromatic Deployment
+# Workflow name
+name: 'Chromatic Deployment'
 
-on:
-  push:
-    branches:
-      - dev # dev 브랜치에 푸시될 때 트리거
-  pull_request:
-    branches:
-      - dev # dev 브랜치로 PR 생성 시 트리거
+# Event for the workflow
+on: push
 
+# List of jobs
 jobs:
-  chromatic-deployment:
+  test:
+    # Operating System
     runs-on: ubuntu-latest
-
+    # Job steps
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v2 # Update to the latest version of checkout action
         with:
-          node-version: 16 # 프로젝트에 맞는 Node.js 버전 설정
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Publish to Chromatic
-        run: npx chromatic
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v2 # Example of using a different action
+        with:
+          node-version: 16
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: yarn
+      - name: Run Chromatic
+        uses: chromaui/action@v1 # Update to the latest version of Chromatic action
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
