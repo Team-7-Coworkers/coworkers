@@ -1,12 +1,5 @@
-import axios from 'axios';
+import instance from '../libs/axios';
 import { imageResponseType } from '../types/image';
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 // 이미지 업로드하기
 const postImagesUpload = async ({

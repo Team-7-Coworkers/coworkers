@@ -6,6 +6,7 @@ interface ButtonProps {
   size?: 'large' | 'X-small' | string;
   state?: 'default' | 'danger' | 'floating';
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
 }
 
@@ -15,6 +16,7 @@ const Button = ({
   state = 'default',
   size = 'large',
   disabled = false,
+  type = 'button',
   onClick,
 }: ButtonProps) => {
   const baseStyles = () =>
@@ -57,6 +59,7 @@ const Button = ({
 
   return (
     <button
+      type={type}
       className={styleClasses}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}

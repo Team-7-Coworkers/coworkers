@@ -1,12 +1,5 @@
-import axios from 'axios';
+import instance from '../libs/axios';
 import { articleResponseType } from '../types/article';
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 // 게시글 올리기
 const postArticles = async ({

@@ -1,12 +1,5 @@
-import axios from 'axios';
+import instance from '../libs/axios';
 import { oauthResponseType } from '../types/oauth';
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 // 간편 로그인 App 등록/수정하기
 const postOauthApps = async ({

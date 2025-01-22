@@ -1,12 +1,5 @@
-import axios from 'axios';
+import instance from '../libs/axios';
 import { userResponseType } from '@/app/types/user';
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 // 사용자 정보 가져오기
 const getUser = async (): Promise<userResponseType['getUser']> => {

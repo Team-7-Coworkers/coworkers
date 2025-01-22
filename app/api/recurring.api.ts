@@ -1,12 +1,5 @@
-import axios from 'axios';
+import instance from '../libs/axios';
 import { recurringResponseType } from '../types/recurring';
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 // 반복할 일 생성하기
 const postGroupsTaskListsRecurring = async ({
