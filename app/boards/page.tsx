@@ -1,9 +1,13 @@
-import Card from './Card';
+import BestCard from './BestCardList';
+import CardList from './CardList';
 
 export default function boards() {
   return (
     <>
-      <Card />
+      <h1>베스트 게시글</h1>
+      <BestCard />
+      <h1>게시글</h1>
+      <CardList />
     </>
   );
 }
