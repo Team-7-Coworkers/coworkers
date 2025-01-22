@@ -24,12 +24,20 @@ function ImageUpload({
     const file = event.target.files?.[0];
     if (!file) return;
 
+    const localPreviewUrl = URL.createObjectURL(file);
+    setPreviewUrl(localPreviewUrl);
+
     try {
       const response = await postImagesUpload({ imageFile: file });
       setPreviewUrl(response.url);
       onUploadSuccess(response.url);
     } catch (error) {
+      // 서버에서 문제가 발생한 경우
+      setPreviewUrl(null);
       onUploadError(error as Error);
+      alert('서버에서 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      URL.revokeObjectURL(localPreviewUrl);
     }
   };
 
@@ -52,16 +60,7 @@ function ImageUpload({
       {/* 이미지 미리보기 및 업로드 아이콘 */}
       {variant === 'circle' ? (
         // Circle 영역 (프로필/팀 이미지)
-        <div
-          className="border-3 relative flex items-center justify-center rounded-full"
-          style={{
-            width: '64px',
-            height: '64px',
-            backgroundColor: 'var(--b-secondary)',
-            borderWidth: '3px',
-            borderColor: 'rgb(243 244 246 / 0.1)',
-          }}
-        >
+        <div className="relative flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-gray-200/10 bg-b-secondary">
           {/* ImagePreview 아이콘 */}
           <Image
             src="/images/icons/ic_image.svg"
@@ -82,34 +81,44 @@ function ImageUpload({
             </div>
           )}
           <div
-            className="absolute bottom-0 cursor-pointer"
-            onClick={triggerFileInput}
+            className="absolute bottom-[-1px] right-[-8px] cursor-pointer rounded-full border-[2px] border-b-primary"
             style={{
-              right: '-6px',
-              border: '2px solid var(--b-primary)',
-              borderRadius: '50%',
+              borderColor: 'var(--b-primary)',
             }}
+            onClick={triggerFileInput}
           >
-            <Image
-              src="/images/icons/ic_imageUpload.svg"
-              alt="이미지 업로드"
-              width={18}
-              height={18}
-              className="cursor-pointer"
-            />
+            {/* 아이콘 애니메이션, hover시 색 변경을 위해  svg를 직접 삽입*/}
+            <div className="group transform cursor-pointer transition-transform duration-300 hover:scale-110">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 32 32"
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon"
+              >
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="16"
+                  className="fill-b-secondary transition-colors duration-300 group-hover:fill-blue"
+                />
+                <path
+                  d="M16.0228 9.22574C16.2087 8.82492 16.6837 8.65204 17.0837 8.83958L20.527 10.4538C20.927 10.6414 21.1006 11.1183 20.9147 11.5191L16.148 21.7962C16.0575 21.9913 15.8923 22.1415 15.6898 22.2128L13.1851 23.094C12.7755 23.2381 12.3252 23.027 12.1717 22.6189L11.2332 20.1235C11.1573 19.9217 11.1656 19.698 11.2561 19.5028L16.0228 9.22574Z"
+                  className="fill-gray-400 transition-colors duration-300"
+                />
+                <path
+                  d="M12.6641 9.56641L22.1995 14.0401"
+                  className="stroke-b-secondary transition-colors duration-300 group-hover:stroke-blue"
+                  strokeWidth="1.5"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       ) : (
         // Square 영역
         <div
-          className="relative flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg"
-          style={{
-            width: '160px',
-            height: '160px',
-            backgroundColor: 'var(--b-primary)',
-            borderWidth: '3px',
-            borderColor: 'rgb(243 244 246 / 0.1)',
-          }}
+          className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[3px] border-gray-200/10 bg-b-primary"
           onClick={triggerFileInput}
         >
           {!previewUrl ? (
