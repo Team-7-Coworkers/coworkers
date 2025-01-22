@@ -10,7 +10,6 @@ export default {
   ],
   theme: {
     screens: {
-      mb: '480px',
       sm: '640px',
       lg: '1024px',
     },
@@ -18,7 +17,6 @@ export default {
       center: true,
       padding: '1.5rem',
       screens: {
-        mb: '480px',
         sm: '100%',
         lg: '1248px',
       },
