@@ -22,7 +22,7 @@ export default function GNB() {
 
   return (
     <>
-      <nav className="sm:py flex h-[60px] w-full items-center justify-between bg-b-secondary px-4 py-3.5 text-lg font-medium sm:px-6 lg:px-[18vw]">
+      <nav className="sm:py fixed left-0 top-0 z-50 flex h-[60px] w-full items-center justify-between bg-b-secondary px-4 py-3.5 text-lg font-medium text-t-primary sm:px-6 lg:px-[18vw]">
         <div className="flex space-x-10">
           <div className="flex items-center gap-4">
             <div
@@ -46,7 +46,7 @@ export default function GNB() {
               />
             </div>
           </div>
-          <div className="hidden items-center space-x-10 text-t-primary sm:flex">
+          <div className="hidden items-center space-x-10 sm:flex">
             <TeamListDropDown />
             <div>자유게시판</div> {/*자유게시판 이동*/}
           </div>
