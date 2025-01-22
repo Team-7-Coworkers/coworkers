@@ -8,7 +8,7 @@ import {
   validateEmail,
   validateName,
   validatePassword,
-} from '@/app/utils/signupValidators';
+} from '@/app/utils/formValidators';
 
 interface SignupFormProps {
   onSubmit: (formData: {
