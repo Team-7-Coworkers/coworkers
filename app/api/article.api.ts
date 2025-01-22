@@ -25,7 +25,7 @@ const postArticles = async ({
 // 게시글 목록 조회하기
 const getArticles = async ({
   page = 1,
-  pageSize = 6,
+  pageSize = 9,
   orderBy = 'recent',
   keyword = '',
 }: {
@@ -33,7 +33,7 @@ const getArticles = async ({
   pageSize?: number;
   orderBy?: string;
   keyword?: string;
-}): Promise<articleResponseType['postArticles']> => {
+}): Promise<articleResponseType['getArticles']> => {
   const response = await instance.get(`articles`, {
     params: {
       page,
