@@ -14,7 +14,7 @@ export default function CardList() {
         articles.list.map((article) => (
           <div
             key={article.id}
-            className="flex h-[176px] w-[589px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
+            className="flex cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
           >
             <div className="flex justify-between">
               <p

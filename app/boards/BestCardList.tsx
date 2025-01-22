@@ -8,14 +8,16 @@ import dayjs from 'dayjs';
 
 export default function BestCardList() {
   const articles = Card({ isBest: true });
-
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-[20px]">
       {articles && articles.list.length > 0 ? (
         articles.list.map((article) => (
           <div
             key={article.id}
-            className="flex h-[220px] w-[387px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
+            className="flex flex-grow flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
+            style={{
+              flexBasis: '0', // 모든 카드의 기본 크기를 균등하게 설정
+            }}
           >
             <div className="mb-[10px] flex">
               <Image
@@ -35,7 +37,6 @@ export default function BestCardList() {
               >
                 {article.title}
               </p>
-              {/* 게시글 이미지가 없을 경우우 */}
               {article.image !== 'https://no-image/no-image.png' && (
                 <Image
                   src={article.image}
