@@ -1,0 +1,128 @@
+'use client';
+
+import React, { useCallback, useEffect, useState } from 'react';
+import InputField from '@components/InputField';
+import Button from '@components/Button';
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validateName,
+  validatePassword,
+} from '@/app/utils/signupValidators';
+
+interface SignupFormProps {
+  onSubmit: (formData: {
+    nickname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => void;
+}
+
+export default function SignupForm({ onSubmit }: SignupFormProps) {
+  const [formData, setFormData] = useState({
+    nickname: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [isValidated, setIsValidated] = useState(false);
+
+  const validateForm = useCallback(() => {
+    const newErrors = {
+      nickname: validateName(formData.nickname) || '',
+      email: validateEmail(formData.email) || '',
+      password: validatePassword(formData.password) || '',
+      confirmPassword: validateConfirmPassword(formData.confirmPassword) || '',
+    };
+
+    // 에러가 하나라도 있으면 false 반환
+    setIsValidated(!Object.values(newErrors).some((error) => error));
+  }, [formData]);
+
+  useEffect(() => {
+    validateForm();
+  }, [validateForm]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (isValidated) {
+      onSubmit(formData);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-10 bg-transparent font-medium"
+    >
+      <div className="space-y-6">
+        <div className="space-y-3">
+          <label htmlFor="nickname">이름</label>
+          <InputField
+            id="nickname"
+            type="text"
+            placeholder="이름을 입력해주세요."
+            value={formData.nickname}
+            onChange={handleChange}
+            validator={validateName}
+          />
+        </div>
+
+        <div className="space-y-3">
+          <label htmlFor="email">이메일</label>
+          <InputField
+            id="email"
+            type="email"
+            placeholder="이메일을 입력해주세요."
+            value={formData.email}
+            onChange={handleChange}
+            validator={validateEmail}
+          />
+        </div>
+
+        <div className="space-y-3">
+          <label htmlFor="password">비밀번호</label>
+          <InputField
+            id="password"
+            type="password"
+            placeholder="비밀번호를 입력해주세요."
+            value={formData.password}
+            onChange={handleChange}
+            validator={validatePassword}
+            isPassword={true}
+          />
+        </div>
+
+        <div className="space-y-3">
+          <label htmlFor="confirmPassword">비밀번호 확인</label>
+          <InputField
+            id="confirmPassword"
+            type="password"
+            placeholder="비밀번호를 다시 한 번 입력해주세요."
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            validator={validateConfirmPassword}
+            isPassword={true}
+          />
+        </div>
+      </div>
+      <Button
+        type="submit"
+        styleType="solid"
+        size="py-3.5 w-full text-md"
+        state="default"
+        disabled={!isValidated}
+      >
+        회원가입
+      </Button>
+    </form>
+  );
+}
