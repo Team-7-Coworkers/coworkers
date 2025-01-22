@@ -40,10 +40,10 @@ export default function CircleGraph({ rate = 0 }: Props) {
           y2="120.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#10B981" />
+          <stop stopColor="#10B981" />
           <stop
             offset="1"
-            stop-color="#A3E635"
+            stopColor="#A3E635"
           />
         </linearGradient>
       </defs>
