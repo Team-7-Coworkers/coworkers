@@ -31,10 +31,11 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
 
   const validateForm = useCallback(() => {
     const newErrors = {
-      nickname: validateName(formData.nickname) || '',
-      email: validateEmail(formData.email) || '',
-      password: validatePassword(formData.password) || '',
-      confirmPassword: validateConfirmPassword(formData.confirmPassword) || '',
+      nickname: validateName(formData.nickname.trim()) || '',
+      email: validateEmail(formData.email.trim()) || '',
+      password: validatePassword(formData.password.trim()) || '',
+      confirmPassword:
+        validateConfirmPassword(formData.confirmPassword.trim()) || '',
     };
 
     // 에러가 하나라도 있으면 false 반환

@@ -19,8 +19,8 @@ export default function LoginForm({ onSubmit }: LoginFormProps) {
 
   const validateForm = useCallback(() => {
     const newErrors = {
-      email: validateEmail(formData.email) || '',
-      password: validatePassword(formData.password) || '',
+      email: validateEmail(formData.email.trim()) || '',
+      password: validatePassword(formData.password.trim()) || '',
     };
 
     // 에러가 하나라도 있으면 false 반환
