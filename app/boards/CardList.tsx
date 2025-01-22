@@ -9,7 +9,7 @@ export default function CardList() {
   const articles = Card({});
 
   return (
-    <div>
+    <div className="grid grid-cols-2 gap-[24px]">
       {articles && articles.list.length > 0 ? (
         articles.list.map((article) => (
           <div

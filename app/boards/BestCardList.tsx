@@ -10,14 +10,14 @@ export default function BestCardList() {
   const articles = Card({ isBest: true });
 
   return (
-    <div>
+    <div className="flex justify-between">
       {articles && articles.list.length > 0 ? (
         articles.list.map((article) => (
           <div
             key={article.id}
             className="flex h-[220px] w-[387px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
           >
-            <div className="flex">
+            <div className="mb-[10px] flex">
               <Image
                 src={MedalIcon}
                 alt=""
