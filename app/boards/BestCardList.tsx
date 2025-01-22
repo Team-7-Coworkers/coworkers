@@ -14,7 +14,7 @@ export default function BestCardList() {
         articles.list.map((article) => (
           <div
             key={article.id}
-            className="flex h-[220px] flex-grow basis-0 cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
+            className="flex h-[220px] flex-grow basis-0 cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105 hover:bg-b-tertiary"
           >
             <div className="mb-[10px] flex">
               <Image
