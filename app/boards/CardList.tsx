@@ -9,33 +9,26 @@ export default function CardList() {
   const articles = Card({});
 
   return (
-    <div className="mb:grid-cols-1 grid gap-[24px] sm:grid-cols-1 lg:grid-cols-2">
+    <div className="grid gap-[24px] mb:grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
       {articles && articles.list.length > 0 ? (
         articles.list.map((article) => (
           <div
             key={article.id}
             className="flex h-[175px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
           >
-            <div className="flex justify-between">
-              <p
-                className="mr-[5px] overflow-hidden text-[18px] text-t-secondary"
-                style={{
-                  display: '-webkit-box',
-                  WebkitBoxOrient: 'vertical',
-                  WebkitLineClamp: 3,
-                }}
-              >
+            <div className="flex items-start justify-between">
+              <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden text-[18px] leading-[1.5] text-t-secondary">
                 {article.title}
               </p>
-              {/* 게시글 이미지가 없을 경우 */}
               {article.image !== 'https://no-image/no-image.png' && (
-                <Image
-                  src={article.image}
-                  alt={article.title}
-                  width={72}
-                  height={72}
-                  className="h-[72px] w-[72px] rounded-[8px] object-cover"
-                />
+                <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
             </div>
             <div className="mt-auto flex items-center justify-between">

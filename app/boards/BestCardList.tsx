@@ -14,10 +14,7 @@ export default function BestCardList() {
         articles.list.map((article) => (
           <div
             key={article.id}
-            className="flex h-[220px] flex-grow cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
-            style={{
-              flexBasis: '0',
-            }}
+            className="flex h-[220px] flex-grow basis-0 cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
           >
             <div className="mb-[10px] flex">
               <Image
@@ -26,25 +23,19 @@ export default function BestCardList() {
               />
               <p className="ml-[4px] font-semibold">Best</p>
             </div>
-            <div className="flex justify-between">
-              <p
-                className="mr-[5px] max-h-[48px] overflow-hidden text-[18px] leading-[1.5] text-t-secondary"
-                style={{
-                  display: '-webkit-box',
-                  WebkitBoxOrient: 'vertical',
-                  WebkitLineClamp: 2,
-                }}
-              >
+            <div className="flex items-start justify-between">
+              <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden text-[18px] leading-[1.5] text-t-secondary">
                 {article.title}
               </p>
               {article.image !== 'https://no-image/no-image.png' && (
-                <Image
-                  src={article.image}
-                  alt={article.title}
-                  width={72}
-                  height={72}
-                  className="h-[72px] w-[72px] rounded-[8px] object-cover"
-                />
+                <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
             </div>
             <p className="text-[14px] text-t-disabled">
