@@ -9,16 +9,16 @@ export default function CardList() {
   const articles = Card({});
 
   return (
-    <div className="grid grid-cols-2 gap-[24px]">
+    <div className="mb:grid-cols-1 grid gap-[24px] sm:grid-cols-1 lg:grid-cols-2">
       {articles && articles.list.length > 0 ? (
         articles.list.map((article) => (
           <div
             key={article.id}
-            className="flex cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
+            className="flex h-[175px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
           >
             <div className="flex justify-between">
               <p
-                className="overflow-hidden text-[18px] text-t-secondary"
+                className="mr-[5px] overflow-hidden text-[18px] text-t-secondary"
                 style={{
                   display: '-webkit-box',
                   WebkitBoxOrient: 'vertical',
@@ -27,14 +27,14 @@ export default function CardList() {
               >
                 {article.title}
               </p>
-              {/* 게시글 이미지가 없을 경우우 */}
+              {/* 게시글 이미지가 없을 경우 */}
               {article.image !== 'https://no-image/no-image.png' && (
                 <Image
                   src={article.image}
                   alt={article.title}
                   width={72}
                   height={72}
-                  className="h-[72px] w-[72px] rounded-[8px] object-cover pl-[10px]"
+                  className="h-[72px] w-[72px] rounded-[8px] object-cover"
                 />
               )}
             </div>

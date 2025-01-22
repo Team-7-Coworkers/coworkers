@@ -14,9 +14,9 @@ export default function BestCardList() {
         articles.list.map((article) => (
           <div
             key={article.id}
-            className="flex flex-grow flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
+            className="flex h-[220px] flex-grow cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105"
             style={{
-              flexBasis: '0', // 모든 카드의 기본 크기를 균등하게 설정
+              flexBasis: '0',
             }}
           >
             <div className="mb-[10px] flex">
@@ -28,7 +28,7 @@ export default function BestCardList() {
             </div>
             <div className="flex justify-between">
               <p
-                className="max-h-[48px] overflow-hidden text-[18px] leading-[1.5] text-t-secondary"
+                className="mr-[5px] max-h-[48px] overflow-hidden text-[18px] leading-[1.5] text-t-secondary"
                 style={{
                   display: '-webkit-box',
                   WebkitBoxOrient: 'vertical',
@@ -43,7 +43,7 @@ export default function BestCardList() {
                   alt={article.title}
                   width={72}
                   height={72}
-                  className="h-[72px] w-[72px] rounded-[8px] object-cover pl-[10px]"
+                  className="h-[72px] w-[72px] rounded-[8px] object-cover"
                 />
               )}
             </div>
