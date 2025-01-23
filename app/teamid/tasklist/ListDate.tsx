@@ -20,8 +20,8 @@ export default function ListDate() {
   return (
     <div className="flex items-center text-lg font-medium text-t-primary">
       <span>{formatDate(currentDate)}</span>
-      <div className="ml-3 flex items-center">
-        <div className="flex gap-2">
+      <div className="ml-2 flex items-center sm:ml-3">
+        <div className="flex gap-1 sm:gap-2">
           <button
             aria-label="이전 날짜"
             className={arrowButtonClass}
@@ -49,7 +49,7 @@ export default function ListDate() {
         </div>
         {/* 캘린더 선택 기능은 후에 추가하겠습니다! 라이브러리 사용할 지?*/}
         <button
-          className="ml-3 flex h-6 w-6 items-center justify-center rounded-xl bg-b-secondary hover:bg-b-tertiary"
+          className="ml-2 flex h-6 w-6 items-center justify-center rounded-xl bg-b-secondary hover:bg-b-tertiary sm:ml-3"
           onClick={() => alert('달력 기능은 아직 구현하지 않았습니다!')}
         >
           <Image

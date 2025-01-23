@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { categories, items } from './mockdata';
 import ItemList from './ItemList';
+import styles from './ListCategory.module.css';
 
 export default function ListCategory() {
   const [selectedCategory, setSelectedCategory] =
@@ -24,14 +25,16 @@ export default function ListCategory() {
 
   return (
     <div>
-      <div className="flex space-x-5 text-lg font-medium">
+      <div
+        className={`flex w-full space-x-5 overflow-x-auto whitespace-nowrap text-lg font-medium ${styles.scrollbarHide}`}
+      >
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
             className={`pb-2 ${
               selectedCategory === category
-                ? 'border-b-2 border-white text-white'
+                ? 'rounded-sm border-b-2 border-white text-white'
                 : 'text-t-default'
             }`}
             aria-label={`Select category ${category}`}

@@ -1,4 +1,12 @@
-export const categories = ['헤더 만들기', '목록 나열', '모달 작업', '기타']; // 목록 목데이터
+export const categories = [
+  '헤더 만들기',
+  '목록 나열',
+  '모달 작업',
+  '기타',
+  '길이',
+  '스크롤',
+  '테스트',
+]; // 목록 목데이터
 
 export const items = [
   // 아이템 목 데이터

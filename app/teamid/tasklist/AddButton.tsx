@@ -7,7 +7,7 @@ export default function AddButton() {
     <Button
       styleType="solid"
       state="floating"
-      size="w-[125px] h-[48px] absolute bottom-5 lg:right-40 right-5 flex items-center justify-center"
+      size="w-[125px] h-[48px] absolute bottom-5 lg:right-35 right-5 flex gap-1 items-center justify-center"
       onClick={() => alert('할 일 추가 버튼 클릭')}
     >
       <Image

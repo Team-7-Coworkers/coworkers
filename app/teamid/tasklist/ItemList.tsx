@@ -38,7 +38,7 @@ export default function ItemList({
                 aria-label={`Mark "${item.title}" as completed`}
               />
               <h3
-                className={`ml-3 cursor-pointer font-medium ${
+                className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
                   checkedItems[item.id] ? 'line-through' : ''
                 }`}
               >
@@ -54,7 +54,14 @@ export default function ItemList({
                 {item.comments}
               </div>
             </div>
-            <div className="cursor-pointer">|</div>
+            <button>
+              <Image
+                src="/images/icons/ic_kebab.svg"
+                alt="수정,삭제"
+                width={16}
+                height={16}
+              />
+            </button>
           </div>
           <div className="mt-4 flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -66,7 +73,7 @@ export default function ItemList({
               />
               <p className="text-sm text-t-default">{item.date}</p>
             </div>
-            <div className="text-xs text-t-default">|</div>
+            <div className="text-xs text-b-tertiary">|</div>
             <div className="flex items-center gap-2">
               {item.frequency !== '한 번' && (
                 <Image

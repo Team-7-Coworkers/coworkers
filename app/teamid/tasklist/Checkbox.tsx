@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export default function Checkbox({
   id,
   checked,
@@ -19,12 +17,21 @@ export default function Checkbox({
       />
       {checked && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <Image
-            src="/images/icons/icon-check.svg"
-            alt="체크"
-            width={16}
-            height={16}
-          />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 7.14286L6.90909 10L12 5"
+              stroke="#F8FAFC"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       )}
     </div>
