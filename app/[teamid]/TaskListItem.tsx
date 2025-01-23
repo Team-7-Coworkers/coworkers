@@ -23,14 +23,16 @@ export default function TaskListItem({
   const borderColor = 'border-' + COLORS[displayIndex % COLORS.length];
 
   return (
-    <li className={cn(borderColor, styles.item)}>
-      <h3 className="text-md font-medium">{name}</h3>
+    <li className={cn(borderColor, styles.task)}>
+      <h3 className="mr-2 truncate text-md font-medium">{name}</h3>
+
       <span className="ml-auto">
         <TaskProgress
           count={taskComplete}
           total={taskTotal}
         />
       </span>
+
       <button className={styles.iconButton}>
         <KebabIcon />
       </button>

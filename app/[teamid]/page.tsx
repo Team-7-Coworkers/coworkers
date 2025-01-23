@@ -1,23 +1,32 @@
-import Image from 'next/image';
-import GearIcon from '../components/icons/GearIcon';
+'use client';
+
+import { useParams } from 'next/navigation';
+
 import { cn } from '../libs/utils';
+
+import GearIcon from '../components/icons/GearIcon';
 import CircleGraph from './CircleGraph';
 import TaskListItem from './TaskListItem';
+import MemberListItem from './MemberListItem';
 
 import styles from './teampage.module.css';
-import KebabIcon from '../components/icons/KebabIcon';
+import { useState } from 'react';
+import Modal, { ModalFooter } from '../components/Modal';
+import Button from '../components/Button';
+import Image from 'next/image';
 
-interface Props {
-  params: {
-    teamid: string;
-  };
-}
+// interface Props {
+//   params: {
+//     teamid: string;
+//   };
+// }
 
 const dummy = {
   name: '경영관리팀',
   id: 1,
   todayTotal: 20,
   todayComplete: 5,
+  role: 'admin',
   members: [
     {
       userImage: '',
@@ -69,16 +78,34 @@ const dummy = {
   ],
 };
 
-export default async function TeamPage({ params }: Props) {
-  const { teamid } = await params;
+export default function TeamPage() {
+  // const { teamid } = await params;
+  const [memberModalOpen, setMemberModalOpen] = useState(false);
+  const [memberIdx, setMemberIdx] = useState<number>(1);
+  const { teamid } = useParams();
   console.log('teamid', teamid);
 
   const rate = dummy.todayComplete / dummy.todayTotal;
+
+  const handleMemberClick = (userId: number) => {
+    // console.log('member clicked', userId);
+    setMemberModalOpen(true);
+    setMemberIdx(dummy.members.findIndex((member) => member.userId === userId));
+  };
+
+  const handleEmailCopyClick = () => {
+    const email = dummy.members[memberIdx].userEmail;
+    navigator.clipboard.writeText(email);
+    // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
+    alert('이메일이 복사되었습니다.');
+    setMemberModalOpen(false);
+  };
 
   return (
     <div className="container flex flex-col py-6">
       <header className={styles.header}>
         <h1 className="text-xl font-bold text-t-inverse">{dummy.name}</h1>
+
         <button>
           <GearIcon />
         </button>
@@ -105,46 +132,54 @@ export default async function TeamPage({ params }: Props) {
         </ul>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={cn(styles.title, 'mb-4')}>리포트</h2>
+      {dummy.role === 'admin' && (
+        <section className={styles.section}>
+          <h2 className={cn(styles.title, 'mb-4')}>리포트</h2>
 
-        <div className="flex items-center rounded-xl bg-b-secondary p-6">
-          <CircleGraph rate={rate} />
+          <div className="relative flex items-center gap-6 rounded-xl bg-b-secondary p-6">
+            <CircleGraph
+              rate={rate}
+              classnames="flex-1 max-w-[170px]"
+            />
 
-          <div className="ml-12">
-            <h3 className="mb-1 text-md font-medium">
-              오늘의
-              <br />
-              진행 상황
-            </h3>
-            <div className="text-gradient text-4xl font-bold">
-              {rate * 100}%
+            <div className="absolute left-[20%] flex-1 text-center sm:static sm:ml-12 sm:text-left">
+              <h3 className="text-xs font-medium sm:hidden">오늘</h3>
+              <h3 className="mb-1 hidden text-md font-medium sm:block">
+                오늘의
+                <br />
+                진행 상황
+              </h3>
+              <div className="text-gradient text-xl font-bold sm:text-4xl">
+                {Math.floor(rate * 100)}%
+              </div>
+            </div>
+
+            <div className="ml-auto flex w-1/2 flex-col gap-4 sm:w-[280px] lg:w-[400px]">
+              <div
+                className={cn(
+                  styles.reportBox,
+                  'bg-[url(/images/icons/icon-user.svg)]'
+                )}
+              >
+                <h4 className={styles.reportTitle}>오늘의 할 일</h4>
+                <div className={styles.reportCount}>{dummy.todayTotal}개</div>
+              </div>
+
+              <div
+                className={cn(
+                  styles.reportBox,
+                  'bg-[url(/images/icons/icon-done.svg)]'
+                )}
+              >
+                <h4 className={styles.reportTitle}>한 일</h4>
+                <div className={styles.reportCount}>
+                  {dummy.todayComplete}개
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="ml-auto flex w-[400px] flex-col gap-4">
-            <div
-              className={cn(
-                styles.reportBox,
-                'bg-[url(/images/icons/icon-user.svg)]'
-              )}
-            >
-              <h4 className={styles.reportTitle}>오늘의 할 일</h4>
-              <div className={styles.reportCount}>{dummy.todayTotal}개</div>
-            </div>
-
-            <div
-              className={cn(
-                styles.reportBox,
-                'bg-[url(/images/icons/icon-done.svg)]'
-              )}
-            >
-              <h4 className={styles.reportTitle}>한 일</h4>
-              <div className={styles.reportCount}>{dummy.todayComplete}개</div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className={styles.section}>
         <header className={styles.sectionheader}>
@@ -152,45 +187,59 @@ export default async function TeamPage({ params }: Props) {
           <span className="ml-2 text-lg text-t-default">
             ({dummy.members.length}명)
           </span>
-          <button className="text-button ml-auto text-md">
-            + 새로운 멤버 초대하기
-          </button>
+
+          {dummy.role === 'admin' && (
+            <button className="text-button ml-auto text-md">
+              + 새로운 멤버 초대하기
+            </button>
+          )}
         </header>
 
-        <ul className="grid grid-cols-3 gap-6">
+        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
           {dummy.members.map((member) => (
-            <li
-              className="flex items-center rounded-xl bg-b-secondary px-6 py-5"
+            <MemberListItem
               key={member.userId}
-            >
-              <figure className="flex size-8 flex-none items-center rounded-full border-bd-primary bg-b-tertiary">
-                <Image
-                  src="/images/icons/icon-base-user.svg"
-                  width="26"
-                  height="26"
-                  alt=""
-                  className="mx-auto"
-                />
-              </figure>
-
-              <div className="ml-3 flex-1 overflow-hidden">
-                <div className="truncate text-md font-medium">
-                  {member.userName}
-                </div>
-                <div className="mt-[2px] truncate text-sm text-t-secondary">
-                  {member.userEmail}
-                </div>
-              </div>
-
-              <div className="ml-auto">
-                <button className={styles.iconButton}>
-                  <KebabIcon />
-                </button>
-              </div>
-            </li>
+              id={member.userId}
+              image={member.userImage}
+              name={member.userName}
+              email={member.userEmail}
+              onClick={handleMemberClick}
+            />
           ))}
         </ul>
       </section>
+
+      <Modal
+        isOpen={memberModalOpen}
+        onClose={() => setMemberModalOpen(false)}
+      >
+        <div className="flex flex-col items-center gap-6">
+          <figure className={cn(styles.memberFigure, 'size-14')}>
+            <Image
+              src={
+                dummy.members[memberIdx].userImage ||
+                '/images/icons/icon-base-user.svg'
+              }
+              width="40"
+              height="40"
+              alt=""
+              className="mx-auto"
+            />
+          </figure>
+          <div className="text-center">
+            <div className="text-md font-medium text-t-primary">
+              {dummy.members[memberIdx].userName}
+            </div>
+            <div className="mt-2 text-xs">
+              {dummy.members[memberIdx].userEmail}
+            </div>
+          </div>
+        </div>
+
+        <ModalFooter>
+          <Button onClick={handleEmailCopyClick}>이메일 복사하기</Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }

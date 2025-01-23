@@ -1,10 +1,13 @@
+import styles from './teampage.module.css';
+
 interface Props {
   rate?: number;
+  classnames?: string;
 }
 
 const MAX_LENGTH = 70 * 2 * 3.14;
 
-export default function CircleGraph({ rate = 0 }: Props) {
+export default function CircleGraph({ rate = 0, classnames = '' }: Props) {
   return (
     <svg
       width="170"
@@ -12,6 +15,7 @@ export default function CircleGraph({ rate = 0 }: Props) {
       viewBox="0 0 170 170"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={classnames}
     >
       <circle
         cx="85"
@@ -25,6 +29,7 @@ export default function CircleGraph({ rate = 0 }: Props) {
           cx="85"
           cy="85"
           r="70"
+          className={styles.frontCircle}
           stroke="url(#gradient)"
           strokeWidth="29.5793"
           strokeLinecap="round"
