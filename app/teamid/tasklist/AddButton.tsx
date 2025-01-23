@@ -11,7 +11,7 @@ export default function AddButton() {
       onClick={() => alert('할 일 추가 버튼 클릭')}
     >
       <Image
-        src="/images/icons/icon-plus.svg"
+        src="/images/icons/ic_list-plus.svg"
         alt="플러스"
         width={16}
         height={16}

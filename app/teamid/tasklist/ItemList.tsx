@@ -46,7 +46,7 @@ export default function ItemList({
               </h3>
               <div className="absolute right-6 flex items-center gap-1 text-t-default sm:relative sm:right-0 sm:ml-3">
                 <Image
-                  src="/images/icons/icon-comment.svg"
+                  src="/images/icons/ic_comment.svg"
                   alt="댓글"
                   width={16}
                   height={16}
@@ -66,7 +66,7 @@ export default function ItemList({
           <div className="mt-4 flex items-center gap-3">
             <div className="flex items-center gap-2">
               <Image
-                src="/images/icons/icon-calendar.svg"
+                src="/images/icons/ic_calendar.svg"
                 alt="달력"
                 width={16}
                 height={16}
@@ -77,7 +77,7 @@ export default function ItemList({
             <div className="flex items-center gap-2">
               {item.frequency !== '한 번' && (
                 <Image
-                  src="/images/icons/icon-repeat.svg"
+                  src="/images/icons/ic_repeat.svg"
                   alt="반복"
                   width={16}
                   height={16}

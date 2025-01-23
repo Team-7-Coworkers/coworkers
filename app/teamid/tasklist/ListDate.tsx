@@ -28,7 +28,7 @@ export default function ListDate() {
             onClick={handlePreviousDay}
           >
             <Image
-              src="/images/icons/icon-left-arrow.svg"
+              src="/images/icons/ic_left-arrow.svg"
               alt="왼쪽 화살표"
               width={16}
               height={16}
@@ -40,7 +40,7 @@ export default function ListDate() {
             onClick={handleNextDay}
           >
             <Image
-              src="/images/icons/icon-right-arrow.svg"
+              src="/images/icons/ic_right-arrow.svg"
               alt="오른쪽 화살표"
               width={16}
               height={16}
@@ -53,7 +53,7 @@ export default function ListDate() {
           onClick={() => alert('달력 기능은 아직 구현하지 않았습니다!')}
         >
           <Image
-            src="/images/icons/icon-calendar.svg"
+            src="/images/icons/ic_calendar.svg"
             alt="달력"
             width={12}
             height={12}
