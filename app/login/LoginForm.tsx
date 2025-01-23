@@ -3,39 +3,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
-import {
-  validateConfirmPassword,
-  validateEmail,
-  validateName,
-  validatePassword,
-} from '@/app/utils/formValidators';
+import { validateEmail, validatePassword } from '@/app/utils/formValidators';
+// import { postUserSendRestPasswordEmail } from '../api/user.api';
 
-interface SignupFormProps {
-  onSubmit: (formData: {
-    nickname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => void;
+interface LoginFormProps {
+  onSubmit: (formData: { email: string; password: string }) => void;
 }
 
-export default function SignupForm({ onSubmit }: SignupFormProps) {
+export default function LoginForm({ onSubmit }: LoginFormProps) {
   const [formData, setFormData] = useState({
-    nickname: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   const [isValidated, setIsValidated] = useState(false);
 
   const validateForm = useCallback(() => {
     const newErrors = {
-      nickname: validateName(formData.nickname.trim()) || '',
       email: validateEmail(formData.email.trim()) || '',
       password: validatePassword(formData.password.trim()) || '',
-      confirmPassword:
-        validateConfirmPassword(formData.confirmPassword.trim()) || '',
     };
 
     // 에러가 하나라도 있으면 false 반환
@@ -45,6 +31,11 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
   useEffect(() => {
     validateForm();
   }, [validateForm]);
+
+  const handleForgetPassword = () => {
+    //     const {email} = formData
+    //     const responce = await postUserSendRestPasswordEmail({email, redirectURL})
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,18 +56,6 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
       className="space-y-10 bg-transparent font-medium"
     >
       <div className="space-y-6">
-        <div className="space-y-3">
-          <label htmlFor="nickname">이름</label>
-          <InputField
-            id="nickname"
-            type="text"
-            placeholder="이름을 입력해주세요."
-            value={formData.nickname}
-            onChange={handleChange}
-            validator={validateName}
-          />
-        </div>
-
         <div className="space-y-3">
           <label htmlFor="email">이메일</label>
           <InputField
@@ -100,19 +79,12 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
             validator={validatePassword}
             isPassword={true}
           />
-        </div>
-
-        <div className="space-y-3">
-          <label htmlFor="confirmPassword">비밀번호 확인</label>
-          <InputField
-            id="confirmPassword"
-            type="password"
-            placeholder="비밀번호를 다시 한 번 입력해주세요."
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            validator={validateConfirmPassword}
-            isPassword={true}
-          />
+          <div
+            onClick={handleForgetPassword}
+            className="cursor-pointer text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
+          >
+            비밀번호를 잊으셨나요?
+          </div>
         </div>
       </div>
       <Button
@@ -122,7 +94,7 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
         state="default"
         disabled={!isValidated}
       >
-        회원가입
+        로그인
       </Button>
     </form>
   );
