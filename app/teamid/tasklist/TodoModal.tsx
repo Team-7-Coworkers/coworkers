@@ -45,6 +45,9 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
     onClose();
   };
 
+  const labelStyle = 'text-lg font-medium text-t-primary';
+  const sectionDiv = 'mt-5';
+
   return (
     <Modal
       isOpen={isOpen}
@@ -56,10 +59,10 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
         할 일은 실제로 행동 가능한 작업 중심으로
         <br /> 작성해주시면 좋습니다.
       </p>
-      <div className="mt-5">
+      <section className={sectionDiv}>
         <label
           htmlFor="todo-title"
-          className="text-lg font-medium text-t-primary"
+          className={labelStyle}
         >
           할 일 제목
         </label>
@@ -71,11 +74,11 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
           onChange={(e) => setTodoTitle(e.target.value)}
           className="mt-3"
         />
-      </div>
-      <div className="mt-5">
+      </section>
+      <section className={sectionDiv}>
         <label
           htmlFor="start-date"
-          className="text-lg font-medium text-t-primary"
+          className={labelStyle}
         >
           시작 날짜 및 시간
         </label>
@@ -101,11 +104,11 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
         <RepeatDropdown
           onSelectRepeatOption={(option: string) => setRepeatOption(option)}
         />
-      </div>
-      <div className="mt-5">
+      </section>
+      <section className={sectionDiv}>
         <label
           htmlFor="todo-memo"
-          className="text-lg font-medium text-t-primary"
+          className={labelStyle}
         >
           할 일 메모
         </label>
@@ -117,7 +120,7 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
             onChange={(e) => setTodoMemo(e.target.value)}
           />
         </div>
-      </div>
+      </section>
       <ModalFooter>
         <Button
           styleType="solid"
