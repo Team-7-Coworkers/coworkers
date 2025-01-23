@@ -27,7 +27,7 @@ export default function ListDate() {
 
   return (
     <div className="flex items-center text-lg font-medium text-t-primary">
-      <span>{formatDate(currentDate)}</span>
+      <span className="truncate">{formatDate(currentDate)}</span>
       <div className="ml-2 flex items-center sm:ml-3">
         <div className="flex gap-1 sm:gap-2">
           <button

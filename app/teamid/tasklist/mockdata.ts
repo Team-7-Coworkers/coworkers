@@ -32,7 +32,7 @@ export const items = [
     title: '헤더 구현하기',
     comments: 3,
     date: '2025년 1월 25일',
-    frequency: '월 반 복',
+    frequency: '월 반복',
   },
 
   {
