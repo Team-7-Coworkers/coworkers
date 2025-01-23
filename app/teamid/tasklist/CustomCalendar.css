@@ -1,9 +1,18 @@
 .react-datepicker {
   background-color: var(--b-secondary);
   color: var(--t-primary);
-  border: none;
-  border-radius: 12px;
+  border: 1px solid var(--t-default);
+
+  border-radius: 12px !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.react-datepicker:hover {
+  border: 1px solid var(--i-hover);
+}
+
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+  border-radius: 12px;
 }
 
 .react-datepicker__header {
@@ -44,7 +53,7 @@ h2.react-datepicker__current-month {
 }
 
 .react-datepicker__day--outside-month {
-  color: #64748b;
+  color: var(--t-default);
 }
 
 .react-datepicker__day:hover {
