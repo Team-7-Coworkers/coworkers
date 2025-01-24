@@ -2,24 +2,21 @@ import Image from 'next/image';
 import styles from './teampage.module.css';
 import { cn } from '../libs/utils';
 // import KebabIcon from '../components/icons/KebabIcon';
+import type { MemberProps } from './MemberList';
 
-interface Props {
-  id: number;
-  image?: string;
-  name: string;
-  email: string;
+interface Props extends MemberProps {
   onClick: (userId: number) => void;
 }
 
 export default function MemberListItem({
-  id,
-  image,
-  name,
-  email,
+  userId,
+  userImage,
+  userName,
+  userEmail,
   onClick,
 }: Props) {
   const handleClick = () => {
-    onClick(id);
+    onClick(userId);
   };
 
   return (
@@ -31,7 +28,7 @@ export default function MemberListItem({
       >
         <figure className={cn(styles.memberFigure, 'size-8')}>
           <Image
-            src={image || '/images/icons/icon-base-user.svg'}
+            src={userImage || '/images/icons/icon-base-user.svg'}
             width="26"
             height="26"
             alt=""
@@ -40,9 +37,9 @@ export default function MemberListItem({
         </figure>
 
         <div className="ml-3 flex-1 overflow-hidden">
-          <div className="truncate text-md font-medium">{name}</div>
+          <div className="truncate text-md font-medium">{userName}</div>
           <div className="mt-[2px] truncate text-sm text-t-secondary">
-            {email}
+            {userEmail}
           </div>
         </div>
 

@@ -1,25 +1,19 @@
 import { cn } from '../libs/utils';
 
-import KebabIcon from '../components/icons/KebabIcon';
+import type { TaskListProps } from './TaskLists';
 import TaskProgress from './TaskProgress';
 
+import KebabIcon from '../components/icons/KebabIcon';
 import styles from './teampage.module.css';
-
-interface Props {
-  name: string;
-  taskTotal: number;
-  taskComplete: number;
-  displayIndex: number;
-}
 
 const COLORS = ['purple', 'blue', 'cyan', 'pink', 'rose', 'orange', 'yellow'];
 
-export default function TaskListItem({
+export default function TaskListsItem({
   name,
   taskTotal,
   taskComplete,
   displayIndex,
-}: Props) {
+}: TaskListProps) {
   const borderColor = 'border-' + COLORS[displayIndex % COLORS.length];
 
   return (
