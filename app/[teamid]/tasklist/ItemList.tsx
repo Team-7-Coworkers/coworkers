@@ -4,8 +4,8 @@ import Checkbox from './Checkbox';
 type Item = {
   id: number;
   category: string;
-  title: string;
-  comments: number;
+  name: string;
+  commentCount: number;
   date: string;
   frequency: string;
 };
@@ -34,14 +34,14 @@ export default function ItemList({
                 id={item.id}
                 checked={!!checkedItems[item.id]}
                 onChange={onCheckboxChange}
-                aria-label={`Mark "${item.title}" as completed`}
+                aria-label={`Mark "${item.name}" as completed`}
               />
               <h3
                 className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
                   checkedItems[item.id] ? 'line-through' : ''
                 }`}
               >
-                {item.title}
+                {item.name}
               </h3>
               <div className="absolute right-6 flex items-center gap-1 text-t-default sm:relative sm:right-0 sm:ml-3">
                 <Image
@@ -50,7 +50,7 @@ export default function ItemList({
                   width={16}
                   height={16}
                 />
-                {item.comments}
+                {item.commentCount}
               </div>
             </div>
             <button>
