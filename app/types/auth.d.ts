@@ -42,3 +42,15 @@ export interface authResponseType {
     };
   };
 }
+
+export type SignUpFormDataType = {
+  nickname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export type LoginformDataType = {
+  email: string;
+  password: string;
+};
