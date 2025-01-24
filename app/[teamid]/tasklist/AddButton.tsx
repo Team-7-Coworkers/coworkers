@@ -1,19 +1,26 @@
 'use client';
+
 import Button from '@/app/components/Button';
 import Image from 'next/image';
 import { useState } from 'react';
 import TodoModal from './TodoModal';
 
-export default function AddButton() {
+interface AddButtonProps {
+  groupId: number;
+  taskListId: number;
+  onSaveSuccess: () => void;
+}
+
+export default function AddButton({
+  groupId,
+  taskListId,
+  onSaveSuccess,
+}: AddButtonProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleSaveTodo = (todo: {
-    title: string;
-    date: Date | null;
-    repeatOption: string;
-    memo: string;
-  }) => {
-    console.log('Saved Todo:', todo); // api 적용 전 임시 저장 로직
+  const handleSaveSuccess = () => {
+    setModalOpen(false);
+    onSaveSuccess();
   };
 
   return (
@@ -32,11 +39,15 @@ export default function AddButton() {
         />
         할 일 추가
       </Button>
-      <TodoModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSave={handleSaveTodo}
-      />
+      {modalOpen && (
+        <TodoModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          groupId={groupId}
+          taskListId={taskListId}
+          onSaveSuccess={handleSaveSuccess}
+        />
+      )}
     </div>
   );
 }

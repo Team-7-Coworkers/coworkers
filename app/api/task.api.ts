@@ -20,7 +20,7 @@ const postGroupsTaskListsTasks = async ({
   monthDay: number;
 }): Promise<taskResponseType['postGroupsTaskListsTasks']> => {
   const response = await instance.post(
-    `groups/${groupId}/task-list/${taskListId}/tasks`,
+    `groups/${groupId}/task-lists/${taskListId}/tasks`,
     {
       name,
       description,
