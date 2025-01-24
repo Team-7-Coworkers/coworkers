@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import siteMetadata from '@/data/siteMetadata';
 import './styles/globals.css';
+import GNB from './components/Gnb';
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="scroll-smooth">{children}</body>
+      <body className="scroll-smooth">
+        <div className="pt-[60px]">{children}</div>
+        <GNB />
+      </body>
     </html>
   );
 }
