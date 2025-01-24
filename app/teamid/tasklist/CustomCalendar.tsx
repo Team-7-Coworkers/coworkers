@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CustomCalendar.css';
 
 type CustomCalendarProps = {
   onDateSelect: (date: Date) => void;
+  selectedDate: Date | null;
 };
 
-export default function CustomCalendar({ onDateSelect }: CustomCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
+export default function CustomCalendar({
+  onDateSelect,
+  selectedDate,
+}: CustomCalendarProps) {
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
     if (date) onDateSelect(date);
   };
 

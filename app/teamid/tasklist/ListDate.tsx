@@ -7,19 +7,19 @@ import { calculateDate, formatDate } from '../../utils/date';
 import CustomCalendar from './CustomCalendar';
 
 export default function ListDate() {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handlePreviousDay = () => {
-    setCurrentDate((prevDate) => calculateDate(prevDate, -1));
+    setSelectedDate((prevDate) => calculateDate(prevDate, -1));
   };
 
   const handleNextDay = () => {
-    setCurrentDate((prevDate) => calculateDate(prevDate, 1));
+    setSelectedDate((prevDate) => calculateDate(prevDate, 1));
   };
 
   const handleDateSelect = (date: Date) => {
-    setCurrentDate(date);
+    setSelectedDate(date);
     setIsCalendarOpen(false);
   };
 
@@ -27,7 +27,7 @@ export default function ListDate() {
 
   return (
     <div className="flex items-center text-lg font-medium text-t-primary">
-      <span className="truncate">{formatDate(currentDate)}</span>
+      <span className="truncate">{formatDate(selectedDate)}</span>
       <div className="ml-2 flex items-center sm:ml-3">
         <div className="flex gap-1 sm:gap-2">
           <button
@@ -69,7 +69,10 @@ export default function ListDate() {
           </button>
           {isCalendarOpen && (
             <div className="absolute left-0 top-full z-10 mt-2">
-              <CustomCalendar onDateSelect={handleDateSelect} />
+              <CustomCalendar
+                selectedDate={selectedDate}
+                onDateSelect={handleDateSelect}
+              />
             </div>
           )}
         </div>

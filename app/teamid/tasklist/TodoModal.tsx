@@ -98,7 +98,10 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
         </div>
         {isCalendarOpen && (
           <div className="mt-3">
-            <CustomCalendar onDateSelect={handleDateSelect} />
+            <CustomCalendar
+              selectedDate={selectedDate}
+              onDateSelect={handleDateSelect}
+            />
           </div>
         )}
         <RepeatDropdown
