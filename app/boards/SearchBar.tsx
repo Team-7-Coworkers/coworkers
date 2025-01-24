@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
+import SearchIcon from '@/public/images/icons/ic_search.svg';
 
 interface SearchBarProps {
   onSearch: (keyword: string) => void;
@@ -16,12 +18,17 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <div>
+    <div className="flex w-[100%] items-center gap-3 rounded-[12px] border border-gray-700 bg-b-secondary px-4 py-1">
+      <Image
+        src={SearchIcon}
+        alt=""
+      />
       <input
         type="text"
-        placeholder="검색어를 입력해주세세요"
+        placeholder="검색어를 입력해주세요."
         value={inputValue}
         onChange={handleInputChange}
+        className="w-[100%] bg-b-secondary py-2 placeholder-t-default focus:outline-none"
       />
     </div>
   );
