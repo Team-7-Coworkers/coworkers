@@ -53,8 +53,7 @@ export default function Card({
       try {
         const articles = await getArticles({
           page: currentPage,
-          orderBy: isBest ? 'like' : orderBy,
-
+          orderBy,
           pageSize,
           keyword,
         });
