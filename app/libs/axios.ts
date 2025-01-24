@@ -1,4 +1,5 @@
 import axios from 'axios';
+import useUserStore from '../stores/userStore';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -12,9 +13,9 @@ instance.interceptors.request.use(
   (config) => {
     // 브라우저 환경인지 확인 (SSR 방어 코드)
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('access_token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      const { accessToken } = useUserStore.getState();
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
     }
     return config;
