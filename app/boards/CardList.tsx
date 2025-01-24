@@ -52,7 +52,7 @@ export default function CardList({
   return (
     <div>
       {!hideItem && (
-        <div className="flex items-center justify-between pb-8 pt-20">
+        <div className="flex items-center justify-between pb-8 pt-6">
           <p className="text-[20px] font-bold">게시글</p>
 
           <div>
