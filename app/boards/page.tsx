@@ -17,8 +17,15 @@ export default function Boards() {
     <div className="mx-auto flex w-[90%] flex-col items-center sm:w-[90%] lg:w-[65%]">
       <div className="w-full">
         <SearchBar onSearch={handleSearch} />
-        <h1>베스트 게시글</h1>
-        <Link href="/boards/best">더보기 {'>'}</Link>
+        <div className="flex items-center justify-between pb-8 pt-10">
+          <p className="text-[20px] font-bold">베스트 게시글</p>
+          <Link
+            href="/boards/best"
+            className="text-[14px] text-t-default"
+          >
+            더보기 <span className="ml-1">{'>'}</span>
+          </Link>
+        </div>
         <BestCard />
         <CardList keyword={searchKeyword} />
       </div>
