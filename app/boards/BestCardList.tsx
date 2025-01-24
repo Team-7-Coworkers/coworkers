@@ -7,7 +7,12 @@ import MedalIcon from '@/public/images/icons/ic_medal.svg';
 import dayjs from 'dayjs';
 
 export default function BestCardList() {
-  const articles = Card({ isBest: true });
+  const articles = Card({
+    isBest: true,
+    currentPage: 1,
+    orderBy: 'like',
+    keyword: '',
+  });
   return (
     <div className="flex justify-between gap-[20px]">
       {articles && articles.list.length > 0 ? (
