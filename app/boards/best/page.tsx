@@ -8,7 +8,7 @@ export default function BestPage() {
       <CardList
         keyword=""
         orderBy="like"
-        hideHeader={true}
+        hideItem={true}
       />
     </div>
   );

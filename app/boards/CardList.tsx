@@ -12,11 +12,11 @@ import Dropdown from '@/app/components/Dropdown';
 export default function CardList({
   keyword,
   orderBy = 'recent',
-  hideHeader = false, //베스트 더보기 페이지 때문에 추가했습니다
+  hideItem = false, //베스트 더보기 페이지 때문에 추가했습니다
 }: {
   keyword: string;
   orderBy?: 'recent' | 'like';
-  hideHeader?: boolean;
+  hideItem?: boolean;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -51,7 +51,7 @@ export default function CardList({
 
   return (
     <div>
-      {!hideHeader && (
+      {!hideItem && (
         <div className="flex items-center justify-between pb-8 pt-20">
           <p className="text-[20px] font-bold">게시글</p>
 
@@ -137,11 +137,13 @@ export default function CardList({
 
       {/* 페이지네이션 */}
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {!hideItem && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }
