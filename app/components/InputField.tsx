@@ -54,8 +54,8 @@ function InputField({
       <Image
         src={
           inputType === 'password'
-            ? '/images/icons/icon-visibility-off.svg'
-            : '/images/icons/icon-visibility-on.svg'
+            ? '/images/icons/ic_visibility-off.svg'
+            : '/images/icons/ic_visibility-on.svg'
         }
         alt={inputType === 'password' ? 'Show' : 'Hide'}
         width={24}
@@ -76,20 +76,18 @@ function InputField({
           onChange={onChange}
           onBlur={handleBlur}
           disabled={isDisabled}
-          className={`w-full px-4 py-3 sm:py-4 text-md sm:text-lg rounded-xl
-            ${
-              isDisabled
-                ? 'border border-bd-primary/10 bg-b-tertiary text-t-disabled'
-                : 'bg-b-secondary border border-bd-primary/10 text-t-primary focus:outline-none hover:border-i-hover focus:ring-1 focus:ring-green-500 focus:border-i-focus'
-            }
-            placeholder-t-default ${error || errorMessage ? 'border-danger' : ''}`}
+          className={`w-full rounded-xl px-4 py-3 text-md sm:py-4 sm:text-lg ${
+            isDisabled
+              ? 'border border-bd-primary/10 bg-b-tertiary text-t-disabled'
+              : 'border border-bd-primary/10 bg-b-secondary text-t-primary hover:border-i-hover focus:border-i-focus focus:outline-none focus:ring-1 focus:ring-green-500'
+          } placeholder-t-default ${error || errorMessage ? 'border-danger' : ''}`}
         />
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center justify-center space-x-2">
+        <div className="absolute right-4 top-1/2 flex -translate-y-1/2 transform items-center justify-center space-x-2">
           {!isDisabled && isPassword && renderPasswordToggle()}
           {children}
         </div>
       </div>
-      {error && <p className="text-danger text-md font-medium mt-2">{error}</p>}
+      {error && <p className="mt-2 text-md font-medium text-danger">{error}</p>}
     </div>
   );
 }
