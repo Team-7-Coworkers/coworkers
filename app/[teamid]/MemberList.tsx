@@ -40,6 +40,7 @@ export default function MemberList({ members, role }: Props) {
   };
 
   const handleLinkCopyClick = () => {
+    // TODO: API 호출로 링크 생성하기
     const url = window.location.href;
     navigator.clipboard.writeText(url);
     // TODO: 복사 되었다고 alert 대신 토스트 뛰우기

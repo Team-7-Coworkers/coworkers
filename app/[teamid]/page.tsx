@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 import TaskLists from './TaskLists';
 import MemberList from './MemberList';
 import Report from './Report';
-// import Modal, { ModalFooter } from '../components/Modal';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';

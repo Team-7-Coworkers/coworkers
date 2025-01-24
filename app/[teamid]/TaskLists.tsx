@@ -14,6 +14,8 @@ interface Props {
 }
 
 export default function TaskLists({ taskLists }: Props) {
+  const isEmtpy = taskLists.length === 0;
+
   return (
     <section className={styles.section}>
       <header className={styles.sectionheader}>
@@ -27,14 +29,20 @@ export default function TaskLists({ taskLists }: Props) {
         </button>
       </header>
 
-      <ul>
-        {taskLists.map((taskList) => (
-          <TaskListsItem
-            key={taskList.id}
-            {...taskList}
-          />
-        ))}
-      </ul>
+      {isEmtpy ? (
+        <p className="mb-6 mt-16 text-center text-md font-medium text-t-default">
+          아직 할 일 목록이 없습니다.
+        </p>
+      ) : (
+        <ul>
+          {taskLists.map((taskList) => (
+            <TaskListsItem
+              key={taskList.id}
+              {...taskList}
+            />
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
