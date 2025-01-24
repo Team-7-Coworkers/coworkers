@@ -6,17 +6,17 @@ import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import dayjs from 'dayjs';
 import { articleResponseType } from '@/app/types/article';
 import { useState } from 'react';
-import Pagination from './PageNation';
-import Dropdown from '../components/Dropdown';
+import Pagination from './Pagination';
+import Dropdown from '@/app/components/Dropdown';
 
-export default function CardList() {
+export default function CardList({ keyword }: { keyword: string }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [orderBy, setOrderBy] = useState<'recent' | 'like'>('recent');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pageSize = 6;
 
-  const articles = Card({ currentPage, orderBy }) as
+  const articles = Card({ currentPage, orderBy, keyword }) as
     | articleResponseType['getArticles']
     | null;
 

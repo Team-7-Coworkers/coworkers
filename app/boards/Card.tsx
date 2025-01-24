@@ -8,10 +8,12 @@ export default function Card({
   isBest,
   currentPage,
   orderBy,
+  keyword,
 }: {
   isBest?: boolean;
   currentPage: number;
   orderBy: 'recent' | 'like';
+  keyword?: string;
 }) {
   const [articles, setArticles] = useState<
     articleResponseType['getArticles'] | null
@@ -54,6 +56,7 @@ export default function Card({
           orderBy: isBest ? 'like' : orderBy,
 
           pageSize,
+          keyword,
         });
         setArticles(articles);
       } catch (error) {
@@ -62,7 +65,7 @@ export default function Card({
     };
 
     loadArticles();
-  }, [isBest, pageSize, currentPage, orderBy]);
+  }, [isBest, pageSize, currentPage, orderBy, keyword]);
 
   return articles;
 }
