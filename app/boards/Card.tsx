@@ -7,6 +7,7 @@ import { articleResponseType } from '@/app/types/article';
 export default function Card({
   isBest,
   currentPage,
+  orderBy,
 }: {
   isBest?: boolean;
   currentPage: number;
@@ -50,7 +51,8 @@ export default function Card({
       try {
         const articles = await getArticles({
           page: currentPage,
-          orderBy: isBest ? 'like' : 'recent',
+          orderBy: isBest ? 'like' : orderBy,
+
           pageSize,
         });
         setArticles(articles);
@@ -60,7 +62,7 @@ export default function Card({
     };
 
     loadArticles();
-  }, [isBest, pageSize, currentPage]);
+  }, [isBest, pageSize, currentPage, orderBy]);
 
   return articles;
 }

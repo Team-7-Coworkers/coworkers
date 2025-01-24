@@ -35,7 +35,8 @@ export default function CardList() {
 
   const handleOrderChange = (newOrder: 'recent' | 'like') => {
     setOrderBy(newOrder);
-    setIsDropdownOpen(false); // 정렬 기준 변경 시 드롭다운 닫기
+    setIsDropdownOpen(false);
+    setCurrentPage(1);
   };
 
   return (
@@ -60,7 +61,7 @@ export default function CardList() {
               </span>
             </Dropdown.Button>
             <Dropdown.Menu
-              isOpen={isDropdownOpen} // 드롭다운 열림 상태에 따라 렌더링
+              isOpen={isDropdownOpen}
               animationType="scale"
               className="z-30"
             >
