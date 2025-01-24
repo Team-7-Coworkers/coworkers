@@ -83,6 +83,7 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
           시작 날짜 및 시간
         </label>
         <div
+          id="start-date"
           className={`mt-3 cursor-pointer rounded-xl border p-4 px-4 py-3 text-lg text-t-default hover:border-primary sm:py-4 sm:text-lg ${
             isCalendarOpen ? 'border-primary' : 'border-bd-primary/10'
           }`}
@@ -117,6 +118,7 @@ export default function TodoModal({ isOpen, onClose, onSave }: TodoModalProps) {
         </label>
         <div className="mt-3">
           <TextField
+            id="todo-memo"
             type="box"
             placeholder="메모를 입력해주세요."
             value={todoMemo}

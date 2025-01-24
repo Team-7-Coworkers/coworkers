@@ -14,7 +14,7 @@ type Item = {
 type ItemListProps = {
   items: Item[];
   checkedItems: { [key: number]: boolean };
-  onCheckboxChange: (id: number) => void;
+  onCheckboxChange: (id: number, checked: boolean) => void;
 };
 
 const frequencyMap: { [key: string]: string } = {
@@ -45,7 +45,7 @@ export default function ItemList({
               <Checkbox
                 id={item.id}
                 checked={!!checkedItems[item.id]}
-                onChange={onCheckboxChange}
+                onChange={(id, checked) => onCheckboxChange(id, checked)}
                 aria-label={`Mark "${item.name}" as completed`}
               />
               <h3

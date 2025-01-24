@@ -115,11 +115,24 @@ export default function ListCategory({ selectedDate }: ListCategoryProps) {
     }
   }, [selectedCategory, selectedDate]);
 
-  const handleCheckboxChange = (id: number): void => {
-    setCheckedItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  const handleCheckboxChange = async (
+    id: number,
+    checked: boolean
+  ): Promise<void> => {
+    if (!selectedCategory) return;
+
+    try {
+      setCheckedItems((prev) => ({
+        ...prev,
+        [id]: checked,
+      }));
+      await instance.patch(
+        `/groups/${selectedCategory.groupId}/task-lists/${selectedCategory.id}/tasks/${id}`,
+        { done: checked }
+      );
+    } catch (error) {
+      console.error('Error updating task done status:', error);
+    }
   };
 
   const filteredTasks = tasks.filter(
