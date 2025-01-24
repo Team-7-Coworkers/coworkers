@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Checkbox from './Checkbox';
+import dayjs from 'dayjs';
 
 type Item = {
   id: number;
@@ -14,6 +15,17 @@ type ItemListProps = {
   items: Item[];
   checkedItems: { [key: number]: boolean };
   onCheckboxChange: (id: number) => void;
+};
+
+const frequencyMap: { [key: string]: string } = {
+  ONCE: '한 번',
+  DAILY: '매일 반복',
+  WEEKLY: '주 반복',
+  MONTHLY: '월 반복',
+};
+
+const getFormattedFrequency = (frequency: string): string => {
+  return frequencyMap[frequency] || '알 수 없음';
 };
 
 export default function ItemList({
@@ -70,11 +82,13 @@ export default function ItemList({
                 width={16}
                 height={16}
               />
-              <p className="text-sm text-t-default">{item.date}</p>
+              <p className="text-sm text-t-default">
+                {dayjs(item.date).format('YYYY년 MM월 DD일')}
+              </p>
             </div>
             <div className="text-xs text-b-tertiary">|</div>
             <div className="flex items-center gap-2">
-              {item.frequency !== '한 번' && (
+              {getFormattedFrequency(item.frequency) !== '한 번' && (
                 <Image
                   src="/images/icons/ic_repeat.svg"
                   alt="반복"
@@ -82,7 +96,9 @@ export default function ItemList({
                   height={16}
                 />
               )}
-              <p className="text-sm text-t-default">{item.frequency}</p>
+              <p className="text-sm text-t-default">
+                {getFormattedFrequency(item.frequency)}
+              </p>
             </div>
           </div>
         </div>

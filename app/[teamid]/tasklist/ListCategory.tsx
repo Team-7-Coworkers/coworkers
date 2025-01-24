@@ -42,7 +42,11 @@ interface GroupResponse {
   taskLists: TaskList[];
 }
 
-export default function ListCategory() {
+type ListCategoryProps = {
+  selectedDate: Date;
+};
+
+export default function ListCategory({ selectedDate }: ListCategoryProps) {
   const { teamid: groupId } = useParams<{ teamid: string }>();
   const [taskLists, setTaskLists] = useState<TaskList[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<TaskList | null>(
@@ -83,9 +87,16 @@ export default function ListCategory() {
   useEffect(() => {
     const fetchTasks = async (): Promise<void> => {
       if (!selectedCategory) return;
+
       try {
+        const formattedDate =
+          selectedDate.toISOString().split('T')[0] + 'T00:00:00Z';
+
         const response = await instance.get<Task[]>(
-          `/groups/${selectedCategory.groupId}/task-lists/${selectedCategory.id}/tasks`
+          `/groups/${selectedCategory.groupId}/task-lists/${selectedCategory.id}/tasks`,
+          {
+            params: { date: formattedDate },
+          }
         );
         setTasks(response.data);
       } catch (err) {
@@ -99,8 +110,10 @@ export default function ListCategory() {
       }
     };
 
-    fetchTasks();
-  }, [selectedCategory]);
+    if (selectedCategory && selectedDate) {
+      fetchTasks();
+    }
+  }, [selectedCategory, selectedDate]);
 
   const handleCheckboxChange = (id: number): void => {
     setCheckedItems((prev) => ({
@@ -108,6 +121,11 @@ export default function ListCategory() {
       [id]: !prev[id],
     }));
   };
+
+  const filteredTasks = tasks.filter(
+    (task) =>
+      task.date.split('T')[0] === selectedDate.toISOString().split('T')[0]
+  );
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
@@ -133,14 +151,12 @@ export default function ListCategory() {
         ))}
       </div>
 
-      <div>
-        {selectedCategory && (
-          <ItemList
-            items={tasks}
-            checkedItems={checkedItems}
-            onCheckboxChange={handleCheckboxChange}
-          />
-        )}
+      <div className="mt-4">
+        <ItemList
+          items={filteredTasks}
+          checkedItems={checkedItems}
+          onCheckboxChange={handleCheckboxChange}
+        />
       </div>
     </div>
   );

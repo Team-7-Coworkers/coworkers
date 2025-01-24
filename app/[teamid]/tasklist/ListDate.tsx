@@ -1,21 +1,27 @@
 'use client';
 
-import Image from 'next/image';
 import React, { useState } from 'react';
-
+import Image from 'next/image';
 import { calculateDate, formatDate } from '../../utils/date';
 import CustomCalendar from './CustomCalendar';
 
-export default function ListDate() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+type ListDateProps = {
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
+};
+
+export default function ListDate({
+  selectedDate,
+  setSelectedDate,
+}: ListDateProps) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handlePreviousDay = () => {
-    setSelectedDate((prevDate) => calculateDate(prevDate, -1));
+    setSelectedDate(calculateDate(selectedDate, -1));
   };
 
   const handleNextDay = () => {
-    setSelectedDate((prevDate) => calculateDate(prevDate, 1));
+    setSelectedDate(calculateDate(selectedDate, 1));
   };
 
   const handleDateSelect = (date: Date) => {
