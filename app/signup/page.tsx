@@ -5,6 +5,7 @@ import SignupForm from '@/app/signup/SignupForm';
 import { postAuthSignUp } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { SignUpFormDataType } from '../types/auth';
 
 export default function SignupPage() {
   const signupMutation = useMutation({
@@ -24,12 +25,7 @@ export default function SignupPage() {
     },
   });
 
-  const handleSignupSubmit = (formData: {
-    nickname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => {
+  const handleSignupSubmit = (formData: SignUpFormDataType) => {
     const {
       nickname,
       email,

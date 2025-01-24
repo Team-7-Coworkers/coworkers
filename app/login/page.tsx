@@ -5,13 +5,8 @@ import LoginForm from '@/app/login/LoginForm';
 import { postAuthSignIn } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '../stores/userStore';
-import { authResponseType } from '../types/auth';
+import { authResponseType, LoginformDataType } from '../types/auth';
 import axios from 'axios';
-
-type LoginFormType = {
-  email: string;
-  password: string;
-};
 
 export default function LoginPage() {
   const { setToken, setUser } = useUserStore();
@@ -36,7 +31,7 @@ export default function LoginPage() {
     },
   });
 
-  const handleLoginSubmit = (formData: LoginFormType) => {
+  const handleLoginSubmit = (formData: LoginformDataType) => {
     loginMutation.mutate(formData);
   };
 
