@@ -32,6 +32,27 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           className="w-[100%] bg-b-secondary py-2 placeholder-t-default focus:outline-none"
         />
       </div>
+      {inputValue && (
+        <p className="relative mt-4 text-[35px] font-medium">
+          <span
+            className="animate-gradientMove bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent"
+            style={{
+              backgroundSize: '200% 200%',
+            }}
+          >
+            {inputValue}
+          </span>
+
+          <span
+            className="animate-gradientMove bg-gradient-to-r from-gray-200 via-gray-600 to-gray-200 bg-clip-text text-transparent"
+            style={{
+              backgroundSize: '200% 200%',
+            }}
+          >
+            으로 검색한 결과입니다.
+          </span>
+        </p>
+      )}
     </div>
   );
 }
