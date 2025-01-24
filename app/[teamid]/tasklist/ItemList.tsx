@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Checkbox from './Checkbox';
 
 type Item = {
-  // 타입은 후에 api로 변경하면서 적당히 수정하겠습니다
   id: number;
   category: string;
   title: string;
