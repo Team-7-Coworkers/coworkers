@@ -21,8 +21,8 @@ export default function GNB() {
   };
 
   return (
-    <>
-      <nav className="sm:py fixed left-0 top-0 z-50 flex h-[60px] w-full items-center justify-between bg-b-secondary px-4 py-3.5 text-lg font-medium text-t-primary sm:px-6 lg:px-[18vw]">
+    <nav className="fixed left-0 top-0 z-10 w-full bg-b-secondary">
+      <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container sm:px-6">
         <div className="flex space-x-10">
           <div className="flex items-center gap-4">
             <div
@@ -61,7 +61,7 @@ export default function GNB() {
           />
           <div className="hidden text-md lg:block">사용자</div>
         </div>
-      </nav>
+      </div>
 
       <div className="sm:hidden">
         <TeamListSideBar
@@ -69,6 +69,6 @@ export default function GNB() {
           onClose={handleCloseSideBar}
         />
       </div>
-    </>
+    </nav>
   );
 }
