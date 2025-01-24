@@ -7,13 +7,16 @@ import dayjs from 'dayjs';
 import { articleResponseType } from '@/app/types/article';
 import { useState } from 'react';
 import Pagination from './PageNation';
+import Dropdown from '../components/Dropdown';
 
 export default function CardList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [orderBy, setOrderBy] = useState<'recent' | 'like'>('recent');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pageSize = 6;
 
-  const articles = Card({ currentPage }) as
+  const articles = Card({ currentPage, orderBy }) as
     | articleResponseType['getArticles']
     | null;
 
@@ -30,8 +33,49 @@ export default function CardList() {
     }
   };
 
+  const handleOrderChange = (newOrder: 'recent' | 'like') => {
+    setOrderBy(newOrder);
+    setIsDropdownOpen(false); // 정렬 기준 변경 시 드롭다운 닫기
+  };
+
   return (
     <div>
+      <div className="flex items-center justify-between pb-8 pt-20">
+        <p className="text-[20px] font-bold">게시글</p>
+
+        {/* 드롭다운 */}
+        <div>
+          <Dropdown onClose={() => setIsDropdownOpen(false)}>
+            <Dropdown.Button
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              className={`flex w-full cursor-pointer items-center justify-between rounded-[11px] border-none px-6 py-3 text-md transition-all duration-200 ${
+                isDropdownOpen
+                  ? 'bg-primary/90 text-white'
+                  : 'bg-b-secondary hover:bg-primary/90'
+              }`}
+            >
+              <span>
+                {orderBy === 'recent' ? '최신순' : '좋아요순'}
+                <span className="ml-4">▼</span>
+              </span>
+            </Dropdown.Button>
+            <Dropdown.Menu
+              isOpen={isDropdownOpen} // 드롭다운 열림 상태에 따라 렌더링
+              animationType="scale"
+              className="z-30"
+            >
+              <Dropdown.MenuItem onClick={() => handleOrderChange('recent')}>
+                최신순
+              </Dropdown.MenuItem>
+              <Dropdown.MenuItem onClick={() => handleOrderChange('like')}>
+                좋아요순
+              </Dropdown.MenuItem>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </div>
+
+      {/* 카드 리스트 */}
       <div className="grid gap-[24px] sm:grid-cols-1 lg:grid-cols-2">
         {articles && articles.list.length > 0 ? (
           articles.list.map((article) => (
@@ -78,6 +122,8 @@ export default function CardList() {
           <p>로딩중...</p>
         )}
       </div>
+
+      {/* 페이지네이션 */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

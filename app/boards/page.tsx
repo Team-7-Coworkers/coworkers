@@ -7,7 +7,7 @@ export default function boards() {
       <div className="w-full">
         <h1>베스트 게시글</h1>
         <BestCard />
-        <h1>게시글</h1>
+
         <CardList />
       </div>
     </div>

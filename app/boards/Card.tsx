@@ -10,6 +10,7 @@ export default function Card({
 }: {
   isBest?: boolean;
   currentPage: number;
+  orderBy: 'recent' | 'like';
 }) {
   const [articles, setArticles] = useState<
     articleResponseType['getArticles'] | null
@@ -48,7 +49,7 @@ export default function Card({
     const loadArticles = async () => {
       try {
         const articles = await getArticles({
-          page: currentPage, // 현재 페이지 반영
+          page: currentPage,
           orderBy: isBest ? 'like' : 'recent',
           pageSize,
         });
