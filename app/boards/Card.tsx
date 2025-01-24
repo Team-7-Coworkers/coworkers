@@ -4,11 +4,18 @@ import { useEffect, useState } from 'react';
 import { getArticles } from '@/app/api/article.api';
 import { articleResponseType } from '@/app/types/article';
 
-export default function Card({ isBest }: { isBest?: boolean }) {
-  const [articles, setArticles] =
-    useState<articleResponseType['getArticles']>();
+export default function Card({
+  isBest,
+  currentPage,
+}: {
+  isBest?: boolean;
+  currentPage: number;
+}) {
+  const [articles, setArticles] = useState<
+    articleResponseType['getArticles'] | null
+  >(null);
   //화면 크기에 따라 표시할 게시글 개수 저장하는 상태
-  const [pageSize, setPageSize] = useState(isBest ? 3 : 10);
+  const [pageSize, setPageSize] = useState(isBest ? 3 : 6);
 
   //화면 크기에 따라 페이지 사이즈 업데이트
   useEffect(() => {
@@ -17,11 +24,11 @@ export default function Card({ isBest }: { isBest?: boolean }) {
 
     const updatePageSize = () => {
       if (smMediaQuery.matches) {
-        setPageSize(isBest ? 1 : 10);
+        setPageSize(isBest ? 1 : 6);
       } else if (lgMediaQuery.matches) {
-        setPageSize(isBest ? 2 : 10);
+        setPageSize(isBest ? 2 : 6);
       } else {
-        setPageSize(isBest ? 3 : 10);
+        setPageSize(isBest ? 3 : 6);
       }
     };
 
@@ -41,6 +48,7 @@ export default function Card({ isBest }: { isBest?: boolean }) {
     const loadArticles = async () => {
       try {
         const articles = await getArticles({
+          page: currentPage, // 현재 페이지 반영
           orderBy: isBest ? 'like' : 'recent',
           pageSize,
         });
@@ -51,7 +59,7 @@ export default function Card({ isBest }: { isBest?: boolean }) {
     };
 
     loadArticles();
-  }, [isBest, pageSize]);
+  }, [isBest, pageSize, currentPage]);
 
   return articles;
 }
