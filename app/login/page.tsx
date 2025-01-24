@@ -5,8 +5,8 @@ import LoginForm from '@/app/login/LoginForm';
 import { postAuthSignIn } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '../stores/userStore';
-import axios from 'axios';
 import { authResponseType } from '../types/auth';
+import axios from 'axios';
 
 type LoginFormType = {
   email: string;
@@ -23,26 +23,28 @@ export default function LoginPage() {
       setToken(accessToken);
       setUser(user);
       alert('로그인에 성공했습니다!');
-      console.log('로그인 성공:', data);
     },
     onError: (error) => {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage = error.response.data.message;
-        alert(`로그인 오류: ${errorMessage}`);
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.message ||
+          '오류가 발생했습니다. 다시 시도해주세요.';
+        alert(`로그인 실패: ${errorMessage}`);
       } else {
-        console.error('Unexpected Error:', error);
+        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       }
     },
   });
 
-  // 폼 제출 핸들러
   const handleLoginSubmit = (formData: LoginFormType) => {
     loginMutation.mutate(formData);
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-start bg-b-primary px-4 py-6 sm:pt-[100px]">
-      <h2 className="mb-6 text-center text-2xl font-medium lg:text-4xl"></h2>
+      <h2 className="mb-6 text-center text-2xl font-medium lg:text-4xl">
+        로그인
+      </h2>
       <div className="w-full max-w-[460px] sm:pt-[80px]">
         <LoginForm onSubmit={handleLoginSubmit} />
       </div>
