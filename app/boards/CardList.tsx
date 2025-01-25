@@ -49,6 +49,14 @@ export default function CardList({
     setCurrentPage(1);
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div>
       {!hideItem && (
@@ -56,9 +64,9 @@ export default function CardList({
           <p className="text-[20px] font-bold">게시글</p>
 
           <div>
-            <Dropdown onClose={() => setIsDropdownOpen(false)}>
+            <Dropdown onClose={closeDropdown}>
               <Dropdown.Button
-                onClick={() => setIsDropdownOpen((prev) => !prev)}
+                onClick={toggleDropdown}
                 className={`flex w-full cursor-pointer items-center justify-between rounded-[11px] border-none px-6 py-3 text-md transition-all duration-200 ${
                   isDropdownOpen
                     ? 'bg-primary/90 text-white'
@@ -136,7 +144,6 @@ export default function CardList({
       </div>
 
       {/* 페이지네이션 */}
-
       {!hideItem && (
         <Pagination
           currentPage={currentPage}
