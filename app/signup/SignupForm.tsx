@@ -9,23 +9,23 @@ import {
   validateName,
   validatePassword,
 } from '@/app/utils/formValidators';
+import { SignUpFormDataType } from '../types/auth';
 
 interface SignupFormProps {
-  onSubmit: (formData: {
-    nickname: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => void;
+  onSubmit: (formData: SignUpFormDataType) => void;
+  initialFormData?: SignUpFormDataType;
 }
 
-export default function SignupForm({ onSubmit }: SignupFormProps) {
-  const [formData, setFormData] = useState({
+export default function SignupForm({
+  onSubmit,
+  initialFormData = {
     nickname: '',
     email: '',
     password: '',
     confirmPassword: '',
-  });
+  },
+}: SignupFormProps) {
+  const [formData, setFormData] = useState(initialFormData);
 
   const [isValidated, setIsValidated] = useState(false);
 
