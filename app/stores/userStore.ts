@@ -1,43 +1,43 @@
-import { create } from 'zustand';
+'use client';
 
-interface UserState {
-  user: { nickname: string; email: string } | null; // 사용자 정보 (이름과 이메일)
-  accessToken: string | null; // 인증 토큰
-  setUser: (user: { nickname: string; email: string }) => void; // 사용자 정보를 설정
-  setToken: (token: string) => void; // 인증 토큰을 설정하는 함수
-  clearUser: () => void; // 사용자 정보를 초기화하는 함수
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface UserInfo {
+  id: number;
+  nickname: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  teamId: string;
 }
 
-const useUserStore = create<UserState>((set) => ({
-  user: null, // 초기 사용자 정보는 null
-  accessToken:
-    typeof window !== 'undefined'
-      ? localStorage.getItem('coworkers_access_token')
-      : null,
-  // 초기 인증 토큰 설정: 클라이언트 환경에서 localStorage에서 가져옴
+interface UserState {
+  user: UserInfo | null;
+  accessToken: string | null; // 액세스 토큰
+  refreshToken: string | null; // 리프레쉬 토큰 추가
+  setUser: (user: UserInfo) => void; // 사용자 정보를 설정
+  setAccessToken: (accessToken: string) => void; // 엑세스 토큰 설정
+  setRefreshToken: (refreshToken: string) => void; // 리프레쉬 토큰 설정
+  clearUser: () => void; // 사용자 정보와 토큰을 초기화
+}
 
-  setUser: (user) => set({ user }),
-  // 사용자 정보를 상태에 저장하는 함수
-
-  setToken: (token) => {
-    if (token) {
-      // 토큰이 존재하면 localStorage에 저장
-      localStorage.setItem('coworkers_access_token', token);
-    } else {
-      // 토큰이 없으면 localStorage에서 삭제
-      localStorage.removeItem('coworkers_access_token');
+const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      user: null,
+      accessToken: null,
+      refreshToken: null, // 초기값 추가
+      setUser: (user) => set({ user }),
+      setAccessToken: (accessToken) => set({ accessToken }),
+      setRefreshToken: (refreshToken) => set({ refreshToken }),
+      clearUser: () =>
+        set({ user: null, accessToken: null, refreshToken: null }), // 초기화
+    }),
+    {
+      name: 'coworkers-storage', // 로컬 스토리지 키
     }
-    set({ accessToken: token }); // 상태에 토큰 업데이트
-  },
-
-  clearUser: () => {
-    // 사용자 정보를 초기화하는 함수
-    localStorage.removeItem('coworkers_access_token'); // localStorage에서 토큰 삭제
-    set({ user: null, accessToken: null }); // 상태 초기화
-  },
-}));
+  )
+);
 
 export default useUserStore;
-
-// 사용 예시
-// const { user, token, setUser, setToken, clearUser } = useUserStore();
