@@ -1,12 +1,4 @@
-export interface UserType {
-  id: number;
-  email: string;
-  nickname: string;
-  updatedAt: string;
-  createdAt: string;
-  image: string | null;
-  teamId: string;
-}
+import { UserType } from './shared';
 
 export interface AuthType {
   accessToken: string;

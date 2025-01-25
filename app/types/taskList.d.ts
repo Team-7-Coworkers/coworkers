@@ -1,6 +1,6 @@
-import { TaskType } from './task';
+import { TaskType } from './shared';
 
-export interface TaskListType {
+interface TaskListType {
   displayIndex: number;
   groupId: number;
   updatedAt: string;

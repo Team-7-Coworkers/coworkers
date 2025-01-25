@@ -1,18 +1,8 @@
-import { TaskType } from './task';
-import { MemberShipType } from './user';
+import { GroupType, MemberShipType, TaskType } from './shared';
 
-export interface GroupType {
-  teamId: string;
-  updatedAt: string;
-  createdAt: string;
-  image: string;
-  name: string;
-  id: number;
-}
-
-export interface GroupDataType extends GroupType {
+interface GroupDataType extends GroupType {
   members: MemberShipType[];
-  taskLists: Omit<TaskType, 'doneBy', 'writer'>[];
+  taskLists: Omit<TaskType, 'doneBy' | 'writer'>[];
 }
 
 export interface GroupResponseType {

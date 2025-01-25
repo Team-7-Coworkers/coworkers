@@ -1,6 +1,6 @@
-import { UserProfileType } from './articleComment';
+import { UserProfileType } from './shared';
 
-export interface TaskCommentType {
+interface TaskCommentType {
   content: string;
   updatedAt: string;
   createdAt: string;

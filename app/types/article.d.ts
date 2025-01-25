@@ -1,6 +1,6 @@
-import { UserProfileType } from './articleComment';
+import { ErrorResponse, UserProfileType } from './shared';
 
-interface ArticleType {
+export interface ArticleType {
   updatedAt: string;
   createdAt: string;
   likeCount: number;
@@ -10,14 +10,10 @@ interface ArticleType {
   id: number;
 }
 
-interface DetailedArticleType extends ArticleType {
+export interface DetailedArticleType extends ArticleType {
   commentCount: number;
   isLiked: boolean;
   content: string;
-}
-
-export interface ErrorResponse {
-  message: string;
 }
 
 export interface ArticleResponseType {

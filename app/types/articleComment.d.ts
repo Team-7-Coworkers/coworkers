@@ -1,10 +1,4 @@
-import { ErrorResponse } from './article';
-
-export interface UserProfileType {
-  image: string | null;
-  nickname: string;
-  id: number;
-}
+import { ErrorResponse, UserProfileType } from './shared';
 
 export interface ArticleCommentType {
   writer: UserProfileType;

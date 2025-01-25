@@ -1,4 +1,4 @@
-import { FrequencyType } from './task';
+import { FrequencyType } from './shared';
 
 export interface RecurringResponseType {
   writerId: number;
