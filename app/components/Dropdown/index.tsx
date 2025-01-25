@@ -33,7 +33,6 @@ export default function Dropdown({ children, className }: DropdownProps) {
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.type === DropdownButton) {
-          // DropdownButton에 onClick을 전달
           return React.cloneElement(
             child as ReactElement<DropdownButtonProps>,
             {
@@ -44,21 +43,10 @@ export default function Dropdown({ children, className }: DropdownProps) {
 
         if (React.isValidElement(child) && child.type === DropdownMenu) {
           return React.cloneElement(child as ReactElement<DropdownMenuProps>, {
-            isOpen, // isOpen 상태를 전달
+            isOpen,
             closeDropdown,
           });
         }
-
-        // if (React.isValidElement(child) && child.type === DropdownMenuItem) {
-        //   // DropdownMenuItem에 closeDropdown 전달
-        //   console.log('Passing closeDropdown:', closeDropdown);
-        //   return React.cloneElement(
-        //     child as ReactElement<DropdownMenuItemProps>,
-        //     {
-        //       closeDropdown,
-        //     }
-        //   );
-        // }
 
         return child;
       })}

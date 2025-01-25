@@ -17,8 +17,6 @@ const DropdownMenu = ({
   isOpen = false,
   closeDropdown,
 }: DropdownMenuProps) => {
-  console.log('DropdownMenu children:', children);
-
   if (!isOpen) return null;
 
   const animationClasses = {
@@ -39,7 +37,7 @@ const DropdownMenu = ({
           return React.cloneElement(
             child as ReactElement<DropdownMenuItemProps>,
             {
-              closeDropdown, // 여기서 closeDropdown을 전달
+              closeDropdown,
             }
           );
         }

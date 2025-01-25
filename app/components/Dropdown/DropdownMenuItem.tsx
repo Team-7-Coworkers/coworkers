@@ -11,12 +11,9 @@ const DropdownMenuItem = ({
   onClick,
   closeDropdown,
 }: DropdownMenuItemProps) => {
-  console.log('closeDropdown:', closeDropdown);
   const handleClick = () => {
-    console.log('clicked');
     if (closeDropdown) {
-      console.log('Closing dropdown');
-      closeDropdown(); // 메뉴 클릭 시 드롭다운 닫기
+      closeDropdown();
     }
 
     if (onClick) {
