@@ -40,6 +40,7 @@ export const Default: Story = {
     type: 'text',
     placeholder: '기본 인풋입니다.',
     value: '',
+    errorMessage: '유효하지 않은 입력입니다.',
   },
 };
 
@@ -93,7 +94,7 @@ export const DisabledPasswordInput: Story = {
     children: (
       <button
         type="button"
-        className="text-white bg-primary text-sm hover:underline"
+        className="bg-primary text-sm text-white hover:underline"
         onClick={() => alert('변경하기 버튼 클릭')}
       >
         변경하기
