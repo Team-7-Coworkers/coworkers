@@ -1,0 +1,50 @@
+@keyframes fillGraph {
+  to {
+    stroke-dasharray: 0, 10000000;
+  }
+}
+
+.header {
+  @apply flex items-center justify-between rounded-xl border border-bd-primary bg-slate-50/10 bg-[url('/images/bg-team-header.svg')] bg-contain bg-[center_right_80px] bg-no-repeat px-6 py-5;
+}
+.progress {
+  @apply flex items-center gap-1 rounded-xl bg-b-primary px-2 py-1 text-md text-primary;
+}
+.task {
+  @apply mt-4 flex items-center rounded-xl border-l-[12px] bg-b-secondary p-3;
+}
+.iconButton {
+  @apply ml-1 rounded-full p-1 text-ic-primary transition-colors hover:bg-b-tertiary hover:text-ic-inverse;
+}
+
+.section {
+  @apply mb-6 mt-6 lg:mb-10;
+
+  .sectionheader {
+    @apply mb-4 flex items-center;
+  }
+  .title {
+    @apply text-lg font-medium;
+  }
+}
+
+.frontCircle {
+  animation: fillGraph 2s reverse;
+}
+
+.reportBox {
+  @apply flex-1 rounded-xl bg-b-tertiary bg-[center_right_16px] bg-no-repeat p-4;
+}
+.reportTitle {
+  @apply mb-1 text-xs font-medium text-t-secondary;
+}
+.reportCount {
+  @apply text-2xl font-bold text-tertiary;
+}
+
+.member {
+  @apply flex w-full items-center rounded-xl bg-b-secondary px-4 py-3 text-left transition-colors hover:bg-b-tertiary/30 sm:px-6 sm:py-5;
+}
+.memberFigure {
+  @apply flex flex-none items-center rounded-full border border-ic-inverse/10 bg-b-tertiary;
+}

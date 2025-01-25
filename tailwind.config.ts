@@ -90,5 +90,14 @@ export default {
       },
     },
   },
+  safelist: [
+    'border-purple',
+    'border-blue',
+    'border-cyan',
+    'border-pink',
+    'border-rose',
+    'border-orange',
+    'border-yellow',
+  ],
   plugins: [],
 } satisfies Config;
