@@ -109,37 +109,42 @@ export default function CardList({
                 key={article.id}
                 className="flex h-[175px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105 hover:bg-b-tertiary"
               >
-                <div>
-                  <div className="flex items-start justify-between">
-                    <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden text-[18px] leading-[1.5] text-t-secondary">
-                      {article.title}
-                    </p>
-                    {article.image !== 'https://no-image/no-image.png' && (
-                      <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
-                        <Image
-                          src={article.image}
-                          alt={article.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
+                <div className="flex justify-between">
+                  {/* Title */}
+                  <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden text-[18px] leading-[1.5] text-t-secondary">
+                    {article.title}
+                  </p>
 
-                  {/*
+                  {/* Image */}
+                  {article.image !== 'https://no-image/no-image.png' && (
+                    <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
+                      <Image
+                        src={article.image}
+                        alt={article.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {/* Dropdown */}
+                  <div className="ml-[16px] flex-shrink-0">
+                    {/*
                   {isOwner && (
                   */}
-                  <PostActionDropdown
-                    onEdit={() => console.log(`수정: ${article.id}`)}
-                    onDeleteSuccess={() =>
-                      console.log('삭제 완료 후 상태 업데이트')
-                    }
-                    articleId={article.id}
-                  />
-                  {/*
-                )}
-                */}
+                    <PostActionDropdown
+                      onEdit={() => console.log(`수정: ${article.id}`)}
+                      onDeleteSuccess={() =>
+                        console.log('삭제 완료 후 상태 업데이트')
+                      }
+                      articleId={article.id}
+                    />
+                    {/*
+                  )}
+                  */}
+                  </div>
                 </div>
+
                 <div className="mt-auto flex items-center justify-between">
                   <div className="flex">
                     <p className="mr-[32px] text-[14px] text-t-primary">

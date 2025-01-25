@@ -54,6 +54,7 @@ export default function PostActionDropdown({
       <Dropdown.Menu
         isOpen={isOpen}
         animationType="scale"
+        className="absolute right-0 sm:left-0 sm:right-auto"
       >
         <Dropdown.MenuItem onClick={onEdit}>수정하기</Dropdown.MenuItem>
         <Dropdown.MenuItem onClick={handleDelete}>
