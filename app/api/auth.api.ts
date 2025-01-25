@@ -31,6 +31,7 @@ const postAuthSignIn = async ({
   password: string;
 }): Promise<authResponseType['postAuthSignIn']> => {
   const response = await instance.post(`auth/signIn`, { email, password });
+  console.log(response.data);
   return response.data;
 };
 

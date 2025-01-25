@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import Image from 'next/image';
 
 interface InputProps {
@@ -29,7 +29,11 @@ function InputField({
   children,
 }: InputProps) {
   const [inputType, setInputType] = useState(type);
-  const [error, setError] = useState<string | undefined>(errorMessage);
+  const [error, setError] = useState<string | undefined>();
+
+  useEffect(() => {
+    setError(errorMessage);
+  }, [errorMessage]);
 
   const handleBlur = () => {
     if (validator) {
@@ -74,13 +78,13 @@ function InputField({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          onBlur={handleBlur}
+          onBlur={validator ? handleBlur : undefined}
           disabled={isDisabled}
           className={`w-full rounded-xl px-4 py-3 text-md sm:py-4 sm:text-lg ${
             isDisabled
               ? 'border border-bd-primary/10 bg-b-tertiary text-t-disabled'
               : 'border border-bd-primary/10 bg-b-secondary text-t-primary hover:border-i-hover focus:border-i-focus focus:outline-none focus:ring-1 focus:ring-green-500'
-          } placeholder-t-default ${error || errorMessage ? 'border-danger' : ''}`}
+          } placeholder-t-default ${error ? 'border-danger' : ''}`}
         />
         <div className="absolute right-4 top-1/2 flex -translate-y-1/2 transform items-center justify-center space-x-2">
           {!isDisabled && isPassword && renderPasswordToggle()}
