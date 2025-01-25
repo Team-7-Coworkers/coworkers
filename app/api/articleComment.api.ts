@@ -1,5 +1,5 @@
 import instance from '../libs/axios';
-import { articleCommentResponseType } from '../types/articleComment';
+import { ArticleCommentResponseType } from '../types/articleComment';
 
 // 게시글의 댓글 작성하기
 const postArticlesComments = async ({
@@ -8,7 +8,7 @@ const postArticlesComments = async ({
 }: {
   articleId: number;
   content: string;
-}): Promise<articleCommentResponseType['postArticlesComments']> => {
+}): Promise<ArticleCommentResponseType['postArticlesComments']> => {
   const response = await instance.post(`articles/${articleId}/comments`, {
     content,
   });
@@ -24,7 +24,7 @@ const getArticlesComment = async ({
   articleId: number;
   limit: number;
   cursor?: number;
-}): Promise<articleCommentResponseType['getArticlesComment']> => {
+}): Promise<ArticleCommentResponseType['getArticlesComment']> => {
   const response = await instance.get(`articles/${articleId}/comments`, {
     params: {
       limit,
@@ -41,7 +41,7 @@ const patchComments = async ({
 }: {
   commentId: number;
   content: string;
-}): Promise<articleCommentResponseType['patchComments']> => {
+}): Promise<ArticleCommentResponseType['patchComments']> => {
   const response = await instance.patch(`comments/${commentId}`, { content });
   return response.data;
 };

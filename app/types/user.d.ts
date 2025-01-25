@@ -1,71 +1,32 @@
-export interface userResponseType {
-  getUser: {
-    teamId: string;
-    image: string;
-    nickname: string;
-    updatedAt: string;
-    createdAt: string;
-    email: string;
-    id: number;
-    memberships: Array<{
-      group: {
-        teamId: string;
-        updatedAt: string;
-        createdAt: string;
-        image: string;
-        name: string;
-        id: number;
-      };
-      role: 'ADMIN';
-      userImage: string;
-      userEmail: string;
-      userName: string;
-      groupId: number;
-      userId: number;
-    }>;
-  };
+import { UserType } from './auth';
+import { GroupType } from './group';
+import { TaskHistoryType } from './task';
+
+type Role = 'ADMIN' | 'MEMBER';
+
+export interface MemberShipType {
+  group: GroupType;
+  role: Role;
+  userImage: string;
+  userEmail: string;
+  userName: string;
+  groupId: number;
+  userId: number;
+}
+
+export interface UserDataType extends UserType {
+  memberships: MemberShipType[];
+}
+
+export interface UserResponseType {
+  getUser: UserDataType;
   patchUser: {
     message: string;
   };
-  getUserGroups: Array<{
-    teamId: string;
-    updatedAt: string;
-    createdAt: string;
-    image: string;
-    name: string;
-    id: number;
-  }>;
-  getUserMemberships: Array<{
-    group: {
-      teamId: string;
-      updatedAt: string;
-      createdAt: string;
-      image: string;
-      name: string;
-      id: number;
-    };
-    role: 'ADMIN';
-    userImage: string;
-    userEmail: string;
-    userName: string;
-    groupId: number;
-    userId: number;
-  }>;
+  getUserGroups: GroupType[];
+  getUserMemberships: MemberShipType[];
   getUserHistory: {
-    tasksDone: Array<{
-      displayIndex: number;
-      writerId: number;
-      userId: number;
-      deletedAt: string;
-      frequency: 'DAILY';
-      description: string;
-      name: string;
-      recurringId: number;
-      doneAt: string;
-      date: string;
-      updatedAt: string;
-      id: number;
-    }>;
+    tasksDone: TaskHistoryType[];
   };
   postUserSendRestPasswordEmail: {
     message: string;

@@ -1,46 +1,26 @@
-export interface authResponseType {
-  postAuthSignUp: {
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      id: number;
-      email: string;
-      nickname: string;
-      updatedAt: string;
-      createdAt: string;
-      image: string | null;
-      teamId: string;
-    };
-  };
-  postAuthSignIn: {
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      id: number;
-      email: string;
-      nickname: string;
-      updatedAt: string;
-      createdAt: string;
-      image: string | null;
-      teamId: string;
-    };
-  };
+export interface UserType {
+  id: number;
+  email: string;
+  nickname: string;
+  updatedAt: string;
+  createdAt: string;
+  image: string | null;
+  teamId: string;
+}
+
+export interface AuthType {
+  accessToken: string;
+  refreshToken: string;
+  user: UserType;
+}
+
+export interface AuthResponseType {
+  postAuthSignUp: AuthType;
+  postAuthSignIn: AuthType;
   postAuthRefreshToken: {
     accessToken: string;
   };
-  postAuthEasySignIn: {
-    refreshToken: string;
-    accessToken: string;
-    user: {
-      teamId: string;
-      image: string;
-      updatedAt: string;
-      createdAt: string;
-      nickname: string;
-      id: number;
-      email: string;
-    };
-  };
+  postAuthEasySignIn: AuthType;
 }
 
 export type SignUpFormDataType = {
@@ -50,7 +30,7 @@ export type SignUpFormDataType = {
   confirmPassword: string;
 };
 
-export type LoginformDataType = {
+export type LoginFormDataType = {
   email: string;
   password: string;
 };

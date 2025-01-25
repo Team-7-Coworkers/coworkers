@@ -1,5 +1,5 @@
 import instance from '../libs/axios';
-import { authResponseType } from '../types/auth';
+import { AuthResponseType } from '../types/auth';
 
 // 회원가입
 const postAuthSignUp = async ({
@@ -12,7 +12,7 @@ const postAuthSignUp = async ({
   nickname: string;
   password: string;
   passwordConfirmation: string;
-}): Promise<authResponseType['postAuthSignUp']> => {
+}): Promise<AuthResponseType['postAuthSignUp']> => {
   const response = await instance.post(`auth/signUp`, {
     email,
     nickname,
@@ -29,7 +29,7 @@ const postAuthSignIn = async ({
 }: {
   email: string;
   password: string;
-}): Promise<authResponseType['postAuthSignIn']> => {
+}): Promise<AuthResponseType['postAuthSignIn']> => {
   const response = await instance.post(`auth/signIn`, { email, password });
   console.log(response.data);
   return response.data;
@@ -40,7 +40,7 @@ const postAuthRefreshToken = async ({
   refreshToken,
 }: {
   refreshToken: string;
-}): Promise<authResponseType['postAuthRefreshToken']> => {
+}): Promise<AuthResponseType['postAuthRefreshToken']> => {
   const response = await instance.post(`auth/refresh-token`, { refreshToken });
   return response.data;
 };
@@ -56,7 +56,7 @@ const postAuthEasySignIn = async ({
   redirectUri: string;
   token: string;
   provider: 'GOOGLE' | 'KAKAO';
-}): Promise<authResponseType['postAuthEasySignIn']> => {
+}): Promise<AuthResponseType['postAuthEasySignIn']> => {
   const response = await instance.post(`auth/singIn/${provider}`, {
     state,
     redirectUri,

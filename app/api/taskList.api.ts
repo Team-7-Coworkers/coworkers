@@ -1,5 +1,5 @@
 import instance from '../libs/axios';
-import { taskListResponseType } from '../types/taskList';
+import { TaskListResponseType } from '../types/taskList';
 
 // 그룹 할일 목록 가져오기
 const getGroupsTaskLists = async ({
@@ -8,7 +8,7 @@ const getGroupsTaskLists = async ({
 }: {
   groupId: number;
   id: number;
-}): Promise<taskListResponseType['getGroupsTaskLists']> => {
+}): Promise<TaskListResponseType['getGroupsTaskLists']> => {
   const response = await instance.get(`groups/${groupId}/task-lists/${id}`);
   return response.data;
 };
@@ -22,7 +22,7 @@ const patchGroupsTaskLists = async ({
   name: string;
   groupId: number;
   id: number;
-}): Promise<taskListResponseType['patchGroupsTaskLists']> => {
+}): Promise<TaskListResponseType['patchGroupsTaskLists']> => {
   const response = await instance.patch(`groups/${groupId}/task-lists/${id}`, {
     name,
   });
@@ -48,7 +48,7 @@ const postGroupsTaskLists = async ({
 }: {
   name: string;
   groupId: number;
-}): Promise<taskListResponseType['postGroupsTaskLists']> => {
+}): Promise<TaskListResponseType['postGroupsTaskLists']> => {
   const response = await instance.post(`groups/${groupId}/task-lists`, {
     name,
   });
@@ -64,7 +64,7 @@ const patchGroupsTaskListOrder = async ({
   displayIndex: number;
   groupId: number;
   id: number;
-}): Promise<taskListResponseType['patchGroupsTaskListOrder']> => {
+}): Promise<TaskListResponseType['patchGroupsTaskListOrder']> => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${id}/order`,
     { displayIndex }

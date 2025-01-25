@@ -1,3 +1,3 @@
-export interface imageResponseType {
+export interface ImageResponseType {
   url: string;
 }

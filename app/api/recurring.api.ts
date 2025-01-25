@@ -1,5 +1,5 @@
 import instance from '../libs/axios';
-import { recurringResponseType } from '../types/recurring';
+import { RecurringResponseType } from '../types/recurring';
 
 // 반복할 일 생성하기
 const postGroupsTaskListsRecurring = async ({
@@ -18,7 +18,7 @@ const postGroupsTaskListsRecurring = async ({
   startDate: string;
   frequencyType: string;
   monthDay: number;
-}): Promise<recurringResponseType> => {
+}): Promise<RecurringResponseType> => {
   const response = await instance.post(
     `groups/${groupId}/task-lists/${taskListId}/recurring`,
     {

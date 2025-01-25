@@ -1,8 +1,8 @@
 import instance from '../libs/axios';
-import { userResponseType } from '@/app/types/user';
+import { UserResponseType } from '@/app/types/user';
 
 // 사용자 정보 가져오기
-const getUser = async (): Promise<userResponseType['getUser']> => {
+const getUser = async (): Promise<UserResponseType['getUser']> => {
   const response = await instance.get(`user`);
   return response.data;
 };
@@ -14,7 +14,7 @@ const patchUser = async ({
 }: {
   nickname: string;
   image: string;
-}): Promise<userResponseType['patchUser']> => {
+}): Promise<UserResponseType['patchUser']> => {
   const response = await instance.patch(`user`, { nickname, image });
   return response.data;
 };
@@ -26,14 +26,14 @@ const deleteUser = async () => {
 };
 
 // 사용자 그룹 가져오기
-const getUserGroups = async (): Promise<userResponseType['getUserGroups']> => {
+const getUserGroups = async (): Promise<UserResponseType['getUserGroups']> => {
   const response = await instance.get(`user/groups`);
   return response.data;
 };
 
 // 사용자 멤버쉽 가져오기
 const getUserMemberships = async (): Promise<
-  userResponseType['getUserMemberships']
+  UserResponseType['getUserMemberships']
 > => {
   const response = await instance.get(`user/memberships`);
   return response.data;
@@ -41,7 +41,7 @@ const getUserMemberships = async (): Promise<
 
 // 사용자 완료한 작업 가져오기
 const getUserHistory = async (): Promise<
-  userResponseType['getUserHistory']
+  UserResponseType['getUserHistory']
 > => {
   const response = await instance.get(`user/history`);
   return response.data;
@@ -55,7 +55,7 @@ const postUserSendRestPasswordEmail = async ({
 }: {
   email: string;
   redirectUrl: string;
-}): Promise<userResponseType['postUserSendRestPasswordEmail']> => {
+}): Promise<UserResponseType['postUserSendRestPasswordEmail']> => {
   const response = await instance.post(`user/send-reset-password-email`, {
     email,
     redirectUrl,
@@ -73,7 +73,7 @@ const patchUserResetPassword = async ({
   passwordConfirmation: string;
   password: string;
   token: string;
-}): Promise<userResponseType['patchUserResetPassword']> => {
+}): Promise<UserResponseType['patchUserResetPassword']> => {
   const response = await instance.patch(`user/reset-password`, {
     passwordConfirmation,
     password,
@@ -91,7 +91,7 @@ const patchUserPassword = async ({
 }: {
   passwordConfirmation: string;
   password: string;
-}): Promise<userResponseType['patchUserPassword']> => {
+}): Promise<UserResponseType['patchUserPassword']> => {
   const response = await instance.patch(`user/password`, {
     passwordConfirmation,
     password,

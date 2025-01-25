@@ -1,84 +1,39 @@
-export interface taskResponseType {
+import { UserProfileType } from './articleComment';
+import { RecurringResponseType } from './recurring';
+
+export type FrequencyType = 'ONCE' | 'MONTHLY' | 'WEEKLY' | 'DAILY';
+
+export interface TaskType {
+  doneBy: {
+    user: UserProfileType;
+  };
+  writer: UserProfileType;
+  displayIndex: number;
+  commentCount: number;
+  deletedAt: string;
+  recurringId: number;
+  frequency: FrequencyType;
+  updatedAt: string;
+  doneAt: string;
+  date: string;
+  description: string;
+  name: string;
+  id: number;
+}
+
+export interface TaskHistoryType
+  extends Omit<TaskType, 'doneBy', 'writer', 'commentCount'> {
+  writerId: number;
+  userId: number;
+}
+
+export interface TaskResponseType {
   postGroupsTaskListsTasks: {
-    recurring: {
-      writerId: number;
-      groupId: number;
-      taskListId: number;
-      monthDay: number;
-      weekDays: number[];
-      frequencyType: 'DAILY';
-      startDate: string;
-      updatedAt: string;
-      createdAt: string;
-      description: string;
-      name: string;
-      id: number;
-    };
+    recurring: RecurringResponseType;
   };
-  getGroupsTaskListTasks: Array<{
-    doneBy: {
-      user: {
-        image: string;
-        nickname: string;
-        id: number;
-      };
-    };
-    writer: {
-      image: string;
-      nickname: string;
-      id: number;
-    };
-    displayIndex: number;
-    commentCount: number;
-    deletedAt: string;
-    recurringId: number;
-    frequency: 'DAILY';
-    updatedAt: string;
-    doneAt: string;
-    date: string;
-    description: string;
-    name: string;
-    id: number;
-  }>;
-  getGroupsTaskListsTasks: {
-    doneBy: {
-      user: {
-        image: string;
-        nickname: string;
-        id: number;
-      };
-    };
-    writer: {
-      image: string;
-      nickname: string;
-      id: number;
-    };
-    displayIndex: number;
-    commentCount: number;
-    deletedAt: string;
-    recurringId: number;
-    frequency: 'DAILY';
-    updatedAt: string;
-    doneAt: string;
-    date: string;
-    description: string;
-    name: string;
-    id: number;
-  };
-  patchGroupsTaskListsTasks: {
-    displayIndex: number;
-    writerId: number;
-    userId: number;
-    deletedAt: string;
-    frequency: 'DAILY';
-    description: string;
-    name: string;
-    recurringId: number;
-    doneAt: string;
-    date: string;
-    updatedAt: string;
-    id: number;
-  };
+  getGroupsTaskListTasks: TaskType[];
+  getGroupsTaskListsTasks: TaskType;
+  patchGroupsTaskListsTasks: TaskHistoryType;
   patchGroupsTaskListTasksOrder: {
     displayIndex: number;
   };

@@ -1,5 +1,5 @@
 import instance from '../libs/axios';
-import { articleResponseType } from '../types/article';
+import { ArticleResponseType } from '../types/article';
 
 // 게시글 올리기
 const postArticles = async ({
@@ -10,7 +10,7 @@ const postArticles = async ({
   image: string;
   content: string;
   title: string;
-}): Promise<articleResponseType['postArticles']> => {
+}): Promise<ArticleResponseType['postArticles']> => {
   const response = await instance.post(`articles`, { image, content, title });
   return response.data;
 };
@@ -26,7 +26,7 @@ const getArticles = async ({
   pageSize?: number;
   orderBy?: string;
   keyword?: string;
-}): Promise<articleResponseType['getArticles']> => {
+}): Promise<ArticleResponseType['getArticles']> => {
   const response = await instance.get(`articles`, {
     params: {
       page,
@@ -43,7 +43,7 @@ const getDetailsArticle = async ({
   articleId,
 }: {
   articleId: number;
-}): Promise<articleResponseType['getDetailsArticle']> => {
+}): Promise<ArticleResponseType['getDetailsArticle']> => {
   const response = await instance.get(`articles/${articleId}`);
   return response.data;
 };
@@ -59,7 +59,7 @@ const patchArticles = async ({
   image: string;
   content: string;
   title: string;
-}): Promise<articleResponseType['patchArticles']> => {
+}): Promise<ArticleResponseType['patchArticles']> => {
   const response = await instance.patch(`articles/${articleId}`, {
     image,
     content,
@@ -79,7 +79,7 @@ const postArticlesLike = async ({
   articleId,
 }: {
   articleId: number;
-}): Promise<articleResponseType['postArticlesLike']> => {
+}): Promise<ArticleResponseType['postArticlesLike']> => {
   const response = await instance.post(`articles/${articleId}/like`);
   return response.data;
 };

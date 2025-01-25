@@ -1,4 +1,4 @@
-export interface oauthResponseType {
+export interface OauthResponseType {
   createdAt: string;
   updatedAt: string;
   appSecret: string;

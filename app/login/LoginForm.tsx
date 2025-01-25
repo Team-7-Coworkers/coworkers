@@ -4,12 +4,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
 import { validateEmail, validatePassword } from '@/app/utils/formValidators';
-import { LoginformDataType } from '../types/auth';
+import { LoginFormDataType } from '../types/auth';
 // import { postUserSendRestPasswordEmail } from '../api/user.api';
 
 interface LoginFormProps {
-  onSubmit: (formData: LoginformDataType) => void;
-  initialFormData?: LoginformDataType;
+  onSubmit: (formData: LoginFormDataType) => void;
+  initialFormData?: LoginFormDataType;
 }
 
 export default function LoginForm({

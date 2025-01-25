@@ -1,5 +1,5 @@
 import instance from '../libs/axios';
-import { taskResponseType } from '../types/task';
+import { TaskResponseType } from '../types/task';
 
 // 할 일 추가하기
 const postGroupsTaskListsTasks = async ({
@@ -18,7 +18,7 @@ const postGroupsTaskListsTasks = async ({
   startDate: string;
   frequencyType: string;
   monthDay: number;
-}): Promise<taskResponseType['postGroupsTaskListsTasks']> => {
+}): Promise<TaskResponseType['postGroupsTaskListsTasks']> => {
   const response = await instance.post(
     `groups/${groupId}/task-list/${taskListId}/tasks`,
     {
@@ -41,7 +41,7 @@ const getGroupsTaskListTasks = async ({
   groupId: number;
   taskListId: number;
   date?: string;
-}): Promise<taskResponseType['getGroupsTaskListTasks']> => {
+}): Promise<TaskResponseType['getGroupsTaskListTasks']> => {
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks`,
     {
@@ -60,7 +60,7 @@ const getGroupsTaskListsTasks = async ({
   groupId: number;
   taskListId: number;
   taskId: number;
-}): Promise<taskResponseType['getGroupsTaskListsTasks']> => {
+}): Promise<TaskResponseType['getGroupsTaskListsTasks']> => {
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`
   );
@@ -82,7 +82,7 @@ const patchGroupsTaskListsTasks = async ({
   name: string;
   description: string;
   done: boolean;
-}): Promise<taskResponseType['patchGroupsTaskListsTasks']> => {
+}): Promise<TaskResponseType['patchGroupsTaskListsTasks']> => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`,
     { name, description, done }
@@ -117,7 +117,7 @@ const patchGroupsTaskListTasksOrder = async ({
   taskListId: number;
   id: number;
   displayIndex: number;
-}): Promise<taskResponseType['patchGroupsTaskListTasksOrder']> => {
+}): Promise<TaskResponseType['patchGroupsTaskListTasksOrder']> => {
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${id}/order`,
     { displayIndex }

@@ -1,87 +1,34 @@
-export interface articleResponseType {
-  postArticles: {
-    updatedAt: string;
-    createdAt: string;
-    likeCount: number;
-    writer: {
-      nickname: string;
-      id: number;
-    };
-    image: string;
-    title: string;
-    id: number;
-  };
+import { UserProfileType } from './articleComment';
+
+interface ArticleType {
+  updatedAt: string;
+  createdAt: string;
+  likeCount: number;
+  writer: Omit<UserProfileType, 'image'>;
+  image: string;
+  title: string;
+  id: number;
+}
+
+interface DetailedArticleType extends ArticleType {
+  commentCount: number;
+  isLiked: boolean;
+  content: string;
+}
+
+export interface ErrorResponse {
+  message: string;
+}
+
+export interface ArticleResponseType {
+  postArticles: ArticleType;
 
   getArticles: {
     totalCount: number;
-    list: Array<{
-      updatedAt: string;
-      createdAt: string;
-      likeCount: number;
-      writer: {
-        nickname: string;
-        id: number;
-      };
-      image: string;
-      title: string;
-      id: number;
-    }>;
+    list: ArticleType[];
   };
-  getDetailsArticle:
-    | {
-        updatedAt: string;
-        createdAt: string;
-        likeCount: number;
-        writer: {
-          nickname: string;
-          id: number;
-        };
-        image: string;
-        title: string;
-        id: number;
-        commentCount: number;
-        isLiked: boolean;
-        content: string;
-      }
-    | {
-        message: string;
-      };
-  patchArticles:
-    | {
-        updatedAt: string;
-        createdAt: string;
-        likeCount: number;
-        writer: {
-          nickname: string;
-          id: number;
-        };
-        image: string;
-        title: string;
-        id: number;
-        commentCount: number;
-        isLiked: boolean;
-        content: string;
-      }
-    | {
-        message: string;
-      };
-  postArticlesLike:
-    | {
-        updatedAt: string;
-        createdAt: string;
-        likeCount: number;
-        writer: {
-          nickname: string;
-          id: number;
-        };
-        image: string;
-        title: string;
-        id: number;
-        commentCount: number;
-        isLiked: boolean;
-        content: string;
-      }
-    | {
-        message: string;
-      };
+
+  getDetailsArticle: DetailedArticleType | ErrorResponse;
+  patchArticles: DetailedArticleType | ErrorResponse;
+  postArticlesLike: DetailedArticleType | ErrorResponse;
 }

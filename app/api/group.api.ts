@@ -1,12 +1,12 @@
 import instance from '../libs/axios';
-import { groupResponseType } from '../types/group';
+import { GroupResponseType } from '../types/group';
 
 // 그룹 정보 가져오기
 const getGroups = async ({
   id,
 }: {
   id: number;
-}): Promise<groupResponseType['getGroups']> => {
+}): Promise<GroupResponseType['getGroups']> => {
   const response = await instance.get(`groups/${id}`);
   return response.data;
 };
@@ -20,7 +20,7 @@ const patchGroups = async ({
   id: number;
   image: string;
   name: string;
-}): Promise<groupResponseType['patchGroups']> => {
+}): Promise<GroupResponseType['patchGroups']> => {
   const response = await instance.patch(`groups/${id}`, { image, name });
   return response.data;
 };
@@ -38,7 +38,7 @@ const postGroups = async ({
 }: {
   image: string;
   name: string;
-}): Promise<groupResponseType['postGroups']> => {
+}): Promise<GroupResponseType['postGroups']> => {
   const response = await instance.post(`groups`, { image, name });
   return response.data;
 };
@@ -50,7 +50,7 @@ const getGroupsMember = async ({
 }: {
   id: number;
   memberUserId: number;
-}): Promise<groupResponseType['getGroupsMember']> => {
+}): Promise<GroupResponseType['getGroupsMember']> => {
   const response = await instance.get(`groups/${id}/member/${memberUserId}`);
   return response.data;
 };
@@ -72,7 +72,7 @@ const getGroupsInvitation = async ({
   id,
 }: {
   id: number;
-}): Promise<groupResponseType['getGroupsInvitation']> => {
+}): Promise<GroupResponseType['getGroupsInvitation']> => {
   const response = await instance.get(`groups/${id}/invitation`);
   return response.data;
 };
@@ -84,7 +84,7 @@ const postGroupsAcceptInvitation = async ({
 }: {
   userEmail: string;
   token: string;
-}): Promise<groupResponseType['postGroupsAcceptInvitation']> => {
+}): Promise<GroupResponseType['postGroupsAcceptInvitation']> => {
   const response = await instance.post(`groups/accept-invitation`, {
     userEmail,
     token,
@@ -99,7 +99,7 @@ const postGroupsMember = async ({
 }: {
   id: number;
   userEmail: string;
-}): Promise<groupResponseType['postGroupsMember']> => {
+}): Promise<GroupResponseType['postGroupsMember']> => {
   const response = await instance.post(`groups/${id}/member`, { userEmail });
   return response.data;
 };
@@ -111,7 +111,7 @@ const getGroupsTasks = async ({
 }: {
   id: number;
   date?: string;
-}): Promise<groupResponseType['getGroupsTasks']> => {
+}): Promise<GroupResponseType['getGroupsTasks']> => {
   const response = await instance.get(`groups/${id}/tasks`, {
     params: date ? { date } : {},
   });
