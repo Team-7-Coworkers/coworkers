@@ -8,27 +8,25 @@ export default function Home() {
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
 
   return (
-    <div className="h-screen w-full">
-      <div className="container py-8">
-        <h1 className="mb-4 text-2xl font-bold">모달 테스트 페이지</h1>
+    <>
+      <h1 className="mb-4 mt-2 text-2xl font-bold">모달 테스트 페이지</h1>
 
-        <div className="flex gap-4">
-          <button
-            type="button"
-            onClick={() => setModalOpen(true)}
-            className="rounded-xl bg-primary px-4 py-[14px] text-lg font-semibold text-t-inverse"
-          >
-            모달 열기
-          </button>
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={() => setModalOpen(true)}
+          className="rounded-xl bg-primary px-4 py-[14px] text-lg font-semibold text-t-inverse"
+        >
+          모달 열기
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setDangerModalOpen(true)}
-            className="rounded-xl bg-danger px-4 py-[14px] text-lg font-semibold text-t-inverse"
-          >
-            경고 모달 열기
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setDangerModalOpen(true)}
+          className="rounded-xl bg-danger px-4 py-[14px] text-lg font-semibold text-t-inverse"
+        >
+          경고 모달 열기
+        </button>
       </div>
 
       <Modal
@@ -70,6 +68,6 @@ export default function Home() {
           </button>
         </ModalFooter>
       </Modal>
-    </div>
+    </>
   );
 }
