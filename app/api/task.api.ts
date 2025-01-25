@@ -1,66 +1,35 @@
 import instance from '../libs/axios';
-import { TaskResponseType } from '../types/task';
+import { TaskResponseType, TaskParamsType } from '../types/task';
 
 // 할 일 추가하기
-const postGroupsTaskListsTasks = async ({
-  groupId,
-  taskListId,
-  name,
-  description,
-  startDate,
-  frequencyType,
-  monthDay,
-}: {
-  groupId: number;
-  taskListId: number;
-  name: string;
-  description: string;
-  startDate: string;
-  frequencyType: string;
-  monthDay: number;
-}): Promise<TaskResponseType['postGroupsTaskListsTasks']> => {
+const postGroupsTaskListsTasks = async (
+  params: TaskParamsType['postGroupsTaskListsTasks']
+): Promise<TaskResponseType['postGroupsTaskListsTasks']> => {
+  const { groupId, taskListId, ...data } = params;
   const response = await instance.post(
     `groups/${groupId}/task-list/${taskListId}/tasks`,
-    {
-      name,
-      description,
-      startDate,
-      frequencyType,
-      monthDay,
-    }
+    data
   );
   return response.data;
 };
 
 // 특정 일자, 특정 할일 리스트의 할일 리스트 가져오기
-const getGroupsTaskListTasks = async ({
-  groupId,
-  taskListId,
-  date,
-}: {
-  groupId: number;
-  taskListId: number;
-  date?: string;
-}): Promise<TaskResponseType['getGroupsTaskListTasks']> => {
+const getGroupsTaskListTasks = async (
+  params: TaskParamsType['getGroupsTaskListTasks']
+): Promise<TaskResponseType['getGroupsTaskListTasks']> => {
+  const { groupId, taskListId, date } = params;
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks`,
-    {
-      params: date ? { date } : {},
-    }
+    { params: date ? { date } : {} }
   );
   return response.data;
 };
 
 // 특정 할일 목록의 할일 리스트 가져오기
-const getGroupsTaskListsTasks = async ({
-  groupId,
-  taskListId,
-  taskId,
-}: {
-  groupId: number;
-  taskListId: number;
-  taskId: number;
-}): Promise<TaskResponseType['getGroupsTaskListsTasks']> => {
+const getGroupsTaskListsTasks = async (
+  params: TaskParamsType['getGroupsTaskListsTasks']
+): Promise<TaskResponseType['getGroupsTaskListsTasks']> => {
+  const { groupId, taskListId, taskId } = params;
   const response = await instance.get(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`
   );
@@ -68,38 +37,22 @@ const getGroupsTaskListsTasks = async ({
 };
 
 // 특정 할일 목록의 할일 리스트 수정하기
-const patchGroupsTaskListsTasks = async ({
-  groupId,
-  taskListId,
-  taskId,
-  name,
-  description,
-  done,
-}: {
-  groupId: number;
-  taskListId: number;
-  taskId: number;
-  name: string;
-  description: string;
-  done: boolean;
-}): Promise<TaskResponseType['patchGroupsTaskListsTasks']> => {
+const patchGroupsTaskListsTasks = async (
+  params: TaskParamsType['patchGroupsTaskListsTasks']
+): Promise<TaskResponseType['patchGroupsTaskListsTasks']> => {
+  const { groupId, taskListId, taskId, ...data } = params;
   const response = await instance.patch(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`,
-    { name, description, done }
+    data
   );
   return response.data;
 };
 
 // 특정 할일 목록의 할일 리스트 삭제하기
-const deleteGroupsTaskListsTasks = async ({
-  groupId,
-  taskListId,
-  taskId,
-}: {
-  groupId: number;
-  taskListId: number;
-  taskId: number;
-}) => {
+const deleteGroupsTaskListsTasks = async (
+  params: TaskParamsType['deleteGroupsTaskListsTasks']
+): Promise<void> => {
+  const { groupId, taskListId, taskId } = params;
   const response = await instance.delete(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`
   );
@@ -107,36 +60,22 @@ const deleteGroupsTaskListsTasks = async ({
 };
 
 // 특정 할일 목록의 할일 리스트 순서 변경하기
-const patchGroupsTaskListTasksOrder = async ({
-  groupId,
-  taskListId,
-  id,
-  displayIndex,
-}: {
-  groupId: number;
-  taskListId: number;
-  id: number;
-  displayIndex: number;
-}): Promise<TaskResponseType['patchGroupsTaskListTasksOrder']> => {
+const patchGroupsTaskListTasksOrder = async (
+  params: TaskParamsType['patchGroupsTaskListTasksOrder']
+): Promise<TaskResponseType['patchGroupsTaskListTasksOrder']> => {
+  const { groupId, taskListId, taskId, displayIndex } = params;
   const response = await instance.patch(
-    `groups/${groupId}/task-lists/${taskListId}/tasks/${id}/order`,
+    `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}/order`,
     { displayIndex }
   );
   return response.data;
 };
 
 // 반복할 일 삭제하기
-const deleteGroupsTaskListsTasksRecurring = async ({
-  groupId,
-  taskListId,
-  taskId,
-  recurringId,
-}: {
-  groupId: number;
-  taskListId: number;
-  taskId: number;
-  recurringId: number;
-}) => {
+const deleteGroupsTaskListsTasksRecurring = async (
+  params: TaskParamsType['deleteGroupsTaskListsTasksRecurring']
+): Promise<void> => {
+  const { groupId, taskListId, taskId, recurringId } = params;
   const response = await instance.delete(
     `groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}/recurring/${recurringId}`
   );

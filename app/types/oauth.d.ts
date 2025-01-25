@@ -7,3 +7,11 @@ export interface OauthResponseType {
   teamId: string;
   id: number;
 }
+
+export interface OauthParamsType {
+  postOauthApps: {
+    appSecret: string;
+    appKey: string;
+    provider: 'GOOGLE' | 'KAKAO';
+  };
+}

@@ -9,10 +9,37 @@ export interface AuthType {
 export interface AuthResponseType {
   postAuthSignUp: AuthType;
   postAuthSignIn: AuthType;
+  
   postAuthRefreshToken: {
     accessToken: string;
   };
+
   postAuthEasySignIn: AuthType;
+}
+
+export interface AuthParamsType {
+  postAuthSignUp: {
+    email: string;
+    nickname: string;
+    password: string;
+    passwordConfirmation: string;
+  };
+
+  postAuthSignIn: {
+    email: string;
+    password: string;
+  };
+
+  postAuthRefreshToken: {
+    refreshToken: string;
+  };
+
+  postAuthEasySignIn: {
+    state: string;
+    redirectUri: string;
+    token: string;
+    provider: 'GOOGLE' | 'KAKAO';
+  };
 }
 
 export type SignUpFormDataType = {
