@@ -1,10 +1,18 @@
 'use client';
 
 import CardList from '../CardList';
+import bestIcon from '@/public/images/icons/ic_medal.svg';
+import Image from 'next/image';
 
 export default function BestPage() {
   return (
     <div className="mx-auto flex w-[90%] flex-col items-center pt-20 sm:w-[90%] lg:w-[65%]">
+      <Image
+        src={bestIcon}
+        alt=""
+        className="h-auto w-[100px] pb-1"
+      />
+      <p className="pb-8 text-[30px] font-semibold">베스트 게시글</p>
       <CardList
         keyword=""
         orderBy="like"
