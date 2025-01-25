@@ -8,6 +8,7 @@ interface Props {
 }
 
 export default function TaskProgress({ done, total }: Props) {
+  // 비율 계산
   const rate = done === 0 ? 0 : done / total;
 
   return (

@@ -3,11 +3,14 @@ import CircleGraph from './CircleGraph';
 import styles from './teampage.module.css';
 
 interface Props {
+  /** 할 일 전체 갯수 */
   total: number;
+  /** 할 일 완료한 갯수 */
   complete: number;
 }
 
 export default function Report({ total, complete }: Props) {
+  // 비율 개산
   const rate = total === 0 ? 0 : complete / total;
 
   return (

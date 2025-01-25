@@ -1,10 +1,15 @@
 interface Props {
+  /** 추가 클래스 */
   classname?: string;
+  /** 비율 */
   rate?: number;
+  /** 비율 원 색상 */
   frontColor?: string;
+  /** 원 배경 색상 */
   backColor?: string;
 }
 
+// 원 둘레 계산
 const MAX_LENGTH = 5 * 2 * 3.14;
 
 export default function CircleGraphIcon({

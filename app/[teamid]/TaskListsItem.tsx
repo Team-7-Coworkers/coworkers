@@ -8,6 +8,7 @@ import TaskProgress from './TaskProgress';
 import KebabIcon from '../components/icons/KebabIcon';
 import styles from './teampage.module.css';
 
+// 목록 왼쪽 보더 색상값들
 const COLORS = ['purple', 'blue', 'cyan', 'pink', 'rose', 'orange', 'yellow'];
 
 export default function TaskListsItem({

@@ -1,10 +1,13 @@
 import styles from './teampage.module.css';
 
 interface Props {
+  /** 비율 */
   rate?: number;
+  /** 추가 클래스 */
   classnames?: string;
 }
 
+// 원 둘레 계산
 const MAX_LENGTH = 70 * 2 * 3.14;
 
 export default function CircleGraph({ rate = 0, classnames = '' }: Props) {

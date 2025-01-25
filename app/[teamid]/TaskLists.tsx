@@ -30,6 +30,7 @@ interface Props {
   taskLists: TaskListProps[];
 }
 
+// input 의 placeholder 와 error message 로 사용할 메시지
 const INPUT_MESSAGE = '목록 명을 입력해주세요.';
 
 export default function TaskLists({ groupId, taskLists = [] }: Props) {
@@ -38,8 +39,10 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
   const [errorMessage, setErrorMessage] = useState('');
   const isEmtpy = taskLists.length === 0;
 
+  // 할 일 목록 생성 폼 서브밋 함수
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!name.trim()) {
       setErrorMessage(INPUT_MESSAGE);
       return;

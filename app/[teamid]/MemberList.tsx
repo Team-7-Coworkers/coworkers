@@ -8,6 +8,7 @@ import MemberListItem from './MemberListItem';
 import Button from '../components/Button';
 
 import styles from './teampage.module.css';
+import { getGroupsInvitation } from '../api/group.api';
 
 export type MemberProps = {
   userId: number;
@@ -17,20 +18,26 @@ export type MemberProps = {
 };
 
 interface Props {
+  /** 그룹 아이디 */
+  groupId: number;
+  /** 멤버 목록 */
   members: MemberProps[];
+  /** 관리자 기능 처리 */
   role: string;
 }
 
-export default function MemberList({ members, role }: Props) {
+export default function MemberList({ groupId, members, role }: Props) {
   const [memberModalOpen, setMemberModalOpen] = useState(false);
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
   const [memberIdx, setMemberIdx] = useState<number>(0);
 
+  // 멤버 상세 모달 이지만, 보이는 정보는 같음..;;;
   const handleMemberClick = (userId: number) => {
     setMemberModalOpen(true);
     setMemberIdx(members.findIndex((member) => member.userId === userId));
   };
 
+  // 이메일 복사 버튼 클릭 함수
   const handleEmailCopyClick = () => {
     const email = members[memberIdx].userEmail;
     navigator.clipboard.writeText(email);
@@ -39,9 +46,12 @@ export default function MemberList({ members, role }: Props) {
     setMemberModalOpen(false);
   };
 
-  const handleLinkCopyClick = () => {
-    // TODO: API 호출로 링크 생성하기
-    const url = window.location.href;
+  // 멤버 초대 링크 복사 버튼 클릭 함수
+  const handleLinkCopyClick = async () => {
+    const token = await getGroupsInvitation({ id: groupId });
+    // TODO: 문서나 UI로는 정확한 프로세스가 확인이 안됨
+    // 팀 참여하기 페이지(/join) 링크 + 토큰
+    const url = window.location.host + '/join?t=' + token;
     navigator.clipboard.writeText(url);
     // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
     alert('링크가 복사되었습니다.');
@@ -57,7 +67,7 @@ export default function MemberList({ members, role }: Props) {
             ({members.length}명)
           </span>
 
-          {role === 'admin' && (
+          {role === 'ADMIN' && (
             <button
               className="text-button ml-auto text-md"
               onClick={() => setAddMemberModalOpen(true)}
