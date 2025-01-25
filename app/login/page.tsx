@@ -9,13 +9,14 @@ import { authResponseType, LoginformDataType } from '../types/auth';
 import axios from 'axios';
 
 export default function LoginPage() {
-  const { setToken, setUser } = useUserStore();
+  const { setAccessToken, setRefreshToken, setUser } = useUserStore();
 
   const loginMutation = useMutation({
     mutationFn: postAuthSignIn,
     onSuccess: (data: authResponseType['postAuthSignIn']) => {
-      const { accessToken, user } = data;
-      setToken(accessToken);
+      const { user, accessToken, refreshToken } = data;
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
       setUser(user);
       alert('로그인에 성공했습니다!');
     },
