@@ -1,6 +1,9 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { getGroups } from '../api/group.api';
+import type { groupResponseType } from '../types/group';
 
 import TaskLists from './TaskLists';
 import MemberList from './MemberList';
@@ -8,6 +11,12 @@ import Report from './Report';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
+
+interface Props {
+  params: {
+    teamid: string;
+  };
+}
 
 const dummy = {
   name: '경영관리팀',
@@ -66,14 +75,47 @@ const dummy = {
   ],
 };
 
-export default function TeamPage() {
-  const { teamid } = useParams();
-  console.log('teamid', teamid);
+export default function TeamPage({ params }: Props) {
+  const [data, setData] = useState<groupResponseType | null>(null);
+  const [role, setRole] = useState('');
+  const D_USER_ID = 1375;
+
+  useEffect(() => {
+    async function fetchGroups() {
+      const { teamid } = await params;
+      // TODO: teamid 검증
+      try {
+        const result: groupResponseType = await getGroups({
+          id: Number(teamid),
+        });
+        console.log('result:', result);
+        if (result !== null) {
+          setData(result);
+          const member = result.members.find(
+            (member) => member.userId === D_USER_ID
+          );
+          console.log('member:', member);
+          setRole(member.role);
+        }
+      } catch (e) {
+        // TODO: 리다이렉트 어디로? 404?
+        console.log('--- e:', e);
+      }
+    }
+
+    fetchGroups();
+  }, [params]);
+
+  if (data === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container flex flex-col py-6">
       <header className={styles.header}>
-        <h1 className="text-xl font-bold text-t-inverse">{dummy.name}</h1>
+        <h1 className="text-xl font-bold text-t-inverse">
+          {data.name}({data.id})
+        </h1>
 
         {/* TODO: 드롭다운 적용 */}
         <button>
@@ -81,9 +123,12 @@ export default function TeamPage() {
         </button>
       </header>
 
-      <TaskLists taskLists={dummy.taskLists} />
+      <TaskLists
+        groupId={data.id}
+        taskLists={data.taskLists}
+      />
 
-      {dummy.role === 'admin' && (
+      {role === 'ADMIN' && (
         <Report
           total={dummy.todayTotal}
           complete={dummy.todayComplete}
@@ -91,8 +136,8 @@ export default function TeamPage() {
       )}
 
       <MemberList
-        members={dummy.members}
-        role={dummy.role}
+        members={data.members}
+        role={role}
       />
     </div>
   );
