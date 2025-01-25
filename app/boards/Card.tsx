@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getArticles } from '@/app/api/article.api';
 import { articleResponseType } from '@/app/types/article';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Card({
   isBest,
@@ -15,13 +16,10 @@ export default function Card({
   orderBy: 'recent' | 'like';
   keyword?: string;
 }) {
-  const [articles, setArticles] = useState<
-    articleResponseType['getArticles'] | null
-  >(null);
   //화면 크기에 따라 표시할 게시글 개수 저장하는 상태
   const [pageSize, setPageSize] = useState(isBest ? 3 : 6);
 
-  //화면 크기에 따라 페이지 사이즈 업데이트
+  // 화면 크기에 따라 페이지 사이즈 업데이트
   useEffect(() => {
     const smMediaQuery = window.matchMedia('(max-width: 640px)');
     const lgMediaQuery = window.matchMedia('(max-width: 1024px)');
@@ -37,7 +35,6 @@ export default function Card({
     };
 
     updatePageSize();
-
     // 미디어 쿼리 변화 감지 리스너 등록
     smMediaQuery.addEventListener('change', updatePageSize);
     lgMediaQuery.addEventListener('change', updatePageSize);
@@ -48,23 +45,18 @@ export default function Card({
     };
   }, [isBest]);
 
-  useEffect(() => {
-    const loadArticles = async () => {
-      try {
-        const articles = await getArticles({
-          page: currentPage,
-          orderBy,
-          pageSize,
-          keyword,
-        });
-        setArticles(articles);
-      } catch (error) {
-        console.error('게시글 로드 실패:', error);
-      }
-    };
+  const { data: articles } = useQuery<articleResponseType['getArticles']>({
+    queryKey: ['articles', currentPage, orderBy, keyword, pageSize],
+    queryFn: () =>
+      getArticles({
+        page: currentPage,
+        orderBy,
+        pageSize,
+        keyword,
+      }),
 
-    loadArticles();
-  }, [isBest, pageSize, currentPage, orderBy, keyword]);
+    staleTime: 1000 * 60 * 5,
+  });
 
   return articles;
 }

@@ -5,6 +5,7 @@ import Dropdown from '@/app/components/Dropdown';
 import Image from 'next/image';
 import kebab from '@/public/images/icons/ic_kebab.svg';
 import { deleteArticles } from '@/app/api/article.api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface PostActionDropdownProps {
   onEdit: () => void;
@@ -20,6 +21,9 @@ export default function PostActionDropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  //캐시 관리를 위해 가져옴
+  const queryClient = useQueryClient();
+
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
   };
@@ -29,11 +33,16 @@ export default function PostActionDropdown({
   };
 
   const handleDelete = async () => {
+    //삭제 중일 때 중복 방지용
     if (isDeleting) return;
 
     try {
       setIsDeleting(true);
       await deleteArticles({ articleId });
+
+      // ui에 바로 반영하기 위해 React Query 캐시 무효화
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+
       if (onDeleteSuccess) onDeleteSuccess();
     } finally {
       setIsDeleting(false);
