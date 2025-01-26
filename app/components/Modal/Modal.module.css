@@ -10,14 +10,14 @@
 }
 
 .modal {
-  @apply fixed inset-0 z-50 h-screen w-full bg-black/50 backdrop-blur-sm;
+  @apply fixed inset-0 z-50 h-screen w-full overflow-y-auto bg-black/50 backdrop-blur-sm sm:py-8;
 
   &[open] {
     animation: open 0.3s forwards;
   }
 
   .container {
-    @apply fixed inset-0 m-auto mb-0 sm:mb-auto h-fit w-[384px] rounded-xl bg-b-secondary px-[52px] pb-8 pt-12 text-md font-medium text-t-secondary max-w-full rounded-b-none sm:rounded-b-xl;
+    @apply fixed inset-0 m-auto mb-0 h-fit max-h-[calc(100%-24px)] w-[384px] max-w-full overflow-y-auto rounded-xl rounded-b-none bg-b-secondary px-[52px] pb-8 pt-12 text-md font-medium text-t-secondary sm:relative sm:mb-auto sm:max-h-none sm:rounded-b-xl;
   }
   .title {
     @apply mb-2 text-center text-lg font-medium text-t-primary;

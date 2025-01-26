@@ -34,6 +34,8 @@
     --danger: #dc2626;
     --ic-primary: #64748b;
     --ic-inverse: #f8fafc;
+
+    --header-height: 60px;
   }
 
   body {
