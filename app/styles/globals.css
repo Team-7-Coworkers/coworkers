@@ -35,10 +35,27 @@
     --ic-primary: #64748b;
     --ic-inverse: #f8fafc;
   }
+
+  body {
+    scrollbar-gutter: stable;
+    color: var(--t-primary);
+    background-color: var(--b-primary);
+
+    &:has(dialog[open]) {
+      overflow: hidden;
+    }
+  }
 }
-body {
-  color: var(--t-primary);
-  background-color: var(--b-primary);
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-tertiary;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-button {
+    @apply text-primary transition-colors hover:text-i-hover;
+  }
 }
 
 ::-webkit-scrollbar-corner {

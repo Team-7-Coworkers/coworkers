@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 
-interface DropdownButtonProps {
+export interface DropdownButtonProps {
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
 }
 
