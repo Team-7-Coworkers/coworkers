@@ -3,7 +3,7 @@
 import Button from '@/app/components/Button';
 import Image from 'next/image';
 import { useState } from 'react';
-import TodoModal from './TodoModal';
+import TodoModal from './modals/TodoModal';
 
 interface AddButtonProps {
   groupId: number;

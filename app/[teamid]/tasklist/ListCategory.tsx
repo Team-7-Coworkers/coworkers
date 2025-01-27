@@ -1,9 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import instance from '../../libs/axios';
 import ItemList from './ItemList';
 import styles from './ListCategory.module.css';
+import {
+  deleteGroupsTaskListsTasks,
+  patchGroupsTaskListsTasks,
+} from '@/app/api/task.api';
 
 interface Task {
   id: number;
@@ -47,53 +51,86 @@ export default function ListCategory({
     {}
   );
 
-  useEffect(() => {
-    if (taskLists.length > 0 && !selectedCategory) {
-      const firstCategory = taskLists[0];
-      setSelectedCategory(firstCategory);
-      onCategoryChange(firstCategory.id);
+  const fetchTasks = useCallback(async () => {
+    if (!selectedCategory) return;
+
+    try {
+      const formattedDate = `${selectedDate.getFullYear()}-${String(
+        selectedDate.getMonth() + 1
+      ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(
+        2,
+        '0'
+      )}T00:00:00Z`;
+
+      const response = await instance.get<Task[]>(
+        `/groups/${groupId}/task-lists/${selectedCategory.id}/tasks`,
+        {
+          params: { date: formattedDate },
+        }
+      );
+      setTasks(response.data);
+
+      const initialCheckedItems = response.data.reduce(
+        (acc: { [key: number]: boolean }, task) => {
+          acc[task.id] = !!task.doneAt || false;
+          return acc;
+        },
+        {}
+      );
+      setCheckedItems(initialCheckedItems);
+    } catch (err) {
+      console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
     }
-  }, [taskLists, selectedCategory, onCategoryChange]);
+  }, [selectedCategory, selectedDate, groupId]);
 
   useEffect(() => {
-    const fetchTasks = async (): Promise<void> => {
-      if (!selectedCategory) return;
-
-      try {
-        const formattedDate = `${selectedDate.getFullYear()}-${String(
-          selectedDate.getMonth() + 1
-        ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(
-          2,
-          '0'
-        )}T00:00:00Z`;
-
-        const response = await instance.get<Task[]>(
-          `/groups/${groupId}/task-lists/${selectedCategory.id}/tasks`,
-          {
-            params: { date: formattedDate },
-          }
-        );
-        setTasks(response.data);
-        const initialCheckedItems = response.data.reduce(
-          (acc: { [key: number]: boolean }, task) => {
-            acc[task.id] = !!task.doneAt || false;
-            return acc;
-          },
-          {}
-        );
-        setCheckedItems(initialCheckedItems);
-      } catch (err) {
-        console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
-      }
-    };
-
     fetchTasks();
-  }, [selectedCategory, selectedDate, updateTrigger, groupId]);
+  }, [fetchTasks, updateTrigger]);
 
   const handleCategoryChange = (taskList: TaskList) => {
     if (selectedCategory?.id !== taskList.id) {
       setSelectedCategory(taskList);
       onCategoryChange(taskList.id);
+    }
+  };
+
+  const handleEditItem = async (
+    taskId: number,
+    name: string,
+    description: string
+  ) => {
+    try {
+      const taskToEdit = tasks.find((task) => task.id === taskId);
+      if (!taskToEdit) throw new Error('Task not found');
+
+      await patchGroupsTaskListsTasks({
+        groupId: groupId,
+        taskListId: selectedCategory?.id || 0,
+        taskId,
+        name,
+        description,
+        done: !!taskToEdit.doneAt,
+      });
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId ? { ...task, name, description } : task
+        )
+      );
+    } catch (error) {
+      console.error('수정 중 오류 발생:', error);
+    }
+  };
+
+  const handleDeleteItem = async (taskId: number) => {
+    try {
+      await deleteGroupsTaskListsTasks({
+        groupId: groupId,
+        taskListId: selectedCategory?.id || 0,
+        taskId,
+      });
+      fetchTasks();
+    } catch (error) {
+      console.error('삭제 중 오류 발생:', error);
     }
   };
 
@@ -132,6 +169,8 @@ export default function ListCategory({
               { done: checked }
             );
           }}
+          onEditItem={handleEditItem}
+          onDeleteItem={handleDeleteItem}
         />
       </div>
     </div>

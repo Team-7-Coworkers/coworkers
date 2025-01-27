@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import Checkbox from './Checkbox';
 import dayjs from 'dayjs';
+import Dropdown from '@/app/components/Dropdown';
+import { useState } from 'react';
+import DeleteModal from './modals/DeleteModal';
+import EditModal from './modals/EditModal';
 
 type Item = {
   id: number;
@@ -15,6 +19,8 @@ type ItemListProps = {
   items: Item[];
   checkedItems: { [key: number]: boolean };
   onCheckboxChange: (id: number, checked: boolean) => void;
+  onEditItem: (taskId: number, name: string, description: string) => void;
+  onDeleteItem: (taskId: number) => void;
 };
 
 const frequencyMap: { [key: string]: string } = {
@@ -32,7 +38,32 @@ export default function ItemList({
   items,
   checkedItems,
   onCheckboxChange,
+  onEditItem,
+  onDeleteItem,
 }: ItemListProps) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const openDeleteModal = (item: Item) => {
+    setSelectedItem(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const openEditModal = (item: Item) => {
+    setSelectedItem(item);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    if (selectedItem) onDeleteItem(selectedItem.id);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleEdit = (title: string, description: string) => {
+    if (selectedItem) onEditItem(selectedItem.id, title, description);
+  };
+
   return (
     <div className="mt-6">
       {items.map((item) => (
@@ -65,14 +96,28 @@ export default function ItemList({
                 {item.commentCount}
               </div>
             </div>
-            <button>
-              <Image
-                src="/images/icons/ic_kebab.svg"
-                alt="수정,삭제"
-                width={16}
-                height={16}
-              />
-            </button>
+            <Dropdown className="relative">
+              <Dropdown.Button>
+                <Image
+                  src="/images/icons/ic_kebab.svg"
+                  alt="수정,삭제"
+                  width={16}
+                  height={16}
+                  className="cursor-pointer rounded-full hover:bg-b-primary"
+                />
+              </Dropdown.Button>
+              <Dropdown.Menu
+                animationType="scale"
+                className="-right-3"
+              >
+                <Dropdown.MenuItem onClick={() => openEditModal(item)}>
+                  수정하기
+                </Dropdown.MenuItem>
+                <Dropdown.MenuItem onClick={() => openDeleteModal(item)}>
+                  삭제하기
+                </Dropdown.MenuItem>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
           <div className="mt-4 flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -103,6 +148,23 @@ export default function ItemList({
           </div>
         </div>
       ))}
+      {selectedItem && (
+        <>
+          <DeleteModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDelete}
+            itemName={selectedItem.name}
+          />
+          <EditModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            onConfirm={handleEdit}
+            initialTitle={selectedItem.name}
+            initialDescription=""
+          />
+        </>
+      )}
     </div>
   );
 }

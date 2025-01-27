@@ -37,11 +37,11 @@ const Button = ({
     }
 
     if (state === 'danger') {
-      return 'bg-danger text-t-inverse hover:bg-[#B91C1C] active:bg-[#7F1D1D]';
+      return 'bg-danger text-t-inverse hover:bg-[#B91C1C] hover:text-t-secondary active:bg-[#7F1D1D]';
     }
 
     if (type === 'outlined-secondary') {
-      return 'bg-white border border-[#CBD5E1] text-t-secondary hover:border-[#E2E8F0] hover:text-t-tertiary active:border-[#E2E8F0] active:text-t-tertiary';
+      return 'bg-white border border-[#CBD5E1] text-t-default hover:border-[#E2E8F0] hover:text-t-secondary active:border-[#E2E8F0] active:text-t-tertiary';
     }
 
     return type === 'outlined'

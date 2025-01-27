@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import Modal, { ModalFooter } from '@/app/components/Modal';
-import CustomCalendar from './CustomCalendar';
-import RepeatDropdown from './RepeatDropdown';
+import CustomCalendar from '../CustomCalendar';
+import RepeatDropdown from '../RepeatDropdown';
 import TextField from '@/app/components/TextField';
 import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
-import instance from '../../libs/axios';
+import instance from '../../../libs/axios';
 
 interface TodoModalProps {
   isOpen: boolean;
