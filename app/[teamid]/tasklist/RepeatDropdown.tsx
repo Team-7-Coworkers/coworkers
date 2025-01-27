@@ -1,5 +1,4 @@
 import Dropdown from '@/app/components/Dropdown';
-import useToggle from '@/app/hooks/useToggle';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -10,7 +9,6 @@ export interface RepeatDropdownProps {
 export default function RepeatDropdown({
   onSelectRepeatOption,
 }: RepeatDropdownProps) {
-  const dropdown = useToggle();
   const [selectedValue, setSelectedValue] = useState('반복 안함');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
@@ -35,8 +33,6 @@ export default function RepeatDropdown({
     } else {
       onSelectRepeatOption(value);
     }
-
-    dropdown.setFalse();
   };
 
   const toggleDay = (day: string) => {
@@ -63,8 +59,8 @@ export default function RepeatDropdown({
         반복 설정
       </label>
       <div className="mt-3">
-        <Dropdown onClose={dropdown.setFalse}>
-          <Dropdown.Button onClick={dropdown.toggle}>
+        <Dropdown>
+          <Dropdown.Button>
             <div className="flex h-11 w-[110px] cursor-pointer items-center justify-center gap-1 rounded-[11px] bg-b-primary px-[10px] pb-[11px] pt-[12px] text-md font-medium text-t-default">
               {selectedValue}
               <Image
@@ -75,26 +71,23 @@ export default function RepeatDropdown({
               />
             </div>
           </Dropdown.Button>
-          {dropdown.state && (
-            <Dropdown.Menu
-              className="top-[50px] w-28"
-              isOpen={dropdown.state}
-              animationType="slide"
-            >
-              <Dropdown.MenuItem onClick={() => handleSelect('한 번')}>
-                한 번
-              </Dropdown.MenuItem>
-              <Dropdown.MenuItem onClick={() => handleSelect('매일 반복')}>
-                매일 반복
-              </Dropdown.MenuItem>
-              <Dropdown.MenuItem onClick={() => handleSelect('주 반복')}>
-                주 반복
-              </Dropdown.MenuItem>
-              <Dropdown.MenuItem onClick={() => handleSelect('월 반복')}>
-                월 반복
-              </Dropdown.MenuItem>
-            </Dropdown.Menu>
-          )}
+          <Dropdown.Menu
+            className="top-[50px] w-28"
+            animationType="slide"
+          >
+            <Dropdown.MenuItem onClick={() => handleSelect('한 번')}>
+              한 번
+            </Dropdown.MenuItem>
+            <Dropdown.MenuItem onClick={() => handleSelect('매일 반복')}>
+              매일 반복
+            </Dropdown.MenuItem>
+            <Dropdown.MenuItem onClick={() => handleSelect('주 반복')}>
+              주 반복
+            </Dropdown.MenuItem>
+            <Dropdown.MenuItem onClick={() => handleSelect('월 반복')}>
+              월 반복
+            </Dropdown.MenuItem>
+          </Dropdown.Menu>
         </Dropdown>
       </div>
       {selectedValue === '주 반복' && (
