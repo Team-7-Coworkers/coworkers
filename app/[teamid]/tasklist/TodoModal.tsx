@@ -110,6 +110,11 @@ export default function TodoModal({
       isCloseOutsideClick
       onClose={onClose}
     >
+      <p className="mt-3 text-center font-medium leading-5 text-t-default">
+        할 일은 실제로 행동 가능한 작업 중심으로
+        <br />
+        작성해주시면 좋습니다.
+      </p>
       <section className="mt-5">
         <label
           htmlFor="todo-title"

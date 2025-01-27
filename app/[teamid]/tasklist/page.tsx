@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
@@ -19,25 +19,25 @@ export default function ListPage() {
 
   const handleUpdateTrigger = () => setUpdateTrigger((prev) => !prev);
 
-  useEffect(() => {
-    const fetchGroupData = async () => {
-      try {
-        const response = await instance.get(`/groups/${groupId}`);
-        const fetchedTaskLists = response.data.taskLists || [];
-        setTaskLists(fetchedTaskLists);
+  const fetchGroupData = useCallback(async () => {
+    try {
+      const response = await instance.get(`/groups/${groupId}`);
+      const fetchedTaskLists = response.data.taskLists || [];
+      setTaskLists(fetchedTaskLists);
 
-        if (fetchedTaskLists.length > 0) {
-          setSelectedTaskListId(fetchedTaskLists[0].id);
-        }
-      } catch (error) {
-        console.error('그룹 데이터를 가져오는 중 오류 발생:', error);
+      if (fetchedTaskLists.length > 0) {
+        setSelectedTaskListId(fetchedTaskLists[0].id);
       }
-    };
+    } catch (error) {
+      console.error('그룹 데이터를 가져오는 중 오류 발생:', error);
+    }
+  }, [groupId]);
 
+  useEffect(() => {
     if (groupId) {
       fetchGroupData();
     }
-  }, [groupId]);
+  }, [groupId, fetchGroupData]);
 
   return (
     <div className="container relative min-h-[700px]">
@@ -47,6 +47,8 @@ export default function ListPage() {
       <ListHeader
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        groupId={Number(groupId)}
+        onListAdded={fetchGroupData}
       />
       <div className="mt-5 sm:mt-6 lg:mt-8">
         <ListCategory

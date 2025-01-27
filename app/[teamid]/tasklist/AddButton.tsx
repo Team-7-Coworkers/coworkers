@@ -16,10 +16,10 @@ export default function AddButton({
   taskListId,
   onSaveSuccess,
 }: AddButtonProps) {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSaveSuccess = () => {
-    setModalOpen(false);
+    setIsModalOpen(false);
     onSaveSuccess();
   };
 
@@ -29,7 +29,7 @@ export default function AddButton({
         styleType="solid"
         state="floating"
         size="w-[125px] h-[48px] absolute bottom-5 lg:right-35 right-5 flex gap-1 items-center justify-center"
-        onClick={() => setModalOpen(true)}
+        onClick={() => setIsModalOpen(true)}
       >
         <Image
           src="/images/icons/ic_list-plus.svg"
@@ -39,10 +39,10 @@ export default function AddButton({
         />
         할 일 추가
       </Button>
-      {modalOpen && (
+      {isModalOpen && (
         <TodoModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
           groupId={groupId}
           taskListId={taskListId}
           onSaveSuccess={handleSaveSuccess}
