@@ -9,7 +9,7 @@ export interface AuthType {
 export interface AuthResponseType {
   postAuthSignUp: AuthType;
   postAuthSignIn: AuthType;
-  
+
   postAuthRefreshToken: {
     accessToken: string;
   };
