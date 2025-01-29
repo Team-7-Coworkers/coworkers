@@ -1,8 +1,9 @@
 import { GroupType, MemberShipType, TaskType } from './shared';
+import { TaskListResponseType } from './taskList';
 
 interface GroupDataType extends GroupType {
   members: MemberShipType[];
-  taskLists: Omit<TaskType, 'doneBy' | 'writer'>[];
+  taskLists: TaskListResponseType['getGroupsTaskLists'][];
 }
 
 export interface GroupResponseType {
