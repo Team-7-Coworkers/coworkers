@@ -19,9 +19,7 @@ import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
 
 interface Props {
-  params: {
-    teamid: string;
-  };
+  params: Promise<{ teamid: string }>;
 }
 
 export default function TeamPage({ params }: Props) {
@@ -48,7 +46,7 @@ export default function TeamPage({ params }: Props) {
     isPending,
     isError,
   } = useQuery<GroupResponseType['getGroups']>({
-    queryKey: ['groupId', teamid],
+    queryKey: ['getGroups', teamid],
     queryFn: async () => await getGroups({ groupId: Number(teamid) }),
     enabled: !!teamid,
   });
