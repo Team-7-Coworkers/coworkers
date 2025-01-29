@@ -4,7 +4,7 @@ import Card from './Card';
 import Image from 'next/image';
 import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import dayjs from 'dayjs';
-import { articleResponseType } from '@/app/types/article';
+import { ArticleResponseType } from '@/app/types/article';
 import { useState } from 'react';
 import Pagination from './Pagination';
 import Dropdown from '@/app/components/Dropdown';
@@ -27,11 +27,11 @@ export default function CardList({
   const [orderByDropdown, setOrderByDropdown] = useState<'recent' | 'like'>(
     orderBy
   );
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const pageSize = 6;
 
   const articles = Card({ currentPage, orderBy: orderByDropdown, keyword }) as
-    | articleResponseType['getArticles']
+    | ArticleResponseType['getArticles']
     | null;
 
   if (articles && articles.totalCount) {
@@ -49,16 +49,7 @@ export default function CardList({
 
   const handleOrderChange = (newOrder: 'recent' | 'like') => {
     setOrderByDropdown(newOrder);
-    setIsDropdownOpen(false);
     setCurrentPage(1);
-  };
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => !prev);
-  };
-
-  const closeDropdown = () => {
-    setIsDropdownOpen(false);
   };
 
   return (
@@ -68,14 +59,9 @@ export default function CardList({
           <p className="text-[20px] font-bold">게시글</p>
 
           <div>
-            <Dropdown onClose={closeDropdown}>
+            <Dropdown>
               <Dropdown.Button
-                onClick={toggleDropdown}
-                className={`flex w-full cursor-pointer items-center justify-between rounded-[11px] border-none px-6 py-3 text-md transition-all duration-200 ${
-                  isDropdownOpen
-                    ? 'bg-primary/90 text-white'
-                    : 'bg-b-secondary hover:bg-primary/90'
-                }`}
+                className={`flex w-full cursor-pointer items-center justify-between rounded-[11px] border-none bg-b-secondary px-6 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white`}
               >
                 <span>
                   {orderByDropdown === 'recent' ? '최신순' : '좋아요순'}
@@ -83,7 +69,6 @@ export default function CardList({
                 </span>
               </Dropdown.Button>
               <Dropdown.Menu
-                isOpen={isDropdownOpen}
                 animationType="scale"
                 className="z-30"
               >
