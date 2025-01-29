@@ -1,15 +1,30 @@
 import React, { ReactNode } from 'react';
 
-interface DropdownMenuItemProps {
+export interface DropdownMenuItemProps {
   children: ReactNode;
   onClick?: () => void;
+  closeDropdown?: () => void;
 }
 
-const DropdownMenuItem = ({ children, onClick }: DropdownMenuItemProps) => {
+const DropdownMenuItem = ({
+  children,
+  onClick,
+  closeDropdown,
+}: DropdownMenuItemProps) => {
+  const handleClick = () => {
+    if (closeDropdown) {
+      closeDropdown();
+    }
+
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <button
       className="w-full cursor-pointer rounded-[11px] border-none bg-b-secondary bg-none px-[16px] pb-[11px] pt-[12px] text-md transition-colors duration-200 hover:bg-b-tertiary focus:outline-none active:scale-95"
-      onClick={onClick}
+      onClick={handleClick}
     >
       {children}
     </button>

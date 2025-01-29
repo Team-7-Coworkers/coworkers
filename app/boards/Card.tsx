@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getArticles } from '@/app/api/article.api';
-import { articleResponseType } from '@/app/types/article';
+import { ArticleResponseType } from '@/app/types/article';
 import { useQuery } from '@tanstack/react-query';
 
 export default function Card({
@@ -45,7 +45,7 @@ export default function Card({
     };
   }, [isBest]);
 
-  const { data: articles } = useQuery<articleResponseType['getArticles']>({
+  const { data: articles } = useQuery<ArticleResponseType['getArticles']>({
     queryKey: ['articles', currentPage, orderBy, keyword, pageSize],
     queryFn: () =>
       getArticles({
