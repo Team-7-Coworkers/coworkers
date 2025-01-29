@@ -33,7 +33,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         />
       </div>
       {inputValue && (
-        <p className="relative mt-4 text-[35px] font-semibold">
+        <p className="relative mt-4 text-[30px] font-semibold">
           <span
             className="animate-gradientMove bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent"
             style={{
@@ -44,7 +44,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
           </span>
 
           <span
-            className="animate-gradientMove bg-gradient-to-r from-gray-200 via-gray-600 to-gray-200 bg-clip-text text-transparent"
+            className="animate-gradientMove bg-gradient-to-r from-gray-200 via-gray-600 to-gray-200 bg-clip-text text-[30px] text-transparent"
             style={{
               backgroundSize: '200% 200%',
             }}

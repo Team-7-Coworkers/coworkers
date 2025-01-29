@@ -97,7 +97,7 @@ export default function CardList({
                 className="pointer-events-auto block"
               >
                 <div
-                  className="flex h-[175px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-300 hover:scale-105 hover:bg-b-tertiary"
+                  className="flex h-[175px] cursor-pointer flex-col rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px] transition-transform duration-200 hover:scale-105 hover:bg-b-tertiary"
                   onClick={(e) => {
                     const target = e.target as HTMLElement;
                     if (target.closest('.dropdown')) {
