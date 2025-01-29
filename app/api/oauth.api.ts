@@ -1,21 +1,11 @@
 import instance from '../libs/axios';
-import { oauthResponseType } from '../types/oauth';
+import { OauthResponseType, OauthParamsType } from '../types/oauth';
 
 // 간편 로그인 App 등록/수정하기
-const postOauthApps = async ({
-  appSecret,
-  appKey,
-  provider,
-}: {
-  appSecret: string;
-  appKey: string;
-  provider: 'GOOGLE' | 'KAKAO';
-}): Promise<oauthResponseType> => {
-  const response = await instance.post(`oauthApps`, {
-    appSecret,
-    appKey,
-    provider,
-  });
+const postOauthApps = async (
+  params: OauthParamsType['postOauthApps']
+): Promise<OauthResponseType> => {
+  const response = await instance.post(`oauthApps`, params);
   return response.data;
 };
 

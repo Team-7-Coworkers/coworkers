@@ -1,4 +1,4 @@
-export interface oauthResponseType {
+export interface OauthResponseType {
   createdAt: string;
   updatedAt: string;
   appSecret: string;
@@ -6,4 +6,12 @@ export interface oauthResponseType {
   provider: 'GOOGLE';
   teamId: string;
   id: number;
+}
+
+export interface OauthParamsType {
+  postOauthApps: {
+    appSecret: string;
+    appKey: string;
+    provider: 'GOOGLE' | 'KAKAO';
+  };
 }
