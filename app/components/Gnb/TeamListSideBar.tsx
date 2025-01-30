@@ -1,10 +1,11 @@
 'use client';
 
+import CloseIcon from '../Modal/CloseIcon';
 import { mockTeamList } from './TeamListDropDown';
 
 export default function TeamListSideBar({
   onClose,
-  isOpen
+  isOpen,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -15,11 +16,13 @@ export default function TeamListSideBar({
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } z-50 w-52 space-y-10 p-4 sm:hidden`}
     >
-      <div
-        className="w-full cursor-pointer text-end"
-        onClick={onClose}
-      >
-        X {/*임시*/}
+      <div className="flex justify-end">
+        <div
+          className="cursor-pointer"
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </div>
       </div>
       <div className="space-y-4 text-md font-medium">
         {mockTeamList.map((team) => (
