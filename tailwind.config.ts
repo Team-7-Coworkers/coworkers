@@ -75,7 +75,29 @@ export default {
           'sans-serif',
         ],
       },
+      animation: {
+        gradientMove: 'gradientMove 5s linear infinite',
+      },
+      keyframes: {
+        gradientMove: {
+          '0%': {
+            backgroundPosition: '200% 0',
+          },
+          '100%': {
+            backgroundPosition: '-200% 0',
+          },
+        },
+      },
     },
   },
+  safelist: [
+    'border-purple',
+    'border-blue',
+    'border-cyan',
+    'border-pink',
+    'border-rose',
+    'border-orange',
+    'border-yellow',
+  ],
   plugins: [],
 } satisfies Config;

@@ -1,85 +1,91 @@
-export interface taskResponseType {
+import { RecurringResponseType } from './recurring';
+import { TaskHistoryType, TaskType } from './shared';
+
+export interface TaskResponseType {
   postGroupsTaskListsTasks: {
-    recurring: {
-      writerId: number;
-      groupId: number;
-      taskListId: number;
-      monthDay: number;
-      weekDays: number[];
-      frequencyType: 'DAILY';
-      startDate: string;
-      updatedAt: string;
-      createdAt: string;
-      description: string;
-      name: string;
-      id: number;
-    };
+    recurring: RecurringResponseType;
   };
-  getGroupsTaskListTasks: Array<{
-    doneBy: {
-      user: {
-        image: string;
-        nickname: string;
-        id: number;
-      };
-    };
-    writer: {
-      image: string;
-      nickname: string;
-      id: number;
-    };
-    displayIndex: number;
-    commentCount: number;
-    deletedAt: string;
-    recurringId: number;
-    frequency: 'DAILY';
-    updatedAt: string;
-    doneAt: string;
-    date: string;
-    description: string;
-    name: string;
-    id: number;
-  }>;
-  getGroupsTaskListsTasks: {
-    doneBy: {
-      user: {
-        image: string;
-        nickname: string;
-        id: number;
-      };
-    };
-    writer: {
-      image: string;
-      nickname: string;
-      id: number;
-    };
-    displayIndex: number;
-    commentCount: number;
-    deletedAt: string;
-    recurringId: number;
-    frequency: 'DAILY';
-    updatedAt: string;
-    doneAt: string;
-    date: string;
-    description: string;
-    name: string;
-    id: number;
-  };
-  patchGroupsTaskListsTasks: {
-    displayIndex: number;
-    writerId: number;
-    userId: number;
-    deletedAt: string;
-    frequency: 'DAILY';
-    description: string;
-    name: string;
-    recurringId: number;
-    doneAt: string;
-    date: string;
-    updatedAt: string;
-    id: number;
-  };
+
+  getGroupsTaskListTasks: TaskType[];
+  getGroupsTaskListsTasks: TaskType;
+  patchGroupsTaskListsTasks: TaskHistoryType;
+
   patchGroupsTaskListTasksOrder: {
     displayIndex: number;
+  };
+}
+
+export interface TaskParamsType {
+  postGroupsTaskListsTasks:
+    | {
+        frequencyType: 'MONTHLY';
+        groupId: number;
+        taskListId: number;
+        name: string;
+        description?: string;
+        startDate: string;
+        monthDay: number; // 필수
+        weekDays?: never; // 허용되지 않음
+      }
+    | {
+        frequencyType: 'WEEKLY';
+        groupId: number;
+        taskListId: number;
+        name: string;
+        description?: string;
+        startDate: string;
+        weekDays: number[]; // 필수
+        monthDay?: never; // 허용되지 않음
+      }
+    | {
+        frequencyType: 'DAILY' | 'ONCE';
+        groupId: number;
+        taskListId: number;
+        name: string;
+        description?: string;
+        startDate: string;
+        monthDay?: never; // 허용되지 않음
+        weekDays?: never; // 허용되지 않음
+      };
+
+  getGroupsTaskListTasks: {
+    groupId: number;
+    taskListId: number;
+    date?: string;
+  };
+
+  getGroupsTaskListsTasks: {
+    groupId: number;
+    taskListId: number;
+    taskId: number;
+  };
+
+  patchGroupsTaskListsTasks: {
+    groupId: number;
+    taskListId: number;
+    taskId: number;
+    name?: string;
+    description?: string;
+    done?: boolean;
+  };
+
+  deleteGroupsTaskListsTasks: {
+    groupId: number;
+    taskListId: number;
+    taskId: number;
+  };
+
+  patchGroupsTaskListTasksOrder: {
+    groupId: number;
+    taskListId: number;
+    taskId: number;
+    displayIndex: number;
+  };
+
+  deleteGroupsTaskListsTasksRecurring: {
+    groupId: number;
+    taskListId: number;
+    taskId: number;
+    recurringId: number;
   };
 }

@@ -3,53 +3,37 @@
 import React from 'react';
 import LoginForm from '@/app/login/LoginForm';
 import { postAuthSignIn } from '../api/auth.api';
-import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 import useUserStore from '../stores/userStore';
-
-interface LoginSuccessPayload {
-  accessToken: string;
-  user: {
-    id: number;
-    email: string;
-    nickname: string;
-    updatedAt: string;
-    createdAt: string;
-    image: string | null;
-    teamId: string;
-  };
-}
+import { AuthResponseType, LoginFormDataType } from '../types/auth';
+import axios from 'axios';
 
 export default function LoginPage() {
-  const { setToken, setUser } = useUserStore();
+  const { setAccessToken, setRefreshToken, setUser } = useUserStore();
 
-  const handleLoginSuccess = ({ accessToken, user }: LoginSuccessPayload) => {
-    setToken(accessToken);
-    setUser(user);
-
-    console.log('로그인 성공:', user);
-  };
-
-  const handleLoginSubmit = async (formData: {
-    email: string;
-    password: string;
-  }) => {
-    const { email, password } = formData;
-
-    try {
-      const response = await postAuthSignIn({ email, password });
-      const { accessToken, user } = response;
-
-      console.log(response);
+  const loginMutation = useMutation({
+    mutationFn: postAuthSignIn,
+    onSuccess: (data: AuthResponseType['postAuthSignIn']) => {
+      const { user, accessToken, refreshToken } = data;
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
+      setUser(user);
       alert('로그인에 성공했습니다!');
-      handleLoginSuccess({ accessToken, user });
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage = error.response.data.message;
-        alert(`로그인 오류: ${errorMessage}`);
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.message ||
+          '오류가 발생했습니다. 다시 시도해주세요.';
+        alert(`로그인 실패: ${errorMessage}`);
       } else {
-        console.error('Unexpected Error:', error);
+        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       }
-    }
+    },
+  });
+
+  const handleLoginSubmit = (formData: LoginFormDataType) => {
+    loginMutation.mutate(formData);
   };
 
   return (

@@ -1,82 +1,72 @@
-export interface groupResponseType {
-  getGroups: {
-    teamId: string;
-    updatedAt: string;
-    createdAt: string;
-    image: string;
-    name: string;
-    id: number;
-    members: Array<{
-      role: 'ADMIN';
-      userImage: string;
-      userEmail: string;
-      userName: string;
-      groupId: number;
-      userId: number;
-    }>;
-    taskLists: Array<{
-      displayIndex: number;
-      groupId: number;
-      updatedAt: string;
-      createdAt: string;
-      name: string;
-      id: number;
-      tasks: string[];
-    }>;
-  };
-  patchGroups: {
-    teamId: string;
-    updatedAt: string;
-    createdAt: string;
-    image: string;
-    name: string;
-    id: number;
-  };
-  postGroups: {
-    name: string;
-    image: string;
-    updatedAt: string;
-    createdAt: string;
-    id: number;
-  };
-  getGroupsMember: {
-    role: 'ADMIN';
-    userImage: string;
-    userEmail: string;
-    userName: string;
-    groupId: number;
-    userId: number;
-  };
+import { GroupType, MemberShipType, TaskType } from './shared';
+import { TaskListResponseType } from './taskList';
+
+interface GroupDataType extends GroupType {
+  members: MemberShipType[];
+  taskLists: TaskListResponseType['getGroupsTaskLists'][];
+}
+
+export interface GroupResponseType {
+  getGroups: GroupDataType;
+  patchGroups: GroupType;
+  postGroups: Omit<GroupType, 'teamgroupId'>;
+  getGroupsMember: Omit<MemberShipType, 'group'>;
   getGroupsInvitation: string;
   postGroupsAcceptInvitation: {
-    groupId: number;
+    groupgroupId: number;
   };
   postGroupsMember: {
     userEmail: string;
   };
-  getGroupsTasks: {
-    doneBy: {
-      user: {
-        image: string;
-        nickname: string;
-        id: number;
-      };
-    };
-    writer: {
-      image: string;
-      nickname: string;
-      id: number;
-    };
-    displayIndex: number;
-    commentCount: number;
-    deletedAt: string;
-    recurringId: number;
-    frequency: 'DAILY';
-    updatedAt: string;
-    doneAt: string;
-    date: string;
-    description: string;
+  getGroupsTasks: TaskType[];
+}
+
+export interface GroupParamsType {
+  getGroups: {
+    groupId: number;
+  };
+
+  patchGroups: {
+    groupId: number;
+    image?: string | null;
+    name?: string;
+  };
+
+  deleteGroups: {
+    groupId: number;
+  };
+
+  postGroups: {
+    image?: string;
     name: string;
-    id: number;
+  };
+
+  getGroupsMember: {
+    groupId: number;
+    memberUserId: number;
+  };
+
+  deleteGroupsMember: {
+    groupId: number;
+    memberUserId: number;
+  };
+
+  getGroupsInvitation: {
+    groupId: number;
+  };
+
+  postGroupsAcceptInvitation: {
+    userEmail: string;
+    token: string;
+  };
+
+  postGroupsMember: {
+    groupId: number;
+    userEmail: string;
+  };
+
+  getGroupsTasks: {
+    groupId: number;
+    date?: string;
   };
 }

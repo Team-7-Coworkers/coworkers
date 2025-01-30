@@ -4,17 +4,22 @@ import React, { useCallback, useEffect, useState } from 'react';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
 import { validateEmail, validatePassword } from '@/app/utils/formValidators';
+import { LoginFormDataType } from '../types/auth';
 // import { postUserSendRestPasswordEmail } from '../api/user.api';
 
 interface LoginFormProps {
-  onSubmit: (formData: { email: string; password: string }) => void;
+  onSubmit: (formData: LoginFormDataType) => void;
+  initialFormData?: LoginFormDataType;
 }
 
-export default function LoginForm({ onSubmit }: LoginFormProps) {
-  const [formData, setFormData] = useState({
+export default function LoginForm({
+  onSubmit,
+  initialFormData = {
     email: '',
     password: '',
-  });
+  },
+}: LoginFormProps) {
+  const [formData, setFormData] = useState(initialFormData);
 
   const [isValidated, setIsValidated] = useState(false);
 

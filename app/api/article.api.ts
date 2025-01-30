@@ -1,91 +1,63 @@
 import instance from '../libs/axios';
-import { articleResponseType } from '../types/article';
+import { ArticleResponseType, ArticleParamsType } from '../types/article';
 
 // 게시글 올리기
-const postArticles = async ({
-  image,
-  content,
-  title,
-}: {
-  image: string;
-  content: string;
-  title: string;
-}): Promise<articleResponseType['postArticles']> => {
-  const response = await instance.post(`articles`, { image, content, title });
+const postArticles = async (
+  params: ArticleParamsType['postArticles']
+): Promise<ArticleResponseType['postArticles']> => {
+  const response = await instance.post(`articles`, params);
   return response.data;
 };
 
 // 게시글 목록 조회하기
-const getArticles = async ({
-  page = 1,
-  pageSize = 9,
-  orderBy = 'recent',
-  keyword = '',
-}: {
-  page?: number;
-  pageSize?: number;
-  orderBy?: string;
-  keyword?: string;
-}): Promise<articleResponseType['getArticles']> => {
-  const response = await instance.get(`articles`, {
-    params: {
-      page,
-      pageSize,
-      orderBy,
-      keyword, // 검색 키워드
-    },
-  });
+const getArticles = async (
+  params: ArticleParamsType['getArticles']
+): Promise<ArticleResponseType['getArticles']> => {
+  const response = await instance.get(`articles`, { params });
   return response.data;
 };
 
 // 게시글 상세 조회하기
-const getDetailsArticle = async ({
-  articleId,
-}: {
-  articleId: number;
-}): Promise<articleResponseType['getDetailsArticle']> => {
+const getDetailsArticle = async (
+  params: ArticleParamsType['getDetailsArticle']
+): Promise<ArticleResponseType['getDetailsArticle']> => {
+  const { articleId } = params;
   const response = await instance.get(`articles/${articleId}`);
   return response.data;
 };
 
 // 게시글 수정하기
-const patchArticles = async ({
-  articleId,
-  image,
-  content,
-  title,
-}: {
-  articleId: number;
-  image: string;
-  content: string;
-  title: string;
-}): Promise<articleResponseType['patchArticles']> => {
-  const response = await instance.patch(`articles/${articleId}`, {
-    image,
-    content,
-    title,
-  });
+const patchArticles = async (
+  params: ArticleParamsType['patchArticles']
+): Promise<ArticleResponseType['patchArticles']> => {
+  const { articleId, ...data } = params;
+  const response = await instance.patch(`articles/${articleId}`, data);
   return response.data;
 };
 
 // 게시글 삭제하기
-const deleteArticles = async ({ articleId }: { articleId: number }) => {
+const deleteArticles = async (
+  params: ArticleParamsType['deleteArticles']
+): Promise<void> => {
+  const { articleId } = params;
   const response = await instance.delete(`articles/${articleId}`);
   return response.data;
 };
 
 // 게시글 좋아요 달기
-const postArticlesLike = async ({
-  articleId,
-}: {
-  articleId: number;
-}): Promise<articleResponseType['postArticlesLike']> => {
+const postArticlesLike = async (
+  params: ArticleParamsType['postArticlesLike']
+): Promise<ArticleResponseType['postArticlesLike']> => {
+  const { articleId } = params;
   const response = await instance.post(`articles/${articleId}/like`);
   return response.data;
 };
 
 // 게시글 좋아요 취소하기
-const deleteArticlesLike = async ({ articleId }: { articleId: number }) => {
+const deleteArticlesLike = async (
+  params: ArticleParamsType['deleteArticlesLike']
+): Promise<void> => {
+  const { articleId } = params;
   const response = await instance.delete(`articles/${articleId}/like`);
   return response.data;
 };

@@ -1,61 +1,36 @@
 import instance from '../libs/axios';
-import { authResponseType } from '../types/auth';
+import { AuthResponseType, AuthParamsType } from '../types/auth';
 
 // 회원가입
-const postAuthSignUp = async ({
-  email,
-  nickname,
-  password,
-  passwordConfirmation,
-}: {
-  email: string;
-  nickname: string;
-  password: string;
-  passwordConfirmation: string;
-}): Promise<authResponseType['postAuthSignUp']> => {
-  const response = await instance.post(`auth/signUp`, {
-    email,
-    nickname,
-    password,
-    passwordConfirmation,
-  });
+const postAuthSignUp = async (
+  params: AuthParamsType['postAuthSignUp']
+): Promise<AuthResponseType['postAuthSignUp']> => {
+  const response = await instance.post(`auth/signUp`, params);
   return response.data;
 };
 
 // 로그인
-const postAuthSignIn = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}): Promise<authResponseType['postAuthSignIn']> => {
-  const response = await instance.post(`auth/signIn`, { email, password });
+const postAuthSignIn = async (
+  params: AuthParamsType['postAuthSignIn']
+): Promise<AuthResponseType['postAuthSignIn']> => {
+  const response = await instance.post(`auth/signIn`, params);
+  console.log(response.data);
   return response.data;
 };
 
 // 액세스토큰 새로 받기
-const postAuthRefreshToken = async ({
-  refreshToken,
-}: {
-  refreshToken: string;
-}): Promise<authResponseType['postAuthRefreshToken']> => {
-  const response = await instance.post(`auth/refresh-token`, { refreshToken });
+const postAuthRefreshToken = async (
+  params: AuthParamsType['postAuthRefreshToken']
+): Promise<AuthResponseType['postAuthRefreshToken']> => {
+  const response = await instance.post(`auth/refresh-token`, params);
   return response.data;
 };
 
-// 간편 로그인(가입되어있지 않을 경우엔 가입됩니다.)
-const postAuthEasySignIn = async ({
-  state,
-  redirectUri,
-  token,
-  provider,
-}: {
-  state: string;
-  redirectUri: string;
-  token: string;
-  provider: 'GOOGLE' | 'KAKAO';
-}): Promise<authResponseType['postAuthEasySignIn']> => {
+// 간편 로그인 (가입되어있지 않을 경우엔 가입됩니다.)
+const postAuthEasySignIn = async (
+  params: AuthParamsType['postAuthEasySignIn']
+): Promise<AuthResponseType['postAuthEasySignIn']> => {
+  const { state, redirectUri, token, provider } = params;
   const response = await instance.post(`auth/singIn/${provider}`, {
     state,
     redirectUri,
