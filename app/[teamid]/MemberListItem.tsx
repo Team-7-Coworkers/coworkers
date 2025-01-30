@@ -15,6 +15,7 @@ export default function MemberListItem({
   userEmail,
   onClick,
 }: Props) {
+  // 멤버 클릭 함수
   const handleClick = () => {
     onClick(userId);
   };

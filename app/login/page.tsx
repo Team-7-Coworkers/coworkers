@@ -5,7 +5,7 @@ import LoginForm from '@/app/login/LoginForm';
 import { postAuthSignIn } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '../stores/userStore';
-import { authResponseType, LoginformDataType } from '../types/auth';
+import { AuthResponseType, LoginFormDataType } from '../types/auth';
 import axios from 'axios';
 
 export default function LoginPage() {
@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: postAuthSignIn,
-    onSuccess: (data: authResponseType['postAuthSignIn']) => {
+    onSuccess: (data: AuthResponseType['postAuthSignIn']) => {
       const { user, accessToken, refreshToken } = data;
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
@@ -32,7 +32,7 @@ export default function LoginPage() {
     },
   });
 
-  const handleLoginSubmit = (formData: LoginformDataType) => {
+  const handleLoginSubmit = (formData: LoginFormDataType) => {
     loginMutation.mutate(formData);
   };
 
