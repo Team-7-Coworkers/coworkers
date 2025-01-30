@@ -5,18 +5,10 @@ import Dropdown from '@/app/components/Dropdown';
 import { useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
-
-type Item = {
-  id: number;
-  category: string;
-  name: string;
-  commentCount: number;
-  date: string;
-  frequency: string;
-};
+import { TaskType } from '@/app/types/shared';
 
 type ItemListProps = {
-  items: Item[];
+  items: TaskType[];
   checkedItems: { [key: number]: boolean };
   onCheckboxChange: (id: number, checked: boolean) => void;
   onEditItem: (taskId: number, name: string, description: string) => void;
@@ -42,15 +34,15 @@ export default function ItemList({
   onDeleteItem,
 }: ItemListProps) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const openDeleteModal = (item: Item) => {
+  const openDeleteModal = (item: TaskType) => {
     setSelectedItem(item);
     setIsDeleteModalOpen(true);
   };
 
-  const openEditModal = (item: Item) => {
+  const openEditModal = (item: TaskType) => {
     setSelectedItem(item);
     setIsEditModalOpen(true);
   };

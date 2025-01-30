@@ -8,29 +8,12 @@ import {
   deleteGroupsTaskListsTasks,
   patchGroupsTaskListsTasks,
 } from '@/app/api/task.api';
-
-interface Task {
-  id: number;
-  category: string;
-  name: string;
-  commentCount: number;
-  date: string;
-  frequency: string;
-  doneAt?: string | null;
-}
-
-interface TaskList {
-  id: number;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-  groupId: number;
-  displayIndex: number;
-}
+import { TaskListResponseType } from '@/app/types/taskList';
+import { TaskResponseType } from '@/app/types/task';
 
 type ListCategoryProps = {
   selectedDate: Date;
-  taskLists: TaskList[];
+  taskLists: TaskListResponseType['getGroupsTaskLists'][];
   groupId: number;
   updateTrigger: boolean;
   onCategoryChange: (taskListId: number) => void;
@@ -43,10 +26,14 @@ export default function ListCategory({
   updateTrigger,
   onCategoryChange,
 }: ListCategoryProps) {
-  const [selectedCategory, setSelectedCategory] = useState<TaskList | null>(
-    taskLists.length > 0 ? taskLists[0] : null
-  );
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<
+    TaskListResponseType['getGroupsTaskLists'] | null
+  >(taskLists.length > 0 ? taskLists[0] : null);
+
+  const [tasks, setTasks] = useState<
+    TaskResponseType['getGroupsTaskListTasks']
+  >([]);
+
   const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -62,12 +49,12 @@ export default function ListCategory({
         '0'
       )}T00:00:00Z`;
 
-      const response = await instance.get<Task[]>(
-        `/groups/${groupId}/task-lists/${selectedCategory.id}/tasks`,
-        {
-          params: { date: formattedDate },
-        }
-      );
+      const response = await instance.get<
+        TaskResponseType['getGroupsTaskListTasks']
+      >(`/groups/${groupId}/task-lists/${selectedCategory.id}/tasks`, {
+        params: { date: formattedDate },
+      });
+
       setTasks(response.data);
 
       const initialCheckedItems = response.data.reduce(
@@ -87,7 +74,9 @@ export default function ListCategory({
     fetchTasks();
   }, [fetchTasks, updateTrigger]);
 
-  const handleCategoryChange = (taskList: TaskList) => {
+  const handleCategoryChange = (
+    taskList: TaskListResponseType['getGroupsTaskLists']
+  ) => {
     if (selectedCategory?.id !== taskList.id) {
       setSelectedCategory(taskList);
       onCategoryChange(taskList.id);
@@ -104,13 +93,14 @@ export default function ListCategory({
       if (!taskToEdit) throw new Error('Task not found');
 
       await patchGroupsTaskListsTasks({
-        groupId: groupId,
+        groupId,
         taskListId: selectedCategory?.id || 0,
         taskId,
         name,
         description,
         done: !!taskToEdit.doneAt,
       });
+
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
           task.id === taskId ? { ...task, name, description } : task
@@ -124,7 +114,7 @@ export default function ListCategory({
   const handleDeleteItem = async (taskId: number) => {
     try {
       await deleteGroupsTaskListsTasks({
-        groupId: groupId,
+        groupId,
         taskListId: selectedCategory?.id || 0,
         taskId,
       });
