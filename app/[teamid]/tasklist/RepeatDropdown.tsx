@@ -1,9 +1,13 @@
 import Dropdown from '@/app/components/Dropdown';
+import { TaskParamsType } from '@/app/types/task';
 import Image from 'next/image';
 import { useState } from 'react';
 
-export interface RepeatDropdownProps {
-  onSelectRepeatOption: (option: string, days?: number[]) => void;
+interface RepeatDropdownProps {
+  onSelectRepeatOption: (
+    option: TaskParamsType['postGroupsTaskListsTasks']['frequencyType'],
+    days?: number[]
+  ) => void;
 }
 
 export default function RepeatDropdown({
@@ -22,16 +26,28 @@ export default function RepeatDropdown({
     토: 6,
   };
 
+  const repeatOptionMap: {
+    [key: string]: TaskParamsType['postGroupsTaskListsTasks']['frequencyType'];
+  } = {
+    '한 번': 'ONCE',
+    '매일 반복': 'DAILY',
+    '주 반복': 'WEEKLY',
+    '월 반복': 'MONTHLY',
+  };
+
   const handleSelect = (value: string) => {
     setSelectedValue(value);
 
-    if (value === '주 반복') {
+    const mappedValue = repeatOptionMap[value];
+    if (!mappedValue) return;
+
+    if (mappedValue === 'WEEKLY') {
       onSelectRepeatOption(
-        value,
+        mappedValue,
         selectedDays.map((day) => dayToNumberMap[day])
       );
     } else {
-      onSelectRepeatOption(value);
+      onSelectRepeatOption(mappedValue);
     }
   };
 
@@ -44,7 +60,7 @@ export default function RepeatDropdown({
 
     if (selectedValue === '주 반복') {
       onSelectRepeatOption(
-        selectedValue,
+        'WEEKLY',
         updatedDays.map((d) => dayToNumberMap[d])
       );
     }
@@ -75,18 +91,14 @@ export default function RepeatDropdown({
             className="top-[50px] w-28"
             animationType="slide"
           >
-            <Dropdown.MenuItem onClick={() => handleSelect('한 번')}>
-              한 번
-            </Dropdown.MenuItem>
-            <Dropdown.MenuItem onClick={() => handleSelect('매일 반복')}>
-              매일 반복
-            </Dropdown.MenuItem>
-            <Dropdown.MenuItem onClick={() => handleSelect('주 반복')}>
-              주 반복
-            </Dropdown.MenuItem>
-            <Dropdown.MenuItem onClick={() => handleSelect('월 반복')}>
-              월 반복
-            </Dropdown.MenuItem>
+            {Object.keys(repeatOptionMap).map((label) => (
+              <Dropdown.MenuItem
+                key={label}
+                onClick={() => handleSelect(label)}
+              >
+                {label}
+              </Dropdown.MenuItem>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
       </div>

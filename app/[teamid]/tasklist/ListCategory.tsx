@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import instance from '../../libs/axios';
 import ItemList from './ItemList';
 import styles from './ListCategory.module.css';
 import {
+  getGroupsTaskListTasks,
   deleteGroupsTaskListsTasks,
   patchGroupsTaskListsTasks,
 } from '@/app/api/task.api';
@@ -49,15 +49,15 @@ export default function ListCategory({
         '0'
       )}T00:00:00Z`;
 
-      const response = await instance.get<
-        TaskResponseType['getGroupsTaskListTasks']
-      >(`/groups/${groupId}/task-lists/${selectedCategory.id}/tasks`, {
-        params: { date: formattedDate },
+      const response = await getGroupsTaskListTasks({
+        groupId,
+        taskListId: selectedCategory.id,
+        date: formattedDate,
       });
 
-      setTasks(response.data);
+      setTasks(response);
 
-      const initialCheckedItems = response.data.reduce(
+      const initialCheckedItems = response.reduce(
         (acc: { [key: number]: boolean }, task) => {
           acc[task.id] = !!task.doneAt || false;
           return acc;
@@ -154,10 +154,12 @@ export default function ListCategory({
 
             setCheckedItems((prev) => ({ ...prev, [id]: checked }));
 
-            await instance.patch(
-              `/groups/${groupId}/task-lists/${selectedCategory.id}/tasks/${id}`,
-              { done: checked }
-            );
+            await patchGroupsTaskListsTasks({
+              groupId,
+              taskListId: selectedCategory.id,
+              taskId: id,
+              done: checked,
+            });
           }}
           onEditItem={handleEditItem}
           onDeleteItem={handleDeleteItem}

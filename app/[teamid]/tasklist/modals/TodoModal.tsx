@@ -7,7 +7,8 @@ import RepeatDropdown from '../RepeatDropdown';
 import TextField from '@/app/components/TextField';
 import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
-import instance from '../../../libs/axios';
+import { postGroupsTaskListsTasks } from '@/app/api/task.api';
+import { TaskParamsType } from '@/app/types/task';
 
 interface TodoModalProps {
   isOpen: boolean;
@@ -27,7 +28,10 @@ export default function TodoModal({
   const [todoTitle, setTodoTitle] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedWeekDays, setSelectedWeekDays] = useState<number[]>([]);
-  const [repeatOption, setRepeatOption] = useState('ONCE');
+  const [repeatOption, setRepeatOption] =
+    useState<TaskParamsType['postGroupsTaskListsTasks']['frequencyType']>(
+      'ONCE'
+    );
   const [todoMemo, setTodoMemo] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -43,56 +47,50 @@ export default function TodoModal({
       const startDate = selectedDate
         ? `${selectedDate.getFullYear()}-${String(
             selectedDate.getMonth() + 1
-          ).padStart(
+          ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(
             2,
             '0'
-          )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`
+          )}T00:00:00Z`
         : '';
 
-      const frequencyTypeMap: { [key: string]: string } = {
-        '한 번': 'ONCE',
-        '매일 반복': 'DAILY',
-        '주 반복': 'WEEKLY',
-        '월 반복': 'MONTHLY',
-      };
+      let taskParams: TaskParamsType['postGroupsTaskListsTasks'];
 
-      const mappedFrequencyType = frequencyTypeMap[repeatOption];
-      if (!mappedFrequencyType) {
-        console.error('Invalid frequencyType:', repeatOption);
-        return;
-      }
-
-      let additionalFields = {};
-      if (mappedFrequencyType === 'MONTHLY') {
-        additionalFields = {
-          monthDay: selectedDate?.getDate() || 0,
-        };
-      } else if (mappedFrequencyType === 'WEEKLY') {
-        additionalFields = {
-          weekDays: selectedWeekDays,
-        };
-      }
-
-      console.log({
-        name: todoTitle,
-        description: todoMemo,
-        startDate,
-        frequencyType: mappedFrequencyType,
-        ...additionalFields,
-      });
-
-      const response = await instance.post(
-        `groups/${groupId}/task-lists/${taskListId}/tasks`,
-        {
+      if (repeatOption === 'MONTHLY') {
+        taskParams = {
+          frequencyType: 'MONTHLY',
+          groupId,
+          taskListId,
           name: todoTitle,
           description: todoMemo,
           startDate,
-          frequencyType: mappedFrequencyType,
-          ...additionalFields,
-        }
-      );
+          monthDay: selectedDate?.getDate() || 1,
+        };
+      } else if (repeatOption === 'WEEKLY') {
+        taskParams = {
+          frequencyType: 'WEEKLY',
+          groupId,
+          taskListId,
+          name: todoTitle,
+          description: todoMemo,
+          startDate,
+          weekDays: selectedWeekDays,
+        };
+      } else {
+        taskParams = {
+          frequencyType: repeatOption,
+          groupId,
+          taskListId,
+          name: todoTitle,
+          description: todoMemo,
+          startDate,
+        };
+      }
 
-      console.log('할 일 생성 성공:', response.data);
+      console.log('할 일 생성 요청 데이터:', taskParams);
+
+      await postGroupsTaskListsTasks(taskParams);
+
+      console.log('할 일 생성 성공');
       onSaveSuccess();
       onClose();
     } catch (error) {
@@ -100,8 +98,7 @@ export default function TodoModal({
     }
   };
 
-  const isFormValid =
-    todoTitle.trim() !== '' && selectedDate !== null && repeatOption !== 'ONCE';
+  const isFormValid = todoTitle.trim() !== '' && selectedDate !== null;
 
   return (
     <Modal
@@ -160,7 +157,7 @@ export default function TodoModal({
           />
         )}
         <RepeatDropdown
-          onSelectRepeatOption={(option: string, days?: number[]) => {
+          onSelectRepeatOption={(option, days) => {
             setRepeatOption(option);
             if (days) {
               setSelectedWeekDays(days);

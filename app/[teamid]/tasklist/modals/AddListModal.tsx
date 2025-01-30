@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Modal, { ModalFooter } from '@/app/components/Modal';
 import Button from '@/app/components/Button';
 import InputField from '@/app/components/InputField';
-import instance from '@/app/libs/axios';
+import { postGroupsTaskLists } from '@/app/api/taskList.api';
+import { TaskListParamsType } from '@/app/types/taskList';
 
 type AddListModalProps = {
   isOpen: boolean;
@@ -25,14 +26,18 @@ export default function AddListModal({
     }
 
     try {
-      await instance.post(`/groups/${groupId}/task-lists`, {
+      const params: TaskListParamsType['postGroupsTaskLists'] = {
+        groupId,
         name: listName,
-      });
+      };
+
+      await postGroupsTaskLists(params);
+
       setListName('');
       onClose();
       onListAdded();
     } catch (error) {
-      console.error('목록 추가 중 오류가 발생했습니다:', error);
+      console.error('목록 추가 중 오류 발생:', error);
       alert('목록 추가에 실패했습니다. 다시 시도해주세요.');
     }
   };

@@ -5,12 +5,16 @@ import { useParams } from 'next/navigation';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
 import ListHeader from './ListHeader';
-import instance from '../../libs/axios';
+import { getGroups } from '@/app/api/group.api';
+import { GroupResponseType } from '@/app/types/group';
 
 export default function ListPage() {
   const { teamid: groupId } = useParams<{ teamid: string }>();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [taskLists, setTaskLists] = useState([]);
+
+  const [taskLists, setTaskLists] = useState<
+    GroupResponseType['getGroups']['taskLists']
+  >([]);
 
   const [selectedTaskListId, setSelectedTaskListId] = useState<number | null>(
     null
@@ -21,8 +25,8 @@ export default function ListPage() {
 
   const fetchGroupData = useCallback(async () => {
     try {
-      const response = await instance.get(`/groups/${groupId}`);
-      const fetchedTaskLists = response.data.taskLists || [];
+      const response = await getGroups({ groupId: Number(groupId) });
+      const fetchedTaskLists = response.taskLists || [];
       setTaskLists(fetchedTaskLists);
 
       if (fetchedTaskLists.length > 0) {
