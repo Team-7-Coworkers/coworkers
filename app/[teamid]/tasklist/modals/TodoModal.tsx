@@ -86,11 +86,8 @@ export default function TodoModal({
         };
       }
 
-      console.log('할 일 생성 요청 데이터:', taskParams);
-
       await postGroupsTaskListsTasks(taskParams);
 
-      console.log('할 일 생성 성공');
       onSaveSuccess();
       onClose();
     } catch (error) {
