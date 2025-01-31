@@ -10,13 +10,18 @@ import useTeamStore from '@/app/stores/teamStore';
 import useUserStore from '@/app/stores/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '@/app/api/user.api';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
+import {
+  extractTeamIdFromPath,
+  isHiddenGNBMenuPath,
+} from '@/app/utils/navigation';
+import ProfileDropDown from './ProfileDropDown';
 
 export default function GNB() {
-  const pathname = usePathname();
-  const match = pathname.match(/^\/(\d+)$/);
-  const teamId = match ? Number(match[1]) : null;
-
+  const currentPath = usePathname();
+  const teamId = extractTeamIdFromPath(currentPath);
+  const isHiddenMenu = isHiddenGNBMenuPath(currentPath);
+  console.log(isHiddenMenu);
   const { user } = useUserStore();
   const { setTeamList, setCurrentTeam } = useTeamStore();
 
@@ -59,17 +64,19 @@ export default function GNB() {
       <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container">
         <div className="flex space-x-10">
           <div className="flex items-center gap-4">
-            <div
-              className="cursor-pointer sm:hidden"
-              onClick={handleOpenSideBar}
-            >
-              <Image
-                src={'/images/icons/ic_gnb-menu.svg'}
-                width={24}
-                height={24}
-                alt="메뉴 버튼"
-              />
-            </div>
+            {isHiddenMenu && (
+              <div
+                className="cursor-pointer sm:hidden"
+                onClick={handleOpenSideBar}
+              >
+                <Image
+                  src={'/images/icons/ic_gnb-menu.svg'}
+                  width={24}
+                  height={24}
+                  alt="메뉴 버튼"
+                />
+              </div>
+            )}
 
             <div className="relative flex h-[20px] w-[102px] lg:h-[60px] lg:w-[158px]">
               <Image
@@ -81,30 +88,23 @@ export default function GNB() {
             </div>
           </div>
           <div className="hidden items-center space-x-10 sm:flex">
-            {teamId && (
+            {user && isHiddenMenu && (
               <>
                 <TeamListDropDown
                   teamList={teamList}
-                  currentTeam={teamList.find((team) => team.id === teamId)}
+                  currentTeam={
+                    teamList.find((team) => team.id === teamId) || teamList[0]
+                  }
                 />
-                <div>자유게시판</div> {/*자유게시판 이동*/}
+                <button onClick={() => redirect('/boards')}>자유게시판</button>{' '}
+                {/*자유게시판 이동*/}
               </>
             )}
             {/* 기본값 어떻게 처리할 지 고민중 */}
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Image
-            src={'/images/icons/ic_user.svg'}
-            width={24}
-            height={24}
-            alt="메뉴 버튼"
-          />
-          <div className="hidden text-md lg:block">
-            {user?.nickname || 'unknown'}
-          </div>
-        </div>
+        <ProfileDropDown user={user} />
       </div>
 
       <div className="sm:hidden">
