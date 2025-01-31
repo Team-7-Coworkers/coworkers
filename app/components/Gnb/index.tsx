@@ -82,8 +82,8 @@ export default function GNB() {
               <Image
                 src="/images/logos/logo.svg"
                 alt="Logo"
-                layout="fill"
-                objectFit="contain"
+                fill
+                style={{ objectFit: 'contain' }}
               />
             </div>
           </div>
