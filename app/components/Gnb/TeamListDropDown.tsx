@@ -22,7 +22,7 @@ export default function TeamListDropDown({
 
       <Dropdown.Menu
         animationType="scale"
-        className="top-[52px] z-30 w-56 pb-4 sm:-left-[144px] lg:-left-[200px]"
+        className="top-[52px] z-30 w-[218px] pb-4 sm:-left-[144px] lg:-left-[200px]"
       >
         {teamList.map((team) => {
           return (
@@ -35,7 +35,7 @@ export default function TeamListDropDown({
           );
         })}
         <button
-          className="m-auto block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
+          className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
           onClick={() => redirect('/addteam')}
         >
           + 팀 추가하기
