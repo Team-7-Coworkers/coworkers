@@ -5,10 +5,44 @@ import Image from 'next/image';
 import TeamListDropDown from './TeamListDropDown';
 import TeamListSideBar from './TeamListSideBar';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useTeamStore from '@/app/stores/teamStore';
+import useUserStore from '@/app/stores/userStore';
+import { useQuery } from '@tanstack/react-query';
+import { getUserGroups } from '@/app/api/user.api';
+import { usePathname } from 'next/navigation';
 
 export default function GNB() {
+  const pathname = usePathname();
+  const match = pathname.match(/^\/(\d+)$/);
+  const teamId = match ? Number(match[1]) : null;
+
+  const { user } = useUserStore();
+  const { setTeamList, setCurrentTeam } = useTeamStore();
+
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+
+  const { data: teamList = [] } = useQuery({
+    queryKey: ['coworkers-teamList', user?.id],
+    queryFn: getUserGroups,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    enabled: !!user?.id,
+  });
+
+  useEffect(() => {
+    if (teamList.length > 0) {
+      const currentTeamList = useTeamStore.getState();
+
+      if (JSON.stringify(currentTeamList) !== JSON.stringify(teamList)) {
+        setTeamList(teamList);
+      }
+
+      if (!teamId) {
+        setCurrentTeam(teamList[0]?.id);
+      }
+    }
+  }, [teamList, setTeamList, teamId, setCurrentTeam]);
 
   const handleOpenSideBar = () => {
     setIsSideBarOpen(true);
@@ -47,8 +81,16 @@ export default function GNB() {
             </div>
           </div>
           <div className="hidden items-center space-x-10 sm:flex">
-            <TeamListDropDown />
-            <div>자유게시판</div> {/*자유게시판 이동*/}
+            {teamId && (
+              <>
+                <TeamListDropDown
+                  teamList={teamList}
+                  currentTeam={teamList.find((team) => team.id === teamId)}
+                />
+                <div>자유게시판</div> {/*자유게시판 이동*/}
+              </>
+            )}
+            {/* 기본값 어떻게 처리할 지 고민중 */}
           </div>
         </div>
 
@@ -59,12 +101,15 @@ export default function GNB() {
             height={24}
             alt="메뉴 버튼"
           />
-          <div className="hidden text-md lg:block">사용자</div>
+          <div className="hidden text-md lg:block">
+            {user?.nickname || 'unknown'}
+          </div>
         </div>
       </div>
 
       <div className="sm:hidden">
         <TeamListSideBar
+          teamList={teamList}
           isOpen={isSideBarOpen}
           onClose={handleCloseSideBar}
         />

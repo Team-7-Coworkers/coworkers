@@ -1,28 +1,33 @@
+import { GroupType } from '@/app/types/shared';
+import { redirect } from 'next/navigation';
+import { ChangeEvent } from 'react';
+
 interface TeamListDropDownProps {
-  option?: { id: number; name: string }[];
-  onSelect?: (value: string) => void;
+  teamList: GroupType[];
+  currentTeam?: GroupType;
 }
 
-export const mockTeamList = [
-  { id: 1, name: '경영관리팀' },
-  { id: 2, name: '프로덕트팀' },
-  { id: 3, name: '마케팅팀' }
-];
-
 export default function TeamListDropDown({
-  option = mockTeamList
+  teamList,
+  currentTeam,
 }: TeamListDropDownProps) {
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    redirect(`/${e.target.value}`);
+  };
+
   return (
     <>
       <div className="relative hidden sm:block">
         <select
           className="cursor-pointer bg-transparent outline-none"
-          defaultValue={option[2].name} // currentTeam이 default로
+          value={currentTeam?.id || ''}
+          onChange={handleChange}
         >
-          {option.map((team) => (
+          {teamList.map((team) => (
             <option
               key={team.id}
               className="bg-b-secondary"
+              value={team.id}
             >
               {team.name}
             </option>
