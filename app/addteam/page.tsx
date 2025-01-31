@@ -9,7 +9,7 @@ import Button from '../components/Button';
 import styles from '../styles/team.module.css';
 
 export default function AddTeamPage() {
-  const [name, setName] = useState('');
+  const [teamName, setTeamName] = useState('');
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
 
@@ -36,12 +36,7 @@ export default function AddTeamPage() {
 
       <form onSubmit={handleSubmit}>
         <div className={styles.wrapImageUpload}>
-          <label
-            htmlFor="name"
-            className={styles.label}
-          >
-            팀 프로필
-          </label>
+          <label className={styles.label}>팀 프로필</label>
           <ImageUpload
             onUploadSuccess={handleImageUploadSuccess}
             onUploadError={handleImageUploadError}
@@ -52,17 +47,17 @@ export default function AddTeamPage() {
         </div>
 
         <label
-          htmlFor="name"
+          htmlFor="team-name"
           className={styles.label}
         >
           팀 이름
         </label>
         <InputField
-          id="name"
+          id="team-name"
           type="text"
-          value={name}
+          value={teamName}
           placeholder="팀 이름을 입력해주세요."
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setTeamName(e.target.value)}
           errorMessage={nameErrorMessage}
         />
 
