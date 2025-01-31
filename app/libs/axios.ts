@@ -1,5 +1,6 @@
 import axios from 'axios';
 import useUserStore from '../stores/userStore';
+import useTeamStore from '../stores/teamStore';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -12,10 +13,12 @@ const instance = axios.create({
 // 토큰 갱신 함수
 const refreshAccessToken = async (): Promise<string | null> => {
   const { refreshToken, clearUser, setAccessToken } = useUserStore.getState();
+  const { clearTeam } = useTeamStore.getState();
 
   if (!refreshToken) {
     console.warn('리프레쉬 토큰이 없습니다. 로그아웃 처리합니다.');
     clearUser();
+    clearTeam();
     window.location.href = '/login';
 
     return null;
@@ -35,6 +38,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
     console.error('토큰 갱신 실패:', error);
     alert('인증이 만료되었습니다. 다시 로그인해주세요.');
     clearUser(); // 상태 초기화
+    clearTeam();
     window.location.href = '/login'; // 로그인 페이지로 리다이렉트
 
     return null;
