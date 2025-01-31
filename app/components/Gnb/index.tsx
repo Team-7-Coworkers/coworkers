@@ -56,7 +56,7 @@ export default function GNB() {
 
   return (
     <nav className="fixed left-0 top-0 z-10 w-full bg-b-secondary">
-      <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container sm:px-6">
+      <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container">
         <div className="flex space-x-10">
           <div className="flex items-center gap-4">
             <div
