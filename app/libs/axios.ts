@@ -26,7 +26,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh-token`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}auth/refresh-token`,
       { refreshToken }
     );
 
