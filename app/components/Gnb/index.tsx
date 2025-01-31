@@ -18,7 +18,7 @@ import {
 import ProfileDropDown from './ProfileDropDown';
 
 export default function GNB() {
-  const currentPath = usePathname();
+  const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
   const isHiddenMenu = isHiddenGNBMenuPath(currentPath);
   console.log(isHiddenMenu);
