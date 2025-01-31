@@ -49,7 +49,7 @@ export default function AddListModal({
       isCloseOutsideClick
       onClose={onClose}
     >
-      <p className="mt-3 text-center font-medium leading-5">
+      <p className="mt-3 text-center font-medium leading-5 text-t-default">
         할 일에 대한 목록을 추가하고
         <br />
         목록별 할 일을 만들 수 있습니다.
