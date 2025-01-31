@@ -40,7 +40,7 @@ export default function PostActionDropdown({
         <Image
           src={kebab}
           alt=""
-          className="h-auto w-6"
+          className="h-6 w-6 max-w-none"
         />
       </Dropdown.Button>
       <Dropdown.Menu
