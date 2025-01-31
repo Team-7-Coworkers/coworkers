@@ -2,6 +2,7 @@
 
 import { GroupType } from '@/app/types/shared';
 import CloseIcon from '../Modal/CloseIcon';
+import { redirect } from 'next/navigation';
 
 interface TeamListSideBarProps {
   teamList: GroupType[];
@@ -14,6 +15,16 @@ export default function TeamListSideBar({
   onClose,
   isOpen,
 }: TeamListSideBarProps) {
+  const handleTeamClick = (teamId: number) => {
+    onClose();
+    redirect(`/${teamId}`);
+  };
+
+  const handleBoardsClick = () => {
+    onClose();
+    redirect('/boards');
+  };
+
   return (
     <nav
       className={`fixed left-0 top-0 h-full bg-gray-800 text-white shadow-lg transition-transform duration-300 ${
@@ -28,10 +39,22 @@ export default function TeamListSideBar({
           <CloseIcon />
         </div>
       </div>
-      <div className="space-y-4 text-md font-medium">
+      <div className="space-y-5 text-md font-medium">
         {teamList.map((team) => (
-          <div key={team.id}>{team.name}</div>
+          <button
+            key={team.id}
+            onClick={() => handleTeamClick(team.id)}
+            className="translat block min-h-5 w-fit transition-all duration-75 hover:text-lg hover:text-green-500"
+          >
+            {team.name}
+          </button>
         ))}
+        <button
+          className="font-medium text-primary transition-all hover:text-lg"
+          onClick={handleBoardsClick}
+        >
+          자유게시판
+        </button>
       </div>
     </nav>
   );
