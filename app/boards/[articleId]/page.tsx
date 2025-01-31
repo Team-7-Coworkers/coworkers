@@ -5,10 +5,10 @@ import { useParams } from 'next/navigation';
 import { getDetailsArticle } from '@/app/api/article.api';
 import type { DetailedArticleType } from '@/app/types/article';
 import commentIcon from '@/public/images/icons/ic_comment.svg';
-import heartIcon from '@/public/images/icons/ic-heart.svg';
 import Image from 'next/image';
 import dayjs from 'dayjs';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
+import LikeButton from '@/app/boards/LikeButton';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -21,10 +21,8 @@ export default function ArticleDetail() {
     const loadArticle = async () => {
       try {
         setLoading(true);
-
         // articleId를 숫자로 변환하기
         const articleIdNumber = Number(articleId);
-
         const data = await getDetailsArticle({ articleId: articleIdNumber });
 
         if ('message' in data) {
@@ -41,7 +39,6 @@ export default function ArticleDetail() {
   }, [articleId]);
 
   if (loading) return <p>로딩 중...</p>;
-
   if (!article) return null;
 
   return (
@@ -74,13 +71,12 @@ export default function ArticleDetail() {
             />
             <span className="text-t-disabled">{article.commentCount}</span>
           </p>
-          <p className="flex items-center space-x-1">
-            <Image
-              src={heartIcon}
-              alt="하트 아이콘"
-            />
-            <span className="text-t-disabled">{article.likeCount}</span>
-          </p>
+
+          <LikeButton
+            articleId={article.id}
+            initialLikeCount={article.likeCount}
+            initialIsLiked={article.isLiked ?? false}
+          />
         </div>
       </div>
 
