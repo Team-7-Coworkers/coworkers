@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import { getDetailsArticle } from '@/app/api/article.api';
 import type { DetailedArticleType } from '@/app/types/article';
 import commentIcon from '@/public/images/icons/ic_comment.svg';
@@ -14,38 +14,25 @@ import useUserStore from '@/app/stores/userStore';
 export default function ArticleDetail() {
   const { articleId } = useParams();
   const router = useRouter();
-  const [article, setArticle] = useState<DetailedArticleType | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const { user } = useUserStore();
 
-  useEffect(() => {
-    if (!articleId) return;
+  const { data: article, isLoading } = useQuery<DetailedArticleType | null>({
+    queryKey: ['article', articleId],
+    queryFn: async () => {
+      const data = await getDetailsArticle({ articleId: Number(articleId) });
 
-    const loadArticle = async () => {
-      try {
-        setLoading(true);
-        const articleIdNumber = Number(articleId);
-        const data = await getDetailsArticle({ articleId: articleIdNumber });
-
-        if ('message' in data) {
-          setArticle(null);
-        } else {
-          setArticle(data);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadArticle();
-  }, [articleId]);
+      if ('message' in data) return null;
+      return data;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 
   const handleDeleteSuccess = () => {
     alert('삭제가 완료되었습니다!');
     router.push('/boards');
   };
 
-  if (loading) return <p>로딩 중...</p>;
+  if (isLoading) return <p>로딩 중...</p>;
   if (!article) return null;
 
   return (
