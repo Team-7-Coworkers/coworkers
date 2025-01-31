@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getDetailsArticle } from '@/app/api/article.api';
 import type { DetailedArticleType } from '@/app/types/article';
 import commentIcon from '@/public/images/icons/ic_comment.svg';
@@ -13,9 +13,9 @@ import useUserStore from '@/app/stores/userStore';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
+  const router = useRouter();
   const [article, setArticle] = useState<DetailedArticleType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
   const { user } = useUserStore();
 
   useEffect(() => {
@@ -24,7 +24,6 @@ export default function ArticleDetail() {
     const loadArticle = async () => {
       try {
         setLoading(true);
-        // articleId를 숫자로 변환하기
         const articleIdNumber = Number(articleId);
         const data = await getDetailsArticle({ articleId: articleIdNumber });
 
@@ -40,6 +39,11 @@ export default function ArticleDetail() {
 
     loadArticle();
   }, [articleId]);
+
+  const handleDeleteSuccess = () => {
+    alert('삭제가 완료되었습니다!');
+    router.push('/boards');
+  };
 
   if (loading) return <p>로딩 중...</p>;
   if (!article) return null;
@@ -67,7 +71,7 @@ export default function ArticleDetail() {
         {user?.nickname === article.writer.nickname && (
           <PostActionDropdown
             onEdit={() => console.log(`수정: ${article.id}`)}
-            onDeleteSuccess={() => console.log('삭제 완료 후 상태 업데이트')}
+            onDeleteSuccess={handleDeleteSuccess}
             articleId={article.id}
           />
         )}
