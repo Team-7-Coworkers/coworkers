@@ -134,7 +134,7 @@ export default function TodoModal({
         </label>
         <div
           id="start-date"
-          className={`mt-3 cursor-pointer rounded-xl border p-4 text-lg text-t-default ${
+          className={`mb-3 mt-3 cursor-pointer rounded-xl border p-4 text-lg text-t-default ${
             isCalendarOpen ? 'border-primary' : 'border-bd-primary/10'
           }`}
           onClick={() => setIsCalendarOpen((prev) => !prev)}
