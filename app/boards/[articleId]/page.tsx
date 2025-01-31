@@ -9,11 +9,14 @@ import Image from 'next/image';
 import dayjs from 'dayjs';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import LikeButton from '@/app/boards/LikeButton';
+import useUserStore from '@/app/stores/userStore';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
   const [article, setArticle] = useState<DetailedArticleType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { user } = useUserStore();
 
   useEffect(() => {
     if (!articleId) return;
@@ -61,11 +64,13 @@ export default function ArticleDetail() {
           )}
         </div>
 
-        <PostActionDropdown
-          onEdit={() => console.log(`수정: ${article.id}`)}
-          onDeleteSuccess={() => console.log('삭제 완료 후 상태 업데이트')}
-          articleId={article.id}
-        />
+        {user?.nickname === article.writer.nickname && (
+          <PostActionDropdown
+            onEdit={() => console.log(`수정: ${article.id}`)}
+            onDeleteSuccess={() => console.log('삭제 완료 후 상태 업데이트')}
+            articleId={article.id}
+          />
+        )}
       </div>
 
       <div className="mt-4 flex w-full items-center justify-between text-[14px]">
