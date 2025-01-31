@@ -1,20 +1,15 @@
+'use Client';
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface Team {
-  teamId: string;
-  updatedAt: string;
-  createdAt: string;
-  image: string;
-  name: string;
-  id: number;
-}
+import { GroupType } from '../types/shared';
 
 interface TeamState {
-  teamList: Team[];
-  currentTeam: Team | null;
-  setTeamList: (teams: Team[]) => void; // 팀 목록을 설정하는 함수
+  teamList: GroupType[];
+  currentTeam: GroupType | null;
+  setTeamList: (teams: GroupType[]) => void; // 팀 목록을 설정하는 함수
   setCurrentTeam: (teamId: number) => void; // 현재 선택된 팀을 설정하는 함수
+  clearTeam: () => void;
 }
 
 const useTeamStore = create<TeamState>()(
@@ -26,16 +21,19 @@ const useTeamStore = create<TeamState>()(
       setTeamList: (teams) => set({ teamList: teams }),
       // 팀 목록을 상태에 저장하는 함수
 
-      setCurrentTeam: (currentTeamId) => {
+      setCurrentTeam: (teamId) => {
         // 팀 ID를 기반으로 현재 팀을 설정하는 함수
-        const selectedTeam = get().teamList.find(
-          (team) => team.id === currentTeamId
-        );
+        const selectedTeam = get().teamList.find((team) => team.id === teamId);
         set({ currentTeam: selectedTeam || null });
+      },
+
+      // 팀 상태 초기화
+      clearTeam: () => {
+        set({ teamList: [], currentTeam: null });
       },
     }),
     {
-      name: 'team-storage', // 로컬 스토리지에 저장될 키 이름
+      name: 'coworkers-team-storage', // 로컬 스토리지에 저장될 키 이름
       partialize: (state) => ({
         // 로컬 스토리지에 저장할 상태 선택
         teamList: state.teamList,
@@ -48,4 +46,4 @@ const useTeamStore = create<TeamState>()(
 export default useTeamStore;
 
 // 사용 예시
-// const { teamList, currentTeam, setTeamList, setCurrentTeam } = useTeamStore();
+// const { teamList, currentTeam, setTeamList, setCurrentTeam, clearTeam } = useTeamStore();
