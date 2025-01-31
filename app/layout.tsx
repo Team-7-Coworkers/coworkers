@@ -19,12 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="scroll-smooth">
+      <body className="scroll-smooth pt-[var(--header-height)]">
         <Providers>
-          <div className="pt-[60px]">
-            {children}
-            <GNB />
-          </div>
+          {children}
+          <GNB />
         </Providers>
       </body>
     </html>
