@@ -44,9 +44,23 @@ export default function ArticleDetail() {
   return (
     <div className="mx-auto mt-14 flex w-[90%] flex-col sm:w-[90%] lg:w-[65%]">
       <div className="flex w-full justify-between border-b border-gray-700 pb-4">
-        <p className="text-[18px] font-medium text-t-secondary">
-          {article.title}
-        </p>
+        <div className="flex w-full justify-between">
+          <p className="flex-grow text-[18px] font-medium text-t-secondary">
+            {article.title}
+          </p>
+
+          {article.image !== 'https://no-image/no-image.png' && (
+            <div className="relative ml-auto h-[150px] w-[150px] flex-shrink-0 overflow-hidden rounded-[8px]">
+              <Image
+                src={article.image}
+                alt={article.title}
+                fill
+                className="object-contain"
+              />
+            </div>
+          )}
+        </div>
+
         <PostActionDropdown
           onEdit={() => console.log(`수정: ${article.id}`)}
           onDeleteSuccess={() => console.log('삭제 완료 후 상태 업데이트')}
