@@ -4,6 +4,15 @@
 
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 @layer base {
   :root {
     --primary: #10b981;
@@ -57,5 +66,9 @@
   }
   .text-button {
     @apply text-primary transition-colors hover:text-i-hover;
+  }
+
+  .spin {
+    animation: 1.5s spin infinite;
   }
 }
