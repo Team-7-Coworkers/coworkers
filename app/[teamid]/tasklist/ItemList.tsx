@@ -23,7 +23,7 @@ const frequencyMap: { [key: string]: string } = {
 };
 
 const getFormattedFrequency = (frequency: string): string => {
-  return frequencyMap[frequency] || '알 수 없음';
+  return frequencyMap[frequency];
 };
 
 export default function ItemList({

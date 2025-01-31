@@ -9,6 +9,7 @@ import InputField from '@/app/components/InputField';
 import Button from '@/app/components/Button';
 import { postGroupsTaskListsTasks } from '@/app/api/task.api';
 import { TaskParamsType } from '@/app/types/task';
+import { FrequencyType } from '@/app/types/shared';
 
 interface TodoModalProps {
   isOpen: boolean;
@@ -28,10 +29,7 @@ export default function TodoModal({
   const [todoTitle, setTodoTitle] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedWeekDays, setSelectedWeekDays] = useState<number[]>([]);
-  const [repeatOption, setRepeatOption] =
-    useState<TaskParamsType['postGroupsTaskListsTasks']['frequencyType']>(
-      'ONCE'
-    );
+  const [repeatOption, setRepeatOption] = useState<FrequencyType>('ONCE');
   const [todoMemo, setTodoMemo] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
