@@ -17,6 +17,7 @@ type ListCategoryProps = {
   groupId: number;
   updateTrigger: boolean;
   onCategoryChange: (taskListId: number) => void;
+  onTaskClick: (taskId: number) => void;
 };
 
 export default function ListCategory({
@@ -25,6 +26,7 @@ export default function ListCategory({
   groupId,
   updateTrigger,
   onCategoryChange,
+  onTaskClick,
 }: ListCategoryProps) {
   const [selectedCategory, setSelectedCategory] = useState<
     TaskListResponseType['getGroupsTaskLists'] | null
@@ -156,6 +158,7 @@ export default function ListCategory({
       <div className="mt-4">
         <ItemList
           items={tasks}
+          onTaskClick={onTaskClick}
           checkedItems={checkedItems}
           onCheckboxChange={async (id, checked) => {
             if (!selectedCategory) return;

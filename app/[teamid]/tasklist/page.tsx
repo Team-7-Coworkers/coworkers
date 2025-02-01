@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
+import TaskDetail from './TaskDetail';
 import ListHeader from './ListHeader';
 import { getGroups } from '@/app/api/group.api';
 import { GroupResponseType } from '@/app/types/group';
@@ -20,6 +21,7 @@ export default function ListPage() {
     null
   );
   const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
   const handleUpdateTrigger = () => setUpdateTrigger((prev) => !prev);
 
@@ -45,30 +47,48 @@ export default function ListPage() {
 
   return (
     <div className="container relative min-h-[80vh]">
-      <h1 className="mb-10 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
-        할 일
-      </h1>
-      <ListHeader
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        groupId={Number(groupId)}
-        onListAdded={fetchGroupData}
-      />
-      <div className="mt-5 sm:mt-6 lg:mt-8">
-        <ListCategory
+      <div className="w-full">
+        <h1 className="mb-10 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
+          할 일
+        </h1>
+        <ListHeader
           selectedDate={selectedDate}
-          taskLists={taskLists}
+          setSelectedDate={setSelectedDate}
           groupId={Number(groupId)}
-          updateTrigger={updateTrigger}
-          onCategoryChange={(taskListId) => setSelectedTaskListId(taskListId)}
+          onListAdded={fetchGroupData}
         />
+        <div className="mt-5 sm:mt-6 lg:mt-8">
+          <ListCategory
+            selectedDate={selectedDate}
+            taskLists={taskLists}
+            groupId={Number(groupId)}
+            updateTrigger={updateTrigger}
+            onCategoryChange={(taskListId) => setSelectedTaskListId(taskListId)}
+            onTaskClick={(taskId) => setSelectedTaskId(taskId)}
+          />
+        </div>
+        {groupId && selectedTaskListId && (
+          <AddButton
+            groupId={Number(groupId)}
+            taskListId={selectedTaskListId}
+            onSaveSuccess={handleUpdateTrigger}
+          />
+        )}
       </div>
-      {groupId && selectedTaskListId && (
-        <AddButton
-          groupId={Number(groupId)}
-          taskListId={selectedTaskListId}
-          onSaveSuccess={handleUpdateTrigger}
-        />
+
+      {selectedTaskId && (
+        <div className="z-1 container fixed right-0 top-[60px] h-full w-1/2 translate-x-0 transform overflow-y-auto bg-gray-900 text-white shadow-xl transition-transform">
+          <button
+            onClick={() => setSelectedTaskId(null)}
+            className="absolute right-4 top-4 text-xl text-white"
+          >
+            ✕
+          </button>
+          <TaskDetail
+            groupId={Number(groupId)}
+            taskId={selectedTaskId}
+          />
+        </div>
       )}
     </div>
   );

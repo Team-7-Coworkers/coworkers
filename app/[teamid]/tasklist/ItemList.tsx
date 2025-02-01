@@ -13,6 +13,7 @@ type ItemListProps = {
   onCheckboxChange: (id: number, checked: boolean) => void;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
+  onTaskClick: (taskId: number) => void;
 };
 
 const frequencyMap: { [key: string]: string } = {
@@ -32,6 +33,7 @@ export default function ItemList({
   onCheckboxChange,
   onEditItem,
   onDeleteItem,
+  onTaskClick,
 }: ItemListProps) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
@@ -72,6 +74,7 @@ export default function ItemList({
                 aria-label={`Mark "${item.name}" as completed`}
               />
               <h3
+                onClick={() => onTaskClick(item.id)}
                 className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
                   checkedItems[item.id] ? 'line-through' : ''
                 }`}
