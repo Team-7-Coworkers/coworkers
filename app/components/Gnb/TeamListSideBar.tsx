@@ -53,7 +53,7 @@ export default function TeamListSideBar({
           </button>
         ))}
         <button
-          className="font-medium text-primary transition-all hover:text-lg"
+          className="font-bold text-primary transition-all duration-75 hover:scale-105"
           onClick={handleBoardsClick}
         >
           자유게시판
