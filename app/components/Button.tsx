@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 interface ButtonProps {
@@ -9,6 +10,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   classname?: string;
   onClick?: () => void;
+  href?: string;
 }
 
 const Button = ({
@@ -20,6 +22,7 @@ const Button = ({
   type = 'button',
   classname = '',
   onClick,
+  href,
 }: ButtonProps) => {
   const baseStyles = () =>
     `font-semibold text-center ${state === 'floating' ? 'rounded-[40px] shadow-[0px_25px_50px_-12px_#00000040]' : 'rounded-xl'}`;
@@ -58,6 +61,17 @@ const Button = ({
   };
 
   const styleClasses = `${baseStyles()} ${sizeStyles} ${styleTypes[styleType]} ${isDisabled} ${classname}`;
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={`flex items-center justify-center ${styleClasses}`}
+      >
+        {children}
+      </Link>
+    );
+  }
 
   return (
     <button
