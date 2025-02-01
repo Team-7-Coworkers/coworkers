@@ -11,17 +11,13 @@ import useUserStore from '@/app/stores/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '@/app/api/user.api';
 import { redirect, usePathname } from 'next/navigation';
-import {
-  extractTeamIdFromPath,
-  isHiddenGNBMenuPath,
-} from '@/app/utils/navigation';
+import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
-  const isHiddenMenu = isHiddenGNBMenuPath(currentPath);
-  console.log(isHiddenMenu);
+
   const { user } = useUserStore();
   const { setTeamList, setCurrentTeam } = useTeamStore();
 
@@ -64,7 +60,7 @@ export default function GNB() {
       <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container">
         <div className="flex space-x-10">
           <div className="flex items-center gap-4">
-            {isHiddenMenu && (
+            {user && (
               <div
                 className="cursor-pointer sm:hidden"
                 onClick={handleOpenSideBar}
@@ -88,7 +84,7 @@ export default function GNB() {
             </div>
           </div>
           <div className="hidden items-center space-x-10 sm:flex">
-            {user && isHiddenMenu && (
+            {user && (
               <>
                 <TeamListDropDown
                   teamList={teamList}
@@ -104,7 +100,7 @@ export default function GNB() {
           </div>
         </div>
 
-        <ProfileDropDown user={user} />
+        {user && <ProfileDropDown user={user} />}
       </div>
 
       <div className="sm:hidden">
