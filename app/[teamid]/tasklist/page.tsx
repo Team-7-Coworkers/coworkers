@@ -44,7 +44,7 @@ export default function ListPage() {
   }, [groupId, fetchGroupData]);
 
   return (
-    <div className="container relative min-h-[700px]">
+    <div className="container relative min-h-[80vh]">
       <h1 className="mb-10 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
         할 일
       </h1>
