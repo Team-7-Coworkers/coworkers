@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Checkbox from './Checkbox';
 import dayjs from 'dayjs';
@@ -6,11 +8,10 @@ import { useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
+import { useTaskStore } from '@/app/stores/taskStore';
 
 type ItemListProps = {
   items: TaskType[];
-  checkedItems: { [key: number]: boolean };
-  onCheckboxChange: (id: number, checked: boolean) => void;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
   onTaskClick: (taskId: number) => void;
@@ -29,8 +30,6 @@ const getFormattedFrequency = (frequency: string): string => {
 
 export default function ItemList({
   items,
-  checkedItems,
-  onCheckboxChange,
   onEditItem,
   onDeleteItem,
   onTaskClick,
@@ -38,6 +37,8 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const { checkedItems, toggleChecked } = useTaskStore();
 
   const openDeleteModal = (item: TaskType) => {
     setSelectedItem(item);
@@ -70,7 +71,7 @@ export default function ItemList({
               <Checkbox
                 id={item.id}
                 checked={!!checkedItems[item.id]}
-                onChange={(id, checked) => onCheckboxChange(id, checked)}
+                onChange={() => toggleChecked(item.id, !checkedItems[item.id])}
                 aria-label={`Mark "${item.name}" as completed`}
               />
               <h3

@@ -10,6 +10,7 @@ import {
 } from '@/app/api/task.api';
 import { TaskListResponseType } from '@/app/types/taskList';
 import { TaskResponseType } from '@/app/types/task';
+import { useTaskStore } from '@/app/stores/taskStore';
 
 type ListCategoryProps = {
   selectedDate: Date;
@@ -31,14 +32,10 @@ export default function ListCategory({
   const [selectedCategory, setSelectedCategory] = useState<
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
-
   const [tasks, setTasks] = useState<
     TaskResponseType['getGroupsTaskListTasks']
   >([]);
-
-  const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>(
-    {}
-  );
+  const { setCheckedItems } = useTaskStore();
 
   const fetchTasks = useCallback(async () => {
     if (!selectedCategory) return;
@@ -46,10 +43,10 @@ export default function ListCategory({
     try {
       const formattedDate = `${selectedDate.getFullYear()}-${String(
         selectedDate.getMonth() + 1
-      ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(
+      ).padStart(
         2,
         '0'
-      )}T00:00:00Z`;
+      )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
 
       const response = await getGroupsTaskListTasks({
         groupId,
@@ -59,20 +56,17 @@ export default function ListCategory({
 
       setTasks(response);
 
-      const initialCheckedItems = response.reduce(
-        (acc: { [key: number]: boolean }, task) => {
-          acc[task.id] = !!task.doneAt || false;
-          return acc;
-        },
-        {}
-      );
+      const initialCheckedItems: { [key: number]: boolean } = {};
+      response.forEach((task) => {
+        initialCheckedItems[task.id] = !!task.doneAt;
+      });
+
       setCheckedItems(initialCheckedItems);
     } catch (err) {
       console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
     }
-  }, [selectedCategory, selectedDate, groupId]);
+  }, [selectedCategory, selectedDate, groupId, setCheckedItems]);
 
-  // 렌더링 시점에 첫 목록이 골라져있도록하는 코드
   useEffect(() => {
     if (taskLists.length > 0 && !selectedCategory) {
       setSelectedCategory(taskLists[0]);
@@ -159,19 +153,6 @@ export default function ListCategory({
         <ItemList
           items={tasks}
           onTaskClick={onTaskClick}
-          checkedItems={checkedItems}
-          onCheckboxChange={async (id, checked) => {
-            if (!selectedCategory) return;
-
-            setCheckedItems((prev) => ({ ...prev, [id]: checked }));
-
-            await patchGroupsTaskListsTasks({
-              groupId,
-              taskListId: selectedCategory.id,
-              taskId: id,
-              done: checked,
-            });
-          }}
           onEditItem={handleEditItem}
           onDeleteItem={handleDeleteItem}
         />
