@@ -62,7 +62,7 @@ const Button = ({
 
   const styleClasses = `${baseStyles()} ${sizeStyles} ${styleTypes[styleType]} ${isDisabled} ${classname}`;
 
-  if (href && !disabled) {
+  if (href) {
     return (
       <Link
         href={href}
