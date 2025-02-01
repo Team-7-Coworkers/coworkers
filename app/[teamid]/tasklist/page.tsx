@@ -8,15 +8,14 @@ import TaskDetail from './TaskDetail';
 import ListHeader from './ListHeader';
 import { getGroups } from '@/app/api/group.api';
 import { GroupResponseType } from '@/app/types/group';
+import CloseIcon from '@/app/components/Modal/CloseIcon';
 
 export default function ListPage() {
   const { teamid: groupId } = useParams<{ teamid: string }>();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
   const [taskLists, setTaskLists] = useState<
     GroupResponseType['getGroups']['taskLists']
   >([]);
-
   const [selectedTaskListId, setSelectedTaskListId] = useState<number | null>(
     null
   );
@@ -77,16 +76,17 @@ export default function ListPage() {
       </div>
 
       {selectedTaskId && (
-        <div className="z-1 container fixed right-0 top-[60px] h-full w-1/2 translate-x-0 transform overflow-y-auto bg-gray-900 text-white shadow-xl transition-transform">
+        <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-1/2 translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform">
           <button
             onClick={() => setSelectedTaskId(null)}
-            className="absolute right-4 top-4 text-xl text-white"
+            className="mt-8 text-ic-primary"
           >
-            ✕
+            <CloseIcon classname="w-6 h-6" />
           </button>
           <TaskDetail
-            groupId={Number(groupId)}
             taskId={selectedTaskId}
+            groupId={Number(groupId)}
+            taskListId={selectedTaskListId || 0}
           />
         </div>
       )}

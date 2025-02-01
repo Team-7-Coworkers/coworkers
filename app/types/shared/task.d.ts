@@ -30,7 +30,7 @@ export interface TaskType {
   recurringId: number;
   frequency: FrequencyType;
   updatedAt: string;
-  doneAt: string;
+  doneAt: string | null;
   date: string;
   description: string;
   name: string;
