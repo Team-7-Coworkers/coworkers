@@ -66,7 +66,7 @@ const Button = ({
     return (
       <Link
         href={href}
-        className={styleClasses}
+        className={`flex items-center justify-center ${styleClasses}`}
       >
         {children}
       </Link>
