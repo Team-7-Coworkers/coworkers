@@ -2,32 +2,52 @@
 
 import { useState } from 'react';
 
+import { postGroups } from '../api/group.api';
+import type { GroupResponseType } from '../types/group';
+
 import InputField from '../components/InputField';
 import ImageUpload from '../components/ImageUpload';
 import Button from '../components/Button';
 
 import styles from '../styles/team.module.css';
+import { useRouter } from 'next/navigation';
+
+const MIN_NAME_LENGTH = 2;
 
 export default function AddTeamPage() {
-  const [teamName, setTeamName] = useState('');
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const validName = name.trim() !== '' && name.trim().length >= MIN_NAME_LENGTH;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // console.log('--- handleSubmit:');
 
-    // ui 확인용
-    console.log('handleSubtmi:');
-    setImageErrorMessage('프로필 이미지를 넣어주세요.');
-    setNameErrorMessage('이미 존재하는 이름입니다.');
+    if (!validName) {
+      setNameErrorMessage('팀 이름을 최소 2글자 이상 작성하셔야 합니다.');
+      return;
+    }
+
+    const result: GroupResponseType['postGroups'] = await postGroups({
+      image,
+      name,
+    });
+    // console.log('--- result', result);
+    router.push(`/${result.id}`);
   };
 
-  const handleImageUploadSuccess = () => {
-    console.log('handleImageUploadSuccess:');
+  const handleImageUploadSuccess = (url: string) => {
+    // console.log('--- handleImageUploadSuccess:', url);
+    setImage(url);
   };
 
-  const handleImageUploadError = () => {
-    console.log('handleImageUploadError:');
+  const handleImageUploadError = (err: Error) => {
+    console.error('--- handleImageUploadError:', err);
+    setImageErrorMessage('이미지 업로드에 실패하였습니다.');
   };
 
   return (
@@ -47,23 +67,24 @@ export default function AddTeamPage() {
         </div>
 
         <label
-          htmlFor="team-name"
+          htmlFor="name"
           className={styles.label}
         >
           팀 이름
         </label>
         <InputField
-          id="team-name"
+          id="name"
           type="text"
-          value={teamName}
+          value={name}
           placeholder="팀 이름을 입력해주세요."
-          onChange={(e) => setTeamName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           errorMessage={nameErrorMessage}
         />
 
         <Button
           type="submit"
           classname="w-full mt-10"
+          disabled={!validName}
         >
           생성하기
         </Button>
