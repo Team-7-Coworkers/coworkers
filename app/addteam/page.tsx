@@ -1,16 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 
 import { postGroups } from '../api/group.api';
-import type { GroupResponseType } from '../types/group';
+import useTeamStore from '../stores/teamStore';
 
 import InputField from '../components/InputField';
 import ImageUpload from '../components/ImageUpload';
 import Button from '../components/Button';
 
 import styles from '../styles/team.module.css';
-import { useRouter } from 'next/navigation';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -20,31 +21,54 @@ export default function AddTeamPage() {
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const router = useRouter();
+  const { teamList } = useTeamStore();
 
-  const validName = name.trim() !== '' && name.trim().length >= MIN_NAME_LENGTH;
+  // 최소 2글자 이상인지 확인
+  const validName = name.trim().length >= MIN_NAME_LENGTH;
 
+  const { mutate } = useMutation({
+    mutationFn: async () => await postGroups({ image, name }),
+    onSuccess: (data) => {
+      // TODO: 토스로 변경
+      alert('팀을 생성하였습니다.');
+      router.push(`/${data.id}`);
+    },
+    onError: (err) => {
+      console.error('--- postGroup: err:', err);
+      // TODO: 모달이나 토스 팀 이름인 경우 setNameErrorMessage
+      alert('팀 생성에 실패하였습니다. 잠시 후 다시 시도해 주세요.');
+    },
+  });
+
+  // 팀 생성 폼 서브및
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log('--- handleSubmit:');
 
+    // 같은 이름이 있는지 여부
+    const findTeamIndex = teamList.findIndex((group) => group.name === name);
+
+    // disabled 에서 걸러지긴 하지만 그래도 넣어둠
     if (!validName) {
       setNameErrorMessage('팀 이름을 최소 2글자 이상 작성하셔야 합니다.');
       return;
     }
 
-    const result: GroupResponseType['postGroups'] = await postGroups({
-      image,
-      name,
-    });
-    // console.log('--- result', result);
-    router.push(`/${result.id}`);
+    // 이름 중복 여부에 따른 처리
+    if (findTeamIndex > 0) {
+      setNameErrorMessage('이미 존재하는 이름입니다.');
+      return;
+    }
+
+    mutate();
   };
 
+  // 이미지 업로드 성공시
   const handleImageUploadSuccess = (url: string) => {
     // console.log('--- handleImageUploadSuccess:', url);
     setImage(url);
   };
 
+  // 이미지 업로드 실패시
   const handleImageUploadError = (err: Error) => {
     console.error('--- handleImageUploadError:', err);
     setImageErrorMessage('이미지 업로드에 실패하였습니다.');
