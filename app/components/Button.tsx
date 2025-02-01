@@ -7,6 +7,7 @@ interface ButtonProps {
   state?: 'default' | 'danger' | 'floating';
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  classname?: string;
   onClick?: () => void;
 }
 
@@ -17,6 +18,7 @@ const Button = ({
   size = 'large',
   disabled = false,
   type = 'button',
+  classname = '',
   onClick,
 }: ButtonProps) => {
   const baseStyles = () =>
@@ -55,7 +57,7 @@ const Button = ({
     'outlined-secondary': getStyleByType('outlined-secondary'),
   };
 
-  const styleClasses = `${baseStyles()} ${sizeStyles} ${styleTypes[styleType]} ${isDisabled}`;
+  const styleClasses = `${baseStyles()} ${sizeStyles} ${styleTypes[styleType]} ${isDisabled} ${classname}`;
 
   return (
     <button
