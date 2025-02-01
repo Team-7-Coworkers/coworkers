@@ -7,7 +7,7 @@ const postGroupsTaskListsTasks = async (
 ): Promise<TaskResponseType['postGroupsTaskListsTasks']> => {
   const { groupId, taskListId, ...data } = params;
   const response = await instance.post(
-    `groups/${groupId}/task-list/${taskListId}/tasks`,
+    `groups/${groupId}/task-lists/${taskListId}/tasks`,
     data
   );
   return response.data;
