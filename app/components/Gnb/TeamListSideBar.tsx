@@ -7,12 +7,14 @@ import { redirect } from 'next/navigation';
 interface TeamListSideBarProps {
   teamList: GroupType[];
   isOpen: boolean;
+  currentTeamId?: number;
   onClose: () => void;
 }
 
 export default function TeamListSideBar({
   teamList,
   onClose,
+  currentTeamId,
   isOpen,
 }: TeamListSideBarProps) {
   const handleTeamClick = (teamId: number) => {
@@ -44,8 +46,9 @@ export default function TeamListSideBar({
           <button
             key={team.id}
             onClick={() => handleTeamClick(team.id)}
-            className="translat block min-h-5 w-fit transition-all duration-75 hover:scale-105 hover:text-green-500"
+            className={`translat block min-h-5 w-full text-start transition-all duration-75 hover:scale-105 ${team.id === currentTeamId ? 'scale-105 rounded-lg bg-b-primary px-1 py-1 text-gray-200' : 'hover:text-green-500'}`}
           >
+            {team.id === currentTeamId ? '▸ ' : ''}
             {team.name}
           </button>
         ))}
