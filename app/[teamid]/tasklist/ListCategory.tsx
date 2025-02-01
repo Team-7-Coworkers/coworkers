@@ -28,7 +28,7 @@ export default function ListCategory({
 }: ListCategoryProps) {
   const [selectedCategory, setSelectedCategory] = useState<
     TaskListResponseType['getGroupsTaskLists'] | null
-  >(taskLists.length > 0 ? taskLists[0] : null);
+  >(null);
 
   const [tasks, setTasks] = useState<
     TaskResponseType['getGroupsTaskListTasks']
@@ -69,6 +69,14 @@ export default function ListCategory({
       console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
     }
   }, [selectedCategory, selectedDate, groupId]);
+
+  // 렌더링 시점에 첫 목록이 골라져있도록하는 코드
+  useEffect(() => {
+    if (taskLists.length > 0 && !selectedCategory) {
+      setSelectedCategory(taskLists[0]);
+      onCategoryChange(taskLists[0].id);
+    }
+  }, [taskLists, selectedCategory, onCategoryChange]);
 
   useEffect(() => {
     fetchTasks();
