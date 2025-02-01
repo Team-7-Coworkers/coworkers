@@ -2,6 +2,7 @@ import { GroupType } from '@/app/types/shared';
 import { redirect } from 'next/navigation';
 import TeamListDropDownItem from './TeamListDropDownItem';
 import Dropdown from '../Dropdown';
+import Image from 'next/image';
 
 interface TeamListDropDownProps {
   teamList: GroupType[];
@@ -18,7 +19,15 @@ export default function TeamListDropDown({
 
   return (
     <Dropdown>
-      <Dropdown.Button>{currentTeam?.name || ''} ▾</Dropdown.Button>
+      <Dropdown.Button className="flex items-center gap-2">
+        {currentTeam?.name || '팀 목록'}
+        <Image
+          src="/images/icons/ic_dropdown-check.svg"
+          alt=""
+          width={16}
+          height={16}
+        />
+      </Dropdown.Button>
 
       <Dropdown.Menu
         animationType="scale"
