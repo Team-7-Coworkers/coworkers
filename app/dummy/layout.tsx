@@ -18,6 +18,10 @@ const LINKS = [
     href: '/dummy/loading',
     text: 'loading',
   },
+  {
+    href: '/dummy/button',
+    text: 'button',
+  },
 ];
 
 export default function Layout({ children }: Props) {
