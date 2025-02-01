@@ -23,6 +23,9 @@ const meta: Meta<typeof Button> = {
     disabled: {
       control: 'boolean',
     },
+    href: {
+      control: 'text',
+    },
   },
 };
 
@@ -115,5 +118,14 @@ export const CustomSize: Story = {
     styleType: 'solid',
     state: 'default',
     size: 'w-[200px] h-[60px] rounded-[14px]',
+  },
+};
+
+export const LinkButton: Story = {
+  args: {
+    children: 'LinkButton',
+    href: '/goToLink',
+    styleType: 'solid',
+    state: 'default',
   },
 };
