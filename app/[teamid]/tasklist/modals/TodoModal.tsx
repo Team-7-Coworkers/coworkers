@@ -10,6 +10,7 @@ import Button from '@/app/components/Button';
 import { postGroupsTaskListsTasks } from '@/app/api/task.api';
 import { TaskParamsType } from '@/app/types/task';
 import { FrequencyType } from '@/app/types/shared';
+import axios from 'axios';
 
 interface TodoModalProps {
   isOpen: boolean;
@@ -32,10 +33,12 @@ export default function TodoModal({
   const [repeatOption, setRepeatOption] = useState<FrequencyType>('ONCE');
   const [todoMemo, setTodoMemo] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
     setIsCalendarOpen(false);
+    setErrorMessage(null);
   };
 
   const handleSave = async () => {
@@ -85,11 +88,18 @@ export default function TodoModal({
       }
 
       await postGroupsTaskListsTasks(taskParams);
-
       onSaveSuccess();
       onClose();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('할 일 생성 실패:', error);
+
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(
+          error.response?.data.message || '서버 오류가 발생했습니다.'
+        );
+      } else {
+        setErrorMessage('알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
 
@@ -107,6 +117,7 @@ export default function TodoModal({
         <br />
         작성해주시면 좋습니다.
       </p>
+
       <section className="mt-5">
         <label
           htmlFor="todo-title"
@@ -123,6 +134,7 @@ export default function TodoModal({
           className="mt-3"
         />
       </section>
+
       <section className="mt-5">
         <label
           htmlFor="start-date"
@@ -130,6 +142,7 @@ export default function TodoModal({
         >
           시작 날짜 및 시간
         </label>
+
         <div
           id="start-date"
           className={`mb-3 mt-3 cursor-pointer rounded-xl border p-4 text-lg text-t-default ${
@@ -151,6 +164,10 @@ export default function TodoModal({
             onDateSelect={handleDateSelect}
           />
         )}
+        {errorMessage && (
+          <p className="mb-2 mt-2 text-sm text-red-500">{errorMessage}</p>
+        )}
+
         <RepeatDropdown
           onSelectRepeatOption={(option, days) => {
             setRepeatOption(option);
@@ -160,6 +177,7 @@ export default function TodoModal({
           }}
         />
       </section>
+
       <section className="mt-5">
         <label
           htmlFor="todo-memo"
@@ -177,6 +195,7 @@ export default function TodoModal({
           />
         </div>
       </section>
+
       <ModalFooter>
         <Button
           styleType="solid"
