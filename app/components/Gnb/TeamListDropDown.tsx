@@ -22,13 +22,14 @@ export default function TeamListDropDown({
 
       <Dropdown.Menu
         animationType="scale"
-        className="top-[52px] z-30 w-[218px] pb-4 sm:-left-[144px] lg:-left-[200px]"
+        className="top-[52px] z-30 w-[218px] p-[8px] pb-4 sm:-left-[144px] lg:-left-[200px]"
       >
         {teamList.map((team) => {
           return (
             <Dropdown.MenuItem
               key={team.id}
               onClick={() => handleClick(team.id)}
+              className="pb-[8px] pt-2"
             >
               <TeamListDropDownItem team={team} />
             </Dropdown.MenuItem>

@@ -44,7 +44,7 @@ export default function TeamListSideBar({
           <button
             key={team.id}
             onClick={() => handleTeamClick(team.id)}
-            className="translat block min-h-5 w-fit transition-all duration-75 hover:text-lg hover:text-green-500"
+            className="translat block min-h-5 w-fit transition-all duration-75 hover:scale-105 hover:text-green-500"
           >
             {team.name}
           </button>
