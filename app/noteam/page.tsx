@@ -1,6 +1,4 @@
 import Button from '../components/Button';
-// import bgNoTeam from '@/public/images/bg-no-team.png';
-import Link from 'next/link';
 
 export default function NoTeamPage() {
   return (
@@ -14,14 +12,19 @@ export default function NoTeamPage() {
         </p>
       </div>
       <div className="mt-[48px] flex flex-col items-center gap-2 sm:mt-[80px] lg:gap-4">
-        <Link href="/addteam">
-          <Button size="w-[186px] h-[48px] rounded-xl">팀 생성하기</Button>
-        </Link>
-        <Link href="/invitation">
-          <Button size="w-[186px] h-[48px] rounded-xl bg-transparent border border-primary text-[#10B981] hover:border-i-pressed hover:bg-i-inactive hover:bg-opacity-15 active:border-i-pressed active:bg-[#94A3B8] active:bg-opacity-5">
-            팀 참여하기
-          </Button>
-        </Link>
+        <Button
+          href="/addteam"
+          size="w-[186px] h-[48px] rounded-xl"
+        >
+          팀 생성하기
+        </Button>
+        <Button
+          href="/invitation"
+          size="w-[186px] h-[48px] rounded-xl"
+          classname="bg-transparent border border-primary !text-primary hover:border-i-pressed hover:bg-i-inactive hover:bg-opacity-15 active:border-i-pressed active:bg-i-inactive active:bg-opacity-10"
+        >
+          팀 참여하기
+        </Button>
       </div>
     </div>
   );
