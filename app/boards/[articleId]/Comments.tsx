@@ -68,7 +68,7 @@ export default function Comment() {
   if (!comments) return;
 
   return (
-    <div className="pt-20">
+    <div className="pb-20 pt-20">
       <p className="pb-6 text-[20px] font-bold">댓글달기</p>
       <TextField
         type="box"
@@ -94,7 +94,7 @@ export default function Comment() {
             //게시글 댓글 목록 부분
             <div
               key={comment.id}
-              className="mb-4 rounded-md bg-b-secondary px-6 py-5"
+              className="mb-6 rounded-md bg-b-secondary px-6 py-5"
             >
               <div className="flex justify-between">
                 {editingCommentId === comment.id ? (
@@ -163,7 +163,11 @@ export default function Comment() {
             </div>
           ))
         ) : (
-          <p>댓글이 없습니다.</p>
+          <div className="flex justify-center">
+            <p className="text-center text-t-default">
+              아직 작성된 댓글이 없습니다.
+            </p>
+          </div>
         )}
       </div>
     </div>
