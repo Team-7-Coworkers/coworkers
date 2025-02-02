@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
-import TaskDetail from './TaskDetail';
+import TaskDetail from './task-detail/TaskDetail';
 import ListHeader from './ListHeader';
 import { getGroups } from '@/app/api/group.api';
 import { GroupResponseType } from '@/app/types/group';
@@ -75,7 +75,7 @@ export default function ListPage() {
         )}
       </div>
 
-      {selectedTaskId && (
+      {selectedTaskId && ( //TODO: 애니메이션 추가
         <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-full translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform sm:w-1/2">
           <button
             onClick={() => setSelectedTaskId(null)}

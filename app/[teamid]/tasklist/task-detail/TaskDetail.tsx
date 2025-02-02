@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import CheckButton from './CheckButton';
+import CheckButton from '../CheckButton';
 import { TaskType } from '@/app/types/shared';
 import {
   deleteGroupsTaskListsTasks,
@@ -9,12 +9,9 @@ import {
   patchGroupsTaskListsTasks,
 } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
-import CheckIcon from './CheckIcon';
-import DateDisplay from './InfoDisplay/DateDisplay';
-import FrequencyDisplay from './InfoDisplay/FrequencyDisplay';
-import DeleteModal from './modals/DeleteModal';
-import EditModal from './modals/EditModal';
-import KebobDropdown from './KebobDropdown';
+import DeleteModal from '../modals/DeleteModal';
+import EditModal from '../modals/EditModal';
+import TaskDetailHeader from './TaskDetailHeader';
 
 interface TaskDetailProps {
   taskId: number;
@@ -32,9 +29,12 @@ export default function TaskDetail({
   const [task, setTask] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
+
   const { checkedItems, setCheckedItems, updateTask, deleteTask } =
     useTaskStore();
-  const isCompleted = checkedItems[taskId];
+
+  const isCompleted = checkedItems[taskId] || false;
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -45,16 +45,12 @@ export default function TaskDetail({
           taskId,
         });
         setTask(response);
+        setSelectedTask(null);
 
-        setCheckedItems((prev) => {
-          if (prev[taskId] === undefined) {
-            return {
-              ...prev,
-              [taskId]: !!response.doneAt,
-            };
-          }
-          return prev;
-        });
+        setCheckedItems((prev) => ({
+          ...prev,
+          [taskId]: !!response.doneAt,
+        }));
 
         updateTask(taskId, response.name, response.description);
       } catch (error) {
@@ -65,22 +61,32 @@ export default function TaskDetail({
     fetchTask();
   }, [taskId, groupId, taskListId, setCheckedItems, updateTask]);
 
+  const openEditModal = () => {
+    setSelectedTask(task);
+    setIsEditModalOpen(true);
+  };
+
+  const openDeleteModal = () => {
+    setSelectedTask(task);
+    setIsDeleteModalOpen(true);
+  };
+
   const handleEdit = async (title: string, description: string) => {
-    if (task) {
+    if (selectedTask) {
       try {
         await patchGroupsTaskListsTasks({
           groupId,
           taskListId,
-          taskId,
+          taskId: selectedTask.id,
           name: title,
           description,
-          done: !!task.doneAt,
+          done: isCompleted,
         });
 
         setTask((prevTask) =>
           prevTask ? { ...prevTask, name: title, description } : prevTask
         );
-        updateTask(taskId, title, description);
+        updateTask(selectedTask.id, title, description);
         setIsEditModalOpen(false);
       } catch (error) {
         console.error('수정 중 오류 발생:', error);
@@ -89,15 +95,15 @@ export default function TaskDetail({
   };
 
   const handleDelete = async () => {
-    if (task) {
+    if (selectedTask) {
       try {
         await deleteGroupsTaskListsTasks({
           groupId,
           taskListId,
-          taskId,
+          taskId: selectedTask.id,
         });
 
-        deleteTask(taskId);
+        deleteTask(selectedTask.id);
         setIsDeleteModalOpen(false);
         onClose();
       } catch (error) {
@@ -106,61 +112,47 @@ export default function TaskDetail({
     }
   };
 
+  useEffect(() => {
+    if (!isEditModalOpen && !isDeleteModalOpen) {
+      setSelectedTask(null);
+    }
+  }, [isEditModalOpen, isDeleteModalOpen]);
+
   return (
     <div className="text-white">
       {task ? (
         <>
-          {isCompleted && (
-            <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-tertiary">
-              <CheckIcon
-                classname="w-4 h-4"
-                color="#a3e635"
-              />
-              완료
-            </div>
-          )}
-          <div className="flex items-center justify-between">
-            <h2
-              className={`mt-2 text-2lg font-bold sm:text-xl ${
-                isCompleted ? 'line-through' : ''
-              }`}
-            >
-              {task.name}
-            </h2>
-            <KebobDropdown
-              onEdit={() => setIsEditModalOpen(true)}
-              onDelete={() => setIsDeleteModalOpen(true)}
-            />
-          </div>
-
-          <div className="mt-3 flex items-center gap-3">
-            <DateDisplay date={task.date} />
-            <div className="text-xs text-b-tertiary">|</div>
-            <FrequencyDisplay frequency={task.frequency} />
-          </div>
-
-          <p className="mt-5">{task.description}</p>
-
+          <TaskDetailHeader
+            task={task}
+            isCompleted={isCompleted}
+            onEdit={openEditModal}
+            onDelete={openDeleteModal}
+          />
+          <p className="mt-5 min-h-[25vh] text-md text-t-primary">
+            {task.description}
+          </p>
           <CheckButton
             taskId={taskId}
             groupId={groupId}
             taskListId={taskListId}
           />
-
-          <EditModal
-            isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
-            onConfirm={handleEdit}
-            initialTitle={task.name}
-            initialDescription={task.description}
-          />
-
-          <DeleteModal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
-            onConfirm={handleDelete}
-            itemName={task.name}
-          />
+          {selectedTask && (
+            <EditModal
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              onConfirm={handleEdit}
+              initialTitle={selectedTask.name}
+              initialDescription={selectedTask.description}
+            />
+          )}
+          {selectedTask && (
+            <DeleteModal
+              isOpen={isDeleteModalOpen}
+              onClose={() => setIsDeleteModalOpen(false)}
+              onConfirm={handleDelete}
+              itemName={selectedTask.name}
+            />
+          )}
         </>
       ) : (
         <p>로딩 중...</p>

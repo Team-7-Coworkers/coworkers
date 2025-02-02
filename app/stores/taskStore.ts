@@ -2,19 +2,19 @@ import { create } from 'zustand';
 import { TaskType } from '../types/shared';
 
 interface TaskState {
-  checkedItems: { [key: number]: boolean };
-  tasks: { [key: number]: TaskType };
-
-  toggleChecked: (taskId: number, checked: boolean) => void;
+  checkedItems: { [key: number]: boolean }; // 체크 저장
+  tasks: { [key: number]: TaskType }; // task
+  toggleChecked: (taskId: number, checked: boolean) => void; // 특정 task 체크 상태 관리
   setCheckedItems: (
+    // 체크 상태 변경
     items:
       | { [key: number]: boolean }
       | ((prev: { [key: number]: boolean }) => { [key: number]: boolean })
   ) => void;
 
-  updateTask: (taskId: number, name: string, description: string) => void;
-  deleteTask: (taskId: number) => void;
-  setTasks: (tasks: TaskType[]) => void;
+  updateTask: (taskId: number, name: string, description: string) => void; // 수정
+  deleteTask: (taskId: number) => void; // 삭제
+  setTasks: (tasks: TaskType[]) => void; // tasks 관리
 }
 
 export const useTaskStore = create<TaskState>((set) => ({

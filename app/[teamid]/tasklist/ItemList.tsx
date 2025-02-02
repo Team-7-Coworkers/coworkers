@@ -2,14 +2,14 @@
 
 import Image from 'next/image';
 import Checkbox from './Checkbox';
-import dayjs from 'dayjs';
 import { useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
 import { useTaskStore } from '@/app/stores/taskStore';
-import FrequencyDisplay from './InfoDisplay/FrequencyDisplay';
+import FrequencyDisplay from './info-displays/FrequencyDisplay';
 import KebobDropdown from './KebobDropdown';
+import DateDisplay from './info-displays/DateDisplay';
 
 type ItemListProps = {
   items: TaskType[];
@@ -46,6 +46,7 @@ export default function ItemList({
       onDeleteItem(selectedItem.id);
       deleteTask(selectedItem.id);
       setIsDeleteModalOpen(false);
+      setSelectedItem(null);
     }
   };
 
@@ -54,6 +55,7 @@ export default function ItemList({
       onEditItem(selectedItem.id, title, description);
       updateTask(selectedItem.id, title, description);
       setIsEditModalOpen(false);
+      setSelectedItem(null);
     }
   };
 
@@ -96,17 +98,7 @@ export default function ItemList({
             />
           </div>
           <div className="mt-4 flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/icons/ic_calendar.svg"
-                alt="달력"
-                width={16}
-                height={16}
-              />
-              <p className="text-sm text-t-default">
-                {dayjs(item.date).format('YYYY년 MM월 DD일')}
-              </p>
-            </div>
+            <DateDisplay date={item.date} />
             <div className="text-xs text-b-tertiary">|</div>
             <FrequencyDisplay frequency={item.frequency} />
           </div>
@@ -116,16 +108,22 @@ export default function ItemList({
         <>
           <DeleteModal
             isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
+            onClose={() => {
+              setIsDeleteModalOpen(false);
+              setSelectedItem(null);
+            }}
             onConfirm={handleDelete}
             itemName={selectedItem.name}
           />
           <EditModal
             isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
+            onClose={() => {
+              setIsDeleteModalOpen(false);
+              setSelectedItem(null);
+            }}
             onConfirm={handleEdit}
             initialTitle={selectedItem.name}
-            initialDescription=""
+            initialDescription={selectedItem.description}
           />
         </>
       )}
