@@ -9,6 +9,7 @@ interface UserInfo {
   email: string;
   createdAt: string;
   updatedAt: string;
+  image: string | null;
   teamId: string;
 }
 

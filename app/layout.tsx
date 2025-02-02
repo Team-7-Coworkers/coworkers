@@ -21,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="scroll-smooth pt-[var(--header-height)]">
-        <GNB />
-        <Providers>{children}</Providers>
-        <KakaoScript />
+        <Providers>
+          {children}
+          <GNB />
+          <KakaoScript />
+        </Providers>
       </body>
     </html>
   );
