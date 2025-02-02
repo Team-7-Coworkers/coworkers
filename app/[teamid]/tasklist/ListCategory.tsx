@@ -9,7 +9,6 @@ import {
   patchGroupsTaskListsTasks,
 } from '@/app/api/task.api';
 import { TaskListResponseType } from '@/app/types/taskList';
-import { TaskResponseType } from '@/app/types/task';
 import { useTaskStore } from '@/app/stores/taskStore';
 
 type ListCategoryProps = {
@@ -32,10 +31,9 @@ export default function ListCategory({
   const [selectedCategory, setSelectedCategory] = useState<
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
-  const [tasks, setTasks] = useState<
-    TaskResponseType['getGroupsTaskListTasks']
-  >([]);
-  const { setCheckedItems } = useTaskStore();
+
+  const { setTasks, setCheckedItems, updateTask, deleteTask, tasks } =
+    useTaskStore();
 
   const fetchTasks = useCallback(async () => {
     if (!selectedCategory) return;
@@ -43,10 +41,10 @@ export default function ListCategory({
     try {
       const formattedDate = `${selectedDate.getFullYear()}-${String(
         selectedDate.getMonth() + 1
-      ).padStart(
+      ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(
         2,
         '0'
-      )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
+      )}T00:00:00Z`;
 
       const response = await getGroupsTaskListTasks({
         groupId,
@@ -65,7 +63,7 @@ export default function ListCategory({
     } catch (err) {
       console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
     }
-  }, [selectedCategory, selectedDate, groupId, setCheckedItems]);
+  }, [selectedCategory, selectedDate, groupId, setTasks, setCheckedItems]);
 
   useEffect(() => {
     if (taskLists.length > 0 && !selectedCategory) {
@@ -93,23 +91,16 @@ export default function ListCategory({
     description: string
   ) => {
     try {
-      const taskToEdit = tasks.find((task) => task.id === taskId);
-      if (!taskToEdit) throw new Error('Task not found');
-
       await patchGroupsTaskListsTasks({
         groupId,
         taskListId: selectedCategory?.id || 0,
         taskId,
         name,
         description,
-        done: !!taskToEdit.doneAt,
+        done: !!tasks[taskId]?.doneAt,
       });
 
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === taskId ? { ...task, name, description } : task
-        )
-      );
+      updateTask(taskId, name, description);
     } catch (error) {
       console.error('수정 중 오류 발생:', error);
     }
@@ -122,7 +113,8 @@ export default function ListCategory({
         taskListId: selectedCategory?.id || 0,
         taskId,
       });
-      fetchTasks();
+
+      deleteTask(taskId);
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
     }
@@ -151,7 +143,7 @@ export default function ListCategory({
 
       <div className="mt-4">
         <ItemList
-          items={tasks}
+          items={Object.values(tasks)}
           onTaskClick={onTaskClick}
           onEditItem={handleEditItem}
           onDeleteItem={handleDeleteItem}

@@ -3,29 +3,19 @@
 import Image from 'next/image';
 import Checkbox from './Checkbox';
 import dayjs from 'dayjs';
-import Dropdown from '@/app/components/Dropdown';
 import { useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
 import { useTaskStore } from '@/app/stores/taskStore';
+import FrequencyDisplay from './InfoDisplay/FrequencyDisplay';
+import KebobDropdown from './KebobDropdown';
 
 type ItemListProps = {
   items: TaskType[];
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
   onTaskClick: (taskId: number) => void;
-};
-
-const frequencyMap: { [key: string]: string } = {
-  ONCE: '한 번',
-  DAILY: '매일 반복',
-  WEEKLY: '주 반복',
-  MONTHLY: '월 반복',
-};
-
-const getFormattedFrequency = (frequency: string): string => {
-  return frequencyMap[frequency];
 };
 
 export default function ItemList({
@@ -38,7 +28,8 @@ export default function ItemList({
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const { checkedItems, toggleChecked } = useTaskStore();
+  const { checkedItems, toggleChecked, updateTask, deleteTask } =
+    useTaskStore();
 
   const openDeleteModal = (item: TaskType) => {
     setSelectedItem(item);
@@ -51,19 +42,26 @@ export default function ItemList({
   };
 
   const handleDelete = () => {
-    if (selectedItem) onDeleteItem(selectedItem.id);
-    setIsDeleteModalOpen(false);
+    if (selectedItem) {
+      onDeleteItem(selectedItem.id);
+      deleteTask(selectedItem.id);
+      setIsDeleteModalOpen(false);
+    }
   };
 
   const handleEdit = (title: string, description: string) => {
-    if (selectedItem) onEditItem(selectedItem.id, title, description);
+    if (selectedItem) {
+      onEditItem(selectedItem.id, title, description);
+      updateTask(selectedItem.id, title, description);
+      setIsEditModalOpen(false);
+    }
   };
 
   return (
     <div className="mt-6">
       {items.map((item) => (
         <div
-          key={item.id}
+          key={`${item.id}-${item.date}`}
           className="mb-4 flex flex-col items-start rounded-lg bg-b-secondary px-3 py-[14px] text-white shadow-md"
         >
           <div className="relative flex w-full items-center justify-between">
@@ -92,28 +90,10 @@ export default function ItemList({
                 {item.commentCount}
               </div>
             </div>
-            <Dropdown className="relative">
-              <Dropdown.Button>
-                <Image
-                  src="/images/icons/ic_kebab.svg"
-                  alt="수정,삭제"
-                  width={16}
-                  height={16}
-                  className="cursor-pointer rounded-full hover:bg-b-primary"
-                />
-              </Dropdown.Button>
-              <Dropdown.Menu
-                animationType="scale"
-                className="-right-3"
-              >
-                <Dropdown.MenuItem onClick={() => openEditModal(item)}>
-                  수정하기
-                </Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => openDeleteModal(item)}>
-                  삭제하기
-                </Dropdown.MenuItem>
-              </Dropdown.Menu>
-            </Dropdown>
+            <KebobDropdown
+              onEdit={() => openEditModal(item)}
+              onDelete={() => openDeleteModal(item)}
+            />
           </div>
           <div className="mt-4 flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -128,19 +108,7 @@ export default function ItemList({
               </p>
             </div>
             <div className="text-xs text-b-tertiary">|</div>
-            <div className="flex items-center gap-2">
-              {getFormattedFrequency(item.frequency) !== '한 번' && (
-                <Image
-                  src="/images/icons/ic_repeat.svg"
-                  alt="반복"
-                  width={16}
-                  height={16}
-                />
-              )}
-              <p className="text-sm text-t-default">
-                {getFormattedFrequency(item.frequency)}
-              </p>
-            </div>
+            <FrequencyDisplay frequency={item.frequency} />
           </div>
         </div>
       ))}

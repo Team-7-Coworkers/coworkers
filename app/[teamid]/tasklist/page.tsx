@@ -76,7 +76,7 @@ export default function ListPage() {
       </div>
 
       {selectedTaskId && (
-        <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-1/2 translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform">
+        <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-full translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform sm:w-1/2">
           <button
             onClick={() => setSelectedTaskId(null)}
             className="mt-8 text-ic-primary"
@@ -87,6 +87,7 @@ export default function ListPage() {
             taskId={selectedTaskId}
             groupId={Number(groupId)}
             taskListId={selectedTaskListId || 0}
+            onClose={() => setSelectedTaskId(null)}
           />
         </div>
       )}
