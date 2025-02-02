@@ -6,13 +6,16 @@ import { postAuthSignUp } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { SignUpFormDataType } from '../types/auth';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
+  const router = useRouter();
+
   const signupMutation = useMutation({
     mutationFn: postAuthSignUp,
     onSuccess: () => {
       alert('회원가입에 성공했습니다!');
-      window.location.href = '/login';
+      router.push('/login')
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
