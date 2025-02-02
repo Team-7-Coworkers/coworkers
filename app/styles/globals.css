@@ -72,3 +72,7 @@
     animation: 1.5s spin infinite;
   }
 }
+
+::-webkit-scrollbar-corner {
+  display: none;
+}
