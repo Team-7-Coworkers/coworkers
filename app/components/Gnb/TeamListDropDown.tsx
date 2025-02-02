@@ -1,34 +1,60 @@
+'use client';
+
+import { GroupType } from '@/app/types/shared';
+import TeamListDropDownItem from './TeamListDropDownItem';
+import Dropdown from '../Dropdown';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 interface TeamListDropDownProps {
-  option?: { id: number; name: string }[];
-  onSelect?: (value: string) => void;
+  teamList: GroupType[];
+  currentTeam?: GroupType;
 }
 
-export const mockTeamList = [
-  { id: 1, name: '경영관리팀' },
-  { id: 2, name: '프로덕트팀' },
-  { id: 3, name: '마케팅팀' }
-];
-
 export default function TeamListDropDown({
-  option = mockTeamList
+  teamList,
+  currentTeam,
 }: TeamListDropDownProps) {
+  const router = useRouter();
+
+  const handleClick = (teamId: number) => {
+    router.push(`/${teamId}`);
+  };
+
   return (
-    <>
-      <div className="relative hidden sm:block">
-        <select
-          className="cursor-pointer bg-transparent outline-none"
-          defaultValue={option[2].name} // currentTeam이 default로
-        >
-          {option.map((team) => (
-            <option
+    <Dropdown>
+      <Dropdown.Button className="flex items-center gap-2">
+        {currentTeam?.name || '팀 목록'}
+        <Image
+          src="/images/icons/ic_dropdown-check.svg"
+          alt=""
+          width={16}
+          height={16}
+        />
+      </Dropdown.Button>
+
+      <Dropdown.Menu
+        animationType="scale"
+        className="top-[52px] z-30 w-[218px] p-[8px] pb-4 sm:-left-[144px] lg:-left-[200px]"
+      >
+        {teamList.map((team) => {
+          return (
+            <Dropdown.MenuItem
               key={team.id}
-              className="bg-b-secondary"
+              onClick={() => handleClick(team.id)}
+              className="pb-[8px] pt-2"
             >
-              {team.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    </>
+              <TeamListDropDownItem team={team} />
+            </Dropdown.MenuItem>
+          );
+        })}
+        <button
+          className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
+          onClick={() => router.push('/addteam')}
+        >
+          + 팀 추가하기
+        </button>
+      </Dropdown.Menu>
+    </Dropdown>
   );
 }
