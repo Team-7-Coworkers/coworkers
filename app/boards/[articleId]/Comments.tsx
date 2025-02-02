@@ -77,20 +77,23 @@ export default function Comment() {
       <div className="pt-20">
         {comments.list.length > 0 ? (
           comments.list.map((comment) => (
+            //게시글 댓글 목록 부분
             <div
               key={comment.id}
               className="mb-4 rounded-md bg-b-secondary px-6 py-5"
             >
-              <p>{comment.content}</p>
-              {user?.id === comment.writer.id && (
-                <PostActionDropdown
-                  onEdit={() => console.log(`수정: ${comment.id}`)}
-                  onDeleteSuccess={() =>
-                    console.log(`삭제 완료: ${comment.id}`)
-                  }
-                  articleId={comment.id}
-                />
-              )}
+              <div className="flex justify-between">
+                <p>{comment.content}</p>
+                {user?.id === comment.writer.id && (
+                  <PostActionDropdown
+                    onEdit={() => console.log(`수정: ${comment.id}`)}
+                    onDeleteSuccess={() =>
+                      console.log(`삭제 완료: ${comment.id}`)
+                    }
+                    commentId={comment.id}
+                  />
+                )}
+              </div>
               <div className="mt-[30px] flex items-center">
                 {(() => {
                   if (
