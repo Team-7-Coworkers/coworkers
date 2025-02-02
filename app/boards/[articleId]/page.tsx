@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import LikeButton from '@/app/boards/LikeButton';
 import useUserStore from '@/app/stores/userStore';
+import Comment from './Comments';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -93,6 +94,7 @@ export default function ArticleDetail() {
       <p className="mt-4 w-full text-left text-t-secondary">
         {article.content}
       </p>
+      <Comment />
     </div>
   );
 }
