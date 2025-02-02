@@ -2,7 +2,7 @@
 
 import { GroupType } from '@/app/types/shared';
 import CloseIcon from '../Modal/CloseIcon';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface TeamListSideBarProps {
   teamList: GroupType[];
@@ -17,14 +17,16 @@ export default function TeamListSideBar({
   currentTeamId,
   isOpen,
 }: TeamListSideBarProps) {
+  const router = useRouter();
+
   const handleTeamClick = (teamId: number) => {
     onClose();
-    redirect(`/${teamId}`);
+    router.push(`/${teamId}`);
   };
 
   const handleBoardsClick = () => {
     onClose();
-    redirect('/boards');
+    router.push('/boards');
   };
 
   return (

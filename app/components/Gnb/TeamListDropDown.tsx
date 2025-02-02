@@ -1,8 +1,10 @@
+'use client';
+
 import { GroupType } from '@/app/types/shared';
-import { redirect } from 'next/navigation';
 import TeamListDropDownItem from './TeamListDropDownItem';
 import Dropdown from '../Dropdown';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface TeamListDropDownProps {
   teamList: GroupType[];
@@ -13,8 +15,10 @@ export default function TeamListDropDown({
   teamList,
   currentTeam,
 }: TeamListDropDownProps) {
+  const router = useRouter();
+
   const handleClick = (teamId: number) => {
-    redirect(`/${teamId}`);
+    router.push(`/${teamId}`);
   };
 
   return (
@@ -46,7 +50,7 @@ export default function TeamListDropDown({
         })}
         <button
           className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
-          onClick={() => redirect('/addteam')}
+          onClick={() => router.push('/addteam')}
         >
           + 팀 추가하기
         </button>

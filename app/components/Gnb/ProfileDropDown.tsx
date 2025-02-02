@@ -1,7 +1,9 @@
+'use client';
+
 import { UserType } from '@/app/types/shared';
 import Image from 'next/image';
 import Dropdown from '../Dropdown';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import useUserStore from '@/app/stores/userStore';
 
 interface ProfileDropDownProps {
@@ -12,9 +14,12 @@ const dropDownItemStyle = 'text-md sm:text-lg pt-2 px-4 pb-2';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { clearUser } = useUserStore();
+
+  const router = useRouter();
+
   const handleLogout = () => {
     clearUser();
-    redirect('/');
+    router.push('/');
   };
 
   return (
@@ -37,19 +42,19 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
       >
         <Dropdown.MenuItem
           className={dropDownItemStyle}
-          onClick={() => redirect('/myhistory')}
+          onClick={() => router.push('/myhistory')}
         >
           마이 히스토리
         </Dropdown.MenuItem>
         <Dropdown.MenuItem
           className={dropDownItemStyle}
-          onClick={() => redirect('/mypage')}
+          onClick={() => router.push('/mypage')}
         >
           계정 설정
         </Dropdown.MenuItem>
         <Dropdown.MenuItem
           className={dropDownItemStyle}
-          onClick={() => redirect('/')}
+          onClick={() => router.push('/')}
         >
           팀 참여
         </Dropdown.MenuItem>

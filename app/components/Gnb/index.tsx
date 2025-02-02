@@ -10,13 +10,15 @@ import useTeamStore from '@/app/stores/teamStore';
 import useUserStore from '@/app/stores/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '@/app/api/user.api';
-import { redirect, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
+
+  const router = useRouter();
 
   const { user } = useUserStore();
   const { setTeamList, setCurrentTeam } = useTeamStore();
@@ -92,7 +94,9 @@ export default function GNB() {
                     teamList.find((team) => team.id === teamId) || teamList[0]
                   }
                 />
-                <button onClick={() => redirect('/boards')}>자유게시판</button>{' '}
+                <button onClick={() => router.push('/boards')}>
+                  자유게시판
+                </button>{' '}
                 {/*자유게시판 이동*/}
               </>
             )}
