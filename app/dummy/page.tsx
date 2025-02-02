@@ -1,4 +1,11 @@
+import { notFound } from 'next/navigation';
+
 export default function DummyPage() {
+  // 개발 환경에서만 접근 가능하도록 수정
+  if (process.env.NODE_ENV !== 'development') {
+    return notFound();
+  }
+
   return (
     <>
       <h1 className="my-2 text-xl font-bold">Dummy Pages</h1>
