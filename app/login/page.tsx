@@ -9,9 +9,11 @@ import { AuthResponseType, LoginFormDataType } from '../types/auth';
 import axios from 'axios';
 import Link from 'next/link';
 import EasyLogin from './EasyLogin';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const { setAccessToken, setRefreshToken, setUser } = useUserStore();
+  const router = useRouter();
 
   const loginMutation = useMutation({
     mutationFn: postAuthSignIn,
@@ -21,6 +23,7 @@ export default function LoginPage() {
       setRefreshToken(refreshToken);
       setUser(user);
       alert('로그인에 성공했습니다!');
+      router.push('/');
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -50,7 +53,7 @@ export default function LoginPage() {
             아직 계정이 없으신가요?
             <Link
               href="/signup"
-              className="ml-2 text-primary underline"
+              className="ml-2 text-primary underline hover:opacity-50"
             >
               가입하기
             </Link>
