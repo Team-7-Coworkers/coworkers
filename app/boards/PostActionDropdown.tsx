@@ -26,7 +26,6 @@ export default function PostActionDropdown({
 
   const handleDelete = async () => {
     if (isDeleting) return;
-
     try {
       setIsDeleting(true);
       if (articleId) {

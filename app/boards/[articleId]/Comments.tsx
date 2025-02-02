@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import {
   getArticlesComment,
   postArticlesComments,
+  patchComments,
 } from '@/app/api/articleComment.api';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -17,6 +18,8 @@ import PostActionDropdown from '@/app/boards/PostActionDropdown';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState('');
   const { articleId } = useParams();
   const queryClient = useQueryClient();
   const { user } = useUserStore();
@@ -47,6 +50,17 @@ export default function Comment() {
           queryKey: ['articleComments', Number(articleId)],
         });
       }
+    },
+  });
+
+  const editMutation = useMutation({
+    mutationFn: async (commentId: number) => {
+      if (!editedContent.trim()) return;
+      await patchComments({ commentId, content: editedContent });
+      setEditingCommentId(null);
+      queryClient.invalidateQueries({
+        queryKey: ['articleComments', Number(articleId)],
+      });
     },
   });
 
@@ -83,39 +97,50 @@ export default function Comment() {
               className="mb-4 rounded-md bg-b-secondary px-6 py-5"
             >
               <div className="flex justify-between">
-                <p>{comment.content}</p>
-                {user?.id === comment.writer.id && (
-                  <PostActionDropdown
-                    onEdit={() => console.log(`수정: ${comment.id}`)}
-                    onDeleteSuccess={() =>
-                      console.log(`삭제 완료: ${comment.id}`)
-                    }
-                    commentId={comment.id}
+                {editingCommentId === comment.id ? (
+                  <TextField
+                    type="box"
+                    value={editedContent}
+                    placeholder="댓글을 수정하세요."
+                    onChange={(e) => setEditedContent(e.target.value)}
+                    height={100}
                   />
+                ) : (
+                  <p>{comment.content}</p>
                 )}
+                {user?.id === comment.writer.id &&
+                  editingCommentId !== comment.id && (
+                    <PostActionDropdown
+                      onEdit={() => {
+                        setEditingCommentId(comment.id);
+                        setEditedContent(comment.content);
+                      }}
+                      onDeleteSuccess={() =>
+                        console.log(`삭제 완료: ${comment.id}`)
+                      }
+                      commentId={comment.id}
+                    />
+                  )}
               </div>
               <div className="mt-[30px] flex items-center">
-                {(() => {
-                  if (
-                    comment.writer.image &&
-                    comment.writer.image.startsWith('http')
-                  ) {
-                    return (
-                      <Image
-                        src={comment.writer.image}
-                        alt="프로필"
-                        className="h-[32px] w-[32px] rounded-full"
-                      />
-                    );
-                  } else {
-                    return (
-                      <Image
-                        src={profile}
-                        alt="기본 프로필"
-                      />
-                    );
-                  }
-                })()}
+                {comment.writer.image &&
+                comment.writer.image.startsWith('http') ? (
+                  <Image
+                    src={comment.writer.image}
+                    alt="프로필"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <Image
+                    src={profile}
+                    alt="기본 프로필"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                )}
                 <p className="border-r border-gray-700 px-3 text-[14px]">
                   {comment.writer.nickname}
                 </p>
@@ -123,6 +148,18 @@ export default function Comment() {
                   {dayjs(comment.createdAt).format('YYYY.MM.DD')}
                 </p>
               </div>
+              {editingCommentId === comment.id && (
+                <div className="mt-2 flex justify-end">
+                  <Button
+                    styleType="solid"
+                    size="X-small"
+                    onClick={() => editMutation.mutate(comment.id)}
+                    disabled={editMutation.status === 'pending'}
+                  >
+                    {editMutation.status === 'pending' ? '수정 중...' : '완료'}
+                  </Button>
+                </div>
+              )}
             </div>
           ))
         ) : (
