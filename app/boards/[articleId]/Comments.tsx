@@ -91,38 +91,51 @@ export default function Comment() {
       <div className="pt-20">
         {comments.list.length > 0 ? (
           comments.list.map((comment) => (
-            //게시글 댓글 목록 부분
             <div
               key={comment.id}
               className="mb-6 rounded-md bg-b-secondary px-6 py-5"
             >
-              <div className="flex justify-between">
+              <div className="flex flex-col">
                 {editingCommentId === comment.id ? (
-                  <TextField
-                    type="box"
-                    value={editedContent}
-                    placeholder="댓글을 수정하세요."
-                    onChange={(e) => setEditedContent(e.target.value)}
-                    height={100}
-                  />
-                ) : (
-                  <p>{comment.content}</p>
-                )}
-                {user?.id === comment.writer.id &&
-                  editingCommentId !== comment.id && (
-                    <PostActionDropdown
-                      onEdit={() => {
-                        setEditingCommentId(comment.id);
-                        setEditedContent(comment.content);
-                      }}
-                      onDeleteSuccess={() =>
-                        console.log(`삭제 완료: ${comment.id}`)
-                      }
-                      commentId={comment.id}
+                  <>
+                    <TextField
+                      type="box"
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      height={130}
                     />
-                  )}
+                    <div className="mt-5 flex justify-end">
+                      <Button
+                        styleType="solid"
+                        size="X-small"
+                        onClick={() => editMutation.mutate(comment.id)}
+                        disabled={editMutation.status === 'pending'}
+                      >
+                        {editMutation.status === 'pending'
+                          ? '수정 중...'
+                          : '완료'}
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex justify-between">
+                    <p>{comment.content}</p>
+                    {user?.id === comment.writer.id && (
+                      <PostActionDropdown
+                        onEdit={() => {
+                          setEditingCommentId(comment.id);
+                          setEditedContent(comment.content);
+                        }}
+                        onDeleteSuccess={() =>
+                          console.log(`삭제 완료: ${comment.id}`)
+                        }
+                        commentId={comment.id}
+                      />
+                    )}
+                  </div>
+                )}
               </div>
-              <div className="mt-[30px] flex items-center">
+              <div className="mt-3 flex items-center">
                 {comment.writer.image &&
                 comment.writer.image.startsWith('http') ? (
                   <Image
@@ -148,18 +161,6 @@ export default function Comment() {
                   {dayjs(comment.createdAt).format('YYYY.MM.DD')}
                 </p>
               </div>
-              {editingCommentId === comment.id && (
-                <div className="mt-2 flex justify-end">
-                  <Button
-                    styleType="solid"
-                    size="X-small"
-                    onClick={() => editMutation.mutate(comment.id)}
-                    disabled={editMutation.status === 'pending'}
-                  >
-                    {editMutation.status === 'pending' ? '수정 중...' : '완료'}
-                  </Button>
-                </div>
-              )}
             </div>
           ))
         ) : (
