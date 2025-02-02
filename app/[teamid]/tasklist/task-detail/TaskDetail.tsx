@@ -12,6 +12,7 @@ import { useTaskStore } from '@/app/stores/taskStore';
 import DeleteModal from '../modals/DeleteModal';
 import EditModal from '../modals/EditModal';
 import TaskDetailHeader from './TaskDetailHeader';
+import TaskComment from './TaskComment';
 
 interface TaskDetailProps {
   taskId: number;
@@ -119,7 +120,7 @@ export default function TaskDetail({
   }, [isEditModalOpen, isDeleteModalOpen]);
 
   return (
-    <div className="text-white">
+    <div>
       {task ? (
         <>
           <TaskDetailHeader
@@ -131,6 +132,7 @@ export default function TaskDetail({
           <p className="mt-5 min-h-[25vh] text-md text-t-primary">
             {task.description}
           </p>
+          <TaskComment />
           <CheckButton
             taskId={taskId}
             groupId={groupId}
