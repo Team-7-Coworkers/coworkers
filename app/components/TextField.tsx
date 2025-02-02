@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import styles from '@/app/styles/scrollbar.module.css';
 
 interface TextFieldProps {
+  id?: string;
   type: 'box' | 'reply';
   height?: number;
   value: string;
@@ -12,6 +13,7 @@ interface TextFieldProps {
 }
 
 export default function TextField({
+  id,
   type,
   height,
   value,
@@ -51,6 +53,7 @@ export default function TextField({
 
   return (
     <textarea
+      id={id}
       ref={textareaRef}
       value={value}
       placeholder={placeholder}

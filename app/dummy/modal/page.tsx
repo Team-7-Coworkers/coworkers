@@ -6,12 +6,13 @@ import Modal, { ModalFooter } from '../../components/Modal';
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
+  const [bigModalOpen, setBigModalOpen] = useState(false);
 
   return (
     <>
       <h1 className="mb-4 mt-2 text-2xl font-bold">모달 테스트 페이지</h1>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <button
           type="button"
           onClick={() => setModalOpen(true)}
@@ -26,6 +27,14 @@ export default function Home() {
           className="rounded-xl bg-danger px-4 py-[14px] text-lg font-semibold text-t-inverse"
         >
           경고 모달 열기
+        </button>
+
+        <button
+          type="button"
+          className="rounded-xl bg-primary px-4 py-[14px] text-lg font-semibold text-t-inverse"
+          onClick={() => setBigModalOpen(true)}
+        >
+          큰 모달 열기
         </button>
       </div>
 
@@ -65,6 +74,24 @@ export default function Home() {
 
           <button className="flex-1 rounded-xl bg-danger px-4 py-[14px] text-lg font-semibold text-t-inverse">
             회원 탈퇴
+          </button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal
+        isOpen={bigModalOpen}
+        title="Big Modal"
+        onClose={() => setBigModalOpen(false)}
+        isCloseOutsideClick
+      >
+        <p className="h-[900px] text-center">높이값 900 고정</p>
+
+        <ModalFooter>
+          <button
+            className="rounded-xl bg-primary px-4 py-[14px] text-lg font-semibold text-t-inverse"
+            onClick={() => setBigModalOpen(false)}
+          >
+            닫기 버튼
           </button>
         </ModalFooter>
       </Modal>
