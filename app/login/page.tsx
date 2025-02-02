@@ -65,7 +65,7 @@ export default function LoginPage() {
             <span>OR</span>
             <div className="flex-1 border-t border-bd-primary opacity-10"></div>
           </div>
-          <EasyLogin page='login' />
+          <EasyLogin page="login" />
         </div>
       </div>
     </div>

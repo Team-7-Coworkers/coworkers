@@ -11,11 +11,12 @@ interface KakaoSDK {
   init: (key: string) => void;
   isInitialized: () => boolean;
   Auth: {
-    login: (options: {
-      success: (authObj: KakaoAuthResponse) => void;
-      fail: (error: KakaoAuthError) => void;
+    authorize: (options: {
+      redirectUri: string;
+      state?: string;
+      isPopup?: boolean;
+      prompt?: 'login' | 'none';
     }) => void;
-    logout: (callback?: () => void) => void;
   };
 }
 

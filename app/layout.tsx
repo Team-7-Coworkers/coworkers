@@ -3,7 +3,7 @@ import siteMetadata from '@/data/siteMetadata';
 import './styles/globals.css';
 import GNB from './components/Gnb';
 import { Providers } from './libs/providers';
-import Script from 'next/script';
+import KakaoScript from './utils/KakaoScript';
 
 export const metadata: Metadata = {
   title: {
@@ -23,12 +23,7 @@ export default function RootLayout({
       <body className="scroll-smooth pt-[var(--header-height)]">
         <GNB />
         <Providers>{children}</Providers>
-        <Script
-          src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"
-          integrity="sha384-DKYJZ8NLiK8MN4/C5P2dtSmLQ4KwPaoqAfyA/DfmEc1VDxu4yyC7wy6K1Hs90nka"
-          crossOrigin="anonymous"
-          strategy="beforeInteractive"
-        />
+        <KakaoScript />
       </body>
     </html>
   );
