@@ -10,6 +10,8 @@ import {
   postArticlesComments,
 } from '@/app/api/articleComment.api';
 import dayjs from 'dayjs';
+import Image from 'next/image';
+import profile from '@/public/images/icons/ic-member.svg';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
@@ -73,9 +75,31 @@ export default function Comment() {
         {comments.list.length > 0 ? (
           comments.list.map((comment) => (
             <div key={comment.id}>
-              <p>{comment.writer.nickname}</p>
-              <p>{comment.content}</p>
-              <p>{dayjs(comment.createdAt).format('YYYY.MM.DD')}</p>
+              {(() => {
+                if (
+                  comment.writer.image &&
+                  comment.writer.image.startsWith('http')
+                ) {
+                  return (
+                    <Image
+                      src={comment.writer.image}
+                      alt="프로필"
+                    />
+                  );
+                } else {
+                  return (
+                    <Image
+                      src={profile}
+                      alt="기본 프로필"
+                    />
+                  );
+                }
+              })()}
+              <div>
+                <p>{comment.writer.nickname}</p>
+                <p>{comment.content}</p>
+                <p>{dayjs(comment.createdAt).format('YYYY.MM.DD')}</p>
+              </div>
             </div>
           ))
         ) : (
