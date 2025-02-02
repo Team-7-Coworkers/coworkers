@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { SignUpFormDataType } from '../types/auth';
 import { useRouter } from 'next/navigation';
+import EasyLogin from '../login/EasyLogin';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function SignupPage() {
     mutationFn: postAuthSignUp,
     onSuccess: () => {
       alert('회원가입에 성공했습니다!');
-      router.push('/login')
+      router.push('/login');
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
@@ -44,8 +45,16 @@ export default function SignupPage() {
       <h2 className="mb-6 text-center text-2xl font-medium lg:text-4xl">
         회원가입
       </h2>
-      <div className="w-full max-w-[460px] sm:pt-[80px]">
+      <div className="w-full max-w-[460px] space-y-8 sm:pt-[80px]">
         <SignupForm onSubmit={handleSignupSubmit} />
+        <div className="space-y-4">
+          <div className="flex w-full items-center gap-4">
+            <div className="flex-1 border-t border-bd-primary opacity-10"></div>
+            <span>OR</span>
+            <div className="flex-1 border-t border-bd-primary opacity-10"></div>
+          </div>
+          <EasyLogin page="signup" />
+        </div>
       </div>
     </div>
   );

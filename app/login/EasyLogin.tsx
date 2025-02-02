@@ -1,9 +1,11 @@
 import Image from 'next/image';
 
-export default function EasyLogin() {
+export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {
   return (
     <div className="flex justify-between">
-      <p className="font-medium">간편 로그인하기</p>
+      <p className="font-medium">
+        간편 {`${page ? `로그인` : '회원가입'}하기`}
+      </p>
       <div className="flex gap-4">
         <Image
           src="/images/icons/ic_google.svg"
