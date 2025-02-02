@@ -12,11 +12,14 @@ import {
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import profile from '@/public/images/icons/ic-member.svg';
+import useUserStore from '@/app/stores/userStore';
+import PostActionDropdown from '@/app/boards/PostActionDropdown';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
   const { articleId } = useParams();
   const queryClient = useQueryClient();
+  const { user } = useUserStore();
 
   const { data: comments, isLoading: isQueryLoading } = useQuery({
     queryKey: ['articleComments', Number(articleId)],
@@ -74,31 +77,48 @@ export default function Comment() {
       <div className="pt-20">
         {comments.list.length > 0 ? (
           comments.list.map((comment) => (
-            <div key={comment.id}>
-              {(() => {
-                if (
-                  comment.writer.image &&
-                  comment.writer.image.startsWith('http')
-                ) {
-                  return (
-                    <Image
-                      src={comment.writer.image}
-                      alt="프로필"
-                    />
-                  );
-                } else {
-                  return (
-                    <Image
-                      src={profile}
-                      alt="기본 프로필"
-                    />
-                  );
-                }
-              })()}
-              <div>
-                <p>{comment.writer.nickname}</p>
-                <p>{comment.content}</p>
-                <p>{dayjs(comment.createdAt).format('YYYY.MM.DD')}</p>
+            <div
+              key={comment.id}
+              className="mb-4 rounded-md bg-b-secondary px-6 py-5"
+            >
+              <p>{comment.content}</p>
+              {user?.id === comment.writer.id && (
+                <PostActionDropdown
+                  onEdit={() => console.log(`수정: ${comment.id}`)}
+                  onDeleteSuccess={() =>
+                    console.log(`삭제 완료: ${comment.id}`)
+                  }
+                  articleId={comment.id}
+                />
+              )}
+              <div className="mt-[30px] flex items-center">
+                {(() => {
+                  if (
+                    comment.writer.image &&
+                    comment.writer.image.startsWith('http')
+                  ) {
+                    return (
+                      <Image
+                        src={comment.writer.image}
+                        alt="프로필"
+                        className="h-[32px] w-[32px] rounded-full"
+                      />
+                    );
+                  } else {
+                    return (
+                      <Image
+                        src={profile}
+                        alt="기본 프로필"
+                      />
+                    );
+                  }
+                })()}
+                <p className="border-r border-gray-700 px-3 text-[14px]">
+                  {comment.writer.nickname}
+                </p>
+                <p className="pl-3 text-[14px] text-i-inactive">
+                  {dayjs(comment.createdAt).format('YYYY.MM.DD')}
+                </p>
               </div>
             </div>
           ))
