@@ -27,6 +27,7 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const tasks = useTaskStore((state) => state.tasks);
 
   const { checkedItems, toggleChecked, updateTask, deleteTask } =
     useTaskStore();
@@ -89,7 +90,7 @@ export default function ItemList({
                   width={16}
                   height={16}
                 />
-                {item.commentCount}
+                <span>{tasks[item.id]?.commentCount || 0}</span>
               </div>
             </div>
             <KebobDropdown

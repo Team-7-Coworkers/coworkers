@@ -35,14 +35,14 @@ export default function CheckButton({
   };
 
   return (
-    <div>
+    <div className="lg:right-35 absolute bottom-5 right-3">
       <Button
         styleType={isCompleted ? 'outlined' : 'solid'}
         state="floating"
-        size="w-[125px] h-[48px] absolute bottom-5 lg:right-35 right-5 flex gap-1 items-center justify-center"
+        size="w-[125px] h-[48px] flex gap-1 items-center justify-center"
         onClick={handleComplete}
       >
-        <CheckIcon classname="w-4 h-4" />
+        {isCompleted ? null : <CheckIcon classname="w-4 h-4" />}
         {isCompleted ? '완료 취소하기' : '완료하기'}
       </Button>
     </div>

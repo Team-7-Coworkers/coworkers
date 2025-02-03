@@ -120,7 +120,7 @@ export default function TaskDetail({
   }, [isEditModalOpen, isDeleteModalOpen]);
 
   return (
-    <div>
+    <div className="relative">
       {task ? (
         <>
           <TaskDetailHeader
@@ -129,10 +129,10 @@ export default function TaskDetail({
             onEdit={openEditModal}
             onDelete={openDeleteModal}
           />
-          <p className="mt-5 min-h-[25vh] text-md text-t-primary">
+          <p className="mt-5 min-h-[20vh] text-md text-t-primary">
             {task.description}
           </p>
-          <TaskComment />
+          <TaskComment taskId={taskId} />
           <CheckButton
             taskId={taskId}
             groupId={groupId}
@@ -157,7 +157,7 @@ export default function TaskDetail({
           )}
         </>
       ) : (
-        <p>로딩 중...</p>
+        <p>로딩 중...</p> //TODO: 임시 로딩
       )}
     </div>
   );

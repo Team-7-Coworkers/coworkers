@@ -15,6 +15,7 @@ interface TaskState {
   updateTask: (taskId: number, name: string, description: string) => void; // 수정
   deleteTask: (taskId: number) => void; // 삭제
   setTasks: (tasks: TaskType[]) => void; // tasks 관리
+  updateCommentCount: (taskId: number, count: number) => void; // 댓글 갯수 관리
 }
 
 export const useTaskStore = create<TaskState>((set) => ({
@@ -71,4 +72,15 @@ export const useTaskStore = create<TaskState>((set) => ({
         tasks: newTasks,
       };
     }),
+
+  updateCommentCount: (taskId, count) =>
+    set((state) => ({
+      tasks: {
+        ...state.tasks,
+        [taskId]: {
+          ...state.tasks[taskId],
+          commentCount: count,
+        },
+      },
+    })),
 }));
