@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserHistory } from '../api/user.api';
 import { UserResponseType } from '../types/user';
 import { useMemo } from 'react';
+import dayjs from 'dayjs';
+import Loading from '../components/Loading';
 
 export default function MyHistoryPage() {
   //히스토리 가져오기
@@ -39,17 +41,18 @@ export default function MyHistoryPage() {
       {} as Record<string, string[]>
     );
 
-    // {날짜: 할 일 배열} 로 변환, 날짜 순으로 정렬
+    // {날짜: 할 일 배열} 로 변환, 최신순으로 정렬
     return Object.entries(groupedTasks)
-      .map(([doneAt, names]) => ({ doneAt, names }))
-      .sort((a, b) => a.doneAt.localeCompare(b.doneAt));
+      .map(([doneAt, names]) => ({
+        doneAt: dayjs(doneAt).format('YYYY년 MM월 DD일'),
+        names,
+      }))
+      .sort((a, b) => b.doneAt.localeCompare(a.doneAt));
   }, [userHistory]);
-
-  console.log(groupedTasksByDate);
 
   // 로딩 및 에러 처리
   if (isLoading) {
-    return <div>로딩중 ..</div>;
+    return <Loading />;
   }
 
   if (isError) {
@@ -57,10 +60,12 @@ export default function MyHistoryPage() {
   }
 
   return (
-    <>
-      <h1 className="">마이 히스토리</h1>
+    <div className="container">
+      <h1 className="my-6 text-2lg font-bold text-t-primary lg:mt-10">
+        마이 히스토리
+      </h1>
       {/* 데이터 있을 때 / 없을 때 */}
       <DailyItemList dailyTasks={groupedTasksByDate} />
-    </>
+    </div>
   );
 }
