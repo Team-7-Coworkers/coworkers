@@ -126,9 +126,7 @@ export default function Comment() {
                           setEditingCommentId(comment.id);
                           setEditedContent(comment.content);
                         }}
-                        onDeleteSuccess={() =>
-                          console.log(`삭제 완료: ${comment.id}`)
-                        }
+                        onDeleteSuccess={() => {}}
                         commentId={comment.id}
                       />
                     )}

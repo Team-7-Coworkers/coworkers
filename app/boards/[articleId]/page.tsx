@@ -59,7 +59,7 @@ export default function ArticleDetail() {
 
         {user?.nickname === article.writer.nickname && (
           <PostActionDropdown
-            onEdit={() => console.log(`수정: ${article.id}`)}
+            onEdit={() => {}}
             onDeleteSuccess={handleDeleteSuccess}
             articleId={article.id}
           />
