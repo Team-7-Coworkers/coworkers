@@ -31,7 +31,12 @@ export default function Comment() {
         articleId: Number(articleId),
         limit: 10,
       });
-      if ('message' in data) return null;
+
+      if ('message' in data) {
+        alert(data.message || '댓글을 불러오는 중 문제가 발생했습니다.');
+        return null;
+      }
+
       return data;
     },
     staleTime: 1000 * 60 * 5,

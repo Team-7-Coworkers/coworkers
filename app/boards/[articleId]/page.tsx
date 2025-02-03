@@ -23,7 +23,10 @@ export default function ArticleDetail() {
     queryFn: async () => {
       const data = await getDetailsArticle({ articleId: Number(articleId) });
 
-      if ('message' in data) return null;
+      if ('message' in data) {
+        alert(data.message || '게시글을 불러오는 중 문제가 발생했습니다.');
+        return null;
+      }
       return data;
     },
     staleTime: 1000 * 60 * 5,

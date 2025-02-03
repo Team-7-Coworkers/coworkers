@@ -36,6 +36,8 @@ export default function PostActionDropdown({
         queryClient.invalidateQueries({ queryKey: ['articleComments'] });
       }
       onDeleteSuccess?.();
+    } catch {
+      alert('삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsDeleting(false);
     }
