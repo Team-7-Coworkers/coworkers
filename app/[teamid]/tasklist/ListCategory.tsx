@@ -9,7 +9,7 @@ import {
   patchGroupsTaskListsTasks,
 } from '@/app/api/task.api';
 import { TaskListResponseType } from '@/app/types/taskList';
-import { TaskResponseType } from '@/app/types/task';
+import { useTaskStore } from '@/app/stores/taskStore';
 
 type ListCategoryProps = {
   selectedDate: Date;
@@ -17,6 +17,7 @@ type ListCategoryProps = {
   groupId: number;
   updateTrigger: boolean;
   onCategoryChange: (taskListId: number) => void;
+  onTaskClick: (taskId: number) => void;
 };
 
 export default function ListCategory({
@@ -25,22 +26,20 @@ export default function ListCategory({
   groupId,
   updateTrigger,
   onCategoryChange,
+  onTaskClick,
 }: ListCategoryProps) {
   const [selectedCategory, setSelectedCategory] = useState<
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
 
-  const [tasks, setTasks] = useState<
-    TaskResponseType['getGroupsTaskListTasks']
-  >([]);
-
-  const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>(
-    {}
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const { setTasks, setCheckedItems, updateTask, deleteTask, tasks } =
+    useTaskStore();
 
   const fetchTasks = useCallback(async () => {
     if (!selectedCategory) return;
 
+    setIsLoading(true);
     try {
       const formattedDate = `${selectedDate.getFullYear()}-${String(
         selectedDate.getMonth() + 1
@@ -57,20 +56,19 @@ export default function ListCategory({
 
       setTasks(response);
 
-      const initialCheckedItems = response.reduce(
-        (acc: { [key: number]: boolean }, task) => {
-          acc[task.id] = !!task.doneAt || false;
-          return acc;
-        },
-        {}
-      );
+      const initialCheckedItems: { [key: number]: boolean } = {};
+      response.forEach((task) => {
+        initialCheckedItems[task.id] = !!task.doneAt;
+      });
+
       setCheckedItems(initialCheckedItems);
     } catch (err) {
       console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
+    } finally {
+      setIsLoading(false);
     }
-  }, [selectedCategory, selectedDate, groupId]);
+  }, [selectedCategory, selectedDate, groupId, setTasks, setCheckedItems]);
 
-  // 렌더링 시점에 첫 목록이 골라져있도록하는 코드
   useEffect(() => {
     if (taskLists.length > 0 && !selectedCategory) {
       setSelectedCategory(taskLists[0]);
@@ -97,23 +95,16 @@ export default function ListCategory({
     description: string
   ) => {
     try {
-      const taskToEdit = tasks.find((task) => task.id === taskId);
-      if (!taskToEdit) throw new Error('Task not found');
-
       await patchGroupsTaskListsTasks({
         groupId,
         taskListId: selectedCategory?.id || 0,
         taskId,
         name,
         description,
-        done: !!taskToEdit.doneAt,
+        done: !!tasks[taskId]?.doneAt,
       });
 
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === taskId ? { ...task, name, description } : task
-        )
-      );
+      updateTask(taskId, name, description);
     } catch (error) {
       console.error('수정 중 오류 발생:', error);
     }
@@ -126,11 +117,21 @@ export default function ListCategory({
         taskListId: selectedCategory?.id || 0,
         taskId,
       });
-      fetchTasks();
+
+      deleteTask(taskId);
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
     }
   };
+
+  if (taskLists.length === 0 && !isLoading) {
+    return (
+      <p className="mt-40 text-center text-md font-medium text-t-default">
+        아직 할 일 목록이 없습니다. <br />
+        새로운 목록을 추가해주세요.
+      </p>
+    );
+  }
 
   return (
     <div>
@@ -153,26 +154,12 @@ export default function ListCategory({
         ))}
       </div>
 
-      <div className="mt-4">
-        <ItemList
-          items={tasks}
-          checkedItems={checkedItems}
-          onCheckboxChange={async (id, checked) => {
-            if (!selectedCategory) return;
-
-            setCheckedItems((prev) => ({ ...prev, [id]: checked }));
-
-            await patchGroupsTaskListsTasks({
-              groupId,
-              taskListId: selectedCategory.id,
-              taskId: id,
-              done: checked,
-            });
-          }}
-          onEditItem={handleEditItem}
-          onDeleteItem={handleDeleteItem}
-        />
-      </div>
+      <ItemList
+        items={Object.values(tasks)}
+        onTaskClick={onTaskClick}
+        onEditItem={handleEditItem}
+        onDeleteItem={handleDeleteItem}
+      />
     </div>
   );
 }

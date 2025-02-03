@@ -61,6 +61,7 @@ export default function EditModal({
         >
           할 일 메모
         </label>
+        {/*TODO: 수정하기 및 등록하기 제목 인풋 글자수 제한 걸기 */}
         <InputField
           id="edit-description"
           type="text"

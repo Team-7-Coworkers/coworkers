@@ -1,13 +1,21 @@
 import instance from '../libs/axios';
-import { CommentResponseType, CommentParamsType } from '../types/taskComment';
+import {
+  CommentResponseType,
+  CommentParamsType,
+  TaskCommentType,
+} from '../types/taskComment';
 
 // 댓글 가져오기
-const getTaskComments = async (
-  params: CommentParamsType['getTaskComments']
-): Promise<CommentResponseType['getTaskComments']> => {
-  const { taskId } = params;
+const getTaskComments = async ({
+  taskId,
+}: {
+  taskId: number;
+}): Promise<TaskCommentType[]> => {
   const response = await instance.get(`tasks/${taskId}/comments`);
-  return response.data;
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+  return [];
 };
 
 // 댓글 보내기

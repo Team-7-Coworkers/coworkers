@@ -10,6 +10,7 @@ interface TextFieldProps {
   value: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  className?: string;
 }
 
 export default function TextField({
@@ -19,6 +20,7 @@ export default function TextField({
   value,
   placeholder,
   onChange,
+  className = '',
 }: TextFieldProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -58,7 +60,7 @@ export default function TextField({
       value={value}
       placeholder={placeholder}
       onChange={onChange}
-      className={`${baseStyle} ${typeStyle}`}
+      className={`${baseStyle} ${typeStyle} ${className}`}
       style={type === 'box' && height ? { height: `${height}px` } : {}}
     />
   );
