@@ -120,7 +120,7 @@ export default function TaskDetail({
   }, [isEditModalOpen, isDeleteModalOpen]);
 
   return (
-    <div className="relative">
+    <div className="relative min-h-[80vh]">
       {task ? (
         <>
           <TaskDetailHeader

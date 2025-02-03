@@ -50,7 +50,7 @@ export default function ListPage() {
 
   if (isLoading) {
     return (
-      <p className="mt-50 text-center text-md font-medium text-t-default">
+      <p className="mt-64 text-center text-md font-medium text-t-default">
         로딩 중...
       </p>
     );
