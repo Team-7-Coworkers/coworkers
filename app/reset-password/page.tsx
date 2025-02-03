@@ -1,14 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ResetPasswordForm from '@/app/reset-password/ResetPasswordForm';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { patchUserResetPassword } from '../api/user.api';
 
 export default function ResetPasswordPage() {
-  const urlParams = new URL(window.location.href).searchParams;
-  const token = urlParams.get('token') ?? '';
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const urlParams = new URL(window.location.href).searchParams;
+    const tokenFromUrl = urlParams.get('token') ?? '';
+    setToken(tokenFromUrl);
+  }, []);
 
   const resetPasswordMutation = useMutation({
     mutationFn: ({
