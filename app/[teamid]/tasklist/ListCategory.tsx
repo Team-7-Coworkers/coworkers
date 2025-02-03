@@ -140,15 +140,19 @@ export default function ListCategory({
           </button>
         ))}
       </div>
-
-      <div className="mt-4">
+      {taskLists.length === 0 ? (
+        <p className="mt-40 text-center text-md font-medium text-t-default">
+          아직 할 일 목록이 없습니다. <br />
+          새로운 목록을 추가해주세요.
+        </p>
+      ) : (
         <ItemList
           items={Object.values(tasks)}
           onTaskClick={onTaskClick}
           onEditItem={handleEditItem}
           onDeleteItem={handleDeleteItem}
         />
-      </div>
+      )}
     </div>
   );
 }
