@@ -17,6 +17,7 @@ import Button from '../components/Button';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
+import Loading from '../components/Loading';
 
 interface Props {
   params: Promise<{ teamid: string }>;
@@ -31,6 +32,16 @@ export default function TeamPage({ params }: Props) {
   const { user } = useUserStore();
   const router = useRouter();
 
+  const {
+    data: group,
+    isLoading,
+    isError,
+  } = useQuery<GroupResponseType['getGroups']>({
+    queryKey: ['getGroupsById', teamid],
+    queryFn: async () => await getGroups({ groupId: Number(teamid) }),
+    enabled: !!teamid,
+  });
+
   useEffect(() => {
     // teamid 설정
     async function fetchParams() {
@@ -40,16 +51,6 @@ export default function TeamPage({ params }: Props) {
 
     fetchParams();
   }, [params]);
-
-  const {
-    data: group,
-    isPending,
-    isError,
-  } = useQuery<GroupResponseType['getGroups']>({
-    queryKey: ['getGroups', teamid],
-    queryFn: async () => await getGroups({ groupId: Number(teamid) }),
-    enabled: !!teamid,
-  });
 
   useEffect(() => {
     if (group) {
@@ -85,21 +86,28 @@ export default function TeamPage({ params }: Props) {
   // 팀 진짜로 삭제하기 버튼 클릭
   const handleRealDeleteClick = async () => {
     if (group) {
-      const result = await deleteGroups({ groupId: group?.id });
+      const result = await deleteGroups({ groupId: group.id });
       console.log('--- deleteGroups:result:', result);
       router.replace('/');
     }
   };
 
-  if (isPending) {
-    // TODO: Loading 머지되면 적용
-    return <div className="my-4 flex justify-center p-8">Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="mt-48">
+        <Loading />
+      </div>
+    );
   }
 
-  if (isError || !group) {
+  if (isError) {
+    // TODO: 토스트로 에러 보여주시
+    console.error('--- data fetch error');
     router.replace('/');
     return null;
   }
+
+  if (!group) return null;
 
   return (
     <div className="container flex flex-col py-6">
