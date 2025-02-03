@@ -32,12 +32,14 @@ export default function ListCategory({
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
 
+  const [isLoading, setIsLoading] = useState(false);
   const { setTasks, setCheckedItems, updateTask, deleteTask, tasks } =
     useTaskStore();
 
   const fetchTasks = useCallback(async () => {
     if (!selectedCategory) return;
 
+    setIsLoading(true);
     try {
       const formattedDate = `${selectedDate.getFullYear()}-${String(
         selectedDate.getMonth() + 1
@@ -62,6 +64,8 @@ export default function ListCategory({
       setCheckedItems(initialCheckedItems);
     } catch (err) {
       console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
+    } finally {
+      setIsLoading(false);
     }
   }, [selectedCategory, selectedDate, groupId, setTasks, setCheckedItems]);
 
@@ -120,6 +124,15 @@ export default function ListCategory({
     }
   };
 
+  if (taskLists.length === 0 && !isLoading) {
+    return (
+      <p className="mt-40 text-center text-md font-medium text-t-default">
+        아직 할 일 목록이 없습니다. <br />
+        새로운 목록을 추가해주세요.
+      </p>
+    );
+  }
+
   return (
     <div>
       <div
@@ -140,19 +153,13 @@ export default function ListCategory({
           </button>
         ))}
       </div>
-      {taskLists.length === 0 ? (
-        <p className="mt-40 text-center text-md font-medium text-t-default">
-          아직 할 일 목록이 없습니다. <br />
-          새로운 목록을 추가해주세요.
-        </p>
-      ) : (
-        <ItemList
-          items={Object.values(tasks)}
-          onTaskClick={onTaskClick}
-          onEditItem={handleEditItem}
-          onDeleteItem={handleDeleteItem}
-        />
-      )}
+
+      <ItemList
+        items={Object.values(tasks)}
+        onTaskClick={onTaskClick}
+        onEditItem={handleEditItem}
+        onDeleteItem={handleDeleteItem}
+      />
     </div>
   );
 }
