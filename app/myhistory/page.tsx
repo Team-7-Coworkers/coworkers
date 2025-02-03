@@ -21,7 +21,7 @@ export default function MyHistoryPage() {
 
   // 데이터 가공
   const groupedTasksByDate = useMemo(() => {
-    if (!userHistory) return [];
+    if (!userHistory?.tasksDone?.length) return [];
 
     // 시간순 정렬
     const sortedTasks = [...userHistory.tasksDone].sort(
@@ -52,7 +52,11 @@ export default function MyHistoryPage() {
 
   // 로딩 및 에러 처리
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
 
   if (isError) {
@@ -60,12 +64,19 @@ export default function MyHistoryPage() {
   }
 
   return (
-    <div className="container">
+    <div className="container flex min-h-[80vh] flex-col">
       <h1 className="my-6 text-2lg font-bold text-t-primary lg:mt-10">
         마이 히스토리
       </h1>
-      {/* 데이터 있을 때 / 없을 때 */}
-      <DailyItemList dailyTasks={groupedTasksByDate} />
+      {groupedTasksByDate.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-center text-md font-medium text-t-default">
+            아직 히스토리가 없습니다.
+          </p>
+        </div>
+      ) : (
+        <DailyItemList dailyTasks={groupedTasksByDate} />
+      )}
     </div>
   );
 }
