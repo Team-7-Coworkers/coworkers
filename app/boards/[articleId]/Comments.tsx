@@ -12,7 +12,7 @@ import {
 } from '@/app/api/articleComment.api';
 import dayjs from 'dayjs';
 import Image from 'next/image';
-import profile from '@/public/images/icons/ic-member.svg';
+import profile from '@/public/images/icons/icon-base-user.svg';
 import useUserStore from '@/app/stores/userStore';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 
@@ -151,7 +151,7 @@ export default function Comment() {
                     alt="기본 프로필"
                     width={32}
                     height={32}
-                    className="rounded-full"
+                    className="rounded-full border-[2px] border-gray-200/10 bg-b-secondary"
                   />
                 )}
                 <p className="border-r border-gray-700 px-3 text-[14px]">

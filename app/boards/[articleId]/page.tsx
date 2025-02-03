@@ -11,6 +11,7 @@ import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import LikeButton from '@/app/boards/LikeButton';
 import useUserStore from '@/app/stores/userStore';
 import Comment from './Comments';
+import profile from '@/public/images/icons/icon-base-user.svg';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -67,6 +68,24 @@ export default function ArticleDetail() {
 
       <div className="mt-4 flex w-full items-center justify-between text-[14px]">
         <div className="flex items-center space-x-2">
+          {/* 작성자 프로필 이미지 */}
+          {article.writer.image && article.writer.image.startsWith('http') ? (
+            <Image
+              src={article.writer.image}
+              alt="프로필"
+              width={32}
+              height={32}
+              className="rounded-full border-[2px] border-gray-200/10 bg-b-secondary"
+            />
+          ) : (
+            <Image
+              src={profile}
+              alt="기본 프로필"
+              width={32}
+              height={32}
+              className="rounded-full border-[2px] border-gray-200/10 bg-b-secondary"
+            />
+          )}
           <p className="pr-3">{article.writer.nickname}</p>
           <span className="h-4 border-l border-gray-700"></span>
           <p className="text-t-secondary">
