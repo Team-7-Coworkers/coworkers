@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+
+import { postGroupsAcceptInvitation } from '../api/group.api';
+import useUserStore from '../stores/userStore';
 
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 
 import styles from '../styles/team.module.css';
-import useUserStore from '../stores/userStore';
-import { useMutation } from '@tanstack/react-query';
-import { postGroupsAcceptInvitation } from '../api/group.api';
 
 export default function InvitationPage() {
   const [link, setLink] = useState('');
