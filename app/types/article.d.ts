@@ -4,7 +4,7 @@ export interface ArticleType {
   updatedAt: string;
   createdAt: string;
   likeCount: number;
-  writer: Omit<UserProfileType, 'image'>;
+  writer: UserProfileType;
   image: string;
   title: string;
   id: number;
