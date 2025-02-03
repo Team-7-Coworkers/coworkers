@@ -10,6 +10,7 @@ import {
   validatePassword,
 } from '@/app/utils/formValidators';
 import { SignUpFormDataType } from '../types/auth';
+import Link from 'next/link';
 
 interface SignupFormProps {
   onSubmit: (formData: SignUpFormDataType) => void;
@@ -76,7 +77,6 @@ export default function SignupForm({
             validator={validateName}
           />
         </div>
-
         <div className="space-y-3">
           <label htmlFor="email">이메일</label>
           <InputField
@@ -88,7 +88,6 @@ export default function SignupForm({
             validator={validateEmail}
           />
         </div>
-
         <div className="space-y-3">
           <label htmlFor="password">비밀번호</label>
           <InputField
@@ -101,7 +100,6 @@ export default function SignupForm({
             isPassword={true}
           />
         </div>
-
         <div className="space-y-3">
           <label htmlFor="confirmPassword">비밀번호 확인</label>
           <InputField
@@ -114,6 +112,12 @@ export default function SignupForm({
             isPassword={true}
           />
         </div>
+        <Link
+          href="/login"
+          className="block cursor-pointer text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
+        >
+          로그인 페이지로
+        </Link>
       </div>
       <Button
         type="submit"

@@ -13,7 +13,7 @@ export const validateEmail = (value: string) => {
 
 export const validatePassword = (value: string) => {
   if (!value.trim()) return '비밀번호는 필수 입력입니다.';
-  if (value.length < 6) return '비밀번호는 최소 8자 이상이어야 합니다.';
+  if (value.length < 8) return '비밀번호는 최소 8자 이상이어야 합니다.';
 
   // 숫자, 영문, 특수문자가 모두 포함
   const hasNumber = /[0-9]/.test(value);

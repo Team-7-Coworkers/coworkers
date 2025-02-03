@@ -31,7 +31,7 @@ const postAuthEasySignIn = async (
   params: AuthParamsType['postAuthEasySignIn']
 ): Promise<AuthResponseType['postAuthEasySignIn']> => {
   const { state, redirectUri, token, provider } = params;
-  const response = await instance.post(`auth/singIn/${provider}`, {
+  const response = await instance.post(`auth/signIn/${provider}`, {
     state,
     redirectUri,
     token,
