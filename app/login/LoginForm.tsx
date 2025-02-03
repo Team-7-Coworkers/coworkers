@@ -5,7 +5,7 @@ import InputField from '@components/InputField';
 import Button from '@components/Button';
 import { validateEmail, validatePassword } from '@/app/utils/formValidators';
 import { LoginFormDataType } from '../types/auth';
-// import { postUserSendRestPasswordEmail } from '../api/user.api';
+import Link from 'next/link';
 
 interface LoginFormProps {
   onSubmit: (formData: LoginFormDataType) => void;
@@ -37,10 +37,7 @@ export default function LoginForm({
     validateForm();
   }, [validateForm]);
 
-  const handleForgetPassword = () => {
-    //     const {email} = formData
-    //     const responce = await postUserSendRestPasswordEmail({email, redirectURL})
-  };
+  const handleForgetPassword = () => {};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,7 +85,7 @@ export default function LoginForm({
             onClick={handleForgetPassword}
             className="cursor-pointer text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
           >
-            비밀번호를 잊으셨나요?
+            <Link href="/reset-password">비밀번호를 잊으셨나요?</Link>
           </div>
         </div>
       </div>
