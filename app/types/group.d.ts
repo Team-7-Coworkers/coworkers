@@ -13,7 +13,7 @@ export interface GroupResponseType {
   getGroupsMember: Omit<MemberShipType, 'group'>;
   getGroupsInvitation: string;
   postGroupsAcceptInvitation: {
-    groupgroupId: number;
+    groupId: number;
   };
   postGroupsMember: {
     userEmail: string;
