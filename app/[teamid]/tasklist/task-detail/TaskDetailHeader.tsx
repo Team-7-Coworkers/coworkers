@@ -5,6 +5,8 @@ import CheckIcon from '../CheckIcon';
 import { TaskType } from '@/app/types/shared';
 import DateDisplay from '../info-displays/DateDisplay';
 import FrequencyDisplay from '../info-displays/FrequencyDisplay';
+import Image from 'next/image';
+import ProfileImg from '@/public/images/icons/icon-base-user.svg';
 
 interface TaskHeaderProps {
   task: TaskType;
@@ -43,13 +45,21 @@ export default function TaskDetailHeader({
           onDelete={onDelete}
         />
       </div>
-      {/*
-        TODO: 글쓴이 프로필 추가하기 + 오른쪽의 날짜?는 뭔지 잘모르겠네요.
-
-        시간은 어디는 있고 어디는 없는데...
-        시간을 활용해서 할 수 있는 작업이 당장은 없어서 저번에 말씀드렸다시피
-        후에 고려해보겠습니다!
-      */}
+      <div className="mt-3 flex items-center gap-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-bd-primary/10 bg-b-tertiary">
+          <Image
+            src={task.writer.image || ProfileImg} // 프로필 이미지가 없다면 기본 이미지
+            alt={`${task.writer.nickname}의 프로필`}
+            width={25}
+            height={25}
+            className="object-cover"
+          />
+        </div>
+        <span className="text-md font-medium text-t-primary">
+          {task.writer.nickname}
+        </span>
+      </div>
+      {/* TODO: 날짜 데이터 변경 고려 */}
       <div className="mt-3 flex items-center gap-3">
         <DateDisplay date={task.date} />
         <div className="text-xs text-b-tertiary">|</div>
