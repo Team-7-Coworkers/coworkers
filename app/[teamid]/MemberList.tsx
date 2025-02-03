@@ -31,11 +31,7 @@ export default function MemberList({ groupId, members, role }: Props) {
   const [memberModalOpen, setMemberModalOpen] = useState(false);
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
   const [memberIdx, setMemberIdx] = useState<number>(0);
-  const {
-    data: token,
-    isError,
-    refetch,
-  } = useQuery({
+  const { refetch } = useQuery({
     queryKey: ['getLinkToken', groupId],
     queryFn: async () => await getGroupsInvitation({ groupId }),
     enabled: false,
@@ -58,14 +54,15 @@ export default function MemberList({ groupId, members, role }: Props) {
 
   // 멤버 초대 링크 복사 버튼 클릭 함수
   const handleLinkCopyClick = async () => {
-    await refetch();
+    const { data: token, isError } = await refetch();
+    // console.log('--- handleLinkCopyClick:result:', token);
+
     if (isError) {
       // TODO: 복사 실패 alert 대신 토스트 뛰우기
       alert('링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
     } else {
       // TODO: 문서나 UI로는 정확한 프로세스가 확인이 안됨
-      // 팀 참여하기 페이지(/join) 링크 + 토큰
-      const url = window.location.origin + '/join?t=' + token;
+      const url = window.location.origin + '/invitation?t=' + token;
       navigator.clipboard.writeText(url);
       // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
       alert('링크가 복사되었습니다.');

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 import { getGroups, deleteGroups } from '../api/group.api';
@@ -19,12 +19,8 @@ import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
 import Loading from '../components/Loading';
 
-interface Props {
-  params: Promise<{ teamid: string }>;
-}
-
-export default function TeamPage({ params }: Props) {
-  const [teamid, setTeamid] = useState('');
+export default function TeamPage() {
+  const { teamid } = useParams();
   const [role, setRole] = useState('');
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
@@ -41,16 +37,6 @@ export default function TeamPage({ params }: Props) {
     queryFn: async () => await getGroups({ groupId: Number(teamid) }),
     enabled: !!teamid,
   });
-
-  useEffect(() => {
-    // teamid 설정
-    async function fetchParams() {
-      const { teamid } = await params;
-      setTeamid(teamid);
-    }
-
-    fetchParams();
-  }, [params]);
 
   useEffect(() => {
     if (group) {
