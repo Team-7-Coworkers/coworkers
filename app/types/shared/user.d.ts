@@ -2,6 +2,7 @@ export interface UserProfileType {
   image: string | null;
   nickname: string;
   id: number;
+  image?: string;
 }
 
 export interface UserType {
