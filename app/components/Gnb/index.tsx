@@ -13,6 +13,7 @@ import { getUserGroups } from '@/app/api/user.api';
 import { useRouter, usePathname } from 'next/navigation';
 import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
+import Link from 'next/link';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
@@ -77,12 +78,14 @@ export default function GNB() {
             )}
 
             <div className="relative flex h-[20px] w-[102px] lg:h-[60px] lg:w-[158px]">
-              <Image
-                src="/images/logos/logo.svg"
-                alt="Logo"
-                fill
-                style={{ objectFit: 'contain' }}
-              />
+              <Link href="/">
+                <Image
+                  src="/images/logos/logo.svg"
+                  alt="Logo"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </Link>
             </div>
           </div>
           <div className="hidden items-center space-x-10 sm:flex">

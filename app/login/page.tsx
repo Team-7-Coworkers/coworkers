@@ -1,15 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import LoginForm from '@/app/login/LoginForm';
 import { postAuthSignIn } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '../stores/userStore';
 import { AuthResponseType, LoginFormDataType } from '../types/auth';
 import axios from 'axios';
+import Link from 'next/link';
+import EasyLogin from './EasyLogin';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const { setAccessToken, setRefreshToken, setUser } = useUserStore();
+  const { user, setAccessToken, setRefreshToken, setUser } = useUserStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user?.id) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   const loginMutation = useMutation({
     mutationFn: postAuthSignIn,
@@ -19,6 +29,7 @@ export default function LoginPage() {
       setRefreshToken(refreshToken);
       setUser(user);
       alert('로그인에 성공했습니다!');
+      router.push('/');
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -41,8 +52,27 @@ export default function LoginPage() {
       <h2 className="mb-6 text-center text-2xl font-medium lg:text-4xl">
         로그인
       </h2>
-      <div className="w-full max-w-[460px] sm:pt-[80px]">
-        <LoginForm onSubmit={handleLoginSubmit} />
+      <div className="w-full max-w-[460px] space-y-12 sm:pt-[80px]">
+        <div className="space-y-6">
+          <LoginForm onSubmit={handleLoginSubmit} />
+          <div className="text-center font-medium">
+            아직 계정이 없으신가요?
+            <Link
+              href="/signup"
+              className="ml-2 text-primary underline hover:opacity-50"
+            >
+              가입하기
+            </Link>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="flex w-full items-center gap-4">
+            <div className="flex-1 border-t border-bd-primary opacity-10"></div>
+            <span>OR</span>
+            <div className="flex-1 border-t border-bd-primary opacity-10"></div>
+          </div>
+          <EasyLogin page="login" />
+        </div>
       </div>
     </div>
   );
