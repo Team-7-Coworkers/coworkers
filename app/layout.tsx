@@ -3,6 +3,7 @@ import siteMetadata from '@/data/siteMetadata';
 import './styles/globals.css';
 import GNB from './components/Gnb';
 import { Providers } from './libs/providers';
+import KakaoScript from './utils/KakaoScript';
 
 export const metadata: Metadata = {
   title: {
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <GNB />
+          <KakaoScript />
         </Providers>
       </body>
     </html>

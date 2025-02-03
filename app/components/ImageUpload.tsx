@@ -8,12 +8,14 @@ interface FileUploadProps {
   onUploadSuccess: (url: string) => void; // 업로드 성공 시 실행할 함수
   onUploadError: (error: Error) => void; // 업로드 실패 시 실행할 함수
   variant?: 'circle' | 'square'; // 'circle': 프로필/팀 이미지, 'square': 게시글 이미지
+  url?: string; // 초기 이미지 주소
 }
 
 function ImageUpload({
   onUploadSuccess,
   onUploadError,
   variant = 'circle',
+  url = '',
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -70,13 +72,14 @@ function ImageUpload({
             className="pointer-events-none"
           />
           {/* 업로드된 이미지 미리보기 */}
-          {previewUrl && (
+          {(url || previewUrl) && (
             <div className="absolute inset-0 overflow-hidden rounded-full">
               <Image
-                src={previewUrl}
+                src={previewUrl || url}
                 alt="업로드된 이미지 미리보기"
-                layout="fill"
-                objectFit="cover"
+                width={58}
+                height={58}
+                className="h-full w-full object-cover"
               />
             </div>
           )}
@@ -121,7 +124,7 @@ function ImageUpload({
           className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[3px] border-gray-200/10 bg-b-primary"
           onClick={triggerFileInput}
         >
-          {!previewUrl ? (
+          {!previewUrl && !url ? (
             <>
               <Image
                 src="/images/icons/ic_plus.svg"
@@ -136,11 +139,11 @@ function ImageUpload({
             </>
           ) : (
             <Image
-              src={previewUrl}
+              src={previewUrl || url}
               alt="업로드된 이미지 미리보기"
-              layout="fill"
-              objectFit="cover"
-              className="absolute inset-0"
+              width={160}
+              height={160}
+              className="absolute inset-0 h-full w-full object-cover"
             />
           )}
         </div>
