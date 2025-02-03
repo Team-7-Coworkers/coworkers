@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import LoginForm from '@/app/login/LoginForm';
 import { postAuthSignIn } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
@@ -12,8 +12,14 @@ import EasyLogin from './EasyLogin';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const { setAccessToken, setRefreshToken, setUser } = useUserStore();
+  const { user, setAccessToken, setRefreshToken, setUser } = useUserStore();
   const router = useRouter();
+
+  useEffect(() => {
+    if (user?.id) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   const loginMutation = useMutation({
     mutationFn: postAuthSignIn,
