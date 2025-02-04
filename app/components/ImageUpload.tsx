@@ -121,7 +121,7 @@ function ImageUpload({
       ) : (
         // Square 영역
         <div
-          className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[3px] border-gray-200/10 bg-b-primary"
+          className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[3px] border-gray-200/10 bg-b-primary sm:h-[240px] sm:w-[240px]"
           onClick={triggerFileInput}
         >
           {!previewUrl && !url ? (
@@ -143,7 +143,7 @@ function ImageUpload({
               alt="업로드된 이미지 미리보기"
               width={160}
               height={160}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover sm:h-[240px] sm:w-[240px]"
             />
           )}
         </div>
