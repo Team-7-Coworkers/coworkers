@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/app/components/Button';
 import ImageUpload from '@/app/components/ImageUpload';
-import InputField from '@/app/components/InputField';
 import TextField from '@/app/components/TextField';
 import { postArticles } from '@/app/api/article.api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -62,12 +61,13 @@ export default function Write() {
       <p className="pb-4 pt-10">
         <span className="text-tertiary">*</span>제목
       </p>
-      <InputField
+      <input
         id="title"
         type="text"
         placeholder="제목을 입력해주세요."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        className="leading-26 border-1px w-full rounded-[12px] border border-[#F8FAFC1A] bg-b-secondary py-[8px] pl-[16px] text-md font-normal text-t-primary placeholder-[#9CA3AF] focus:border-bd-primary focus:outline-none sm:py-[16px] sm:pl-[24px] sm:text-lg"
       />
 
       <p className="pb-4 pt-8">
