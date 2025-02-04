@@ -7,6 +7,7 @@ import { deleteArticles } from '@/app/api/article.api';
 import { deleteComments } from '@/app/api/articleComment.api';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PostActionDropdownProps {
   onEdit: () => void;
@@ -16,13 +17,13 @@ interface PostActionDropdownProps {
 }
 
 export default function PostActionDropdown({
-  onEdit,
   onDeleteSuccess,
   articleId,
   commentId,
 }: PostActionDropdownProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const handleDelete = async () => {
     if (isDeleting) return;
@@ -43,6 +44,12 @@ export default function PostActionDropdown({
     }
   };
 
+  const handleEdit = () => {
+    if (articleId) {
+      router.push(`/boards/write?articleId=${articleId}`);
+    }
+  };
+
   return (
     <Dropdown>
       <Dropdown.Button>
@@ -56,7 +63,7 @@ export default function PostActionDropdown({
         animationType="scale"
         className="absolute right-0 sm:left-0 sm:right-auto"
       >
-        <Dropdown.MenuItem onClick={onEdit}>수정하기</Dropdown.MenuItem>
+        <Dropdown.MenuItem onClick={handleEdit}>수정하기</Dropdown.MenuItem>
         <Dropdown.MenuItem onClick={handleDelete}>
           {isDeleting ? '삭제 중...' : '삭제하기'}
         </Dropdown.MenuItem>
