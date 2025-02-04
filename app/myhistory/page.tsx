@@ -29,23 +29,22 @@ export default function MyHistoryPage() {
     );
 
     // 날짜별로 묶기
-    const groupedTasks = sortedTasks.reduce(
-      (acc, task) => {
-        const doneDate = task.doneAt.split('T')[0];
+    const initialAcc: Record<string, { name: string; id: number }[]> = {};
 
-        if (!acc[doneDate]) acc[doneDate] = [];
-        acc[doneDate].push(task.name);
+    const groupedTasks = sortedTasks.reduce((acc, task) => {
+      const doneDate = task.doneAt.split('T')[0];
 
-        return acc;
-      },
-      {} as Record<string, string[]>
-    );
+      if (!acc[doneDate]) acc[doneDate] = [];
+      acc[doneDate].push({ name: task.name, id: task.id });
+
+      return acc;
+    }, initialAcc);
 
     // {날짜: 할 일 배열} 로 변환, 최신순으로 정렬
     return Object.entries(groupedTasks)
-      .map(([doneAt, names]) => ({
+      .map(([doneAt, tasks]) => ({
         doneAt: dayjs(doneAt).format('YYYY년 MM월 DD일'),
-        names,
+        tasks,
       }))
       .sort((a, b) => b.doneAt.localeCompare(a.doneAt));
   }, [userHistory]);
