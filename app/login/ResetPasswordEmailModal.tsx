@@ -74,7 +74,12 @@ export default function ResetPasswordEmailModal({
       )}
 
       <ModalFooter>
-        <Button styleType="outlined">취소</Button>
+        <Button
+          onClick={onClose}
+          styleType="outlined"
+        >
+          취소
+        </Button>
         <Button onClick={handleSendEmail}>링크 보내기</Button>
       </ModalFooter>
     </Modal>
