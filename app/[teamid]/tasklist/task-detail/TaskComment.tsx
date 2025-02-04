@@ -146,7 +146,6 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
                 </div>
               ) : (
                 <div className="mt-3 flex-1 text-md">
-                  {' '}
                   {/* 댓글 정보 보여주기 */}
                   <div className="flex items-center justify-between">
                     <p className="text-t-primary">{comment.content}</p>

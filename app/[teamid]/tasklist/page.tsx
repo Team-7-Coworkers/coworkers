@@ -9,6 +9,7 @@ import ListHeader from './ListHeader';
 import { getGroups } from '@/app/api/group.api';
 import { GroupResponseType } from '@/app/types/group';
 import CloseIcon from '@/app/components/Modal/CloseIcon';
+import Loading from '@/app/components/Loading';
 
 export default function ListPage() {
   const { teamid: groupId } = useParams<{ teamid: string }>();
@@ -50,11 +51,11 @@ export default function ListPage() {
 
   if (isLoading) {
     return (
-      <p className="mt-64 text-center text-md font-medium text-t-default">
-        로딩 중...
-      </p>
+      <div className="flex min-h-[80vh] items-center justify-center">
+        <Loading />
+      </div>
     );
-  } //TODO: 임시 로딩
+  }
 
   return (
     <div className="container relative min-h-[80vh]">

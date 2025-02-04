@@ -13,6 +13,7 @@ import DeleteModal from '../modals/DeleteModal';
 import EditModal from '../modals/EditModal';
 import TaskDetailHeader from './TaskDetailHeader';
 import TaskComment from './TaskComment';
+import Loading from '@/app/components/Loading';
 
 interface TaskDetailProps {
   taskId: number;
@@ -157,7 +158,9 @@ export default function TaskDetail({
           )}
         </>
       ) : (
-        <p>로딩 중...</p> //TODO: 임시 로딩
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <Loading />
+        </div>
       )}
     </div>
   );
