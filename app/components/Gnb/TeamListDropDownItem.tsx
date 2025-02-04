@@ -10,12 +10,14 @@ export default function TeamListDropDownItem({
 }: TeamListDropDownItemProps) {
   return (
     <div className="flex items-center gap-3">
-      <Image
-        src={team.image || '/images/icons/ic_user.svg'}
-        width={32}
-        height={32}
-        alt=""
-      />
+      <div className="relative h-8 w-8 overflow-hidden rounded-md">
+        <Image
+          src={team.image || '/images/icons/ic_user.svg'}
+          alt=""
+          fill
+          objectFit="cover"
+        />
+      </div>
       <p className="truncate text-lg">{team.name}</p>
     </div>
   );
