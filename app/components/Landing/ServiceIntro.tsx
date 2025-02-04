@@ -5,12 +5,10 @@ import landingMain from '@/public/images/landing/landing-main.png';
 import RepairIcon from '@/public/images/icons/ic_repair.svg';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-// import { useRouter } from 'next/navigation';
 import useUserStore from '@/app/stores/userStore';
 import useTeamStore from '@/app/stores/teamStore';
 
 export default function ServiceIntro() {
-  // const router = useRouter();
   const { user } = useUserStore();
   const { currentTeam } = useTeamStore();
 
