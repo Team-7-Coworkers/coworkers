@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { cn } from '@/app/libs/utils';
+
 import AlertIcon from './AlertIcon';
 import CloseIcon from './CloseIcon';
 import styles from './Modal.module.css';
@@ -15,6 +17,8 @@ interface ModalProps {
   icon?: 'danger' | null;
   /** 모달 제목 문자열 */
   title?: string;
+  /** 모달 위치 - 큰 사이즈는 'top'으로 설정해 주세요 */
+  position?: 'center' | 'top';
   /** 모달 내부 children 요소 */
   children: ReactNode;
   /** 모달 닫기 함수 */
@@ -32,6 +36,7 @@ export default function Modal({
   isCloseOutsideClick = false,
   icon = null,
   title,
+  position = 'center',
   children,
   onClose,
 }: ModalProps) {
@@ -47,13 +52,15 @@ export default function Modal({
     }
   };
 
+  const containerClass = cn(styles.container, position === 'top' && styles.top);
+
   return (
     <dialog
       className={styles.modal}
       open={isOpen}
       onClick={handleBackdropClick}
     >
-      <div className={styles.container}>
+      <div className={containerClass}>
         {icon === 'danger' && (
           <AlertIcon classname="mx-auto mb-4 text-danger" />
         )}
