@@ -16,12 +16,14 @@ export default function write() {
   };
 
   return (
-    <div className="mx-auto flex w-[90%] flex-col items-start pb-12 sm:w-[90%] lg:w-[65%]">
+    <div className="relative mx-auto flex w-[90%] flex-col items-start pb-12 sm:w-[90%] lg:w-[65%]">
+      {/* 제목 & 버튼 (PC에서만 보임) */}
       <div className="flex w-full items-center justify-between border-b border-gray-700 pb-8 pt-12">
         <p className="pb-6 text-[20px] font-bold">게시글 쓰기</p>
         <Button
           styleType="solid"
           size="w-[184px] h-[42px]"
+          classname="hidden sm:inline-block" // ✅ PC에서만 보이게 설정
         >
           등록
         </Button>
@@ -35,6 +37,7 @@ export default function write() {
         type={'text'}
         placeholder={'제목을 입력해주세요.'}
       />
+
       <p className="pb-4 pt-8">
         <span className="text-tertiary">*</span>내용
       </p>
@@ -44,6 +47,7 @@ export default function write() {
         height={240}
         value={''}
       />
+
       <p className="pb-4 pt-8">
         <span className="text-tertiary">*</span>이미지
       </p>
@@ -52,6 +56,14 @@ export default function write() {
         onUploadError={handleUploadError}
         variant="square"
       />
+
+      <Button
+        styleType="solid"
+        size="w-full h-[42px]"
+        classname="sm:hidden mt-10"
+      >
+        등록
+      </Button>
     </div>
   );
 }
