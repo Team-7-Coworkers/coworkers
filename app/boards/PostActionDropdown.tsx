@@ -17,6 +17,7 @@ interface PostActionDropdownProps {
 }
 
 export default function PostActionDropdown({
+  onEdit,
   onDeleteSuccess,
   articleId,
   commentId,
@@ -47,6 +48,8 @@ export default function PostActionDropdown({
   const handleEdit = () => {
     if (articleId) {
       router.push(`/boards/write?articleId=${articleId}`);
+    } else if (commentId) {
+      onEdit();
     }
   };
 
