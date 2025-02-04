@@ -43,6 +43,9 @@ export default function Write() {
       queryClient.invalidateQueries({ queryKey: ['articles'] });
       router.push('/boards');
     },
+    onError: () => {
+      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+    },
   });
 
   const patchMutation = useMutation({
@@ -50,6 +53,9 @@ export default function Write() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['articles'] });
       router.push('/boards');
+    },
+    onError: () => {
+      alert('게시글 수정에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
