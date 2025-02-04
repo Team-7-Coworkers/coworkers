@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Dropdown from '../Dropdown';
 import { useRouter } from 'next/navigation';
 import useUserStore from '@/app/stores/userStore';
+import useTeamStore from '@/app/stores/teamStore';
 
 interface ProfileDropDownProps {
   user: UserType;
@@ -14,11 +15,13 @@ const dropDownItemStyle = 'text-md sm:text-lg pt-2 px-4 pb-2';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { clearUser } = useUserStore();
+  const { clearTeam } = useTeamStore();
 
   const router = useRouter();
 
   const handleLogout = () => {
     clearUser();
+    clearTeam();
     router.push('/');
   };
 

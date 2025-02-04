@@ -23,7 +23,7 @@ export default function GNB() {
   const router = useRouter();
 
   const { user } = useUserStore();
-  const { setTeamList, setCurrentTeam } = useTeamStore();
+  const { setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
@@ -44,10 +44,15 @@ export default function GNB() {
       }
 
       if (!teamId) {
-        setCurrentTeam(teamList[0]?.id);
+        setCurrentTeam(currentTeam?.id || teamList[0]?.id);
+        return;
+      }
+
+      if (teamId !== currentTeam?.id) {
+        setCurrentTeam(teamId);
       }
     }
-  }, [teamList, setTeamList, teamId, setCurrentTeam]);
+  }, [teamList, setTeamList, teamId, setCurrentTeam, currentTeam]);
 
   const handleOpenSideBar = () => {
     setIsSideBarOpen(true);
@@ -94,9 +99,7 @@ export default function GNB() {
               <>
                 <TeamListDropDown
                   teamList={teamList}
-                  currentTeam={
-                    teamList.find((team) => team.id === teamId) || teamList[0]
-                  }
+                  currentTeam={currentTeam || teamList[0]}
                 />
                 <button onClick={() => router.push('/boards')}>
                   자유게시판
