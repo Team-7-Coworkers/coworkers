@@ -24,7 +24,6 @@ export default function ServiceOut() {
           fill
           quality={100}
           alt=""
-          unoptimized
         />
       </div>
     </div>

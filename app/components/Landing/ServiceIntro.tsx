@@ -29,7 +29,6 @@ export default function ServiceIntro() {
           src={landingMain}
           alt=""
           priority
-          unoptimized
           quality={100}
         />
       </div>
