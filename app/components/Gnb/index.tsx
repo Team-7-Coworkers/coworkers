@@ -14,6 +14,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
 import Link from 'next/link';
+import isEqual from 'lodash.isequal';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
@@ -38,7 +39,7 @@ export default function GNB() {
     if (teamList.length > 0) {
       const currentTeamList = useTeamStore.getState();
 
-      if (JSON.stringify(currentTeamList) !== JSON.stringify(teamList)) {
+      if (!isEqual(teamList, currentTeamList)) {
         setTeamList(teamList);
       }
 
