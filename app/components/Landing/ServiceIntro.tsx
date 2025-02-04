@@ -5,8 +5,21 @@ import landingMain from '@/public/images/landing/landing-main.png';
 import RepairIcon from '@/public/images/icons/ic_repair.svg';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+// import { useRouter } from 'next/navigation';
+import useUserStore from '@/app/stores/userStore';
+import useTeamStore from '@/app/stores/teamStore';
 
 export default function ServiceIntro() {
+  // const router = useRouter();
+  const { user } = useUserStore();
+  const { currentTeam } = useTeamStore();
+
+  const getRedirectPath = () => {
+    if (!user) return '/login';
+    if (!currentTeam) return '/noteam';
+    return `${currentTeam.id}`;
+  };
+
   return (
     <div className="relative w-full overflow-hidden text-center">
       <div className="h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
@@ -41,7 +54,7 @@ export default function ServiceIntro() {
           </h1>
         </motion.div>
       </div>
-      <Link href="/login">
+      <Link href={getRedirectPath()}>
         <motion.button
           className="relative bottom-12 w-[343px] rounded-[32px] bg-gradient-to-r from-primary to-tertiary py-[13px] text-lg font-semibold sm:bottom-[119px] sm:w-[373px] sm:py-[14.5px] lg:bottom-[160px]"
           whileHover={{ scale: 1.15 }}
