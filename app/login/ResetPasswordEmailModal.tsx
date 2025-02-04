@@ -49,7 +49,7 @@ export default function ResetPasswordEmailModal({
   const handleSendEmail = () => {
     sendResetPasswordLinkMutation.mutate({
       email,
-      redirectUrl: 'http://localhost:3000',
+      redirectUrl: process.env.NEXT_PUBLIC_REDIRECT_URL ?? '',
     });
   };
 
