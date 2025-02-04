@@ -10,9 +10,12 @@ import { useTaskStore } from '@/app/stores/taskStore';
 import FrequencyDisplay from './info-displays/FrequencyDisplay';
 import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
+import Loading from '@/app/components/Loading';
 
 type ItemListProps = {
-  items: TaskType[];
+  items: TaskType[] | undefined;
+  isFetching: boolean;
+  isLoading: boolean;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
   onTaskClick: (taskId: number) => void;
@@ -20,6 +23,8 @@ type ItemListProps = {
 
 export default function ItemList({
   items,
+  isLoading,
+  isFetching,
   onEditItem,
   onDeleteItem,
   onTaskClick,
@@ -60,10 +65,19 @@ export default function ItemList({
     }
   };
 
+  // 로딩 중에 아직 할 일이 없습니다.가 한 번씩 보여서 로직을 빡세게 넣었습니다.
+  if (isLoading || isFetching || items === undefined) {
+    return (
+      <div className="flex min-h-[250px] items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
+
   if (items.length === 0) {
     return (
       <p className="mt-24 text-center text-t-default">
-        아직 할 일이 없습니다. 할 일을 추가해보세요.
+        아직 할 일이 없습니다. <br /> 할 일을 추가해보세요.
       </p>
     );
   }

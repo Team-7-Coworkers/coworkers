@@ -19,6 +19,7 @@ export default function UserProfile({ image, nickname }: UserProfileProps) {
           alt={`${nickname}의 프로필`}
           width={25}
           height={25}
+          priority
           className="rounded-full object-cover"
         />
       </div>

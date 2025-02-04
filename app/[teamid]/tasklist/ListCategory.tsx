@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import ItemList from './ItemList';
 import styles from './ListCategory.module.css';
 import {
@@ -32,42 +33,33 @@ export default function ListCategory({
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
 
-  const [isLoading, setIsLoading] = useState(false);
   const { setTasks, setCheckedItems, updateTask, deleteTask, tasks } =
     useTaskStore();
 
-  const fetchTasks = useCallback(async () => {
-    if (!selectedCategory) return;
-
-    setIsLoading(true);
-    try {
+  const {
+    data: taskData,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ['tasks', selectedCategory?.id, selectedDate, updateTrigger],
+    queryFn: async () => {
+      if (!selectedCategory) return [];
       const formattedDate = `${selectedDate.getFullYear()}-${String(
         selectedDate.getMonth() + 1
-      ).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(
+      ).padStart(
         2,
         '0'
-      )}T00:00:00Z`;
+      )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
 
-      const response = await getGroupsTaskListTasks({
+      return await getGroupsTaskListTasks({
         groupId,
         taskListId: selectedCategory.id,
         date: formattedDate,
       });
-
-      setTasks(response);
-
-      const initialCheckedItems: { [key: number]: boolean } = {};
-      response.forEach((task) => {
-        initialCheckedItems[task.id] = !!task.doneAt;
-      });
-
-      setCheckedItems(initialCheckedItems);
-    } catch (err) {
-      console.error('Tasks를 불러오는 중 오류가 발생했습니다:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [selectedCategory, selectedDate, groupId, setTasks, setCheckedItems]);
+    },
+    enabled: !!selectedCategory,
+  });
 
   useEffect(() => {
     if (taskLists.length > 0 && !selectedCategory) {
@@ -77,8 +69,15 @@ export default function ListCategory({
   }, [taskLists, selectedCategory, onCategoryChange]);
 
   useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks, updateTrigger]);
+    if (taskData) {
+      setTasks(taskData);
+      const initialCheckedItems: { [key: number]: boolean } = {};
+      taskData.forEach((task) => {
+        initialCheckedItems[task.id] = !!task.doneAt;
+      });
+      setCheckedItems(initialCheckedItems);
+    }
+  }, [taskData, setTasks, setCheckedItems]);
 
   const handleCategoryChange = (
     taskList: TaskListResponseType['getGroupsTaskLists']
@@ -103,8 +102,8 @@ export default function ListCategory({
         description,
         done: !!tasks[taskId]?.doneAt,
       });
-
       updateTask(taskId, name, description);
+      refetch();
     } catch (error) {
       console.error('수정 중 오류 발생:', error);
     }
@@ -117,18 +116,17 @@ export default function ListCategory({
         taskListId: selectedCategory?.id || 0,
         taskId,
       });
-
       deleteTask(taskId);
+      refetch();
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
     }
   };
 
-  if (taskLists.length === 0 && !isLoading) {
+  if (!isLoading && taskLists.length === 0) {
     return (
       <p className="mt-40 text-center text-md font-medium text-t-default">
-        아직 할 일 목록이 없습니다. <br />
-        새로운 목록을 추가해주세요.
+        아직 할 일 목록이 없습니다. <br /> 새로운 목록을 추가해주세요.
       </p>
     );
   }
@@ -155,7 +153,9 @@ export default function ListCategory({
       </div>
 
       <ItemList
-        items={Object.values(tasks)}
+        items={taskData ?? []}
+        isLoading={isLoading}
+        isFetching={isFetching}
         onTaskClick={onTaskClick}
         onEditItem={handleEditItem}
         onDeleteItem={handleDeleteItem}
