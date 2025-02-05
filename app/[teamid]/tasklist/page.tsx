@@ -9,7 +9,25 @@ import ListHeader from './ListHeader';
 import { getGroups } from '@/app/api/group.api';
 import CloseIcon from '@/app/components/Modal/CloseIcon';
 import Loading from '@/app/components/Loading';
+import Modal, { ModalFooter } from '@/app/components/Modal';
 import { useQuery } from '@tanstack/react-query';
+import useUserStore from '@/app/stores/userStore';
+import { TaskListType } from '@/app/types/taskList';
+import Button from '@/app/components/Button';
+
+interface Member {
+  userId: number;
+  userName: string;
+  userEmail: string;
+  role: string;
+}
+
+interface GroupDataType {
+  id: number;
+  name: string;
+  members: Member[];
+  taskLists: TaskListType[];
+}
 
 export default function ListPage() {
   const { teamid: groupId } = useParams<{ teamid: string }>();
@@ -19,22 +37,25 @@ export default function ListPage() {
   );
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+  const [isMember, setIsMember] = useState(true);
+  const { user } = useUserStore();
 
   const handleUpdateTrigger = () => setUpdateTrigger((prev) => !prev);
 
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery<GroupDataType, Error>({
     queryKey: ['groupTasks', groupId, updateTrigger],
     queryFn: async () => {
       const response = await getGroups({ groupId: Number(groupId) });
-      return response.taskLists || [];
+
+      // 멤버의 아이디에 현재 로그인된 유저 아이디가 있는 지 판별
+      const isUserMember = response.members.some(
+        (member) => member.userId === user?.id
+      );
+      setIsMember(isUserMember);
+
+      return response;
     },
     enabled: !!groupId,
-  });
-
-  useState(() => {
-    if (data && data.length > 0 && !selectedTaskListId) {
-      setSelectedTaskListId(data[0].id);
-    }
   });
 
   if (isLoading) {
@@ -58,34 +79,61 @@ export default function ListPage() {
 
   return (
     <div className="container relative min-h-[80vh]">
-      <div className="w-full">
-        <h1 className="mb-7 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
-          할 일
-        </h1>
-        <ListHeader
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          groupId={Number(groupId)}
-          onListAdded={refetch}
-        />
-        <div className="mt-5 sm:mt-6 lg:mt-8">
-          <ListCategory
+      {!isMember && ( // 멤버가 아니라면
+        <Modal
+          isOpen={!isMember}
+          title="해당 팀의 멤버가 아닙니다."
+          onClose={() => console.log('팀에 가입해주세요.')}
+          // onClose가 해당 모달에선 사용되지 않긴 하는데 필수라서 일단 console 코드를 넣어뒀습니다.
+          hasCloseButton={false}
+          icon="danger"
+        >
+          <p className="mt-5 text-center text-md font-semibold text-t-default">
+            팀에 가입해주세요!
+          </p>
+          <ModalFooter>
+            <Button
+              state="danger"
+              href="/"
+            >
+              확인
+            </Button>
+          </ModalFooter>
+        </Modal>
+      )}
+
+      {isMember && (
+        <div className="w-full">
+          <h1 className="mb-7 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
+            할 일
+          </h1>
+          <ListHeader
             selectedDate={selectedDate}
-            taskLists={data || []}
+            setSelectedDate={setSelectedDate}
             groupId={Number(groupId)}
-            updateTrigger={updateTrigger}
-            onCategoryChange={(taskListId) => setSelectedTaskListId(taskListId)}
-            onTaskClick={(taskId) => setSelectedTaskId(taskId)}
+            onListAdded={refetch}
           />
+          <div className="mt-5 sm:mt-6 lg:mt-8">
+            <ListCategory
+              selectedDate={selectedDate}
+              taskLists={data?.taskLists || []}
+              groupId={Number(groupId)}
+              updateTrigger={updateTrigger}
+              onCategoryChange={(taskListId) =>
+                setSelectedTaskListId(taskListId)
+              }
+              onTaskClick={(taskId) => setSelectedTaskId(taskId)}
+            />
+          </div>
+          {groupId && selectedTaskListId && (
+            <AddButton
+              groupId={Number(groupId)}
+              taskListId={selectedTaskListId}
+              onSaveSuccess={handleUpdateTrigger}
+            />
+          )}
         </div>
-        {groupId && selectedTaskListId && (
-          <AddButton
-            groupId={Number(groupId)}
-            taskListId={selectedTaskListId}
-            onSaveSuccess={handleUpdateTrigger}
-          />
-        )}
-      </div>
+      )}
 
       {selectedTaskId && (
         <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-full translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform sm:w-1/2">
