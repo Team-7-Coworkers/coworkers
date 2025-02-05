@@ -40,21 +40,29 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         className="right-0 w-[140px] p-[8px] py-[12px] sm:w-[152px]"
         animationType="scale"
       >
-        <Dropdown.MenuItem className={dropDownItemStyle}>
-          <Link href="/myhistory">마이 히스토리</Link>
-        </Dropdown.MenuItem>
-        <Dropdown.MenuItem className={dropDownItemStyle}>
-          <Link href="/mypage">계정 설정</Link>
-        </Dropdown.MenuItem>
-        <Dropdown.MenuItem className={dropDownItemStyle}>
-          <Link href="/invitation">팀 참여</Link>
-        </Dropdown.MenuItem>
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={handleLogout}
-        >
-          <Link href="/">로그아웃</Link>
-        </Dropdown.MenuItem>
+        <Link href="/myhistory">
+          <Dropdown.MenuItem className={dropDownItemStyle}>
+            마이 히스토리
+          </Dropdown.MenuItem>
+        </Link>
+        <Link href="/mypage">
+          <Dropdown.MenuItem className={dropDownItemStyle}>
+            계정 설정
+          </Dropdown.MenuItem>
+        </Link>
+        <Link href="/invitation">
+          <Dropdown.MenuItem className={dropDownItemStyle}>
+            팀 참여
+          </Dropdown.MenuItem>
+        </Link>
+        <Link href="/">
+          <Dropdown.MenuItem
+            className={dropDownItemStyle}
+            onClick={handleLogout}
+          >
+            로그아웃
+          </Dropdown.MenuItem>
+        </Link>
       </Dropdown.Menu>
     </Dropdown>
   );
