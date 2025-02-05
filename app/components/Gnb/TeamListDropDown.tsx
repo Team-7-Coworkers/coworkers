@@ -4,7 +4,7 @@ import { GroupType } from '@/app/types/shared';
 import TeamListDropDownItem from './TeamListDropDownItem';
 import Dropdown from '../Dropdown';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface TeamListDropDownProps {
   teamList: GroupType[];
@@ -15,12 +15,6 @@ export default function TeamListDropDown({
   teamList,
   currentTeam,
 }: TeamListDropDownProps) {
-  const router = useRouter();
-
-  const handleClick = (teamId: number) => {
-    router.push(`/${teamId}`);
-  };
-
   return (
     <Dropdown>
       <Dropdown.Button className="flex items-center gap-2">
@@ -39,21 +33,22 @@ export default function TeamListDropDown({
       >
         {teamList.map((team) => {
           return (
-            <Dropdown.MenuItem
+            <Link
+              href={`/${team.id}`}
               key={team.id}
-              onClick={() => handleClick(team.id)}
-              className="pb-[8px] pt-2"
             >
-              <TeamListDropDownItem team={team} />
-            </Dropdown.MenuItem>
+              <Dropdown.MenuItem className="pb-[8px] pt-2">
+                <TeamListDropDownItem team={team} />
+              </Dropdown.MenuItem>
+            </Link>
           );
         })}
-        <button
-          className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
-          onClick={() => router.push('/addteam')}
+        <Link
+          className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-center text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
+          href="/addteam"
         >
           + 팀 추가하기
-        </button>
+        </Link>
       </Dropdown.Menu>
     </Dropdown>
   );
