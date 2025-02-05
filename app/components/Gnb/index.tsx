@@ -10,7 +10,7 @@ import useTeamStore from '@/app/stores/teamStore';
 import useUserStore from '@/app/stores/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '@/app/api/user.api';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
 import Link from 'next/link';
@@ -19,8 +19,6 @@ import isEqual from 'lodash.isequal';
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
-
-  const router = useRouter();
 
   const { user } = useUserStore();
   const { setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
@@ -101,10 +99,7 @@ export default function GNB() {
                   teamList={teamList}
                   currentTeam={currentTeam || teamList[0]}
                 />
-                <button onClick={() => router.push('/boards')}>
-                  자유게시판
-                </button>{' '}
-                {/*자유게시판 이동*/}
+                <Link href="/boards">자유게시판</Link>
               </>
             )}
             {/* 기본값 어떻게 처리할 지 고민중 */}

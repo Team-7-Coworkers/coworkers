@@ -2,8 +2,8 @@
 
 import { UserType } from '@/app/types/shared';
 import Image from 'next/image';
+import Link from 'next/link';
 import Dropdown from '../Dropdown';
-import { useRouter } from 'next/navigation';
 import useUserStore from '@/app/stores/userStore';
 import useTeamStore from '@/app/stores/teamStore';
 
@@ -17,12 +17,9 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
 
-  const router = useRouter();
-
   const handleLogout = () => {
     clearUser();
     clearTeam();
-    router.push('/');
   };
 
   return (
@@ -43,29 +40,20 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         className="right-0 w-[140px] p-[8px] py-[12px] sm:w-[152px]"
         animationType="scale"
       >
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={() => router.push('/myhistory')}
-        >
-          마이 히스토리
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <Link href="/myhistory">마이 히스토리</Link>
         </Dropdown.MenuItem>
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={() => router.push('/mypage')}
-        >
-          계정 설정
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <Link href="/mypage">계정 설정</Link>
         </Dropdown.MenuItem>
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={() => router.push('/')}
-        >
-          팀 참여
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <Link href="/invitation">팀 참여</Link>
         </Dropdown.MenuItem>
         <Dropdown.MenuItem
           className={dropDownItemStyle}
           onClick={handleLogout}
         >
-          로그아웃
+          <Link href="/">로그아웃</Link>
         </Dropdown.MenuItem>
       </Dropdown.Menu>
     </Dropdown>
