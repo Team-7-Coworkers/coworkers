@@ -6,7 +6,6 @@ import { TaskType } from '@/app/types/shared';
 import DateDisplay from '../info-displays/DateDisplay';
 import FrequencyDisplay from '../info-displays/FrequencyDisplay';
 import UserProfile from './UserProfile';
-import dayjs from 'dayjs';
 
 interface TaskHeaderProps {
   task: TaskType;
@@ -46,15 +45,10 @@ export default function TaskDetailHeader({
         />
       </div>
       <div className="mt-4">
-        <div className="flex items-center justify-between">
-          <UserProfile
-            image={task.writer.image}
-            nickname={task.writer.nickname}
-          />
-          <p className="text-md text-t-secondary">
-            {dayjs(task.updatedAt).format('YYYY.MM.DD')}
-          </p>
-        </div>
+        <UserProfile
+          image={task.writer.image}
+          nickname={task.writer.nickname}
+        />
       </div>
       {/* TODO: 날짜 데이터 변경 고려 */}
       <div className="mt-3 flex items-center gap-3">
