@@ -59,7 +59,7 @@ export default function ListPage() {
   return (
     <div className="container relative min-h-[80vh]">
       <div className="w-full">
-        <h1 className="mb-10 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
+        <h1 className="mb-7 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
           할 일
         </h1>
         <ListHeader
