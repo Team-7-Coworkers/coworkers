@@ -29,7 +29,7 @@ export default function Comment() {
     queryFn: async () => {
       const data = await getArticlesComment({
         articleId: Number(articleId),
-        limit: 10,
+        limit: 3000,
       });
 
       if ('message' in data) {
