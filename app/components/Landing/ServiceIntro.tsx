@@ -10,12 +10,12 @@ import useTeamStore from '@/app/stores/teamStore';
 
 export default function ServiceIntro() {
   const { user } = useUserStore();
-  const { currentTeam } = useTeamStore();
+  const { teamList, currentTeam } = useTeamStore();
 
   const getRedirectPath = () => {
     if (!user) return '/login';
-    if (!currentTeam) return '/noteam';
-    return `${currentTeam.id}`;
+    if (teamList.length === 0) return '/noteam';
+    return `${currentTeam?.id}`;
   };
 
   return (
