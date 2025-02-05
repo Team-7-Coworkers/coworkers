@@ -143,24 +143,32 @@ export default function ListPage() {
         </div>
       )}
 
-      {selectedTaskId && (
-        <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-full translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform sm:w-1/2">
-          <button
+      {selectedTaskId && ( // 상세페이지
+        <>
+          <div // 상세 페이지 바깥 영역을 반투명하게 설정 후 클릭 시 상세 페이지가 닫히도록
+            className="fixed inset-0 hidden bg-b-primary/50 sm:block"
             onClick={() => setSelectedTaskId(null)}
-            className="mt-8 text-ic-primary"
-          >
-            <CloseIcon classname="w-6 h-6" />
-          </button>
-          <TaskDetail
-            taskId={selectedTaskId}
-            groupId={Number(groupId)}
-            taskListId={selectedTaskListId || 0}
-            onClose={() => setSelectedTaskId(null)}
-            onTaskUpdated={() =>
-              selectedTaskListId && handleTaskUpdated(selectedTaskListId)
-            }
-          />
-        </div>
+          ></div>
+
+          {/* 상세 페이지 절반 */}
+          <div className="z-1 container fixed right-0 top-[60px] h-[calc(100vh-60px)] w-full translate-x-0 transform overflow-y-auto border border-bd-primary/10 bg-b-secondary text-white shadow-xl transition-transform sm:w-1/2">
+            <button
+              onClick={() => setSelectedTaskId(null)}
+              className="mt-8 text-ic-primary"
+            >
+              <CloseIcon classname="w-6 h-6" />
+            </button>
+            <TaskDetail
+              taskId={selectedTaskId}
+              groupId={Number(groupId)}
+              taskListId={selectedTaskListId || 0}
+              onClose={() => setSelectedTaskId(null)}
+              onTaskUpdated={() =>
+                selectedTaskListId && handleTaskUpdated(selectedTaskListId)
+              }
+            />
+          </div>
+        </>
       )}
     </div>
   );
