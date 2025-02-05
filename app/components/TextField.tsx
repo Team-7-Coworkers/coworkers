@@ -11,6 +11,8 @@ interface TextFieldProps {
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
+  enterSubmit?: boolean;
+  onSubmit?: () => void;
 }
 
 export default function TextField({
@@ -21,6 +23,8 @@ export default function TextField({
   placeholder,
   onChange,
   className = '',
+  enterSubmit = false,
+  onSubmit,
 }: TextFieldProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -37,6 +41,15 @@ export default function TextField({
     if (textareaRef.current) {
       textareaRef.current.style.height = '0px'; // 먼저 높이를 자동으로 재설정
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 실제 내용에 맞는 높이로 설정
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (enterSubmit && e.key === 'Enter') {
+      if (e.nativeEvent.isComposing === false && !e.shiftKey) {
+        e.preventDefault();
+        onSubmit?.();
+      }
     }
   };
 
@@ -60,6 +73,7 @@ export default function TextField({
       value={value}
       placeholder={placeholder}
       onChange={onChange}
+      onKeyDown={handleKeyDown}
       className={`${baseStyle} ${typeStyle} ${className}`}
       style={type === 'box' && height ? { height: `${height}px` } : {}}
     />

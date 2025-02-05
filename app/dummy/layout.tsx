@@ -22,6 +22,10 @@ const LINKS = [
     href: '/dummy/button',
     text: 'button',
   },
+  {
+    href: '/dummy/textfield',
+    text: 'textfield',
+  },
 ];
 
 export default function Layout({ children }: Props) {
