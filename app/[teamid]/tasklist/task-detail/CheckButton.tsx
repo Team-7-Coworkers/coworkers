@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import CheckIcon from './CheckIcon';
+import CheckIcon from '../CheckIcon';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
 
@@ -9,12 +9,14 @@ interface CheckButtonProps {
   taskId: number;
   groupId: number;
   taskListId: number;
+  onTaskUpdated: () => void;
 }
 
 export default function CheckButton({
   taskId,
   groupId,
   taskListId,
+  onTaskUpdated,
 }: CheckButtonProps) {
   const { checkedItems, toggleChecked } = useTaskStore();
   const isCompleted = !!checkedItems[taskId];
@@ -28,6 +30,7 @@ export default function CheckButton({
         done: !isCompleted,
       });
       toggleChecked(taskId, !isCompleted);
+      onTaskUpdated();
     } catch (error) {
       console.error('완료 처리 실패:', error);
       alert('완료 처리에 실패했습니다.');

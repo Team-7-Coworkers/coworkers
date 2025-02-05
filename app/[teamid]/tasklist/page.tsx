@@ -10,7 +10,7 @@ import { getGroups } from '@/app/api/group.api';
 import CloseIcon from '@/app/components/Modal/CloseIcon';
 import Loading from '@/app/components/Loading';
 import Modal, { ModalFooter } from '@/app/components/Modal';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import useUserStore from '@/app/stores/userStore';
 import { TaskListType } from '@/app/types/taskList';
 import Button from '@/app/components/Button';
@@ -35,18 +35,16 @@ export default function ListPage() {
   const [selectedTaskListId, setSelectedTaskListId] = useState<number | null>(
     null
   );
-  const [updateTrigger, setUpdateTrigger] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isMember, setIsMember] = useState(true);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
   const { user } = useUserStore();
+  const queryClient = useQueryClient();
 
-  const handleUpdateTrigger = () => setUpdateTrigger((prev) => !prev);
-
-  const { data, isLoading, isError, refetch } = useQuery<GroupDataType, Error>({
+  const { data, isLoading, isError } = useQuery<GroupDataType, Error>({
     queryKey: ['groupTasks', groupId, updateTrigger],
     queryFn: async () => {
       const response = await getGroups({ groupId: Number(groupId) });
-
       // 멤버의 아이디에 현재 로그인된 유저 아이디가 있는 지 판별
       if (user) {
         const isUserMember = response.members.some(
@@ -54,11 +52,15 @@ export default function ListPage() {
         );
         setIsMember(isUserMember);
       }
-
       return response;
     },
     enabled: !!groupId && !!user,
   });
+
+  const handleTaskUpdated = () => {
+    setUpdateTrigger((prev) => !prev);
+    queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
+  };
 
   if (isLoading || !user) {
     return (
@@ -113,7 +115,7 @@ export default function ListPage() {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             groupId={Number(groupId)}
-            onListAdded={refetch}
+            onListAdded={handleTaskUpdated}
           />
           <div className="mt-5 sm:mt-6 lg:mt-8">
             <ListCategory
@@ -131,7 +133,7 @@ export default function ListPage() {
             <AddButton
               groupId={Number(groupId)}
               taskListId={selectedTaskListId}
-              onSaveSuccess={handleUpdateTrigger}
+              onSaveSuccess={handleTaskUpdated}
             />
           )}
         </div>
@@ -150,6 +152,7 @@ export default function ListPage() {
             groupId={Number(groupId)}
             taskListId={selectedTaskListId || 0}
             onClose={() => setSelectedTaskId(null)}
+            onTaskUpdated={handleTaskUpdated}
           />
         </div>
       )}

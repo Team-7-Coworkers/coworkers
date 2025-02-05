@@ -152,6 +152,8 @@ export default function ListCategory({
       </div>
 
       <ItemList
+        taskListId={selectedCategory?.id || 0}
+        groupId={groupId}
         items={taskData ?? []}
         isLoading={isLoading}
         onTaskClick={onTaskClick}
