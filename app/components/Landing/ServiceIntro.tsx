@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import useUserStore from '@/app/stores/userStore';
 import useTeamStore from '@/app/stores/teamStore';
+import { IMAGE_SIZES } from '@/app/constants/image';
 
 export default function ServiceIntro() {
   const { user } = useUserStore();
@@ -27,7 +28,7 @@ export default function ServiceIntro() {
           src={landingMain}
           alt=""
           priority
-          quality={100}
+          sizes={IMAGE_SIZES}
         />
       </div>
       <div className="absolute top-[55px] flex w-full flex-col items-center gap-1 sm:top-[100px] sm:gap-2 lg:top-[84px] lg:gap-5">

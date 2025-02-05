@@ -4,6 +4,7 @@ import Image from 'next/image';
 import landingMockup01 from '@/public/images/landing/landing-mockup-01.png';
 import folderIcon from '@/public/images/icons/ic_folder.svg';
 import { motion } from 'framer-motion';
+import { IMAGE_SIZES } from '@/app/constants/image';
 
 export default function Section1() {
   return (
@@ -25,7 +26,7 @@ export default function Section1() {
             height={273}
             src={landingMockup01}
             alt=""
-            quality={100}
+            sizes={IMAGE_SIZES}
           />
           <div className="flex w-[235px] flex-col items-start gap-4 sm:w-auto">
             <div className="mt-12 flex h-12 w-12 items-center justify-center rounded-xl border border-[#F8FAFC] border-opacity-10 bg-b-secondary shadow-[0_0_12px_2px_rgba(0,0,0,0.25)] sm:m-0">
@@ -48,7 +49,7 @@ export default function Section1() {
             height={273}
             src={landingMockup01}
             alt=""
-            quality={100}
+            sizes={IMAGE_SIZES}
           />
         </div>
       </div>
