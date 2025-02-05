@@ -5,7 +5,7 @@ import { cn } from '../libs/utils';
 import type { TaskListProps } from './TaskLists';
 import TaskProgress from './TaskProgress';
 
-import KebabIcon from '../components/icons/KebabIcon';
+import PencelIcon from '../components/icons/PencilIcon';
 import styles from './teampage.module.css';
 
 // 목록 왼쪽 보더 색상값들
@@ -17,9 +17,15 @@ export default function TaskListsItem({
   name,
   displayIndex,
   tasks,
+  onEdit,
 }: TaskListProps) {
   const borderColor = 'border-' + COLORS[displayIndex % COLORS.length];
   const done = tasks.filter((task) => task.doneAt !== null);
+
+  // 수정 클릭 함수
+  const handleClick = () => {
+    if (onEdit) onEdit(id);
+  };
 
   return (
     <li className={cn(borderColor, styles.task)}>
@@ -39,8 +45,12 @@ export default function TaskListsItem({
         />
       </span>
 
-      <button className={styles.iconButton}>
-        <KebabIcon />
+      <button
+        className={cn(styles.iconButton, 'tool-tip')}
+        onClick={handleClick}
+        aria-label="할 일 목록 수정"
+      >
+        <PencelIcon classname="size-3 mx-auto" />
       </button>
     </li>
   );
