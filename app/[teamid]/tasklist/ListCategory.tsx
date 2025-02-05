@@ -39,7 +39,6 @@ export default function ListCategory({
   const {
     data: taskData,
     isLoading,
-    isFetching,
     refetch,
   } = useQuery({
     queryKey: ['tasks', selectedCategory?.id, selectedDate, updateTrigger],
@@ -155,7 +154,6 @@ export default function ListCategory({
       <ItemList
         items={taskData ?? []}
         isLoading={isLoading}
-        isFetching={isFetching}
         onTaskClick={onTaskClick}
         onEditItem={handleEditItem}
         onDeleteItem={handleDeleteItem}

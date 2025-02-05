@@ -28,7 +28,7 @@ export default function AddButton({
       <Button
         styleType="solid"
         state="floating"
-        size="w-[125px] h-[48px] absolute bottom-5 lg:right-35 right-5 flex gap-1 items-center justify-center"
+        size="w-[125px] h-[48px] fixed bottom-5 lg:right-35 right-28 flex gap-1 items-center justify-center"
         onClick={() => setIsModalOpen(true)}
       >
         <Image

@@ -80,7 +80,7 @@ export default function ListPage() {
   }
 
   return (
-    <div className="container relative min-h-[80vh]">
+    <div className="container relative min-h-[80vh] pb-10">
       {!isMember && ( // 멤버가 아니라면
         <Modal
           isOpen={!isMember}
