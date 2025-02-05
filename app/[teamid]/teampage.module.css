@@ -14,7 +14,7 @@
   @apply mt-4 flex items-center rounded-xl border-l-[12px] bg-b-secondary p-3;
 }
 .iconButton {
-  @apply ml-1 rounded-full p-1 text-ic-primary transition-colors hover:bg-b-tertiary hover:text-ic-inverse;
+  @apply ml-1 size-6 rounded-full p-1 text-ic-primary transition-colors hover:bg-b-tertiary hover:text-ic-inverse;
 }
 
 .section {

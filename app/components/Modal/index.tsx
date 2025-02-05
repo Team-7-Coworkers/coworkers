@@ -65,6 +65,7 @@ export default function Modal({
         {hasCloseButton && (
           <button
             type="button"
+            aria-label="닫기"
             className={styles.btnClose}
             onClick={handleClick}
           >
