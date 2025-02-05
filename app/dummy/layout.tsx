@@ -26,9 +26,9 @@ const LINKS = [
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="container flex gap-4 py-6">
-      <aside className="w-1/4 flex-none self-start rounded-xl bg-b-secondary p-4">
-        <ul className="space-y-1">
+    <div className="container flex flex-col gap-4 py-6 sm:flex-row">
+      <aside className="w-full flex-none self-start rounded-xl bg-b-secondary p-4 sm:w-1/4">
+        <ul className="flex gap-1 sm:flex-col">
           {LINKS.map(({ href, text }) => (
             <li key={text}>
               <Link
