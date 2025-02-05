@@ -37,12 +37,11 @@ export default function ListPage() {
   );
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isMember, setIsMember] = useState(true);
-  const [updateTrigger, setUpdateTrigger] = useState(false);
   const { user } = useUserStore();
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery<GroupDataType, Error>({
-    queryKey: ['groupTasks', groupId, updateTrigger],
+    queryKey: ['groupTasks', groupId],
     queryFn: async () => {
       const response = await getGroups({ groupId: Number(groupId) });
       // 멤버의 아이디에 현재 로그인된 유저 아이디가 있는 지 판별
@@ -55,11 +54,11 @@ export default function ListPage() {
       return response;
     },
     enabled: !!groupId && !!user,
+    initialData: () => queryClient.getQueryData(['groupTasks', groupId]),
   });
 
-  const handleTaskUpdated = () => {
-    setUpdateTrigger((prev) => !prev);
-    queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
+  const handleTaskUpdated = (taskListId: number) => {
+    queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
   };
 
   if (isLoading || !user) {
@@ -115,14 +114,15 @@ export default function ListPage() {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             groupId={Number(groupId)}
-            onListAdded={handleTaskUpdated}
+            onListAdded={() =>
+              selectedTaskListId && handleTaskUpdated(selectedTaskListId)
+            }
           />
           <div className="mt-5 sm:mt-6 lg:mt-8">
             <ListCategory
               selectedDate={selectedDate}
               taskLists={data?.taskLists || []}
               groupId={Number(groupId)}
-              updateTrigger={updateTrigger}
               onCategoryChange={(taskListId) =>
                 setSelectedTaskListId(taskListId)
               }
@@ -133,7 +133,7 @@ export default function ListPage() {
             <AddButton
               groupId={Number(groupId)}
               taskListId={selectedTaskListId}
-              onSaveSuccess={handleTaskUpdated}
+              onSaveSuccess={() => handleTaskUpdated(selectedTaskListId)}
             />
           )}
         </div>
@@ -152,7 +152,9 @@ export default function ListPage() {
             groupId={Number(groupId)}
             taskListId={selectedTaskListId || 0}
             onClose={() => setSelectedTaskId(null)}
-            onTaskUpdated={handleTaskUpdated}
+            onTaskUpdated={() =>
+              selectedTaskListId && handleTaskUpdated(selectedTaskListId)
+            }
           />
         </div>
       )}

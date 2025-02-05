@@ -16,7 +16,6 @@ type ListCategoryProps = {
   selectedDate: Date;
   taskLists: TaskListResponseType['getGroupsTaskLists'][];
   groupId: number;
-  updateTrigger: boolean;
   onCategoryChange: (taskListId: number) => void;
   onTaskClick: (taskId: number) => void;
 };
@@ -25,7 +24,6 @@ export default function ListCategory({
   selectedDate,
   taskLists,
   groupId,
-  updateTrigger,
   onCategoryChange,
   onTaskClick,
 }: ListCategoryProps) {
@@ -33,15 +31,14 @@ export default function ListCategory({
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
 
-  const { setTasks, setCheckedItems, updateTask, deleteTask, tasks } =
-    useTaskStore();
+  const { setTasks, setCheckedItems, deleteTask, tasks } = useTaskStore();
 
   const {
     data: taskData,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['tasks', selectedCategory?.id, selectedDate, updateTrigger],
+    queryKey: ['tasks', selectedCategory?.id, selectedDate],
     queryFn: async () => {
       if (!selectedCategory) return [];
       const formattedDate = `${selectedDate.getFullYear()}-${String(
@@ -101,7 +98,6 @@ export default function ListCategory({
         description,
         done: !!tasks[taskId]?.doneAt,
       });
-      updateTask(taskId, name, description);
       refetch();
     } catch (error) {
       console.error('수정 중 오류 발생:', error);
