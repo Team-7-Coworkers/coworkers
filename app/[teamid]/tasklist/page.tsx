@@ -48,17 +48,19 @@ export default function ListPage() {
       const response = await getGroups({ groupId: Number(groupId) });
 
       // 멤버의 아이디에 현재 로그인된 유저 아이디가 있는 지 판별
-      const isUserMember = response.members.some(
-        (member) => member.userId === user?.id
-      );
-      setIsMember(isUserMember);
+      if (user) {
+        const isUserMember = response.members.some(
+          (member) => member.userId === user.id
+        );
+        setIsMember(isUserMember);
+      }
 
       return response;
     },
-    enabled: !!groupId,
+    enabled: !!groupId && !!user,
   });
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return (
       <div className="flex min-h-[80vh] items-center justify-center">
         <Loading />
