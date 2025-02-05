@@ -129,7 +129,7 @@ export default function ListCategory({
   return (
     <div>
       <div
-        className={`flex w-full space-x-5 overflow-x-auto whitespace-nowrap text-lg font-medium ${styles.scrollbarHide}`}
+        className={`flex w-full space-x-5 whitespace-nowrap pb-2 text-lg font-medium ${styles.ListScrollbar}`}
       >
         {taskLists.map((taskList) => (
           <button
