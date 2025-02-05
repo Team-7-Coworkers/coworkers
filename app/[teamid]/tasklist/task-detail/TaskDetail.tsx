@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import CheckButton from '../CheckButton';
+import CheckButton from './CheckButton';
 import { TaskType } from '@/app/types/shared';
 import {
   deleteGroupsTaskListsTasks,
@@ -20,6 +20,7 @@ interface TaskDetailProps {
   groupId: number;
   taskListId: number;
   onClose: () => void;
+  onTaskUpdated: () => void;
 }
 
 export default function TaskDetail({
@@ -27,6 +28,7 @@ export default function TaskDetail({
   groupId,
   taskListId,
   onClose,
+  onTaskUpdated,
 }: TaskDetailProps) {
   const [task, setTask] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -90,6 +92,7 @@ export default function TaskDetail({
         );
         updateTask(selectedTask.id, title, description);
         setIsEditModalOpen(false);
+        onTaskUpdated();
       } catch (error) {
         console.error('수정 중 오류 발생:', error);
       }
@@ -108,6 +111,7 @@ export default function TaskDetail({
         deleteTask(selectedTask.id);
         setIsDeleteModalOpen(false);
         onClose();
+        onTaskUpdated();
       } catch (error) {
         console.error('삭제 중 오류 발생:', error);
       }
@@ -135,6 +139,7 @@ export default function TaskDetail({
           </p>
           <TaskComment taskId={taskId} />
           <CheckButton
+            onTaskUpdated={onTaskUpdated}
             taskId={taskId}
             groupId={groupId}
             taskListId={taskListId}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { calculateDate, formatDate } from '../../utils/date';
 import CustomCalendar from './CustomCalendar';
@@ -15,6 +15,7 @@ export default function ListDate({
   setSelectedDate,
 }: ListDateProps) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const handlePreviousDay = () => {
     setSelectedDate(calculateDate(selectedDate, -1));
@@ -28,6 +29,26 @@ export default function ListDate({
     setSelectedDate(date);
     setIsCalendarOpen(false);
   };
+
+  // 달력 바깥 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node)
+      ) {
+        setIsCalendarOpen(false);
+      }
+    };
+
+    if (isCalendarOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCalendarOpen]);
 
   const arrowButtonClass = 'rounded-full bg-b-secondary hover:bg-b-tertiary';
 
@@ -61,7 +82,10 @@ export default function ListDate({
             />
           </button>
         </div>
-        <div className="relative">
+        <div
+          className="relative"
+          ref={calendarRef}
+        >
           <button
             className="ml-2 flex h-6 w-6 items-center justify-center rounded-xl bg-b-secondary hover:bg-b-tertiary sm:ml-3"
             onClick={() => setIsCalendarOpen((prev) => !prev)}
