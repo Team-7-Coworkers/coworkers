@@ -15,10 +15,12 @@ import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
 import Link from 'next/link';
 import isEqual from 'lodash.isequal';
+import LoginMenu from './LoginMenu';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
+  const isLoginMenuHidden = currentPath == '/login' || currentPath == '/signup';
 
   const { user } = useUserStore();
   const { setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
@@ -106,7 +108,11 @@ export default function GNB() {
           </div>
         </div>
 
-        {user && <ProfileDropDown user={user} />}
+        {user ? (
+          <ProfileDropDown user={user} />
+        ) : (
+          !isLoginMenuHidden && <LoginMenu />
+        )}
       </div>
 
       <div className="sm:hidden">
