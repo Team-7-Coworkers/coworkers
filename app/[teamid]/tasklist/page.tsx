@@ -61,7 +61,12 @@ export default function ListPage() {
     queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
   };
 
+  const handleListAdded = () => {
+    queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
+  };
+
   if (isLoading || !user) {
+    // 로딩 코드
     return (
       <div className="flex min-h-[80vh] items-center justify-center">
         <Loading />
@@ -70,6 +75,7 @@ export default function ListPage() {
   }
 
   if (isError) {
+    // 만약 에러 발생 시 보여줄 코드
     return (
       <div className="flex min-h-[80vh] items-center justify-center">
         <p className="text-danger">
@@ -114,9 +120,7 @@ export default function ListPage() {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             groupId={Number(groupId)}
-            onListAdded={() =>
-              selectedTaskListId && handleTaskUpdated(selectedTaskListId)
-            }
+            onListAdded={handleListAdded}
           />
           <div className="mt-5 sm:mt-6 lg:mt-8">
             <ListCategory
