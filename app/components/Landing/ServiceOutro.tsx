@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import landingBottom from '@/public/images/landing/landing-bottom.png';
+import { IMAGE_SIZES } from '@/app/constants/image';
 
 export default function ServiceOut() {
   return (
@@ -22,9 +23,8 @@ export default function ServiceOut() {
           src={landingBottom}
           className="object-cover"
           fill
-          quality={100}
+          sizes={IMAGE_SIZES}
           alt=""
-          unoptimized
         />
       </div>
     </div>
