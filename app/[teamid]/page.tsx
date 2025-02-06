@@ -14,17 +14,19 @@ import Report from './Report';
 import Dropdown from '../components/Dropdown';
 import Modal, { ModalFooter } from '../components/Modal';
 import Button from '../components/Button';
+import Loading from '../components/Loading';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
-import Loading from '../components/Loading';
 
 export default function TeamPage() {
   const { teamid } = useParams();
+
   const [role, setRole] = useState('');
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [deleteModal, setDeleteModal] = useState(false);
+
   const { user } = useUserStore();
   const router = useRouter();
 
@@ -43,7 +45,12 @@ export default function TeamPage() {
       // 사용자 검증 및 역할 받아 설정
       const member = group.members.find((member) => member.userId === user?.id);
       // console.log('--- member:', member);
-      if (member) setRole(member.role);
+      if (member) {
+        setRole(member.role);
+      } else {
+        alert('접근 가능한 팀이 아닙니다. 다시 확인 부탁드립니다.');
+        router.replace('/');
+      }
 
       // 할 일 전체와 완료된 할 일 갯수 받기
       let total = 0;
@@ -57,7 +64,7 @@ export default function TeamPage() {
       setTotalTasks(total);
       setCompletedTasks(complete);
     }
-  }, [group, user]);
+  }, [group, user, router]);
 
   // 팀 수정하기 버튼 클릭 함수
   const handleModifyClick = () => {
