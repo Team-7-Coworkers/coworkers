@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Dropdown from '../Dropdown';
 import { useRouter } from 'next/navigation';
 import useUserStore from '@/app/stores/userStore';
+import { signOut } from 'next-auth/react';
 
 interface ProfileDropDownProps {
   user: UserType;
@@ -13,12 +14,22 @@ interface ProfileDropDownProps {
 const dropDownItemStyle = 'text-md sm:text-lg pt-2 px-4 pb-2';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
-  const { clearUser } = useUserStore();
+  const { isKakaoLogin, isGoogleLogin, clearUser } = useUserStore();
 
   const router = useRouter();
 
   const handleLogout = () => {
     clearUser();
+
+    if (isGoogleLogin) {
+      signOut({ callbackUrl: '/' });
+      return;
+    }
+
+    if (isKakaoLogin) {
+      window.Kakao.Auth.logout(() => {})
+    }
+    
     router.push('/');
   };
 
