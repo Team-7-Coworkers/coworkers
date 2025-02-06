@@ -48,7 +48,7 @@ export default function ArticleDetail() {
             {article.title}
           </p>
 
-          {article.image && article.image && (
+          {article.image && (
             <div className="relative ml-auto h-[150px] w-[150px] flex-shrink-0 overflow-hidden rounded-[8px]">
               <Image
                 src={article.image}
