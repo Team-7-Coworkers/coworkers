@@ -18,7 +18,9 @@ export default function TeamListDropDown({
   return (
     <Dropdown>
       <Dropdown.Button className="flex items-center gap-2">
-        {currentTeam?.name || '팀 목록'}
+        <p className="sm:max-w-[206px] sm:truncate lg:max-w-full">
+          {currentTeam?.name || '팀 목록'}
+        </p>
         <Image
           src="/images/icons/ic_dropdown-check.svg"
           alt=""
