@@ -75,9 +75,10 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
           </p>
         ) : (
           <ul>
-            {taskLists.map((taskList) => (
+            {taskLists.map((taskList, index) => (
               <TaskListsItem
                 key={taskList.id}
+                index={index}
                 {...taskList}
               />
             ))}

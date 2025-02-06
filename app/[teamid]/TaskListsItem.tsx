@@ -8,17 +8,21 @@ import TaskProgress from './TaskProgress';
 import KebabIcon from '../components/icons/KebabIcon';
 import styles from './teampage.module.css';
 
+interface Props extends TaskListProps {
+  index: number;
+}
+
 // 목록 왼쪽 보더 색상값들
 const COLORS = ['purple', 'blue', 'cyan', 'pink', 'rose', 'orange', 'yellow'];
 
 export default function TaskListsItem({
   id,
+  index,
   groupId,
   name,
-  displayIndex,
   tasks,
-}: TaskListProps) {
-  const borderColor = 'border-' + COLORS[displayIndex % COLORS.length];
+}: Props) {
+  const borderColor = 'border-' + COLORS[index % COLORS.length];
   const done = tasks.filter((task) => task.doneAt !== null);
 
   return (
