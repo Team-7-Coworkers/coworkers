@@ -88,28 +88,26 @@ export default function ListPage() {
 
   return (
     <div className="container relative min-h-[80vh] pb-10">
-      {!isMember && ( // 멤버가 아니라면
-        <Modal
-          isOpen={!isMember}
-          title="해당 팀의 멤버가 아닙니다."
-          onClose={() => console.log('팀에 가입해주세요.')}
-          // onClose가 해당 모달에선 사용되지 않긴 하는데 필수라서 일단 console 코드를 넣어뒀습니다.
-          hasCloseButton={false}
-          icon="danger"
-        >
-          <p className="mt-5 text-center text-md font-semibold text-t-default">
-            팀에 가입해주세요!
-          </p>
-          <ModalFooter>
-            <Button
-              state="danger"
-              href="/"
-            >
-              확인
-            </Button>
-          </ModalFooter>
-        </Modal>
-      )}
+      <Modal
+        isOpen={!isMember}
+        title="해당 팀의 멤버가 아닙니다."
+        onClose={() => console.log('팀에 가입해주세요.')}
+        // onClose가 해당 모달에선 사용되지 않긴 하는데 필수라서 일단 console 코드를 넣어뒀습니다.
+        hasCloseButton={false}
+        icon="danger"
+      >
+        <p className="mt-5 text-center text-md font-semibold text-t-default">
+          팀에 가입해주세요!
+        </p>
+        <ModalFooter>
+          <Button
+            state="danger"
+            href="/"
+          >
+            확인
+          </Button>
+        </ModalFooter>
+      </Modal>
 
       {isMember && (
         <div className="w-full">
