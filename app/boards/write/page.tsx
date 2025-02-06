@@ -22,8 +22,8 @@ const WriteContent = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
-  //수정하기로 들어갔을 때 게시글 정보 가져옴
 
+  //수정하기로 들어갔을 때 게시글 정보 가져옴
   useEffect(() => {
     if (articleId) {
       getDetailsArticle({ articleId: Number(articleId) })
@@ -52,8 +52,10 @@ const WriteContent = () => {
   const patchMutation = useMutation({
     mutationFn: patchArticles,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['articles'] });
-      router.push('/boards');
+      router.push(`/boards/${articleId}`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['article', articleId] });
     },
     onError: () => {
       alert('게시글 수정에 실패했습니다. 다시 시도해주세요.');
@@ -67,20 +69,19 @@ const WriteContent = () => {
     }
 
     if (articleId) {
-      //수정
+      // 수정
       patchMutation.mutate({
         articleId: Number(articleId),
         title,
         content,
-        image: image || 'https://no-image/no-image.png',
+        ...(image && { image }),
       });
     } else {
-      //등록
+      // 등록
       postMutation.mutate({
         title,
         content,
-        //이미지 없이 등록할 경우 임시 주소 전송
-        image: image || 'https://no-image/no-image.png',
+        ...(image && { image }),
       });
     }
   };
@@ -128,8 +129,9 @@ const WriteContent = () => {
         <span className="text-tertiary">*</span>이미지
         <span className="text-[14px] text-t-default"> (선택)</span>
       </p>
+
       <ImageUpload
-        url={image !== 'https://no-image/no-image.png' ? image : undefined}
+        url={image ? image : undefined}
         onUploadSuccess={setImage}
         onUploadError={() => {}}
         variant="square"

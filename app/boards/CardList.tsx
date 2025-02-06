@@ -111,17 +111,16 @@ export default function CardList({
                       {article.title}
                     </p>
 
-                    {article.image &&
-                      article.image !== 'https://no-image/no-image.png' && (
-                        <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
-                          <Image
-                            src={article.image}
-                            alt={article.title}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      )}
+                    {article.image && (
+                      <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
+                        <Image
+                          src={article.image}
+                          alt={article.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
 
                     {/* Dropdown */}
                     {isOwner && (
