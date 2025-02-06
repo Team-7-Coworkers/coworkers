@@ -2,10 +2,13 @@
 
 import { UserType } from '@/app/types/shared';
 import Image from 'next/image';
+import Link from 'next/link';
 import Dropdown from '../Dropdown';
-import { useRouter } from 'next/navigation';
 import useUserStore from '@/app/stores/userStore';
+
 import { signOut } from 'next-auth/react';
+import useTeamStore from '@/app/stores/teamStore';
+import { useRouter } from 'next/navigation';
 
 interface ProfileDropDownProps {
   user: UserType;
@@ -15,21 +18,22 @@ const dropDownItemStyle = 'text-md sm:text-lg pt-2 px-4 pb-2';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { isKakaoLogin, isGoogleLogin, clearUser } = useUserStore();
+  const { clearTeam } = useTeamStore();
 
   const router = useRouter();
 
   const handleLogout = () => {
     clearUser();
-
+    clearTeam();
     if (isGoogleLogin) {
       signOut({ callbackUrl: '/' });
       return;
     }
 
     if (isKakaoLogin) {
-      window.Kakao.Auth.logout(() => {})
+      window.Kakao.Auth.logout(() => {});
     }
-    
+
     router.push('/');
   };
 
@@ -51,30 +55,29 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         className="right-0 w-[140px] p-[8px] py-[12px] sm:w-[152px]"
         animationType="scale"
       >
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={() => router.push('/myhistory')}
-        >
-          마이 히스토리
-        </Dropdown.MenuItem>
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={() => router.push('/mypage')}
-        >
-          계정 설정
-        </Dropdown.MenuItem>
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={() => router.push('/')}
-        >
-          팀 참여
-        </Dropdown.MenuItem>
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={handleLogout}
-        >
-          로그아웃
-        </Dropdown.MenuItem>
+        <Link href="/myhistory">
+          <Dropdown.MenuItem className={dropDownItemStyle}>
+            마이 히스토리
+          </Dropdown.MenuItem>
+        </Link>
+        <Link href="/mypage">
+          <Dropdown.MenuItem className={dropDownItemStyle}>
+            계정 설정
+          </Dropdown.MenuItem>
+        </Link>
+        <Link href="/invitation">
+          <Dropdown.MenuItem className={dropDownItemStyle}>
+            팀 참여
+          </Dropdown.MenuItem>
+        </Link>
+        <Link href="/">
+          <Dropdown.MenuItem
+            className={dropDownItemStyle}
+            onClick={handleLogout}
+          >
+            로그아웃
+          </Dropdown.MenuItem>
+        </Link>
       </Dropdown.Menu>
     </Dropdown>
   );

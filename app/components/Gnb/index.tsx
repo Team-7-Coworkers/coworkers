@@ -10,19 +10,20 @@ import useTeamStore from '@/app/stores/teamStore';
 import useUserStore from '@/app/stores/userStore';
 import { useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '@/app/api/user.api';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { extractTeamIdFromPath } from '@/app/utils/navigation';
 import ProfileDropDown from './ProfileDropDown';
 import Link from 'next/link';
+import isEqual from 'lodash.isequal';
+import LoginMenu from './LoginMenu';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
-
-  const router = useRouter();
+  const isLoginMenuHidden = currentPath == '/login' || currentPath == '/signup';
 
   const { user } = useUserStore();
-  const { setTeamList, setCurrentTeam } = useTeamStore();
+  const { setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
@@ -38,15 +39,20 @@ export default function GNB() {
     if (teamList.length > 0) {
       const currentTeamList = useTeamStore.getState();
 
-      if (JSON.stringify(currentTeamList) !== JSON.stringify(teamList)) {
+      if (!isEqual(teamList, currentTeamList)) {
         setTeamList(teamList);
       }
 
       if (!teamId) {
-        setCurrentTeam(teamList[0]?.id);
+        setCurrentTeam(currentTeam?.id || teamList[0]?.id);
+        return;
+      }
+
+      if (teamId !== currentTeam?.id) {
+        setCurrentTeam(teamId);
       }
     }
-  }, [teamList, setTeamList, teamId, setCurrentTeam]);
+  }, [teamList, setTeamList, teamId, setCurrentTeam, currentTeam]);
 
   const handleOpenSideBar = () => {
     setIsSideBarOpen(true);
@@ -93,21 +99,20 @@ export default function GNB() {
               <>
                 <TeamListDropDown
                   teamList={teamList}
-                  currentTeam={
-                    teamList.find((team) => team.id === teamId) || teamList[0]
-                  }
+                  currentTeam={currentTeam || teamList[0]}
                 />
-                <button onClick={() => router.push('/boards')}>
-                  자유게시판
-                </button>{' '}
-                {/*자유게시판 이동*/}
+                <Link href="/boards">자유게시판</Link>
               </>
             )}
             {/* 기본값 어떻게 처리할 지 고민중 */}
           </div>
         </div>
 
-        {user && <ProfileDropDown user={user} />}
+        {user ? (
+          <ProfileDropDown user={user} />
+        ) : (
+          !isLoginMenuHidden && <LoginMenu />
+        )}
       </div>
 
       <div className="sm:hidden">

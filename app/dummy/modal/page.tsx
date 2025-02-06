@@ -81,6 +81,7 @@ export default function Home() {
       <Modal
         isOpen={bigModalOpen}
         title="Big Modal"
+        position="top"
         onClose={() => setBigModalOpen(false)}
         isCloseOutsideClick
       >
