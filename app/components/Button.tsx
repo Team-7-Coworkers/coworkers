@@ -50,7 +50,7 @@ const Button = ({
     }
 
     return type === 'outlined'
-      ? 'bg-white border border-primary text-primary hover:border-i-hover hover:text-i-hover active:border-i-pressed active:text-i-pressed'
+      ? 'bg-white border border-primary text-primary hover:border-i-hover hover:bg-t-secondary hover:text-i-hover active:border-i-pressed active:text-i-pressed'
       : 'bg-primary text-t-inverse hover:bg-i-hover active:bg-i-pressed';
   };
 
