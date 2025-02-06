@@ -147,15 +147,19 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
               ) : (
                 <div className="mt-3 flex-1 text-md">
                   {/* 댓글 정보 보여주기 */}
-                  <div className="flex items-center justify-between">
-                    <p className="text-t-primary">{comment.content}</p>
+                  <div className="relative flex items-center justify-between">
+                    <p className="w-[calc(100%-10px)] text-t-primary lg:w-[calc(100%-20px)]">
+                      {comment.content}
+                    </p>
                     {isAuthor(comment.user.id) && (
-                      <KebobDropdown
-                        onEdit={() =>
-                          handleEditComment(comment.id, comment.content)
-                        }
-                        onDelete={() => handleDeleteComment(comment.id)}
-                      />
+                      <div className="absolute right-0 top-0 ml-3">
+                        <KebobDropdown
+                          onEdit={() =>
+                            handleEditComment(comment.id, comment.content)
+                          }
+                          onDelete={() => handleDeleteComment(comment.id)}
+                        />
+                      </div>
                     )}
                   </div>
                   <div className="mt-5 flex items-center justify-between text-t-secondary">
