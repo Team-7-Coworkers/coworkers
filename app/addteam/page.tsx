@@ -27,7 +27,10 @@ export default function AddTeamPage() {
   const validName = name.trim().length >= MIN_NAME_LENGTH;
 
   const { mutate } = useMutation({
-    mutationFn: async () => await postGroups({ image, name }),
+    mutationFn: async () => {
+      if (!image) return await postGroups({ name });
+      else return await postGroups({ name, image });
+    },
     onSuccess: (data) => {
       // TODO: 토스로 변경
       alert('팀을 생성하였습니다.');
