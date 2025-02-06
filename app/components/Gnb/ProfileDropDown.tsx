@@ -17,7 +17,7 @@ interface ProfileDropDownProps {
 const dropDownItemStyle = 'text-md sm:text-lg pt-2 px-4 pb-2';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
-  const { isKakaoLogin, isGoogleLogin, clearUser } = useUserStore();
+  const { isGoogleLogin, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
 
   const router = useRouter();
@@ -25,13 +25,11 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const handleLogout = () => {
     clearUser();
     clearTeam();
+
     if (isGoogleLogin) {
       signOut({ callbackUrl: '/' });
-      return;
-    }
 
-    if (isKakaoLogin) {
-      window.Kakao.Auth.logout(() => {});
+      return;
     }
 
     router.push('/');
