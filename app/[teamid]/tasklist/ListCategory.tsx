@@ -16,7 +16,6 @@ type ListCategoryProps = {
   selectedDate: Date;
   taskLists: TaskListResponseType['getGroupsTaskLists'][];
   groupId: number;
-  updateTrigger: boolean;
   onCategoryChange: (taskListId: number) => void;
   onTaskClick: (taskId: number) => void;
 };
@@ -25,7 +24,6 @@ export default function ListCategory({
   selectedDate,
   taskLists,
   groupId,
-  updateTrigger,
   onCategoryChange,
   onTaskClick,
 }: ListCategoryProps) {
@@ -33,16 +31,14 @@ export default function ListCategory({
     TaskListResponseType['getGroupsTaskLists'] | null
   >(null);
 
-  const { setTasks, setCheckedItems, updateTask, deleteTask, tasks } =
-    useTaskStore();
+  const { setTasks, setCheckedItems, deleteTask, tasks } = useTaskStore();
 
   const {
     data: taskData,
     isLoading,
-    isFetching,
     refetch,
   } = useQuery({
-    queryKey: ['tasks', selectedCategory?.id, selectedDate, updateTrigger],
+    queryKey: ['tasks', selectedCategory?.id, selectedDate],
     queryFn: async () => {
       if (!selectedCategory) return [];
       const formattedDate = `${selectedDate.getFullYear()}-${String(
@@ -102,7 +98,6 @@ export default function ListCategory({
         description,
         done: !!tasks[taskId]?.doneAt,
       });
-      updateTask(taskId, name, description);
       refetch();
     } catch (error) {
       console.error('수정 중 오류 발생:', error);
@@ -134,7 +129,7 @@ export default function ListCategory({
   return (
     <div>
       <div
-        className={`flex w-full space-x-5 overflow-x-auto whitespace-nowrap text-lg font-medium ${styles.scrollbarHide}`}
+        className={`flex w-full space-x-5 whitespace-nowrap pb-2 text-lg font-medium ${styles.ListScrollbar}`}
       >
         {taskLists.map((taskList) => (
           <button
@@ -153,9 +148,10 @@ export default function ListCategory({
       </div>
 
       <ItemList
+        taskListId={selectedCategory?.id || 0}
+        groupId={groupId}
         items={taskData ?? []}
         isLoading={isLoading}
-        isFetching={isFetching}
         onTaskClick={onTaskClick}
         onEditItem={handleEditItem}
         onDeleteItem={handleDeleteItem}

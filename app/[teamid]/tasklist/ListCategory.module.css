@@ -1,8 +1,27 @@
-.scrollbarHide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.ListScrollbar {
+  box-sizing: border-box;
+  scrollbar-gutter: stable;
+  overflow-x: auto;
 }
 
-.scrollbarHide::-webkit-scrollbar {
-  display: none;
+.ListScrollbar::-webkit-scrollbar {
+  height: 10px;
+  background: transparent;
+}
+
+.ListScrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.ListScrollbar::-webkit-scrollbar-thumb {
+  background-color: #334155;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.3s ease;
+}
+
+.ListScrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8 !important;
 }
