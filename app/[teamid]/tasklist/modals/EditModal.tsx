@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal, { ModalFooter } from '@/app/components/Modal';
 import Button from '@/app/components/Button';
 import InputField from '@/app/components/InputField';
+import { MAX_LENGTH } from '@/app/constants/form';
 
 type EditModalProps = {
   isOpen: boolean;
@@ -50,9 +51,13 @@ export default function EditModal({
           type="text"
           placeholder="할 일 제목을 입력해주세요."
           value={title}
+          maxlength={MAX_LENGTH.taskName}
           onChange={(e) => setTitle(e.target.value)}
           className="mt-3"
         />
+        <div className="help-message">
+          할 일 제목은 최대 {MAX_LENGTH.taskName}자 입니다.
+        </div>
       </section>
       <section className="mt-5">
         <label

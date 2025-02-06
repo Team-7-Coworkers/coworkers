@@ -4,6 +4,7 @@ import Button from '@/app/components/Button';
 import InputField from '@/app/components/InputField';
 import { postGroupsTaskLists } from '@/app/api/taskList.api';
 import { TaskListParamsType } from '@/app/types/taskList';
+import { MAX_LENGTH } from '@/app/constants/form';
 
 type AddListModalProps = {
   isOpen: boolean;
@@ -66,9 +67,13 @@ export default function AddListModal({
           type="text"
           placeholder="목록 이름을 입력해주세요."
           value={listName}
+          maxlength={MAX_LENGTH.taskListName}
           onChange={(e) => setListName(e.target.value)}
           className="mt-3"
         />
+        <div className="help-message">
+          할 일 목록 이름은 최대 {MAX_LENGTH.taskName}자 입니다.
+        </div>
       </section>
       <ModalFooter>
         <Button
