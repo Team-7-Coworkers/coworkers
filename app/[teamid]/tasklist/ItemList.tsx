@@ -11,10 +11,12 @@ import FrequencyDisplay from './info-displays/FrequencyDisplay';
 import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
+import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
-  isFetching: boolean;
+  groupId: number;
+  taskListId: number;
   isLoading: boolean;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
@@ -23,8 +25,9 @@ type ItemListProps = {
 
 export default function ItemList({
   items,
+  groupId,
+  taskListId,
   isLoading,
-  isFetching,
   onEditItem,
   onDeleteItem,
   onTaskClick,
@@ -36,6 +39,24 @@ export default function ItemList({
 
   const { checkedItems, toggleChecked, updateTask, deleteTask } =
     useTaskStore();
+
+  const handleComplete = async (taskId: number, checked: boolean) => {
+    try {
+      await patchGroupsTaskListsTasks({
+        groupId,
+        taskListId,
+        taskId,
+        name: tasks[taskId].name,
+        description: tasks[taskId].description,
+        done: checked,
+      });
+
+      toggleChecked(taskId, checked);
+    } catch (error) {
+      console.error('완료 처리 실패:', error);
+      alert('완료 처리에 실패했습니다.');
+    }
+  };
 
   const openDeleteModal = (item: TaskType) => {
     setSelectedItem(item);
@@ -65,8 +86,7 @@ export default function ItemList({
     }
   };
 
-  // 로딩 중에 아직 할 일이 없습니다.가 한 번씩 보여서 로직을 빡세게 넣었습니다.
-  if (isLoading || isFetching || items === undefined) {
+  if (isLoading || items === undefined) {
     return (
       <div className="flex min-h-[250px] items-center justify-center">
         <Loading />
@@ -94,7 +114,7 @@ export default function ItemList({
               <Checkbox
                 id={item.id}
                 checked={!!checkedItems[item.id]}
-                onChange={() => toggleChecked(item.id, !checkedItems[item.id])}
+                onChange={(id, checked) => handleComplete(id, checked)}
                 aria-label={`Mark "${item.name}" as completed`}
               />
               <h3
