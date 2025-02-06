@@ -8,10 +8,11 @@ import Button from '../../components/Button';
 
 import styles from '../../styles/team.module.css';
 import { useParams, useRouter } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getGroups, patchGroups } from '@/app/api/group.api';
 import Loading from '@/app/components/Loading';
 import useTeamStore from '@/app/stores/teamStore';
+import useUserStore from '@/app/stores/userStore';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -21,7 +22,8 @@ export default function ModifyTeamPage() {
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const { teamid } = useParams();
-  const { teamList } = useTeamStore();
+  const { user } = useUserStore();
+  const { teamList, currentTeam, setCurrentTeam } = useTeamStore();
   const router = useRouter();
   // console.log('--- teamid:', teamid);
 
@@ -38,11 +40,22 @@ export default function ModifyTeamPage() {
     enabled: !!teamid,
   });
 
+  const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: async () =>
       await patchGroups({ groupId: Number(teamid), name, image }),
     onSuccess: (data) => {
       // TODO: 토스로 변경
+
+      queryClient.invalidateQueries({
+        queryKey: ['coworkers-teamList', user?.id],
+      });
+
+      if (currentTeam?.id === data.id) {
+        setCurrentTeam(data.id);
+      }
+
       alert('팀 정보를 수정하였습니다.');
       console.log('--- patchGroups:data:', data);
       router.push(`/${data.id}`);

@@ -23,11 +23,11 @@ export default function GNB() {
   const isLoginMenuHidden = currentPath == '/login' || currentPath == '/signup';
 
   const { user } = useUserStore();
-  const { setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
+  const { teamList, setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
-  const { data: teamList = [] } = useQuery({
+  const { data: fetchedteamList = [] } = useQuery({
     queryKey: ['coworkers-teamList', user?.id],
     queryFn: getUserGroups,
     staleTime: 1000 * 60 * 5,
@@ -36,15 +36,15 @@ export default function GNB() {
   });
 
   useEffect(() => {
-    if (teamList.length > 0) {
+    if (fetchedteamList.length > 0) {
       const currentTeamList = useTeamStore.getState();
 
-      if (!isEqual(teamList, currentTeamList)) {
-        setTeamList(teamList);
+      if (!isEqual(fetchedteamList, currentTeamList.teamList)) {
+        setTeamList(fetchedteamList);
       }
 
-      if (!teamId) {
-        setCurrentTeam(currentTeam?.id || teamList[0]?.id);
+      if (!teamId || teamId === currentTeam?.id) {
+        setCurrentTeam(currentTeam?.id || fetchedteamList[0]?.id);
         return;
       }
 
@@ -52,7 +52,7 @@ export default function GNB() {
         setCurrentTeam(teamId);
       }
     }
-  }, [teamList, setTeamList, teamId, setCurrentTeam, currentTeam]);
+  }, [fetchedteamList, setTeamList, teamId, setCurrentTeam, currentTeam]);
 
   const handleOpenSideBar = () => {
     setIsSideBarOpen(true);
