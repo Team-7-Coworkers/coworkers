@@ -5,8 +5,20 @@ import landingMain from '@/public/images/landing/landing-main.png';
 import RepairIcon from '@/public/images/icons/ic_repair.svg';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import useUserStore from '@/app/stores/userStore';
+import useTeamStore from '@/app/stores/teamStore';
+import { IMAGE_SIZES } from '@/app/constants/image';
 
 export default function ServiceIntro() {
+  const { user } = useUserStore();
+  const { teamList, currentTeam } = useTeamStore();
+
+  const getRedirectPath = () => {
+    if (!user) return '/login';
+    if (teamList.length === 0) return '/noteam';
+    return `${currentTeam?.id}`;
+  };
+
   return (
     <div className="relative w-full overflow-hidden text-center">
       <div className="h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
@@ -16,8 +28,7 @@ export default function ServiceIntro() {
           src={landingMain}
           alt=""
           priority
-          unoptimized
-          quality={100}
+          sizes={IMAGE_SIZES}
         />
       </div>
       <div className="absolute top-[55px] flex w-full flex-col items-center gap-1 sm:top-[100px] sm:gap-2 lg:top-[84px] lg:gap-5">
@@ -41,7 +52,7 @@ export default function ServiceIntro() {
           </h1>
         </motion.div>
       </div>
-      <Link href="/login">
+      <Link href={getRedirectPath()}>
         <motion.button
           className="relative bottom-12 w-[343px] rounded-[32px] bg-gradient-to-r from-primary to-tertiary py-[13px] text-lg font-semibold sm:bottom-[119px] sm:w-[373px] sm:py-[14.5px] lg:bottom-[160px]"
           whileHover={{ scale: 1.15 }}
