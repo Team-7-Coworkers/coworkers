@@ -1,5 +1,3 @@
-export {};
-
 declare global {
   interface Window {
     Kakao: KakaoSDK;
@@ -17,6 +15,8 @@ interface KakaoSDK {
       isPopup?: boolean;
       prompt?: 'login' | 'none';
     }) => void;
+
+    logout(callback: () => void): void;
   };
 }
 
@@ -35,3 +35,12 @@ interface KakaoAuthError {
   error: string;
   error_description: string;
 }
+
+interface KakaoAuth {
+  setAccessToken(token: string | null): void;
+  // 필요에 따라 다른 메서드도 추가
+}
+
+declare const Kakao: KakaoStatic;
+
+export {};

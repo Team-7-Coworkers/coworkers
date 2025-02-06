@@ -35,8 +35,8 @@ export interface AuthParamsType {
   };
 
   postAuthEasySignIn: {
-    state: string;
-    redirectUri: string;
+    state?: string | null;
+    redirectUri?: string | null;
     token: string;
     provider: 'GOOGLE' | 'KAKAO';
   };
