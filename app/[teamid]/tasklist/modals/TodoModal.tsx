@@ -197,6 +197,7 @@ export default function TodoModal({
             type="box"
             placeholder="메모를 입력해주세요."
             value={todoMemo}
+            maxlength={MAX_LENGTH.taskMemo}
             onChange={(e) => setTodoMemo(e.target.value)}
           />
         </div>

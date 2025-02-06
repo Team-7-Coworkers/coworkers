@@ -17,6 +17,7 @@ import KebobDropdown from '../KebobDropdown';
 import Button from '@/app/components/Button';
 import { formatCommentDate } from '@/app/utils/date';
 import useUserStore from '@/app/stores/userStore';
+import { MAX_LENGTH } from '@/app/constants/form';
 
 interface TaskCommentProps {
   taskId: number;
@@ -126,6 +127,7 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
                     type="reply"
                     value={editingContent}
                     onChange={(e) => setEditingContent(e.target.value)}
+                    maxlength={MAX_LENGTH.taskMemo}
                     className="!text-md"
                   />
                   <div className="mt-4 flex items-center justify-end gap-2">

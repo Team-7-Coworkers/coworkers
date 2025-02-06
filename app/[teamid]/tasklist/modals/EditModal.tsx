@@ -67,12 +67,12 @@ export default function EditModal({
         >
           할 일 메모
         </label>
-        {/*TODO: 수정하기 및 등록하기 제목 인풋 글자수 제한 걸기 */}
         <TextField
           id="edit-description"
           type="box"
           placeholder="메모를 입력하세요."
           value={description}
+          maxlength={MAX_LENGTH.taskMemo}
           onChange={(e) => setDescription(e.target.value)}
           className="mt-3"
         />
