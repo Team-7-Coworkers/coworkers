@@ -104,10 +104,10 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
           value={newComment}
           placeholder="댓글을 달아주세요"
           onChange={(e) => setNewComment(e.target.value)}
+          enterSubmit
           className="!text-md"
+          onSubmit={handleAddComment}
         />
-        {/*TODO: 엔터키를 누르면 댓글 제출 가능 + 쉬프트엔터는 줄바꿈 => 이건 텍스트필드 컴포넌트에 추가해야되는걸까요?
-         onKeyPress 속성을 추가해야하나요...? */}
         <button onClick={handleAddComment}>
           <SubmitIcon color={newComment.trim() ? '#10B981' : '#64748B'} />
         </button>

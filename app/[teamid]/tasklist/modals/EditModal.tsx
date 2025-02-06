@@ -3,6 +3,7 @@ import Modal, { ModalFooter } from '@/app/components/Modal';
 import Button from '@/app/components/Button';
 import InputField from '@/app/components/InputField';
 import { MAX_LENGTH } from '@/app/constants/form';
+import TextField from '@/app/components/TextField';
 
 type EditModalProps = {
   isOpen: boolean;
@@ -67,9 +68,9 @@ export default function EditModal({
           할 일 메모
         </label>
         {/*TODO: 수정하기 및 등록하기 제목 인풋 글자수 제한 걸기 */}
-        <InputField
+        <TextField
           id="edit-description"
-          type="text"
+          type="box"
           placeholder="메모를 입력하세요."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
