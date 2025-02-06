@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from '@/app/components/Button';
 import ImageUpload from '@/app/components/ImageUpload';
 import TextField from '@/app/components/TextField';
@@ -10,9 +11,9 @@ import {
   patchArticles,
   getDetailsArticle,
 } from '@/app/api/article.api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Loading from '@/app/components/Loading';
 
-export default function Write() {
+const WriteContent = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
@@ -21,8 +22,8 @@ export default function Write() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
-
   //수정하기로 들어갔을 때 게시글 정보 가져옴
+
   useEffect(() => {
     if (articleId) {
       getDetailsArticle({ articleId: Number(articleId) })
@@ -66,7 +67,7 @@ export default function Write() {
     }
 
     if (articleId) {
-      //수정정
+      //수정
       patchMutation.mutate({
         articleId: Number(articleId),
         title,
@@ -144,5 +145,13 @@ export default function Write() {
         {articleId ? '수정' : '등록'}
       </Button>
     </div>
+  );
+};
+
+export default function Write() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <WriteContent />
+    </Suspense>
   );
 }
