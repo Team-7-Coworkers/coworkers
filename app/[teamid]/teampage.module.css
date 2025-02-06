@@ -5,7 +5,12 @@
 }
 
 .header {
-  @apply flex items-center justify-between rounded-xl border border-bd-primary bg-slate-50/10 bg-[url('/images/bg-team-header.svg')] bg-contain bg-[center_right_80px] bg-no-repeat px-6 py-5;
+  @apply flex items-center justify-between rounded-xl border border-bd-primary bg-slate-50/10 bg-[url('/images/bg-team-header.svg')] bg-clip-padding bg-[center_right_80px] bg-no-repeat px-6 py-5;
+  background-size: 180px auto;
+
+  .headerTitle {
+    @apply text-xl font-bold text-t-inverse;
+  }
 }
 .progress {
   @apply flex items-center gap-1 rounded-xl bg-b-primary px-2 py-1 text-md text-primary;
@@ -14,7 +19,7 @@
   @apply mt-4 flex items-center rounded-xl border-l-[12px] bg-b-secondary p-3;
 }
 .iconButton {
-  @apply ml-1 size-6 rounded-full p-1 text-ic-primary transition-colors hover:bg-b-tertiary hover:text-ic-inverse;
+  @apply ml-2 size-6 rounded-full p-1 text-ic-primary transition-colors hover:bg-b-tertiary hover:text-ic-inverse;
 }
 
 .section {

@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { patchGroupsTaskLists, postGroupsTaskLists } from '../api/taskList.api';
+import {
+  deleteGroupsTaskLists,
+  patchGroupsTaskLists,
+  postGroupsTaskLists,
+} from '../api/taskList.api';
 import { MAX_LENGTH } from '../constants/form';
 
 import Button from '../components/Button';
@@ -26,7 +30,6 @@ export type TaskListProps = {
   name: string;
   displayIndex: number;
   tasks: TaskProps[];
-  onEdit?: (id: number) => void;
 };
 
 interface Props {
@@ -39,6 +42,7 @@ type ModalMode = 'post' | 'patch';
 
 export default function TaskLists({ groupId, taskLists = [] }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<ModalMode>('post');
   const [taskListId, setTaskListId] = useState(0);
   const [name, setName] = useState('');
@@ -69,6 +73,19 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
       alert('할 일 목록 수정에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
     },
   });
+  const { mutate: deleteMutate, isPending: isDeletePending } = useMutation({
+    mutationFn: async () =>
+      await deleteGroupsTaskLists({ groupId, taskListId }),
+    onSuccess: (data) => {
+      console.log('--- data', data);
+      queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
+      setDeleteModalOpen(false);
+    },
+    onError: (err) => {
+      console.error('--- error', err);
+      alert('할 일 목록 삭제에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    },
+  });
   const mutate = {
     post: postMutate,
     patch: patchMutate,
@@ -93,11 +110,26 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
     setModalOpen(true);
   };
 
+  const handleDeleteList = (id: number) => {
+    setTaskListId(id);
+    setDeleteModalOpen(true);
+  };
+
   // 할 일 목록 폼 서브밋 함수
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     mutate[modalMode]();
+  };
+
+  // 할 일 목록 삭제 모달 닫기 함수
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const handleTaskListDelete = () => {
+    // console.log('deleteMutate');
+    deleteMutate();
   };
 
   return (
@@ -128,6 +160,7 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
                 key={taskList.id}
                 index={index}
                 onEdit={handleEditList}
+                onDelete={handleDeleteList}
                 {...taskList}
               />
             ))}
@@ -136,7 +169,9 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
       </section>
 
       <Modal
-        title="할 일 목록"
+        title={
+          modalMode === 'post' ? '할 일 목록 만들기' : '할 일 목록 수정하기'
+        }
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       >
@@ -165,6 +200,34 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
             </Button>
           </ModalFooter>
         </form>
+      </Modal>
+
+      <Modal
+        title="할 일 목록 삭제하기"
+        icon="danger"
+        isOpen={deleteModalOpen}
+        onClose={handleDeleteModalClose}
+      >
+        <p className="text-center">
+          선택한 할 일 목록을 정말로 삭제하시겠습니까?
+          <br />
+          삭제하시면 다시 되돌릴 수 없습니다.
+        </p>
+        <ModalFooter>
+          <Button
+            styleType="outlined"
+            onClick={handleDeleteModalClose}
+          >
+            취소
+          </Button>
+          <Button
+            state="danger"
+            onClick={handleTaskListDelete}
+            disabled={isDeletePending}
+          >
+            삭제
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );

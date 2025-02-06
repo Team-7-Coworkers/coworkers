@@ -24,7 +24,7 @@ export default function Dropdown({ children, className }: DropdownProps) {
 
   // 외부 클릭 시 닫히도록
   const ref = useClickOutside(closeDropdown);
-  console.log('Dropdown children:', children);
+  // console.log('Dropdown children:', children);
 
   return (
     <div
