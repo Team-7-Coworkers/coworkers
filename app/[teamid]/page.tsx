@@ -14,17 +14,20 @@ import Report from './Report';
 import Dropdown from '../components/Dropdown';
 import Modal, { ModalFooter } from '../components/Modal';
 import Button from '../components/Button';
+import Loading from '../components/Loading';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
-import Loading from '../components/Loading';
 
 export default function TeamPage() {
   const { teamid } = useParams();
+
   const [role, setRole] = useState('');
   const [totalTasks, setTotalTasks] = useState(0);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [incorrectModal, setIncorrectModal] = useState(false);
+
   const { user } = useUserStore();
   const router = useRouter();
 
@@ -43,7 +46,11 @@ export default function TeamPage() {
       // 사용자 검증 및 역할 받아 설정
       const member = group.members.find((member) => member.userId === user?.id);
       // console.log('--- member:', member);
-      if (member) setRole(member.role);
+      if (member) {
+        setRole(member.role);
+      } else {
+        setIncorrectModal(true);
+      }
 
       // 할 일 전체와 완료된 할 일 갯수 받기
       let total = 0;
@@ -57,7 +64,12 @@ export default function TeamPage() {
       setTotalTasks(total);
       setCompletedTasks(complete);
     }
-  }, [group, user]);
+  }, [group, user, router]);
+
+  // 그룹 이미지를 배경 이미지로
+  const bgImage = group?.image
+    ? { backgroundImage: `url(${group.image})` }
+    : {};
 
   // 팀 수정하기 버튼 클릭 함수
   const handleModifyClick = () => {
@@ -78,6 +90,11 @@ export default function TeamPage() {
     }
   };
 
+  // 팀 검증 실패 모달에서 메인페이지로 이동시킴
+  const handleIncorrectModalClose = () => {
+    router.replace('/');
+  };
+
   if (isLoading) {
     return (
       <div className="mt-48">
@@ -93,12 +110,38 @@ export default function TeamPage() {
     return null;
   }
 
+  // 팀 검증 실패 모달
+  if (incorrectModal) {
+    return (
+      <Modal
+        isOpen={incorrectModal}
+        onClose={handleIncorrectModalClose}
+        hasCloseButton={false}
+        icon="danger"
+        title="해당 팀의 멤버가 아닙니다."
+      >
+        <p className="text-center">메인페이지로 돌아갑니다.</p>
+        <ModalFooter>
+          <Button
+            state="danger"
+            onClick={handleIncorrectModalClose}
+          >
+            확인
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+
   if (!group) return null;
 
   return (
     <div className="container flex flex-col py-6">
-      <header className={styles.header}>
-        <h1 className="text-xl font-bold text-t-inverse">
+      <header
+        className={styles.header}
+        style={bgImage}
+      >
+        <h1 className={styles.headerTitle}>
           {group.name}({group.id})
         </h1>
 
@@ -150,7 +193,7 @@ export default function TeamPage() {
             styleType="outlined-secondary"
             onClick={() => setDeleteModal(false)}
           >
-            닫기
+            취소
           </Button>
 
           <Button

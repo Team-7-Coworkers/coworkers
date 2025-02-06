@@ -1,8 +1,10 @@
 import Image from 'next/image';
-import styles from './teampage.module.css';
 import { cn } from '../libs/utils';
-// import KebabIcon from '../components/icons/KebabIcon';
+
 import type { MemberProps } from './MemberList';
+
+// import KebabIcon from '../components/icons/KebabIcon';
+import styles from './teampage.module.css';
 
 interface Props extends MemberProps {
   onClick: (userId: number) => void;

@@ -13,6 +13,7 @@ interface InputProps {
   className?: string;
   state?: 'default' | 'default-disabled';
   children?: ReactNode;
+  maxlength?: number;
 }
 
 function InputField({
@@ -27,6 +28,7 @@ function InputField({
   className = '',
   state = 'default',
   children,
+  maxlength,
 }: InputProps) {
   const [inputType, setInputType] = useState(type);
   const [error, setError] = useState<string | undefined>();
@@ -79,6 +81,7 @@ function InputField({
           value={value}
           onChange={onChange}
           onBlur={validator ? handleBlur : undefined}
+          maxLength={maxlength}
           disabled={isDisabled}
           className={`w-full rounded-xl px-4 py-3 text-md sm:py-4 sm:text-lg ${
             isDisabled

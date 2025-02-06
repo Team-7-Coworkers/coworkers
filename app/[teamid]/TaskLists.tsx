@@ -1,4 +1,12 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import {
+  deleteGroupsTaskLists,
+  patchGroupsTaskLists,
+  postGroupsTaskLists,
+} from '../api/taskList.api';
+import { MAX_LENGTH } from '../constants/form';
 
 import Button from '../components/Button';
 import InputField from '../components/InputField';
@@ -6,7 +14,6 @@ import Modal, { ModalFooter } from '../components/Modal';
 import TaskListsItem from './TaskListsItem';
 
 import styles from './teampage.module.css';
-import { postGroupsTaskLists } from '../api/taskList.api';
 
 // 할 일 속성
 export type TaskProps = {
@@ -30,26 +37,99 @@ interface Props {
   taskLists: TaskListProps[];
 }
 
-// input 의 placeholder 와 error message 로 사용할 메시지
-const INPUT_MESSAGE = '목록 명을 입력해주세요.';
+// 모달(폼) 형태
+type ModalMode = 'post' | 'patch';
 
 export default function TaskLists({ groupId, taskLists = [] }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<ModalMode>('post');
+  const [taskListId, setTaskListId] = useState(0);
   const [name, setName] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const isEmtpy = taskLists.length === 0;
 
-  // 할 일 목록 생성 폼 서브밋 함수
+  const queryClient = useQueryClient();
+  const { mutate: postMutate, isPending: isPostPending } = useMutation({
+    mutationFn: async () => await postGroupsTaskLists({ name, groupId }),
+    onSuccess: () => {
+      // console.log('--- data', data);
+      queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
+      setModalOpen(false);
+    },
+    onError: (err) => {
+      console.error('--- error', err);
+      alert('할 일 목록 생성에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    },
+  });
+  const { mutate: patchMutate, isPending: isPatchPending } = useMutation({
+    mutationFn: async () =>
+      await patchGroupsTaskLists({ groupId, taskListId, name }),
+    onSuccess: (data) => {
+      console.log('--- data', data);
+      queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
+      setModalOpen(false);
+    },
+    onError: (err) => {
+      console.error('--- error', err);
+      alert('할 일 목록 수정에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    },
+  });
+  const { mutate: deleteMutate, isPending: isDeletePending } = useMutation({
+    mutationFn: async () =>
+      await deleteGroupsTaskLists({ groupId, taskListId }),
+    onSuccess: (data) => {
+      console.log('--- data', data);
+      queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
+      setDeleteModalOpen(false);
+    },
+    onError: (err) => {
+      console.error('--- error', err);
+      alert('할 일 목록 삭제에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    },
+  });
+  const mutate = {
+    post: postMutate,
+    patch: patchMutate,
+  };
+
+  // 할 일 목록 생성
+  const handleNewList = () => {
+    setName('');
+    setModalMode('post');
+    setModalOpen(true);
+  };
+
+  // 할 일 목록 수정
+  const handleEditList = (id: number) => {
+    const tasklist = taskLists.find((tasklist) => tasklist.id === id);
+
+    if (!tasklist) return;
+
+    setTaskListId(id);
+    setName(tasklist.name);
+    setModalMode('patch');
+    setModalOpen(true);
+  };
+
+  const handleDeleteList = (id: number) => {
+    setTaskListId(id);
+    setDeleteModalOpen(true);
+  };
+
+  // 할 일 목록 폼 서브밋 함수
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!name.trim()) {
-      setErrorMessage(INPUT_MESSAGE);
-      return;
-    }
-    const result = await postGroupsTaskLists({ name, groupId });
-    console.log('--- 할 일 목록 생성: result:', result);
-    setModalOpen(false);
+    mutate[modalMode]();
+  };
+
+  // 할 일 목록 삭제 모달 닫기 함수
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const handleTaskListDelete = () => {
+    // console.log('deleteMutate');
+    deleteMutate();
   };
 
   return (
@@ -63,21 +143,24 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
 
           <button
             className="text-button ml-auto text-md"
-            onClick={() => setModalOpen(true)}
+            onClick={handleNewList}
           >
             + 새로운 목록 추가하기
           </button>
         </header>
 
-        {isEmtpy ? (
+        {taskLists.length === 0 ? (
           <p className="mb-6 mt-16 text-center text-md font-medium text-t-default">
             아직 할 일 목록이 없습니다.
           </p>
         ) : (
           <ul>
-            {taskLists.map((taskList) => (
+            {taskLists.map((taskList, index) => (
               <TaskListsItem
                 key={taskList.id}
+                index={index}
+                onEdit={handleEditList}
+                onDelete={handleDeleteList}
                 {...taskList}
               />
             ))}
@@ -86,7 +169,9 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
       </section>
 
       <Modal
-        title="할 일 목록"
+        title={
+          modalMode === 'post' ? '할 일 목록 만들기' : '할 일 목록 수정하기'
+        }
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       >
@@ -95,22 +180,54 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
           className="mt-4"
         >
           <InputField
-            placeholder={INPUT_MESSAGE}
-            type="text"
             id="group-name"
+            type="text"
+            placeholder="목록 명을 입력해주세요."
+            maxlength={MAX_LENGTH.taskListName}
             value={name}
-            errorMessage={errorMessage}
             onChange={(e) => setName(e.target.value)}
           />
+          <div className="help-message">
+            할 일 목록 이름은 최대 {MAX_LENGTH.taskListName}자 입니다.
+          </div>
+
           <ModalFooter>
             <Button
               type="submit"
-              disabled={errorMessage !== '' || name.trim() === ''}
+              disabled={name.trim() === '' || isPostPending || isPatchPending}
             >
-              만들기
+              {modalMode === 'post' ? '만들기' : '수정하기'}
             </Button>
           </ModalFooter>
         </form>
+      </Modal>
+
+      <Modal
+        title="할 일 목록 삭제하기"
+        icon="danger"
+        isOpen={deleteModalOpen}
+        onClose={handleDeleteModalClose}
+      >
+        <p className="text-center">
+          선택한 할 일 목록을 정말로 삭제하시겠습니까?
+          <br />
+          삭제하시면 다시 되돌릴 수 없습니다.
+        </p>
+        <ModalFooter>
+          <Button
+            styleType="outlined"
+            onClick={handleDeleteModalClose}
+          >
+            취소
+          </Button>
+          <Button
+            state="danger"
+            onClick={handleTaskListDelete}
+            disabled={isDeletePending}
+          >
+            삭제
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );
