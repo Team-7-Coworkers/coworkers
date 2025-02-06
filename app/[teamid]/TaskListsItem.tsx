@@ -5,7 +5,7 @@ import { cn } from '../libs/utils';
 import type { TaskListProps } from './TaskLists';
 import TaskProgress from './TaskProgress';
 
-import KebabIcon from '../components/icons/KebabIcon';
+import PencelIcon from '../components/icons/PencilIcon';
 import styles from './teampage.module.css';
 
 interface Props extends TaskListProps {
@@ -21,9 +21,15 @@ export default function TaskListsItem({
   groupId,
   name,
   tasks,
+  onEdit,
 }: Props) {
   const borderColor = 'border-' + COLORS[index % COLORS.length];
   const done = tasks.filter((task) => task.doneAt !== null);
+
+  // 수정 클릭 함수
+  const handleClick = () => {
+    if (onEdit) onEdit(id);
+  };
 
   return (
     <li className={cn(borderColor, styles.task)}>
@@ -43,8 +49,12 @@ export default function TaskListsItem({
         />
       </span>
 
-      <button className={styles.iconButton}>
-        <KebabIcon />
+      <button
+        className={cn(styles.iconButton, 'tool-tip')}
+        onClick={handleClick}
+        aria-label="할 일 목록 수정"
+      >
+        <PencelIcon classname="size-3 mx-auto" />
       </button>
     </li>
   );
