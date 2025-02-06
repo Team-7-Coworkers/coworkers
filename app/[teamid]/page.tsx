@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getGroups, deleteGroups } from '../api/group.api';
 import useUserStore from '../stores/userStore';
@@ -18,6 +18,7 @@ import Loading from '../components/Loading';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
+import useTeamStore from '../stores/teamStore';
 
 export default function TeamPage() {
   const { teamid } = useParams();
@@ -28,7 +29,10 @@ export default function TeamPage() {
   const [deleteModal, setDeleteModal] = useState(false);
 
   const { user } = useUserStore();
+  const { teamList, setCurrentTeam } = useTeamStore();
+
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     data: group,
@@ -80,6 +84,11 @@ export default function TeamPage() {
   const handleRealDeleteClick = async () => {
     if (group) {
       const result = await deleteGroups({ groupId: group.id });
+      queryClient.invalidateQueries({
+        queryKey: ['coworkers-teamList', user?.id],
+      });
+      setCurrentTeam(teamList[0].id);
+
       console.log('--- deleteGroups:result:', result);
       router.replace('/');
     }
