@@ -1,18 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-import InputField from '../../components/InputField';
-import ImageUpload from '../../components/ImageUpload';
-import Button from '../../components/Button';
-
-import styles from '../../styles/team.module.css';
 import { useParams, useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { getGroups, patchGroups } from '@/app/api/group.api';
-import Loading from '@/app/components/Loading';
 import useTeamStore from '@/app/stores/teamStore';
 import useUserStore from '@/app/stores/userStore';
+
+import InputField from '@/app/components/InputField';
+import ImageUpload from '@/app/components/ImageUpload';
+import Button from '@/app/components/Button';
+import Loading from '@/app/components/Loading';
+
+import styles from '../../styles/team.module.css';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -57,7 +58,7 @@ export default function ModifyTeamPage() {
       }
 
       alert('팀 정보를 수정하였습니다.');
-      console.log('--- patchGroups:data:', data);
+      // console.log('--- patchGroups:data:', data);
       router.push(`/${data.id}`);
     },
     onError: (err) => {
@@ -89,7 +90,7 @@ export default function ModifyTeamPage() {
   };
 
   const handleImageUploadSuccess = (url: string) => {
-    console.log('--- handleImageUploadSuccess:', url);
+    // console.log('--- handleImageUploadSuccess:', url);
     setImage(url);
   };
 
@@ -99,8 +100,10 @@ export default function ModifyTeamPage() {
   };
 
   useEffect(() => {
-    setName(group?.name ?? '');
-    setImage(group?.image ?? '');
+    if (group) {
+      setName(group.name);
+      setImage(group.image);
+    }
   }, [group]);
 
   if (isLoading) {
@@ -112,6 +115,8 @@ export default function ModifyTeamPage() {
   }
 
   if (isError) {
+    alert('팀 정보 가져오는데 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    router.back();
     return null;
   }
 

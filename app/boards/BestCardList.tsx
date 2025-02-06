@@ -37,7 +37,7 @@ export default function BestCardList() {
                   {article.title}
                 </p>
                 {/* Image */}
-                {article.image !== 'https://no-image/no-image.png' && (
+                {article.image && (
                   <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
                     <Image
                       src={article.image}

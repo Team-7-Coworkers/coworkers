@@ -31,7 +31,10 @@ export default function AddTeamPage() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async () => await postGroups({ image, name }),
+    mutationFn: async () => {
+      if (!image) return await postGroups({ name });
+      else return await postGroups({ name, image });
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['coworkers-teamList', user?.id],
