@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { GroupType } from '../types/shared';
 import { getGroups, deleteGroups } from '../api/group.api';
 import useUserStore from '../stores/userStore';
 import { GroupResponseType } from '../types/group';
@@ -18,6 +19,7 @@ import Loading from '../components/Loading';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
+import useTeamStore from '../stores/teamStore';
 
 export default function TeamPage() {
   const { teamid } = useParams();
@@ -29,7 +31,10 @@ export default function TeamPage() {
   const [incorrectModal, setIncorrectModal] = useState(false);
 
   const { user } = useUserStore();
+  const { teamList, setCurrentTeam, clearTeam } = useTeamStore();
+
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     data: group,
@@ -85,6 +90,27 @@ export default function TeamPage() {
   const handleRealDeleteClick = async () => {
     if (group) {
       const result = await deleteGroups({ groupId: group.id });
+
+      if (teamList.length)
+        await queryClient.refetchQueries({
+          queryKey: ['coworkers-teamList', user?.id],
+        });
+
+      // 최신화된 팀 데이터 확인
+      const updatedTeamList =
+        queryClient.getQueryData<GroupType[]>([
+          'coworkers-teamList',
+          user?.id,
+        ]) || [];
+
+      if (updatedTeamList.length > 0) {
+        // 팀이 남아있다면 첫 번째 팀을 현재 팀으로 설정
+        setCurrentTeam(updatedTeamList[0].id);
+      } else {
+        // 팀이 없다면 currentTeam을 null로 초기화
+        clearTeam();
+      }
+
       console.log('--- deleteGroups:result:', result);
       router.replace('/');
     }

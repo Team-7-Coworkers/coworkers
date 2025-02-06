@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { postGroups } from '../api/group.api';
 import useTeamStore from '../stores/teamStore';
@@ -12,6 +12,7 @@ import ImageUpload from '../components/ImageUpload';
 import Button from '../components/Button';
 
 import styles from '../styles/team.module.css';
+import useUserStore from '../stores/userStore';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -21,10 +22,13 @@ export default function AddTeamPage() {
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const router = useRouter();
+  const { user } = useUserStore();
   const { teamList } = useTeamStore();
 
   // 최소 2글자 이상인지 확인
   const validName = name.trim().length >= MIN_NAME_LENGTH;
+
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -32,8 +36,13 @@ export default function AddTeamPage() {
       else return await postGroups({ name, image });
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['coworkers-teamList', user?.id],
+      });
+
       // TODO: 토스로 변경
       alert('팀을 생성하였습니다.');
+
       router.push(`/${data.id}`);
     },
     onError: (err) => {
