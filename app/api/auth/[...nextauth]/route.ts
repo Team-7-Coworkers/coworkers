@@ -9,6 +9,7 @@ const handler = NextAuth({
       authorization: {
         params: {
           scope: 'openid profile email',
+          prompt: 'select_account',
         },
       },
     }),
