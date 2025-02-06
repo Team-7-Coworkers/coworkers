@@ -25,17 +25,26 @@ const WriteContent = () => {
 
   //수정하기로 들어갔을 때 게시글 정보 가져옴
   useEffect(() => {
-    if (articleId) {
-      getDetailsArticle({ articleId: Number(articleId) })
-        .then((data) => {
-          if ('title' in data && 'content' in data && 'image' in data) {
-            setTitle(data.title);
-            setContent(data.content);
-            setImage(data.image);
-          }
-        })
-        .catch(() => {});
-    }
+    const fetchArticle = async () => {
+      if (!articleId) return;
+
+      try {
+        const data = await getDetailsArticle({ articleId: Number(articleId) });
+
+        if ('message' in data) {
+          alert('게시글 정보를 찾을 수 없습니다.');
+          return;
+        }
+
+        setTitle(data.title);
+        setContent(data.content);
+        setImage(data.image);
+      } catch {
+        alert('게시글 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.');
+      }
+    };
+
+    fetchArticle();
   }, [articleId]);
 
   const postMutation = useMutation({
