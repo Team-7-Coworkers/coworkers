@@ -17,7 +17,11 @@
   }
 
   .container {
-    @apply fixed inset-0 m-auto mb-0 h-fit max-h-[calc(100%-24px)] w-[384px] max-w-full overflow-y-auto rounded-xl rounded-b-none bg-b-secondary px-[52px] pb-8 pt-12 text-md font-medium text-t-secondary sm:relative sm:mb-auto sm:max-h-none sm:rounded-b-xl;
+    @apply fixed inset-0 m-auto mb-0 h-fit max-h-[calc(100%-24px)] w-[384px] max-w-full overflow-y-auto rounded-xl rounded-b-none bg-b-secondary px-[52px] pb-8 pt-12 text-md font-medium text-t-secondary sm:mb-auto sm:max-h-none sm:rounded-b-xl;
+
+    &.top {
+      @apply sm:relative;
+    }
   }
   .title {
     @apply mb-2 text-center text-lg font-medium text-t-primary;

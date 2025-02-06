@@ -21,18 +21,25 @@ export default function MyHistoryPage() {
 
   // 데이터 가공
   const groupedTasksByDate = useMemo(() => {
-    if (!userHistory?.tasksDone?.length) return [];
+    if (
+      !Array.isArray(userHistory?.tasksDone) ||
+      userHistory?.tasksDone?.length === 0
+    )
+      return [];
 
     // 시간순 정렬
-    const sortedTasks = [...userHistory.tasksDone].sort(
-      (a, b) => new Date(a.doneAt).getTime() - new Date(b.doneAt).getTime()
-    );
+    const sortedTasks = [...userHistory.tasksDone].sort((a, b) => {
+      return (
+        (a.doneAt ? new Date(a.doneAt).getTime() : 0) -
+        (b.doneAt ? new Date(b.doneAt).getTime() : 0)
+      );
+    });
 
     // 날짜별로 묶기
     const initialAcc: Record<string, { name: string; id: number }[]> = {};
 
     const groupedTasks = sortedTasks.reduce((acc, task) => {
-      const doneDate = task.doneAt.split('T')[0];
+      const doneDate = task.doneAt ? task.doneAt.split('T')[0] : '';
 
       if (!acc[doneDate]) acc[doneDate] = [];
       acc[doneDate].push({ name: task.name, id: task.id });
