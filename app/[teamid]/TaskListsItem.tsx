@@ -7,6 +7,7 @@ import TaskProgress from './TaskProgress';
 
 import PencelIcon from '../components/icons/PencilIcon';
 import styles from './teampage.module.css';
+import { useTaskStore } from '../stores/taskStore';
 
 // 목록 왼쪽 보더 색상값들
 const COLORS = ['purple', 'blue', 'cyan', 'pink', 'rose', 'orange', 'yellow'];
@@ -22,6 +23,8 @@ export default function TaskListsItem({
   const borderColor = 'border-' + COLORS[displayIndex % COLORS.length];
   const done = tasks.filter((task) => task.doneAt !== null);
 
+  const { setSelectedCategory } = useTaskStore(); // task 스토어 불러오기
+
   // 수정 클릭 함수
   const handleClick = () => {
     if (onEdit) onEdit(id);
@@ -33,6 +36,7 @@ export default function TaskListsItem({
         <Link
           href={`${groupId}/tasklist`}
           className="hover:underline"
+          onClick={() => setSelectedCategory(id)} // task 스토어에 선택한 id 값을 전달
         >
           {name}({id})
         </Link>

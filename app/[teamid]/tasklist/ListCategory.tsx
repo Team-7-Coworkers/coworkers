@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ItemList from './ItemList';
 import styles from './ListCategory.module.css';
@@ -27,18 +27,24 @@ export default function ListCategory({
   onCategoryChange,
   onTaskClick,
 }: ListCategoryProps) {
-  const [selectedCategory, setSelectedCategory] = useState<
-    TaskListResponseType['getGroupsTaskLists'] | null
-  >(null);
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    setTasks,
+    setCheckedItems,
+    deleteTask,
+    tasks,
+  } = useTaskStore();
 
-  const { setTasks, setCheckedItems, deleteTask, tasks } = useTaskStore();
+  const listRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
 
   const {
     data: taskData,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['tasks', selectedCategory?.id, selectedDate],
+    queryKey: ['tasks', selectedCategory, selectedDate],
     queryFn: async () => {
       if (!selectedCategory) return [];
       const formattedDate = `${selectedDate.getFullYear()}-${String(
@@ -50,7 +56,7 @@ export default function ListCategory({
 
       return await getGroupsTaskListTasks({
         groupId,
-        taskListId: selectedCategory.id,
+        taskListId: selectedCategory,
         date: formattedDate,
       });
     },
@@ -58,13 +64,26 @@ export default function ListCategory({
   });
 
   useEffect(() => {
-    if (taskLists.length > 0 && !selectedCategory) {
-      setSelectedCategory(taskLists[0]);
+    // 카테고리 선택
+    if (taskLists.length > 0 && selectedCategory === null) {
+      setSelectedCategory(taskLists[0].id);
       onCategoryChange(taskLists[0].id);
     }
-  }, [taskLists, selectedCategory, onCategoryChange]);
+  }, [taskLists, selectedCategory, setSelectedCategory, onCategoryChange]);
 
   useEffect(() => {
+    // 스크롤 이동
+    if (selectedCategory !== null && buttonRefs.current[selectedCategory]) {
+      buttonRefs.current[selectedCategory]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    // 체크 상태 관리
     if (taskData) {
       setTasks(taskData);
       const initialCheckedItems: { [key: number]: boolean } = {};
@@ -78,8 +97,8 @@ export default function ListCategory({
   const handleCategoryChange = (
     taskList: TaskListResponseType['getGroupsTaskLists']
   ) => {
-    if (selectedCategory?.id !== taskList.id) {
-      setSelectedCategory(taskList);
+    if (selectedCategory !== taskList.id) {
+      setSelectedCategory(taskList.id);
       onCategoryChange(taskList.id);
     }
   };
@@ -92,7 +111,7 @@ export default function ListCategory({
     try {
       await patchGroupsTaskListsTasks({
         groupId,
-        taskListId: selectedCategory?.id || 0,
+        taskListId: selectedCategory || 0,
         taskId,
         name,
         description,
@@ -108,7 +127,7 @@ export default function ListCategory({
     try {
       await deleteGroupsTaskListsTasks({
         groupId,
-        taskListId: selectedCategory?.id || 0,
+        taskListId: selectedCategory || 0,
         taskId,
       });
       deleteTask(taskId);
@@ -129,14 +148,18 @@ export default function ListCategory({
   return (
     <div>
       <div
+        ref={listRef}
         className={`flex w-full space-x-5 whitespace-nowrap pb-2 text-lg font-medium ${styles.ListScrollbar}`}
       >
         {taskLists.map((taskList) => (
           <button
             key={taskList.id}
+            ref={(el) => {
+              if (el) buttonRefs.current[taskList.id] = el;
+            }}
             onClick={() => handleCategoryChange(taskList)}
             className={`pb-2 ${
-              selectedCategory?.id === taskList.id
+              selectedCategory === taskList.id
                 ? 'rounded-sm border-b-2 border-white text-white'
                 : 'text-t-default'
             }`}
@@ -148,7 +171,7 @@ export default function ListCategory({
       </div>
 
       <ItemList
-        taskListId={selectedCategory?.id || 0}
+        taskListId={selectedCategory || 0}
         groupId={groupId}
         items={taskData ?? []}
         isLoading={isLoading}
