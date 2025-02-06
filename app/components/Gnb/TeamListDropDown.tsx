@@ -35,14 +35,14 @@ export default function TeamListDropDown({
           .sort((a, b) => b.id - a.id) // id순 내림차순 정렬
           .map((team) => {
             return (
-              <Link
-                href={`/${team.id}`}
+              <Dropdown.MenuItem
+                className="pb-[8px] pt-[8px]"
                 key={team.id}
               >
-                <Dropdown.MenuItem className="pb-[8px] pt-2">
+                <Link href={`/${team.id}`}>
                   <TeamListDropDownItem team={team} />
-                </Dropdown.MenuItem>
-              </Link>
+                </Link>
+              </Dropdown.MenuItem>
             );
           })}
         <Link
