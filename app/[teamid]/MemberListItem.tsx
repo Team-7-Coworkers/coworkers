@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import { cn } from '../libs/utils';
 
 import type { MemberProps } from './MemberList';
+import Img from '../components/Img';
 
 // import KebabIcon from '../components/icons/KebabIcon';
 import styles from './teampage.module.css';
@@ -30,8 +30,9 @@ export default function MemberListItem({
         onClick={handleClick}
       >
         <figure className={cn(styles.memberFigure, 'size-8')}>
-          <Image
-            src={userImage || '/images/icons/icon-base-user.svg'}
+          <Img
+            src={userImage}
+            baseImage="/images/icons/icon-base-user.svg"
             width="26"
             height="26"
             alt=""
