@@ -1,17 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import InputField from '../../components/InputField';
-import ImageUpload from '../../components/ImageUpload';
-import Button from '../../components/Button';
+import { getGroups, patchGroups } from '@/app/api/group.api';
+import useTeamStore from '@/app/stores/teamStore';
+import useUserStore from '@/app/stores/userStore';
+
+import InputField from '@/app/components/InputField';
+import ImageUpload from '@/app/components/ImageUpload';
+import Button from '@/app/components/Button';
+import Loading from '@/app/components/Loading';
 
 import styles from '../../styles/team.module.css';
-import { useParams, useRouter } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getGroups, patchGroups } from '@/app/api/group.api';
-import Loading from '@/app/components/Loading';
-import useTeamStore from '@/app/stores/teamStore';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -21,7 +23,8 @@ export default function ModifyTeamPage() {
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const { teamid } = useParams();
-  const { teamList } = useTeamStore();
+  const { user } = useUserStore();
+  const { teamList, currentTeam, setCurrentTeam } = useTeamStore();
   const router = useRouter();
   // console.log('--- teamid:', teamid);
 
@@ -38,13 +41,24 @@ export default function ModifyTeamPage() {
     enabled: !!teamid,
   });
 
+  const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: async () =>
       await patchGroups({ groupId: Number(teamid), name, image }),
     onSuccess: (data) => {
       // TODO: 토스로 변경
+
+      queryClient.invalidateQueries({
+        queryKey: ['coworkers-teamList', user?.id],
+      });
+
+      if (currentTeam?.id === data.id) {
+        setCurrentTeam(data.id);
+      }
+
       alert('팀 정보를 수정하였습니다.');
-      console.log('--- patchGroups:data:', data);
+      // console.log('--- patchGroups:data:', data);
       router.push(`/${data.id}`);
     },
     onError: (err) => {
@@ -76,7 +90,7 @@ export default function ModifyTeamPage() {
   };
 
   const handleImageUploadSuccess = (url: string) => {
-    console.log('--- handleImageUploadSuccess:', url);
+    // console.log('--- handleImageUploadSuccess:', url);
     setImage(url);
   };
 
@@ -86,8 +100,10 @@ export default function ModifyTeamPage() {
   };
 
   useEffect(() => {
-    setName(group?.name ?? '');
-    setImage(group?.image ?? '');
+    if (group) {
+      setName(group.name);
+      setImage(group.image);
+    }
   }, [group]);
 
   if (isLoading) {
@@ -99,6 +115,8 @@ export default function ModifyTeamPage() {
   }
 
   if (isError) {
+    alert('팀 정보 가져오는데 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    router.back();
     return null;
   }
 

@@ -18,7 +18,9 @@ export default function TeamListDropDown({
   return (
     <Dropdown>
       <Dropdown.Button className="flex items-center gap-2">
-        {currentTeam?.name || '팀 목록'}
+        <p className="sm:max-w-[206px] sm:truncate lg:max-w-full">
+          {currentTeam?.name || '팀 목록'}
+        </p>
         <Image
           src="/images/icons/ic_dropdown-check.svg"
           alt=""
@@ -31,18 +33,20 @@ export default function TeamListDropDown({
         animationType="scale"
         className="top-[52px] z-30 w-[218px] p-[8px] pb-4 sm:-left-[144px] lg:-left-[200px]"
       >
-        {teamList.map((team) => {
-          return (
-            <Link
-              href={`/${team.id}`}
-              key={team.id}
-            >
-              <Dropdown.MenuItem className="pb-[8px] pt-2">
-                <TeamListDropDownItem team={team} />
+        {[...teamList]
+          .sort((a, b) => b.id - a.id) // id순 내림차순 정렬
+          .map((team) => {
+            return (
+              <Dropdown.MenuItem
+                className="pb-[8px] pt-[8px]"
+                key={team.id}
+              >
+                <Link href={`/${team.id}`}>
+                  <TeamListDropDownItem team={team} />
+                </Link>
               </Dropdown.MenuItem>
-            </Link>
-          );
-        })}
+            );
+          })}
         <Link
           className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-center text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
           href="/addteam"

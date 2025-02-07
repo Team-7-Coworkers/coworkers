@@ -111,7 +111,7 @@ export default function CardList({
                       {article.title}
                     </p>
 
-                    {article.image !== 'https://no-image/no-image.png' && (
+                    {article.image && (
                       <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
                         <Image
                           src={article.image}
