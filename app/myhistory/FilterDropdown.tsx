@@ -81,9 +81,9 @@ export default function FilterDropdown({
         <div className="flex gap-2">
           <Dropdown>
             <Dropdown.Button className="flex w-full cursor-pointer items-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary">
-              {sortType === 'doneAt' ? '완료한 날짜' : 'date'}{' '}
+              {sortType === 'doneAt' ? '완료한 날짜' : '목표 날짜'}{' '}
               <Image
-                src="./images/icons/ic_toggle.svg"
+                src="/images/icons/ic_toggle.svg"
                 alt=""
                 width={20}
                 height={20}
@@ -98,7 +98,7 @@ export default function FilterDropdown({
                 완료한 날짜
               </Dropdown.MenuItem>
               <Dropdown.MenuItem onClick={() => setSortType('date')}>
-                date
+                목표 날짜
               </Dropdown.MenuItem>
             </Dropdown.Menu>
           </Dropdown>
@@ -108,7 +108,7 @@ export default function FilterDropdown({
             >
               {dropdownText}{' '}
               <Image
-                src="./images/icons/ic_toggle.svg"
+                src="/images/icons/ic_toggle.svg"
                 alt=""
                 width={20}
                 height={20}
