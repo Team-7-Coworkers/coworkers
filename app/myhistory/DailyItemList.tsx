@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 interface DailyTask {
-  doneAt: string;
+  date: string;
   tasks: { name: string; id: number }[];
 }
 
@@ -12,9 +12,9 @@ type DailyItemListProps = {
 export default function DailyItemList({ dailyTasks }: DailyItemListProps) {
   return (
     <div className="mb-10 flex flex-col gap-10">
-      {dailyTasks.map(({ doneAt, tasks }) => (
-        <div key={doneAt}>
-          <h3 className="mb-4 text-lg font-medium text-t-primary">{doneAt}</h3>
+      {dailyTasks?.map(({ date, tasks }) => (
+        <div key={date}>
+          <h3 className="mb-4 text-lg font-medium text-t-primary">{date}</h3>
           <div className="flex flex-col gap-4">
             {tasks.map(({ name, id }) => {
               return (
