@@ -108,7 +108,9 @@ export default function MyPage() {
   });
 
   useEffect(() => {
-    if (!accessToken) {
+    const { accessToken: isAthenticated } = useUserStore.getState();
+
+    if (!isAthenticated) {
       alert('로그인이 필요합니다!');
       router.push('/');
     }
