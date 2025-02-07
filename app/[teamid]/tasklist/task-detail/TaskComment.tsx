@@ -105,6 +105,7 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
           value={newComment}
           placeholder="댓글을 달아주세요"
           onChange={(e) => setNewComment(e.target.value)}
+          maxlength={MAX_LENGTH.taskComment}
           enterSubmit
           className="!text-md"
           onSubmit={handleAddComment}
@@ -118,7 +119,7 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
           comments.map((comment) => (
             <div
               key={comment.id}
-              className="flex items-center justify-between border-b border-b-bd-primary/10 pb-3"
+              className="flex min-w-0 items-center justify-between border-b border-b-bd-primary/10 pb-3"
             >
               {/* 댓글이 수정중이라면 */}
               {editingCommentId === comment.id ? (
@@ -127,7 +128,7 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
                     type="reply"
                     value={editingContent}
                     onChange={(e) => setEditingContent(e.target.value)}
-                    maxlength={MAX_LENGTH.taskMemo}
+                    maxlength={MAX_LENGTH.taskComment}
                     className="!text-md"
                   />
                   <div className="mt-4 flex items-center justify-end gap-2">
@@ -147,23 +148,21 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
                   </div>
                 </div>
               ) : (
-                <div className="mt-3 flex-1 text-md">
+                <div className="relative mt-3 max-w-full flex-1 text-md">
                   {/* 댓글 정보 보여주기 */}
-                  <div className="relative flex items-center justify-between">
-                    <p className="w-[calc(100%-10px)] text-t-primary lg:w-[calc(100%-20px)]">
-                      {comment.content}
-                    </p>
-                    {isAuthor(comment.user.id) && (
-                      <div className="absolute right-0 top-0 ml-3">
-                        <KebobDropdown
-                          onEdit={() =>
-                            handleEditComment(comment.id, comment.content)
-                          }
-                          onDelete={() => handleDeleteComment(comment.id)}
-                        />
-                      </div>
-                    )}
-                  </div>
+                  <p className="w-[calc(100%-20px)] whitespace-pre-wrap break-words text-t-primary">
+                    {comment.content}
+                  </p>
+                  {isAuthor(comment.user.id) && (
+                    <div className="absolute right-0 top-0 ml-3">
+                      <KebobDropdown
+                        onEdit={() =>
+                          handleEditComment(comment.id, comment.content)
+                        }
+                        onDelete={() => handleDeleteComment(comment.id)}
+                      />
+                    </div>
+                  )}
                   <div className="mt-5 flex items-center justify-between text-t-secondary">
                     <UserProfile
                       image={comment.user.image}
