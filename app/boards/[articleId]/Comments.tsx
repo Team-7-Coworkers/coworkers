@@ -2,8 +2,12 @@
 
 import TextField from '@/app/components/TextField';
 import Button from '@/app/components/Button';
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useRef, useCallback } from 'react';
+import {
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import {
   getArticlesComment,
@@ -15,6 +19,8 @@ import Image from 'next/image';
 import profile from '@/public/images/icons/icon-base-user.svg';
 import useUserStore from '@/app/stores/userStore';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
+import { ArticleCommentType } from '@/app/types/articleComment';
+import Loading from '@/app/components/Loading';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
@@ -23,13 +29,21 @@ export default function Comment() {
   const { articleId } = useParams();
   const queryClient = useQueryClient();
   const { user } = useUserStore();
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const { data: comments, isLoading: isQueryLoading } = useQuery({
+  const {
+    data: comments,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading: isQueryLoading,
+  } = useInfiniteQuery({
     queryKey: ['articleComments', Number(articleId)],
-    queryFn: async () => {
+    queryFn: async ({ pageParam }: { pageParam?: number }) => {
       const data = await getArticlesComment({
         articleId: Number(articleId),
-        limit: 3000,
+        limit: 10,
+        cursor: pageParam,
       });
 
       if ('message' in data) {
@@ -39,8 +53,29 @@ export default function Comment() {
 
       return data;
     },
-    staleTime: 1000 * 60 * 5,
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage?.nextCursor || undefined,
   });
+
+  // 마지막 댓글이 화면에 보여지는 걸 감지
+  const lastCommentRef = useCallback(
+    (node: HTMLDivElement) => {
+      //중복 요청 방지
+      if (isFetchingNextPage) return;
+      //중복 감지 방지
+      if (observerRef.current) observerRef.current.disconnect();
+
+      // 마지막 댓글이 화면에 나타났고 다음 페이지가 있다면 실행
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -94,11 +129,13 @@ export default function Comment() {
         </Button>
       </div>
       <div className="pt-20">
-        {comments.list.length > 0 ? (
-          comments.list.map((comment) => (
+        {comments?.pages
+          .flatMap((page) => page?.list || [])
+          .map((comment: ArticleCommentType, index, array) => (
             <div
               key={comment.id}
               className="mb-6 rounded-md bg-b-secondary px-6 py-5"
+              ref={index === array.length - 1 ? lastCommentRef : undefined} //마지막 댓글 감지지
             >
               <div className="flex flex-col">
                 {editingCommentId === comment.id ? (
@@ -165,14 +202,17 @@ export default function Comment() {
                 </p>
               </div>
             </div>
-          ))
-        ) : (
+          ))}
+
+        {comments?.pages.flatMap((page) => page?.list || []).length === 0 && (
           <div className="flex justify-center">
             <p className="text-center text-t-default">
               아직 작성된 댓글이 없습니다.
             </p>
           </div>
         )}
+
+        {isFetchingNextPage && <Loading text="로딩 중..." />}
       </div>
     </div>
   );
