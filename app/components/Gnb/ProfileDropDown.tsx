@@ -5,21 +5,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Dropdown from '../Dropdown';
 import useUserStore from '@/app/stores/userStore';
+
+import { signOut } from 'next-auth/react';
 import useTeamStore from '@/app/stores/teamStore';
+import { useRouter } from 'next/navigation';
 
 interface ProfileDropDownProps {
   user: UserType;
 }
 
-const dropDownItemStyle = 'text-md sm:text-lg pt-2 px-4 pb-2';
+const dropDownItemStyle = 'block px-[16px] py-3 text-md sm:text-lg';
+const linkStyle = 'px-[0] pb-[0px] pt-[0px]';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
-  const { clearUser } = useUserStore();
+  const { isGoogleLogin, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
+
+  const router = useRouter();
 
   const handleLogout = () => {
     clearUser();
     clearTeam();
+
+    if (isGoogleLogin) {
+      signOut({ callbackUrl: '/' });
+
+      return;
+    }
+
+    router.push('/');
   };
 
   return (
@@ -40,29 +54,44 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         className="right-0 w-[140px] p-[8px] py-[12px] sm:w-[152px]"
         animationType="scale"
       >
-        <Link href="/myhistory">
-          <Dropdown.MenuItem className={dropDownItemStyle}>
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <Link
+            href="/myhistory"
+            className={linkStyle}
+          >
             마이 히스토리
-          </Dropdown.MenuItem>
-        </Link>
-        <Link href="/mypage">
-          <Dropdown.MenuItem className={dropDownItemStyle}>
+          </Link>
+        </Dropdown.MenuItem>
+
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <Link
+            href="/mypage"
+            className={linkStyle}
+          >
             계정 설정
-          </Dropdown.MenuItem>
-        </Link>
-        <Link href="/invitation">
-          <Dropdown.MenuItem className={dropDownItemStyle}>
+          </Link>
+        </Dropdown.MenuItem>
+
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <Link
+            href="/invitation"
+            className={linkStyle}
+          >
             팀 참여
-          </Dropdown.MenuItem>
-        </Link>
-        <Link href="/">
-          <Dropdown.MenuItem
-            className={dropDownItemStyle}
-            onClick={handleLogout}
+          </Link>
+        </Dropdown.MenuItem>
+
+        <Dropdown.MenuItem
+          className={dropDownItemStyle}
+          onClick={handleLogout}
+        >
+          <Link
+            href="/"
+            className={linkStyle}
           >
             로그아웃
-          </Dropdown.MenuItem>
-        </Link>
+          </Link>
+        </Dropdown.MenuItem>
       </Dropdown.Menu>
     </Dropdown>
   );

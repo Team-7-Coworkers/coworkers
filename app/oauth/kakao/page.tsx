@@ -38,7 +38,7 @@ const KakaoCallback = () => {
 
       kakaoLoginMutation.mutate({
         state: receivedState,
-        redirectUri: 'http://localhost:3000/oauth/kakao',
+        redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI,
         token: code,
         provider: 'KAKAO',
       });

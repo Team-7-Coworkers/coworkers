@@ -1,5 +1,6 @@
 'use client';
 
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 
 export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {
@@ -18,11 +19,18 @@ export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {
     const state = Math.random().toString(36).substring(2, 10);
 
     window.Kakao.Auth.authorize({
-      redirectUri: 'http://localhost:3000/oauth/kakao', // 인가 코드 받을 페이지
+      redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI!, // 인가 코드 받을 페이지
       state: state,
     });
 
     localStorage.setItem('kakao_state', state); // 이후 검증을 위해 저장
+  };
+
+  // 구글 로그인 창으로 이동
+  const handleGoogleLogin = () => {
+    signIn('google', {
+      callbackUrl: '/oauth/google',
+    });
   };
 
   return (
@@ -31,12 +39,14 @@ export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {
         간편 {page === 'login' ? `로그인` : '회원가입'}하기
       </p>
       <div className="flex gap-4">
-        <Image
-          src="/images/icons/ic_google.svg"
-          alt="구글 간편 로그인"
-          width={42}
-          height={42}
-        />
+        <button onClick={handleGoogleLogin}>
+          <Image
+            src="/images/icons/ic_google.svg"
+            alt="구글 간편 로그인"
+            width={42}
+            height={42}
+          />
+        </button>
         <button onClick={handleKakaoLogin}>
           <Image
             src="/images/icons/ic_kakaotalk.svg"
