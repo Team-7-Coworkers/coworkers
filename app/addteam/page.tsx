@@ -6,13 +6,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { postGroups } from '../api/group.api';
 import useTeamStore from '../stores/teamStore';
+import useUserStore from '../stores/userStore';
+import { MAX_LENGTH } from '../constants/form';
 
 import InputField from '../components/InputField';
 import ImageUpload from '../components/ImageUpload';
 import Button from '../components/Button';
 
 import styles from '../styles/team.module.css';
-import useUserStore from '../stores/userStore';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -115,7 +116,11 @@ export default function AddTeamPage() {
           placeholder="팀 이름을 입력해주세요."
           onChange={(e) => setName(e.target.value)}
           errorMessage={nameErrorMessage}
+          maxlength={MAX_LENGTH.teamName}
         />
+        <div className="help-message">
+          팀 이름은 최대 {MAX_LENGTH.taskListName}자 입니다.
+        </div>
 
         <Button
           type="submit"
