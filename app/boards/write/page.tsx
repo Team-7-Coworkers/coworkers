@@ -119,7 +119,13 @@ const WriteContent = () => {
         type="text"
         placeholder="제목을 입력해주세요."
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length > 200) {
+            alert('제목은 최대 200자까지 입력 가능합니다.');
+            return;
+          }
+          setTitle(e.target.value);
+        }}
         className="border-1px w-full rounded-[12px] border border-[#F8FAFC1A] bg-b-secondary py-[8px] pl-[16px] text-md font-normal text-t-primary placeholder-[#9CA3AF] focus:border-bd-primary focus:outline-none sm:py-[16px] sm:pl-[24px] sm:text-lg"
       />
 

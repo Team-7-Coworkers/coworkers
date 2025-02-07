@@ -107,7 +107,7 @@ export default function CardList({
                   }}
                 >
                   <div className="flex justify-between">
-                    <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden text-[18px] leading-[1.5] text-t-secondary">
+                    <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden break-all text-[18px] leading-[1.5] text-t-secondary">
                       {article.title}
                     </p>
 
