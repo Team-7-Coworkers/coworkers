@@ -38,7 +38,7 @@ export default function FilterDropdown({
     const now = dayjs();
     let filteredTasks = dailyTasks;
 
-    // date(전달한 날짜)으로 필터링, 일주일 전(subtract) 이후(isAfter)
+    // date(전달한 날짜)으로 필터링, 일주일 전(subtract)과 오늘 사이(isBetween)
     if (filterType === 'week') {
       const oneWeekAgo = now.subtract(1, 'week');
       filteredTasks = dailyTasks.filter(({ date }) =>
