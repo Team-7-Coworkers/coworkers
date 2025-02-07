@@ -12,6 +12,7 @@ import LikeButton from '@/app/boards/LikeButton';
 import useUserStore from '@/app/stores/userStore';
 import Comment from './Comments';
 import profile from '@/public/images/icons/icon-base-user.svg';
+import Loading from '@/app/components/Loading';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -37,7 +38,13 @@ export default function ArticleDetail() {
     router.push('/boards');
   };
 
-  if (isLoading) return <p>로딩 중...</p>;
+  if (isLoading)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loading classname="" />
+      </div>
+    );
+
   if (!article) return null;
 
   return (

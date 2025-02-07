@@ -212,7 +212,7 @@ export default function Comment() {
           </div>
         )}
 
-        {isFetchingNextPage && <Loading text="로딩 중..." />}
+        {isFetchingNextPage && <Loading />}
       </div>
     </div>
   );
