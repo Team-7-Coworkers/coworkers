@@ -161,7 +161,7 @@ export default function Comment() {
                   </>
                 ) : (
                   <div className="flex justify-between">
-                    <p>{comment.content}</p>
+                    <p className="break-all">{comment.content}</p>
                     {user?.id === comment.writer.id && (
                       <PostActionDropdown
                         onEdit={() => {
