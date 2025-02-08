@@ -12,7 +12,7 @@ export default function NotFound() {
           href="/"
           className="text-primary underline"
         >
-          홈 페이지로 가기 &rarr;
+          메인 페이지로 가기 &rarr;
         </Link>
       </div>
     </div>
