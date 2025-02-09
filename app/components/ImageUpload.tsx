@@ -9,6 +9,7 @@ interface FileUploadProps {
   onUploadError: (error: Error) => void; // 업로드 실패 시 실행할 함수
   variant?: 'circle' | 'square'; // 'circle': 프로필/팀 이미지, 'square': 게시글 이미지
   url?: string; // 초기 이미지 주소
+  disabled?: boolean;
 }
 
 function ImageUpload({
@@ -16,6 +17,7 @@ function ImageUpload({
   onUploadError,
   variant = 'circle',
   url = '',
+  disabled = false,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -83,40 +85,42 @@ function ImageUpload({
               />
             </div>
           )}
-          <div
-            className="absolute bottom-[-1px] right-[-8px] cursor-pointer rounded-full border-[2px] border-b-primary"
-            style={{
-              borderColor: 'var(--b-primary)',
-            }}
-            onClick={triggerFileInput}
-          >
-            {/* 아이콘 애니메이션, hover시 색 변경을 위해  svg를 직접 삽입*/}
-            <div className="group transform cursor-pointer transition-transform duration-300 hover:scale-110">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 32 32"
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon"
-              >
-                <circle
-                  cx="16"
-                  cy="16"
-                  r="16"
-                  className="fill-b-secondary transition-colors duration-300 group-hover:fill-blue"
-                />
-                <path
-                  d="M16.0228 9.22574C16.2087 8.82492 16.6837 8.65204 17.0837 8.83958L20.527 10.4538C20.927 10.6414 21.1006 11.1183 20.9147 11.5191L16.148 21.7962C16.0575 21.9913 15.8923 22.1415 15.6898 22.2128L13.1851 23.094C12.7755 23.2381 12.3252 23.027 12.1717 22.6189L11.2332 20.1235C11.1573 19.9217 11.1656 19.698 11.2561 19.5028L16.0228 9.22574Z"
-                  className="fill-gray-400 transition-colors duration-300"
-                />
-                <path
-                  d="M12.6641 9.56641L22.1995 14.0401"
-                  className="stroke-b-secondary transition-colors duration-300 group-hover:stroke-blue"
-                  strokeWidth="1.5"
-                />
-              </svg>
+          {!disabled && (
+            <div
+              className="absolute bottom-[-1px] right-[-8px] cursor-pointer rounded-full border-[2px] border-b-primary"
+              style={{
+                borderColor: 'var(--b-primary)',
+              }}
+              onClick={triggerFileInput}
+            >
+              {/* 아이콘 애니메이션, hover시 색 변경을 위해  svg를 직접 삽입*/}
+              <div className="group transform cursor-pointer transition-transform duration-300 hover:scale-110">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 32 32"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon"
+                >
+                  <circle
+                    cx="16"
+                    cy="16"
+                    r="16"
+                    className="fill-b-secondary transition-colors duration-300 group-hover:fill-blue"
+                  />
+                  <path
+                    d="M16.0228 9.22574C16.2087 8.82492 16.6837 8.65204 17.0837 8.83958L20.527 10.4538C20.927 10.6414 21.1006 11.1183 20.9147 11.5191L16.148 21.7962C16.0575 21.9913 15.8923 22.1415 15.6898 22.2128L13.1851 23.094C12.7755 23.2381 12.3252 23.027 12.1717 22.6189L11.2332 20.1235C11.1573 19.9217 11.1656 19.698 11.2561 19.5028L16.0228 9.22574Z"
+                    className="fill-gray-400 transition-colors duration-300"
+                  />
+                  <path
+                    d="M12.6641 9.56641L22.1995 14.0401"
+                    className="stroke-b-secondary transition-colors duration-300 group-hover:stroke-blue"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ) : (
         // Square 영역
