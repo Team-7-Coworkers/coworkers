@@ -80,7 +80,7 @@ export default function FilterDropdown({
         <div className="" />
         <div className="flex gap-2">
           <Dropdown>
-            <Dropdown.Button className="flex w-full cursor-pointer items-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary">
+            <Dropdown.Button className="flex w-[120px] cursor-pointer items-center justify-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary">
               {sortType === 'doneAt' ? '완료한 날짜' : '목표 날짜'}{' '}
               <Image
                 src="/images/icons/ic_toggle.svg"
@@ -104,7 +104,7 @@ export default function FilterDropdown({
           </Dropdown>
           <Dropdown>
             <Dropdown.Button
-              className={`flex w-full cursor-pointer items-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary`}
+              className={`flex w-[115px] cursor-pointer items-center justify-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary`}
             >
               {dropdownText}{' '}
               <Image
