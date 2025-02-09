@@ -3,4 +3,5 @@ export const MAX_LENGTH = {
   nickName: 50,
   taskName: 100,
   taskListName: 50,
+  articleName: 200,
 };

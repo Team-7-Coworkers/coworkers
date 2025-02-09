@@ -12,6 +12,7 @@ import {
   getDetailsArticle,
 } from '@/app/api/article.api';
 import Loading from '@/app/components/Loading';
+import { MAX_LENGTH } from '@/app/constants/form';
 
 const WriteContent = () => {
   const router = useRouter();
@@ -121,7 +122,10 @@ const WriteContent = () => {
         value={title}
         onChange={(e) => {
           if (e.target.value.length > 200) {
-            alert('제목은 최대 200자까지 입력 가능합니다.');
+            alert(
+              `제목은 최대 ${MAX_LENGTH.articleName}자까지 입력 가능합니다.`
+            );
+
             return;
           }
           setTitle(e.target.value);
@@ -138,6 +142,7 @@ const WriteContent = () => {
         height={240}
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        enterSubmit
       />
 
       <p className="pb-4 pt-8">
