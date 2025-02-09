@@ -35,7 +35,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       {inputValue && (
         <p className="relative mt-4 text-[30px] font-semibold">
           <span
-            className="animate-gradientMove bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent"
+            className="animate-gradientMove break-all bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent"
             style={{
               backgroundSize: '200% 200%',
             }}

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 
 import { cn } from '../libs/utils';
@@ -10,6 +9,7 @@ import MemberListItem from './MemberListItem';
 import Button from '../components/Button';
 
 import styles from './teampage.module.css';
+import Img from '../components/Img';
 
 export type MemberProps = {
   userId: number;
@@ -109,11 +109,9 @@ export default function MemberList({ groupId, members, role }: Props) {
       >
         <div className="flex flex-col items-center gap-6">
           <figure className={cn(styles.memberFigure, 'size-14')}>
-            <Image
-              src={
-                members[memberIdx].userImage ||
-                '/images/icons/icon-base-user.svg'
-              }
+            <Img
+              src={members[memberIdx].userImage}
+              baseImage="/images/icons/icon-base-user.svg"
               width="40"
               height="40"
               alt=""
