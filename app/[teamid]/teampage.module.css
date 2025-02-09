@@ -5,11 +5,17 @@
 }
 
 .header {
-  @apply flex items-center justify-between rounded-xl border border-bd-primary bg-slate-50/10 bg-[url('/images/bg-team-header.svg')] bg-clip-padding bg-[center_right_80px] bg-no-repeat px-6 py-5;
-  background-size: 180px auto;
+  @apply relative flex items-center justify-between rounded-xl border border-bd-primary bg-slate-50/10 bg-[url('/images/bg-team-header.svg')] bg-cover bg-clip-padding bg-center bg-no-repeat px-6 py-5 sm:bg-[180px_auto] sm:bg-[center_right_80px];
+  /* background-size: 180px auto; */
 
   .headerTitle {
-    @apply text-xl font-bold text-t-inverse;
+    @apply z-10 truncate text-xl font-bold text-t-inverse sm:bg-transparent;
+
+    &::before {
+      @apply absolute inset-0 -z-[1] rounded-xl backdrop-brightness-75;
+      content: '';
+      background-image: linear-gradient(135deg, var(--b-secondary) 30%, #fff0);
+    }
   }
 }
 .progress {
