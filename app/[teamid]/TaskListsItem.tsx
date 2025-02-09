@@ -59,7 +59,7 @@ export default function TaskListsItem({
 
       <Dropdown>
         <Dropdown.Button className={styles.iconButton}>
-          <KebabIcon classname="size-3 mx-auto" />
+          <KebabIcon classname="size-4 mx-auto" />
         </Dropdown.Button>
         <Dropdown.Menu className="right-0">
           <Dropdown.MenuItem onClick={handleEditClick}>수정</Dropdown.MenuItem>
