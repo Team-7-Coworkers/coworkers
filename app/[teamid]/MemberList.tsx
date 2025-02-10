@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { cn } from '../libs/utils';
-import { getGroupsInvitation } from '../api/group.api';
+import { deleteGroupsMember, getGroupsInvitation } from '../api/group.api';
 
 import Modal, { ModalFooter } from '../components/Modal';
 import MemberListItem from './MemberListItem';
@@ -16,6 +16,7 @@ export type MemberProps = {
   userImage: string;
   userName: string;
   userEmail: string;
+  role: string;
 };
 
 interface Props {
@@ -28,19 +29,46 @@ interface Props {
 }
 
 export default function MemberList({ groupId, members, role }: Props) {
-  const [memberModalOpen, setMemberModalOpen] = useState(false);
-  const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
-  const [memberIdx, setMemberIdx] = useState<number>(0);
+  const [memberModal, setMemberModal] = useState(false);
+  const [addMemberModal, setAddMemberModal] = useState(false);
+  const [dropMemberModal, setDropMemberModal] = useState(false);
+  const [memberIdx, setMemberIdx] = useState(0);
+  const [userId, setUserId] = useState(0);
+
+  const queryClient = useQueryClient();
   const { refetch } = useQuery({
     queryKey: ['getLinkToken', groupId],
     queryFn: async () => await getGroupsInvitation({ groupId }),
     enabled: false,
   });
+  const { mutate } = useMutation({
+    mutationFn: async (userId: number) =>
+      await deleteGroupsMember({ memberUserId: userId, groupId }),
+    onSuccess: () => {
+      // console.log('success', data);
+      queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
+    },
+    onError: (err) => {
+      console.error('--- error', err);
+      alert('멤버 제외에 문제가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
+    },
+  });
 
-  // 멤버 상세 모달 이지만, 보이는 정보는 같음..;;;
-  const handleMemberClick = (userId: number) => {
-    setMemberModalOpen(true);
+  // 멤버 상세 모달
+  const handleDetailClick = (userId: number) => {
     setMemberIdx(members.findIndex((member) => member.userId === userId));
+    setMemberModal(true);
+  };
+
+  // 멤버 제외 모달
+  const handleDeleteClick = (userId: number) => {
+    setDropMemberModal(true);
+    setUserId(userId);
+  };
+
+  // 멤버 제외
+  const handleDropMember = () => {
+    mutate(userId);
   };
 
   // 이메일 복사 버튼 클릭 함수
@@ -49,7 +77,7 @@ export default function MemberList({ groupId, members, role }: Props) {
     navigator.clipboard.writeText(email);
     // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
     alert('이메일이 복사되었습니다.');
-    setMemberModalOpen(false);
+    setMemberModal(false);
   };
 
   // 멤버 초대 링크 복사 버튼 클릭 함수
@@ -66,7 +94,7 @@ export default function MemberList({ groupId, members, role }: Props) {
       navigator.clipboard.writeText(url);
       // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
       alert('링크가 복사되었습니다.');
-      setAddMemberModalOpen(false);
+      setAddMemberModal(false);
     }
   };
 
@@ -82,7 +110,7 @@ export default function MemberList({ groupId, members, role }: Props) {
           {role === 'ADMIN' && (
             <button
               className="text-button ml-auto text-md"
-              onClick={() => setAddMemberModalOpen(true)}
+              onClick={() => setAddMemberModal(true)}
             >
               + 새로운 멤버 초대하기
             </button>
@@ -93,19 +121,18 @@ export default function MemberList({ groupId, members, role }: Props) {
           {members.map((member) => (
             <MemberListItem
               key={member.userId}
-              userId={member.userId}
-              userImage={member.userImage}
-              userName={member.userName}
-              userEmail={member.userEmail}
-              onClick={handleMemberClick}
+              {...member}
+              editable={role === 'ADMIN'}
+              onDetailClick={handleDetailClick}
+              onDeleteClick={handleDeleteClick}
             />
           ))}
         </ul>
       </section>
 
       <Modal
-        isOpen={memberModalOpen}
-        onClose={() => setMemberModalOpen(false)}
+        isOpen={memberModal}
+        onClose={() => setMemberModal(false)}
       >
         <div className="flex flex-col items-center gap-6">
           <figure className={cn(styles.memberFigure, 'size-14')}>
@@ -133,8 +160,8 @@ export default function MemberList({ groupId, members, role }: Props) {
 
       <Modal
         title="멤버 초대"
-        isOpen={addMemberModalOpen}
-        onClose={() => setAddMemberModalOpen(false)}
+        isOpen={addMemberModal}
+        onClose={() => setAddMemberModal(false)}
       >
         <div className="text-center">
           그룹에 참여할 수 있는 링크를 복사합니다.
@@ -142,6 +169,30 @@ export default function MemberList({ groupId, members, role }: Props) {
 
         <ModalFooter>
           <Button onClick={handleLinkCopyClick}>링크 복사하기</Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal
+        title="멤버 제외"
+        isOpen={dropMemberModal}
+        onClose={() => setDropMemberModal(false)}
+        icon="danger"
+      >
+        <div className="text-center">해당 멤버를 제외 하시겠습니까?</div>
+
+        <ModalFooter>
+          <Button
+            onClick={() => setDropMemberModal(false)}
+            styleType="outlined"
+          >
+            취소
+          </Button>
+          <Button
+            onClick={handleDropMember}
+            state="danger"
+          >
+            제외
+          </Button>
         </ModalFooter>
       </Modal>
     </>
