@@ -23,9 +23,12 @@ export default function ListHeader({
 
   return (
     <div>
-      <div className="flex items-center gap-3">
-        <h1 className="mb-7 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
-          {groupName} 할 일
+      <div className="flex items-center justify-between">
+        <h1 className="mb-7 mt-8 flex items-center gap-2 text-2lg font-bold text-t-primary sm:text-xl">
+          <span className="max-w-[150px] truncate bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent sm:max-w-[450px] lg:max-w-full">
+            {groupName}
+          </span>
+          할 일
         </h1>
         <div className="flex items-center justify-between">
           <Link
