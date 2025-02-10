@@ -51,8 +51,14 @@ export default function ItemList({
   const tasks = useTaskStore((state) => state.tasks);
   const { checkedItems, setTasks, toggleChecked, updateTask } = useTaskStore();
 
+  // 할 일 순서 변경
   const handleDragEnd = async (result: DropResult) => {
     if (!result.destination || !items) return;
+
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+    // 순서 변경없이 할 일을 들었다 놓을 때를 감안
+    if (sourceIndex === destinationIndex) return;
 
     const previousTasks = [...items];
 
@@ -68,7 +74,7 @@ export default function ItemList({
       taskId: movedItem.id,
       displayIndex: result.destination.index,
     };
-
+    // 순서 변경
     try {
       await patchGroupsTaskListTasksOrder(params);
 
@@ -78,7 +84,7 @@ export default function ItemList({
 
       setTasks(previousTasks);
     } finally {
-      setTimeout(() => setIsReordering(false), 300); // 임시 로딩
+      setTimeout(() => setIsReordering(false), 300);
     }
   };
 
