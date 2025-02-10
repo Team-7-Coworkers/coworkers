@@ -120,6 +120,7 @@ export default function GNB() {
           isOpen={isSideBarOpen}
           onClose={handleCloseSideBar}
           currentTeamId={teamId || undefined}
+          currentPath={currentPath}
         />
       </div>
     </nav>
