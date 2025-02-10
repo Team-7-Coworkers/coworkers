@@ -102,6 +102,17 @@ export default function TaskDetail({
   const handleDelete = async () => {
     if (selectedTask) {
       try {
+        if (checkedItems[selectedTask.id]) {
+          await patchGroupsTaskListsTasks({
+            groupId,
+            taskListId,
+            taskId: selectedTask.id,
+            name: selectedTask.name,
+            description: selectedTask.description,
+            done: false,
+          });
+        }
+
         await deleteGroupsTaskListsTasks({
           groupId,
           taskListId,
@@ -134,7 +145,7 @@ export default function TaskDetail({
             onEdit={openEditModal}
             onDelete={openDeleteModal}
           />
-          <p className="mt-5 min-h-[20vh] text-md text-t-primary">
+          <p className="mt-5 min-h-[20vh] whitespace-normal break-words text-md text-t-primary">
             {task.description}
           </p>
           <TaskComment taskId={taskId} />

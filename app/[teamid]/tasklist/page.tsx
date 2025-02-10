@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
 import TaskDetail from './task-detail/TaskDetail';
@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import useUserStore from '@/app/stores/userStore';
 import { TaskListType } from '@/app/types/taskList';
 import Button from '@/app/components/Button';
+import { useTaskStore } from '@/app/stores/taskStore';
 
 interface Member {
   userId: number;
@@ -34,9 +35,12 @@ export default function ListPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTaskListId, setSelectedTaskListId] = useState<number | null>(
     null
-  );
+  ); // TODO: 전역 상태를 추가했으므로 해당 state 관련 작업들 리팩토링하기
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isMember, setIsMember] = useState(true);
+  const router = useRouter();
+
+  const { selectedCategory } = useTaskStore();
   const { user } = useUserStore();
   const queryClient = useQueryClient();
 
@@ -65,6 +69,10 @@ export default function ListPage() {
     queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
   };
 
+  const handleIncorrectModalClose = () => {
+    router.push('/');
+  };
+
   if (isLoading || !user) {
     // 로딩 코드
     return (
@@ -91,18 +99,17 @@ export default function ListPage() {
       <Modal
         isOpen={!isMember}
         title="해당 팀의 멤버가 아닙니다."
-        onClose={() => console.log('팀에 가입해주세요.')}
-        // onClose가 해당 모달에선 사용되지 않긴 하는데 필수라서 일단 console 코드를 넣어뒀습니다.
+        onClose={handleIncorrectModalClose}
         hasCloseButton={false}
         icon="danger"
       >
         <p className="mt-5 text-center text-md font-semibold text-t-default">
-          팀에 가입해주세요!
+          메인 페이지로 돌아갑니다.
         </p>
         <ModalFooter>
           <Button
             state="danger"
-            href="/"
+            onClick={handleIncorrectModalClose}
           >
             확인
           </Button>
@@ -131,11 +138,11 @@ export default function ListPage() {
               onTaskClick={(taskId) => setSelectedTaskId(taskId)}
             />
           </div>
-          {groupId && selectedTaskListId && (
+          {groupId && selectedCategory !== null && (
             <AddButton
               groupId={Number(groupId)}
-              taskListId={selectedTaskListId}
-              onSaveSuccess={() => handleTaskUpdated(selectedTaskListId)}
+              taskListId={selectedCategory}
+              onSaveSuccess={() => handleTaskUpdated(selectedCategory)}
             />
           )}
         </div>

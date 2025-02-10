@@ -13,6 +13,7 @@ interface TextFieldProps {
   className?: string;
   enterSubmit?: boolean;
   onSubmit?: () => void;
+  maxlength?: number;
 }
 
 export default function TextField({
@@ -25,6 +26,7 @@ export default function TextField({
   className = '',
   enterSubmit = false,
   onSubmit,
+  maxlength,
 }: TextFieldProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -72,6 +74,7 @@ export default function TextField({
       ref={textareaRef}
       value={value}
       placeholder={placeholder}
+      maxLength={maxlength}
       onChange={onChange}
       onKeyDown={handleKeyDown}
       className={`${baseStyle} ${typeStyle} ${className}`}

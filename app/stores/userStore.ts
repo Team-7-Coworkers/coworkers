@@ -18,8 +18,9 @@ interface UserState {
   accessToken: string | null; // 액세스 토큰
   refreshToken: string | null; // 리프레쉬 토큰 추가
   isGoogleLogin: boolean | null; // 구글 간편 로그인 여부
-  isKakaoLogin: boolean | null;  // 카카오 간편 로그인 여부
+  isKakaoLogin: boolean | null; // 카카오 간편 로그인 여부
   setUser: (user: UserInfo) => void; // 사용자 정보를 설정
+  updateUser: (data: Partial<UserInfo>) => void; // 사용자 정보 업데이트
   setAccessToken: (accessToken: string) => void; // 엑세스 토큰 설정
   setRefreshToken: (refreshToken: string) => void; // 리프레쉬 토큰 설정
   setIsGoogleLogin: (isGoogleLogin: boolean) => void;
@@ -36,6 +37,10 @@ const useUserStore = create<UserState>()(
       isGoogleLogin: false,
       isKakaoLogin: false,
       setUser: (user) => set({ user }),
+      updateUser: (data: Partial<UserInfo>) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...data } : state.user,
+        })),
       setAccessToken: (accessToken) => set({ accessToken }),
       setRefreshToken: (refreshToken) => set({ refreshToken }),
       setIsGoogleLogin: (isGoogleLogin) => set({ isGoogleLogin }),
