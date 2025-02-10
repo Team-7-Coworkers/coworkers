@@ -102,6 +102,17 @@ export default function TaskDetail({
   const handleDelete = async () => {
     if (selectedTask) {
       try {
+        if (checkedItems[selectedTask.id]) {
+          await patchGroupsTaskListsTasks({
+            groupId,
+            taskListId,
+            taskId: selectedTask.id,
+            name: selectedTask.name,
+            description: selectedTask.description,
+            done: false,
+          });
+        }
+
         await deleteGroupsTaskListsTasks({
           groupId,
           taskListId,

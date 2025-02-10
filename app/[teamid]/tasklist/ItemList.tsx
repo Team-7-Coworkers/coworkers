@@ -37,8 +37,7 @@ export default function ItemList({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const tasks = useTaskStore((state) => state.tasks);
 
-  const { checkedItems, toggleChecked, updateTask, deleteTask } =
-    useTaskStore();
+  const { checkedItems, toggleChecked, updateTask } = useTaskStore();
 
   const handleComplete = async (taskId: number, checked: boolean) => {
     try {
@@ -68,10 +67,9 @@ export default function ItemList({
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (selectedItem) {
-      onDeleteItem(selectedItem.id);
-      deleteTask(selectedItem.id);
+      await onDeleteItem(selectedItem.id);
       setIsDeleteModalOpen(false);
       setSelectedItem(null);
     }

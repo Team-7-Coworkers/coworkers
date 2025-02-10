@@ -31,6 +31,7 @@ export default function ListCategory({
     selectedCategory,
     setSelectedCategory,
     setTasks,
+    checkedItems,
     setCheckedItems,
     deleteTask,
     tasks,
@@ -125,11 +126,23 @@ export default function ListCategory({
 
   const handleDeleteItem = async (taskId: number) => {
     try {
+      if (checkedItems[taskId]) {
+        await patchGroupsTaskListsTasks({
+          groupId,
+          taskListId: selectedCategory || 0,
+          taskId,
+          name: tasks[taskId].name,
+          description: tasks[taskId].description,
+          done: false,
+        });
+      }
+
       await deleteGroupsTaskListsTasks({
         groupId,
         taskListId: selectedCategory || 0,
         taskId,
       });
+
       deleteTask(taskId);
       refetch();
     } catch (error) {
