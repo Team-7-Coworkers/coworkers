@@ -38,10 +38,13 @@ export default function TeamListDropDown({
           .map((team) => {
             return (
               <Dropdown.MenuItem
-                className="pb-[8px] pt-[8px]"
+                className="px-[0px] pb-[0] pt-[0]"
                 key={team.id}
               >
-                <Link href={`/${team.id}`}>
+                <Link
+                  href={`/${team.id}`}
+                  className="block px-[12px] pb-[8px] pt-[8px]"
+                >
                   <TeamListDropDownItem team={team} />
                 </Link>
               </Dropdown.MenuItem>
