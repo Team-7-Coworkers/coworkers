@@ -14,7 +14,11 @@ import Button from '../components/Button';
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
 
-export default function GroupInfo({ id, name, image }: GroupType) {
+interface Props extends GroupType {
+  role: string;
+}
+
+export default function GroupInfo({ id, name, image, role }: Props) {
   const [modal, setModal] = useState(false);
 
   const router = useRouter();
@@ -74,19 +78,21 @@ export default function GroupInfo({ id, name, image }: GroupType) {
         {name}({id})
       </h1>
 
-      <Dropdown className="z-10 h-6">
-        <Dropdown.Button>
-          <GearIcon />
-        </Dropdown.Button>
-        <Dropdown.Menu className="right-0">
-          <Dropdown.MenuItem onClick={handleModifyClick}>
-            수정하기
-          </Dropdown.MenuItem>
-          <Dropdown.MenuItem onClick={handleDeleteClick}>
-            삭제하기
-          </Dropdown.MenuItem>
-        </Dropdown.Menu>
-      </Dropdown>
+      {role === 'ADMIN' && (
+        <Dropdown className="z-10 h-6">
+          <Dropdown.Button>
+            <GearIcon />
+          </Dropdown.Button>
+          <Dropdown.Menu className="right-0">
+            <Dropdown.MenuItem onClick={handleModifyClick}>
+              수정하기
+            </Dropdown.MenuItem>
+            <Dropdown.MenuItem onClick={handleDeleteClick}>
+              삭제하기
+            </Dropdown.MenuItem>
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
 
       <Modal
         isOpen={modal}
