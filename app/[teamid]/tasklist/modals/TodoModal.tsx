@@ -11,6 +11,7 @@ import { postGroupsTaskListsTasks } from '@/app/api/task.api';
 import { TaskParamsType } from '@/app/types/task';
 import { FrequencyType } from '@/app/types/shared';
 import axios from 'axios';
+import { MAX_LENGTH } from '@/app/constants/form';
 
 interface TodoModalProps {
   isOpen: boolean;
@@ -130,10 +131,14 @@ export default function TodoModal({
           id="todo-title"
           type="text"
           placeholder="할 일 제목을 입력해주세요."
+          maxlength={MAX_LENGTH.taskName}
           value={todoTitle}
           onChange={(e) => setTodoTitle(e.target.value)}
           className="mt-3"
         />
+        <div className="help-message">
+          할 일 제목은 최대 {MAX_LENGTH.taskName}자 입니다.
+        </div>
       </section>
 
       <section className="mt-5">
@@ -192,6 +197,7 @@ export default function TodoModal({
             type="box"
             placeholder="메모를 입력해주세요."
             value={todoMemo}
+            maxlength={MAX_LENGTH.taskMemo}
             onChange={(e) => setTodoMemo(e.target.value)}
           />
         </div>
