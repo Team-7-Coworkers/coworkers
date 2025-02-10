@@ -10,6 +10,7 @@ import Button from '../components/Button';
 
 import styles from './teampage.module.css';
 import Img from '../components/Img';
+import Link from 'next/link';
 
 export type MemberProps = {
   userId: number;
@@ -141,17 +142,25 @@ export default function MemberList({ groupId, members, role }: Props) {
             <Img
               src={members[memberIdx].userImage}
               baseImage="/images/icons/icon-base-user.svg"
-              width="40"
-              height="40"
+              width={members[memberIdx].userImage ? 54 : 40}
+              height={members[memberIdx].userImage ? 54 : 40}
               alt=""
-              className="mx-auto"
+              className={cn(
+                members[memberIdx].userImage && 'size-[54px]',
+                'mx-auto rounded-full'
+              )}
             />
           </figure>
           <div className="text-center">
             <div className="text-md font-medium text-t-primary">
               {members[memberIdx].userName}
             </div>
-            <div className="mt-2 text-xs">{members[memberIdx].userEmail}</div>
+            <Link
+              href={`mailto:${members[memberIdx].userEmail}`}
+              className="mt-2 text-xs hover:underline"
+            >
+              {members[memberIdx].userEmail}
+            </Link>
           </div>
         </div>
 
