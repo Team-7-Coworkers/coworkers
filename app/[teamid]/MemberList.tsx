@@ -46,10 +46,12 @@ export default function MemberList({ groupId, members, role }: Props) {
       await deleteGroupsMember({ memberUserId: userId, groupId }),
     onSuccess: () => {
       // console.log('success', data);
+      setDropMemberModal(false);
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
     },
     onError: (err) => {
       console.error('--- error', err);
+      setDropMemberModal(false);
       alert('멤버 제외에 문제가 발생하였습니다. 잠시 후 다시 시도해 주세요.');
     },
   });

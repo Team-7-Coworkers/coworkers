@@ -1,5 +1,5 @@
 import Image, { ImageProps } from 'next/image';
-import BaseImage from '@/public/images/icons/ic_image.svg';
+import NoImage from '@/public/images/icons/ic_image.svg';
 
 interface Props extends ImageProps {
   baseImage?: string;
@@ -15,12 +15,12 @@ export default function Img({
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.currentTarget;
     target.srcset = '';
-    target.src = baseImage || BaseImage.src;
+    target.src = baseImage || NoImage.src;
   };
 
   return (
     <Image
-      src={src || baseImage || BaseImage}
+      src={src || baseImage || NoImage}
       alt={alt}
       onError={handleError}
       placeholder="blur"
