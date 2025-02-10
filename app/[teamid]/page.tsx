@@ -109,7 +109,10 @@ export default function TeamPage() {
 
   return (
     <div className="container flex flex-col py-6">
-      <GroupInfo {...group} />
+      <GroupInfo
+        {...group}
+        role={role}
+      />
 
       <TaskLists
         groupId={group.id}
