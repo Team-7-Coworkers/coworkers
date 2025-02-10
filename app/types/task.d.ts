@@ -80,6 +80,8 @@ export interface TaskParamsType {
     taskListId: number;
     taskId: number;
     displayIndex: number;
+    sourceIndex?: number; // 추가
+    destinationIndex?: number; // 추가
   };
 
   deleteGroupsTaskListsTasksRecurring: {

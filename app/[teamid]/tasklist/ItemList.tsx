@@ -11,7 +11,17 @@ import FrequencyDisplay from './info-displays/FrequencyDisplay';
 import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
-import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
+import {
+  patchGroupsTaskListsTasks,
+  patchGroupsTaskListTasksOrder,
+} from '@/app/api/task.api';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from '@hello-pangea/dnd';
+import { useQueryClient } from '@tanstack/react-query';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
@@ -35,9 +45,42 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const tasks = useTaskStore((state) => state.tasks);
+  const queryClient = useQueryClient();
+  const [isReordering, setIsReordering] = useState(false);
 
-  const { checkedItems, toggleChecked, updateTask } = useTaskStore();
+  const tasks = useTaskStore((state) => state.tasks);
+  const { checkedItems, setTasks, toggleChecked, updateTask } = useTaskStore();
+
+  const handleDragEnd = async (result: DropResult) => {
+    if (!result.destination || !items) return;
+
+    const previousTasks = [...items];
+
+    const updatedTasks = [...items];
+    const [movedItem] = updatedTasks.splice(result.source.index, 1);
+    updatedTasks.splice(result.destination.index, 0, movedItem);
+    setTasks(updatedTasks);
+    setIsReordering(true);
+
+    const params = {
+      groupId,
+      taskListId,
+      taskId: movedItem.id,
+      displayIndex: result.destination.index,
+    };
+
+    try {
+      await patchGroupsTaskListTasksOrder(params);
+
+      queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
+    } catch (error) {
+      console.error('순서 변경 실패:', error);
+
+      setTasks(previousTasks);
+    } finally {
+      setTimeout(() => setIsReordering(false), 300); // 임시 로딩
+    }
+  };
 
   const handleComplete = async (taskId: number, checked: boolean) => {
     try {
@@ -84,7 +127,7 @@ export default function ItemList({
     }
   };
 
-  if (isLoading || items === undefined) {
+  if (isLoading || isReordering || items === undefined) {
     return (
       <div className="flex min-h-[250px] items-center justify-center">
         <Loading />
@@ -101,50 +144,75 @@ export default function ItemList({
   }
 
   return (
-    <div className="mt-6">
-      {items.map((item) => (
-        <div
-          key={`${item.id}-${item.date}`}
-          className="mb-4 flex flex-col items-start rounded-lg bg-b-secondary px-3 py-[14px] text-white shadow-md"
-        >
-          <div className="relative flex w-full items-center justify-between">
-            <div className="flex items-center justify-center">
-              <Checkbox
-                id={item.id}
-                checked={!!checkedItems[item.id]}
-                onChange={(id, checked) => handleComplete(id, checked)}
-                aria-label={`Mark "${item.name}" as completed`}
-              />
-              <h3
-                onClick={() => onTaskClick(item.id)}
-                className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
-                  checkedItems[item.id] ? 'line-through' : ''
-                }`}
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="taskList">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="mt-6"
+          >
+            {items.map((item, index) => (
+              <Draggable
+                key={item.id}
+                draggableId={String(item.id)}
+                index={index}
               >
-                {item.name}
-              </h3>
-              <div className="absolute right-6 flex items-center gap-1 text-t-default sm:relative sm:right-0 sm:ml-3">
-                <Image
-                  src="/images/icons/ic_comment.svg"
-                  alt="댓글"
-                  width={16}
-                  height={16}
-                />
-                <span>{tasks[item.id]?.commentCount || 0}</span>
-              </div>
-            </div>
-            <KebobDropdown
-              onEdit={() => openEditModal(item)}
-              onDelete={() => openDeleteModal(item)}
-            />
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    className={`mb-4 flex flex-col items-start rounded-lg bg-b-secondary px-3 py-[14px] text-white shadow-md ${
+                      snapshot.isDragging ? 'opacity-75' : ''
+                    }`}
+                  >
+                    <div className="relative flex w-full items-center justify-between">
+                      <div className="flex items-center justify-center">
+                        <Checkbox
+                          id={item.id}
+                          checked={!!checkedItems[item.id]}
+                          onChange={(id, checked) =>
+                            handleComplete(id, checked)
+                          }
+                          aria-label={`Mark "${item.name}" as completed`}
+                        />
+                        <h3
+                          onClick={() => onTaskClick(item.id)}
+                          className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
+                            checkedItems[item.id] ? 'line-through' : ''
+                          }`}
+                        >
+                          {item.name}
+                        </h3>
+                        <div className="absolute right-6 flex items-center gap-1 text-t-default sm:relative sm:right-0 sm:ml-3">
+                          <Image
+                            src="/images/icons/ic_comment.svg"
+                            alt="댓글"
+                            width={16}
+                            height={16}
+                          />
+                          <span>{tasks[item.id]?.commentCount || 0}</span>
+                        </div>
+                      </div>
+                      <KebobDropdown
+                        onEdit={() => openEditModal(item)}
+                        onDelete={() => openDeleteModal(item)}
+                      />
+                    </div>
+                    <div className="mt-4 flex items-center gap-3">
+                      <DateDisplay date={item.date} />
+                      <div className="text-xs text-b-tertiary">|</div>
+                      <FrequencyDisplay frequency={item.frequency} />
+                    </div>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
           </div>
-          <div className="mt-4 flex items-center gap-3">
-            <DateDisplay date={item.date} />
-            <div className="text-xs text-b-tertiary">|</div>
-            <FrequencyDisplay frequency={item.frequency} />
-          </div>
-        </div>
-      ))}
+        )}
+      </Droppable>
 
       {selectedItem && (
         <>
@@ -169,6 +237,6 @@ export default function ItemList({
           />
         </>
       )}
-    </div>
+    </DragDropContext>
   );
 }
