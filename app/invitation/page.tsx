@@ -24,8 +24,8 @@ const InvitationContent = () => {
   const validLink = link.length > 0;
 
   const { mutate } = useMutation({
-    mutationFn: (email: string) =>
-      postGroupsAcceptInvitation({ userEmail: email, token: link }),
+    mutationFn: async (email: string) =>
+      await postGroupsAcceptInvitation({ userEmail: email, token: link }),
     onSuccess: (data) => {
       router.push(`/${data.groupId}`);
     },
