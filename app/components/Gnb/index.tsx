@@ -87,7 +87,7 @@ export default function GNB() {
               <Link href="/">
                 <Image
                   src="/images/logos/logo.svg"
-                  alt="Logo"
+                  alt="coworkers"
                   fill
                   style={{ objectFit: 'contain' }}
                 />
@@ -104,7 +104,6 @@ export default function GNB() {
                 <Link href="/boards">자유게시판</Link>
               </>
             )}
-            {/* 기본값 어떻게 처리할 지 고민중 */}
           </div>
         </div>
 
