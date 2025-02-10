@@ -9,6 +9,7 @@ interface TeamListSideBarProps {
   isOpen: boolean;
   currentTeamId?: number;
   onClose: () => void;
+  currentPath: string;
 }
 
 export default function TeamListSideBar({
@@ -16,6 +17,7 @@ export default function TeamListSideBar({
   onClose,
   currentTeamId,
   isOpen,
+  currentPath,
 }: TeamListSideBarProps) {
   return (
     <nav
@@ -37,17 +39,19 @@ export default function TeamListSideBar({
             key={team.id}
             href={`/${team.id}`}
             onClick={onClose}
-            className={`translat block min-h-5 w-full text-start transition-all duration-75 hover:scale-105 ${team.id === currentTeamId ? 'scale-105 rounded-lg bg-b-primary px-1 py-1.5 text-gray-200' : 'hover:text-green-500'}`}
+            className={`translat flex min-h-5 w-full text-start transition-all duration-75 hover:scale-105 ${team.id === currentTeamId ? 'scale-105 rounded-lg bg-b-primary px-1 py-1.5 text-gray-200' : 'hover:text-green-500'}`}
           >
-            {team.id === currentTeamId ? '▸ ' : ''}
-            {team.name}
+            <p>{team.id === currentTeamId ? '▸ ' : ''}</p>
+            <p className="break-all px-1">{team.name}</p>
           </Link>
         ))}
+        <div className="border-t-[1px] border-t-slate-600" />
         <Link
           href="/boards"
-          className="block font-bold text-primary transition-all duration-75 hover:scale-105"
+          className={`flex gap-1 font-bold transition-all duration-75 hover:scale-105 ${currentPath.includes('/boards') ? 'scale-105 rounded-lg bg-b-primary px-1 py-1.5 text-gray-200' : 'hover:text-green-500'}}`}
           onClick={onClose}
         >
+          <p>{currentPath.includes('/boards') ? '▸ ' : ''}</p>
           자유게시판
         </Link>
       </div>
