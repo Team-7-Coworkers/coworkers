@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import CheckIcon from '../CheckIcon';
+import CheckIcon from '../task-icon/CheckIcon';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
 

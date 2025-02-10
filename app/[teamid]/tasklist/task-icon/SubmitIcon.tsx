@@ -1,12 +1,8 @@
 interface Props {
   classname?: string;
-  color?: string;
 }
 
-export default function SubmitIcon({
-  classname = '',
-  color = '#64748B',
-}: Props) {
+export default function SubmitIcon({ classname = '' }: Props) {
   return (
     <svg
       width="24"
@@ -20,7 +16,7 @@ export default function SubmitIcon({
         cx="12"
         cy="12"
         r="12"
-        fill={color}
+        fill="currentColor"
       />
       <path
         d="M8 11L12 7M12 7L16 11M12 7V16"

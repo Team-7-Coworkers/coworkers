@@ -9,7 +9,7 @@ import {
   deleteTasksComments,
 } from '@/app/api/taskComment.api';
 import { TaskCommentType } from '@/app/types/taskComment';
-import SubmitIcon from './SubmitIcon';
+import SubmitIcon from '../task-icon/SubmitIcon';
 import TextField from '@/app/components/TextField';
 import { useTaskStore } from '@/app/stores/taskStore';
 import UserProfile from './UserProfile';
@@ -110,8 +110,10 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
           className="!text-md"
           onSubmit={handleAddComment}
         />
-        <button onClick={handleAddComment}>
-          <SubmitIcon color={newComment.trim() ? '#10B981' : '#64748B'} />
+        <button
+          className={newComment.trim() ? 'text-primary' : 'text-ic-primary'}
+        >
+          <SubmitIcon />
         </button>
       </div>
       <div className="pb-16 sm:pb-20">

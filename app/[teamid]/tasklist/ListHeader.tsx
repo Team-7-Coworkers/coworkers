@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ListDate from './ListDate';
 import AddListModal from './modals/AddListModal';
 import Link from 'next/link';
-import BackIcon from './BackIcon';
+import BackIcon from './task-icon/BackIcon';
 
 type ListHeaderProps = {
   selectedDate: Date;
