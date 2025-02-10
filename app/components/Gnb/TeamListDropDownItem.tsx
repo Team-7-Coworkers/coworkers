@@ -1,5 +1,3 @@
-// TeamListDropDownItem.tsx
-
 import { GroupType } from '@/app/types/shared';
 import Img from '../Img';
 

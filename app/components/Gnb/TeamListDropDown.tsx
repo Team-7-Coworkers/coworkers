@@ -34,7 +34,7 @@ export default function TeamListDropDown({
         className="top-[52px] z-30 w-[218px] p-[8px] pb-4 sm:-left-[144px] lg:-left-[200px]"
       >
         {[...teamList]
-          .sort((a, b) => b.id - a.id) // id순 내림차순 정렬
+          .sort((a, b) => b.id - a.id)
           .map((team) => {
             return (
               <Dropdown.MenuItem
