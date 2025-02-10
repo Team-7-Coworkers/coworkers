@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       'sprint-fe-project.s3.ap-northeast-2.amazonaws.com',
       'picsum.photos',
     ],
+    formats: ['image/avif', 'image/webp'],
   },
 };
 
