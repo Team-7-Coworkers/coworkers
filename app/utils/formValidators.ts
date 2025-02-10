@@ -1,3 +1,6 @@
+import { UserFormDataTypes } from '../mypage/page';
+import { UserType } from '../types/shared';
+
 export const validateName = (value: string) => {
   if (!value.trim()) return '닉네임은 필수 입력입니다.';
   if (value.length < 2) return '이름은 최소 2자 이상이어야 합니다.';
@@ -37,4 +40,16 @@ export const validateConfirmPassword = (value: string) => {
   if (value !== password) return '비밀번호가 일치하지 않습니다.';
 
   return undefined;
+};
+
+// 계정 정보 변경 여부를 확인
+export const validateUserUpdated = (
+  prevData: UserType,
+  newData: UserFormDataTypes
+): boolean => {
+  const isNicknameChanged =
+    prevData.nickname.trim() !== newData.nickname.trim();
+  const isImageChanged = prevData.image !== newData.image;
+
+  return isNicknameChanged || isImageChanged;
 };

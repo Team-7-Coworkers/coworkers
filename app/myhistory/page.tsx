@@ -1,14 +1,17 @@
 'use client';
 
-import DailyItemList from './DailyItemList';
 import { useQuery } from '@tanstack/react-query';
 import { getUserHistory } from '../api/user.api';
 import { UserResponseType } from '../types/user';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loading from '../components/Loading';
+import FilterDropdown from './FilterDropdown';
 
 export default function MyHistoryPage() {
+  // 정렬 기준 (doneAt, date)
+  const [sortType, setSortType] = useState<'doneAt' | 'date'>('doneAt');
+
   //히스토리 가져오기
   const {
     data: userHistory,
@@ -27,11 +30,14 @@ export default function MyHistoryPage() {
     )
       return [];
 
-    // 시간순 정렬
+    // 시간순 정렬 (doneAt, date에 따라 분기)
     const sortedTasks = [...userHistory.tasksDone].sort((a, b) => {
+      const dateA = sortType === 'doneAt' ? a.doneAt : a.date;
+      const dateB = sortType === 'doneAt' ? b.doneAt : b.date;
+
       return (
-        (a.doneAt ? new Date(a.doneAt).getTime() : 0) -
-        (b.doneAt ? new Date(b.doneAt).getTime() : 0)
+        (dateA ? new Date(dateA).getTime() : 0) -
+        (dateB ? new Date(dateB).getTime() : 0)
       );
     });
 
@@ -39,22 +45,23 @@ export default function MyHistoryPage() {
     const initialAcc: Record<string, { name: string; id: number }[]> = {};
 
     const groupedTasks = sortedTasks.reduce((acc, task) => {
-      const doneDate = task.doneAt ? task.doneAt.split('T')[0] : '';
+      const key =
+        (sortType === 'doneAt' ? task.doneAt : task.date)?.split('T')[0] || '';
 
-      if (!acc[doneDate]) acc[doneDate] = [];
-      acc[doneDate].push({ name: task.name, id: task.id });
+      if (!acc[key]) acc[key] = [];
+      acc[key].push({ name: task.name, id: task.id });
 
       return acc;
     }, initialAcc);
 
     // {날짜: 할 일 배열} 로 변환, 최신순으로 정렬
     return Object.entries(groupedTasks)
-      .map(([doneAt, tasks]) => ({
-        doneAt: dayjs(doneAt).format('YYYY년 MM월 DD일'),
+      .map(([key, tasks]) => ({
+        date: dayjs(key).format('YYYY년 MM월 DD일'),
         tasks,
       }))
-      .sort((a, b) => b.doneAt.localeCompare(a.doneAt));
-  }, [userHistory]);
+      .sort((a, b) => b.date.localeCompare(a.date));
+  }, [userHistory, sortType]);
 
   // 로딩 및 에러 처리
   if (isLoading) {
@@ -71,7 +78,7 @@ export default function MyHistoryPage() {
 
   return (
     <div className="container flex min-h-[80vh] flex-col">
-      <h1 className="my-6 text-2lg font-bold text-t-primary lg:mt-10">
+      <h1 className="mt-6 text-2lg font-bold text-t-primary lg:mt-10">
         마이 히스토리
       </h1>
       {groupedTasksByDate.length === 0 ? (
@@ -81,7 +88,11 @@ export default function MyHistoryPage() {
           </p>
         </div>
       ) : (
-        <DailyItemList dailyTasks={groupedTasksByDate} />
+        <FilterDropdown
+          dailyTasks={groupedTasksByDate}
+          sortType={sortType}
+          setSortType={setSortType}
+        />
       )}
     </div>
   );

@@ -8,6 +8,7 @@ import TaskProgress from './TaskProgress';
 import KebabIcon from '../components/icons/KebabIcon';
 import styles from './teampage.module.css';
 import Dropdown from '../components/Dropdown';
+import { useTaskStore } from '../stores/taskStore';
 
 interface Props extends TaskListProps {
   index: number;
@@ -30,6 +31,8 @@ export default function TaskListsItem({
   const borderColor = 'border-' + COLORS[index % COLORS.length];
   const done = tasks.filter((task) => task.doneAt !== null);
 
+  const { setSelectedCategory } = useTaskStore(); // task 스토어 불러오기
+
   // 수정 클릭 함수
   const handleEditClick = () => {
     if (onEdit) onEdit(id);
@@ -45,6 +48,7 @@ export default function TaskListsItem({
         <Link
           href={`${groupId}/tasklist`}
           className="hover:underline"
+          onClick={() => setSelectedCategory(id)} // task 스토어에 선택한 id 값을 전달
         >
           {name}({id})
         </Link>

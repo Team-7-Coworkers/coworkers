@@ -12,6 +12,7 @@ import LikeButton from '@/app/boards/LikeButton';
 import useUserStore from '@/app/stores/userStore';
 import Comment from './Comments';
 import profile from '@/public/images/icons/icon-base-user.svg';
+import Loading from '@/app/components/Loading';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -37,14 +38,20 @@ export default function ArticleDetail() {
     router.push('/boards');
   };
 
-  if (isLoading) return <p>로딩 중...</p>;
+  if (isLoading)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loading classname="" />
+      </div>
+    );
+
   if (!article) return null;
 
   return (
     <div className="mx-auto mt-14 flex w-[90%] flex-col sm:w-[90%] lg:w-[65%]">
       <div className="flex w-full justify-between border-b border-gray-700 pb-4">
         <div className="flex w-full justify-between">
-          <p className="flex-grow text-[18px] font-medium text-t-secondary">
+          <p className="flex-grow break-all text-[18px] font-medium text-t-secondary">
             {article.title}
           </p>
 
@@ -113,7 +120,7 @@ export default function ArticleDetail() {
         </div>
       </div>
 
-      <p className="mt-4 w-full text-left text-t-secondary">
+      <p className="mt-4 w-full break-all text-left text-t-secondary">
         {article.content}
       </p>
       <Comment />
