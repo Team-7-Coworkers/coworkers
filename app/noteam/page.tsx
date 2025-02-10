@@ -1,10 +1,21 @@
+import Image from 'next/image';
 import Button from '../components/Button';
 
 export default function NoTeamPage() {
   return (
     <div className="mt-[190px] px-8 sm:px-[112px] lg:mx-auto">
       <div className="flex flex-col items-center gap-8 sm:gap-12">
-        <div className="aspect-[810/255] w-full max-w-[810px] bg-[url('/images/bg-no-team.png')] bg-contain" />
+        <div className="w-full max-w-[810px]">
+          <Image
+            src="/images/bg-no-team.png"
+            alt=""
+            layout="responsive"
+            priority
+            width={810}
+            height={255}
+            className="object-contain"
+          />
+        </div>
         <p className="text-center text-md text-t-default lg:text-lg">
           아직 소속된 팀이 없습니다.
           <br />
