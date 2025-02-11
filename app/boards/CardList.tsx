@@ -5,12 +5,13 @@ import Image from 'next/image';
 import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import dayjs from 'dayjs';
 import { ArticleResponseType } from '@/app/types/article';
-import { useState } from 'react';
 import Pagination from './Pagination';
 import Dropdown from '@/app/components/Dropdown';
 import PostActionDropdown from './PostActionDropdown';
 import useUserStore from '@/app/stores/userStore';
 import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 export default function CardList({
   keyword,
@@ -22,7 +23,11 @@ export default function CardList({
   hideItem?: boolean;
 }) {
   const { user } = useUserStore();
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const currentPage = Number(searchParams.get('page')) || 1;
   const [totalPages, setTotalPages] = useState(1);
   const [orderByDropdown, setOrderByDropdown] = useState<'recent' | 'like'>(
     orderBy
@@ -41,15 +46,14 @@ export default function CardList({
     }
   }
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
   const handleOrderChange = (newOrder: 'recent' | 'like') => {
     setOrderByDropdown(newOrder);
-    setCurrentPage(1);
+
+    const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
+    params.set('orderBy', newOrder);
+
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -94,7 +98,7 @@ export default function CardList({
               return (
                 <Link
                   key={article.id}
-                  href={`/boards/${article.id}`}
+                  href={`/boards/${article.id}?page=${currentPage}`}
                   className="pointer-events-auto block"
                 >
                   <div
@@ -176,7 +180,6 @@ export default function CardList({
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={handlePageChange}
         />
       )}
     </div>
