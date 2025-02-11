@@ -21,7 +21,7 @@ import {
   Draggable,
   DropResult,
 } from '@hello-pangea/dnd';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
@@ -52,40 +52,83 @@ export default function ItemList({
   const { checkedItems, setTasks, toggleChecked, updateTask } = useTaskStore();
 
   // 할 일 순서 변경
-  const handleDragEnd = async (result: DropResult) => {
-    if (!result.destination || !items) return;
+  const reorderMutation = useMutation({
+    mutationFn: async (params: {
+      groupId: number;
+      taskListId: number;
+      taskId: number;
+      displayIndex: number;
+    }) => patchGroupsTaskListTasksOrder(params),
 
-    const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;
-    // 순서 변경없이 할 일을 들었다 놓을 때를 감안
-    if (sourceIndex === destinationIndex) return;
+    onMutate: async (newOrder) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks', taskListId] });
 
-    const previousTasks = [...items];
+      // 드래그 전 기존 할 일 목록을 저장
+      const previousTasks = queryClient.getQueryData<TaskType[]>([
+        'tasks',
+        taskListId,
+      ]);
 
-    const updatedTasks = [...items];
-    const [movedItem] = updatedTasks.splice(result.source.index, 1);
-    updatedTasks.splice(result.destination.index, 0, movedItem);
-    setTasks(updatedTasks);
+      if (previousTasks) {
+        const updatedTasks = [...previousTasks];
+        const movedTaskIndex = updatedTasks.findIndex(
+          (task) => task.id === newOrder.taskId
+        );
+
+        if (movedTaskIndex !== -1) {
+          const [movedTask] = updatedTasks.splice(movedTaskIndex, 1); // 할 일을 이전 위치에서 제거
+          updatedTasks.splice(newOrder.displayIndex, 0, movedTask); // 새로운 위치에 삽입
+        }
+
+        queryClient.setQueryData(['tasks', taskListId], updatedTasks);
+        setTasks(updatedTasks);
+
+        return { previousTasks };
+      }
+
+      return { previousTasks: [] };
+    },
+
+    onError: (err, _, context) => {
+      // 에러 발생 시 이전 데이터 백업
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks', taskListId], context.previousTasks);
+        setTasks(context.previousTasks);
+      }
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
+    },
+  });
+
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination || !items) return; // 드래그가 취소되거나 없을 때를 대비
+
+    const sourceIndex = result.source.index; // 원래 위치
+    const destinationIndex = result.destination.index; // 사용자가 놓을 위치
+
+    if (sourceIndex === destinationIndex) return; // 같은 위치에 들었다 놓을 때를 대비
+
+    const movedItem = items[sourceIndex];
+
     setIsReordering(true);
 
-    const params = {
-      groupId,
-      taskListId,
-      taskId: movedItem.id,
-      displayIndex: result.destination.index,
-    };
-    // 순서 변경
-    try {
-      await patchGroupsTaskListTasksOrder(params);
-
-      queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
-    } catch (error) {
-      console.error('순서 변경 실패:', error);
-
-      setTasks(previousTasks);
-    } finally {
-      setTimeout(() => setIsReordering(false), 300);
-    }
+    reorderMutation.mutate(
+      {
+        groupId,
+        taskListId,
+        taskId: movedItem.id,
+        displayIndex: destinationIndex,
+      },
+      {
+        onSettled: () => {
+          setTimeout(() => {
+            setIsReordering(false);
+          }, 300);
+        },
+      }
+    );
   };
 
   const handleComplete = async (taskId: number, checked: boolean) => {
