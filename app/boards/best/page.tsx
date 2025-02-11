@@ -3,6 +3,7 @@
 import CardList from '../CardList';
 import bestIcon from '@/public/images/icons/ic_medal.svg';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 export default function BestPage() {
   return (
@@ -14,11 +15,13 @@ export default function BestPage() {
       />
       <p className="pb-8 text-[30px] font-semibold">베스트 게시글</p>
       <div className="w-full">
-        <CardList
-          keyword=""
-          orderBy="like"
-          hideItem={true}
-        />
+        <Suspense fallback={<></>}>
+          <CardList
+            keyword=""
+            orderBy="like"
+            hideItem={true}
+          />
+        </Suspense>
       </div>
     </div>
   );
