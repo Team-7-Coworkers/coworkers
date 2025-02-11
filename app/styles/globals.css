@@ -45,6 +45,16 @@
     --ic-inverse: #f8fafc;
 
     --header-height: 60px;
+
+    /* 토스트 스타일 변수값 설정 */
+    --toastify-toast-bd-radius: 12px;
+    --toastify-color-progress-dark: var(--primary);
+    --toastify-color-dark: var(--b-primary);
+    --toastify-font-family: theme(fontFamily.sans);
+    --toastify-icon-color-info: var(--cyan);
+    --toastify-icon-color-success: var(--primary);
+    --toastify-icon-color-warning: var(--orange);
+    --toastify-icon-color-error: var(--danger);
   }
 
   body {
@@ -92,4 +102,9 @@
 
 ::-webkit-scrollbar-corner {
   display: none;
+}
+
+/* 토스트 스타일 수정 */
+.Toastify__toast {
+  @apply pr-5 text-md;
 }
