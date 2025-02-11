@@ -8,32 +8,27 @@ import useUserStore from '@/app/stores/userStore';
 
 import { signOut } from 'next-auth/react';
 import useTeamStore from '@/app/stores/teamStore';
-import { useRouter } from 'next/navigation';
 
 interface ProfileDropDownProps {
   user: UserType;
 }
 
-const dropDownItemStyle = 'block px-[16px] py-3 text-md sm:text-lg';
-const linkStyle = 'px-[0] pb-[0px] pt-[0px]';
+const dropDownItemStyle = 'px-0 py-0 text-md sm:text-lg';
+const linkStyle = 'block px-3 py-2 sm:py-3';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { isGoogleLogin, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
-
-  const router = useRouter();
 
   const handleLogout = () => {
     clearUser();
     clearTeam();
 
     if (isGoogleLogin) {
-      signOut({ callbackUrl: '/' });
+      signOut();
 
       return;
     }
-
-    router.push('/');
   };
 
   return (
