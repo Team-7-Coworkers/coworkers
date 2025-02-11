@@ -178,13 +178,15 @@ export default function Comment() {
               <div className="mt-3 flex items-center">
                 {comment.writer.image &&
                 comment.writer.image.startsWith('http') ? (
-                  <Image
-                    src={comment.writer.image}
-                    alt="프로필"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
+                  <div className="h-[32px] w-[32px] overflow-hidden rounded-full">
+                    <Image
+                      src={comment.writer.image}
+                      alt="프로필"
+                      width={32}
+                      height={32}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 ) : (
                   <Image
                     src={profile}
