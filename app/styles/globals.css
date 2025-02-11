@@ -51,6 +51,10 @@
     --toastify-color-progress-dark: var(--primary);
     --toastify-color-dark: var(--b-primary);
     --toastify-font-family: theme(fontFamily.sans);
+    --toastify-color-info: var(--cyan);
+    --toastify-color-success: var(--primary);
+    --toastify-color-warning: var(--orange);
+    --toastify-color-error: var(--danger);
     --toastify-icon-color-info: var(--cyan);
     --toastify-icon-color-success: var(--primary);
     --toastify-icon-color-warning: var(--orange);
