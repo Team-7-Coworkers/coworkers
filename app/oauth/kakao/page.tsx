@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { postAuthEasySignIn } from '../../api/auth.api';
 import useUserStore from '@/app/stores/userStore';
+import EasyLoginLoadingPage from '../EasyLoginLoadingPage';
+import axios from 'axios';
 
 const KakaoCallback = () => {
   const router = useRouter();
@@ -13,7 +15,6 @@ const KakaoCallback = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // 카카오 로그인 API 요청
   const kakaoLoginMutation = useMutation({
     mutationFn: postAuthEasySignIn,
     onSuccess: (data) => {
@@ -22,13 +23,20 @@ const KakaoCallback = () => {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
       setUser(user);
-      alert('카카오 로그인 성공!');
 
       router.push('/');
     },
     onError: (error) => {
-      console.error('카카오 로그인 실패:', error);
-      alert('카카오 로그인에 실패했습니다. 다시 시도해주세요.');
+      if (axios.isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.message ||
+          '오류가 발생했습니다. 다시 시도해주세요.';
+        alert(`간편 로그인 실패: ${errorMessage}`);
+      } else {
+        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      }
+
+      router.push('/login');
     },
   });
 
@@ -47,29 +55,33 @@ const KakaoCallback = () => {
   );
 
   useEffect(() => {
-    if (isProcessing) return; // 이미 처리 중이라면 실행하지 않음
+    if (isProcessing) return;
 
     const urlParams = new URL(window.location.href).searchParams;
-    const code = urlParams.get('code'); // 카카오에서 전달한 인가 코드
-    const receivedState = urlParams.get('state'); // 응답에서 받은 state 값
-    const storedState = localStorage.getItem('kakao_state'); // 로컬 스토리지에 저장된 state 값 가져오기
+    const code = urlParams.get('code');
+    const receivedState = urlParams.get('state');
+    const storedState = localStorage.getItem('kakao_state');
 
     if (!code) {
       alert('⚠️ 인가 코드가 없습니다. 다시 로그인해주세요.');
+      router.push('/login');
+
       return;
     }
 
     if (!receivedState || receivedState !== storedState) {
       alert('⚠️ CSRF 공격이 감지되었습니다. 다시 로그인해주세요.');
+      router.push('/login');
+
       return;
     }
 
     setIsProcessing(true);
 
     handleKakaoLogin(code, receivedState);
-  }, [handleKakaoLogin, isProcessing]);
+  }, [handleKakaoLogin, isProcessing, router]);
 
-  return <div>카카오 로그인 처리 중...</div>;
+  return <EasyLoginLoadingPage type="kakao" />;
 };
 
 export default KakaoCallback;
