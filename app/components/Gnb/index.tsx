@@ -1,33 +1,33 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import isEqual from 'lodash.isequal';
 
 import TeamListDropDown from './TeamListDropDown';
 import TeamListSideBar from './TeamListSideBar';
+import ProfileDropDown from './ProfileDropDown';
+import LoginMenu from './LoginMenu';
 
-import { useEffect, useState } from 'react';
 import useTeamStore from '@/app/stores/teamStore';
 import useUserStore from '@/app/stores/userStore';
-import { useQuery } from '@tanstack/react-query';
 import { getUserGroups } from '@/app/api/user.api';
 import { usePathname } from 'next/navigation';
 import { extractTeamIdFromPath } from '@/app/utils/navigation';
-import ProfileDropDown from './ProfileDropDown';
-import Link from 'next/link';
-import isEqual from 'lodash.isequal';
-import LoginMenu from './LoginMenu';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
-  const isLoginMenuHidden = currentPath == '/login' || currentPath == '/signup';
+  const isLoginMenuHidden =
+    currentPath === '/login' || currentPath === '/signup';
 
   const { user } = useUserStore();
   const { teamList, setTeamList, currentTeam, setCurrentTeam } = useTeamStore();
-
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
-  const { data: fetchedteamList = [] } = useQuery({
+  const { data: fetchedTeamList = [] } = useQuery({
     queryKey: ['coworkers-teamList', user?.id],
     queryFn: getUserGroups,
     staleTime: 1000 * 60 * 5,
@@ -35,34 +35,32 @@ export default function GNB() {
     enabled: !!user?.id,
   });
 
-  useEffect(() => {
-    if (fetchedteamList.length > 0) {
-      const currentTeamList = useTeamStore.getState();
+  const updateTeamInfo = useCallback(() => {
+    if (fetchedTeamList.length === 0) return;
 
-      if (!isEqual(fetchedteamList, currentTeamList.teamList)) {
-        setTeamList(fetchedteamList);
-      }
-
-      if (!teamId || teamId === currentTeam?.id) {
-        setCurrentTeam(currentTeam?.id || fetchedteamList[0]?.id);
-        return;
-      }
-
-      if (teamId !== currentTeam?.id) {
-        setCurrentTeam(teamId);
-      }
+    const currentStoreTeamList = useTeamStore.getState().teamList;
+    if (!isEqual(fetchedTeamList, currentStoreTeamList)) {
+      setTeamList(fetchedTeamList);
     }
-  }, [fetchedteamList, setTeamList, teamId, setCurrentTeam, currentTeam]);
 
-  const handleOpenSideBar = () => {
+    if (!teamId || teamId === currentTeam?.id) {
+      setCurrentTeam(currentTeam?.id || fetchedTeamList[0]?.id);
+    } else {
+      setCurrentTeam(teamId);
+    }
+  }, [fetchedTeamList, teamId, currentTeam?.id, setTeamList, setCurrentTeam]);
+
+  useEffect(() => {
+    updateTeamInfo();
+  }, [updateTeamInfo]);
+
+  const handleOpenSideBar = useCallback(() => {
     setIsSideBarOpen(true);
-    console.log(isSideBarOpen);
-  };
+  }, []);
 
-  const handleCloseSideBar = () => {
+  const handleCloseSideBar = useCallback(() => {
     setIsSideBarOpen(false);
-    console.log(isSideBarOpen);
-  };
+  }, []);
 
   return (
     <nav className="fixed left-0 top-0 z-10 w-full bg-b-secondary">
@@ -75,7 +73,7 @@ export default function GNB() {
                 onClick={handleOpenSideBar}
               >
                 <Image
-                  src={'/images/icons/ic_gnb-menu.svg'}
+                  src="/images/icons/ic_gnb-menu.svg"
                   width={24}
                   height={24}
                   alt="메뉴 버튼"

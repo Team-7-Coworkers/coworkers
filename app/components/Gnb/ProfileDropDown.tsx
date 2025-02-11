@@ -8,7 +8,6 @@ import useUserStore from '@/app/stores/userStore';
 
 import { signOut } from 'next-auth/react';
 import useTeamStore from '@/app/stores/teamStore';
-import { useRouter } from 'next/navigation';
 
 interface ProfileDropDownProps {
   user: UserType;
@@ -21,19 +20,15 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { isGoogleLogin, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
 
-  const router = useRouter();
-
   const handleLogout = () => {
     clearUser();
     clearTeam();
 
     if (isGoogleLogin) {
-      signOut({ callbackUrl: '/' });
+      signOut();
 
       return;
     }
-
-    router.push('/');
   };
 
   return (
