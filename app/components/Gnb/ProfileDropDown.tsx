@@ -14,8 +14,8 @@ interface ProfileDropDownProps {
   user: UserType;
 }
 
-const dropDownItemStyle = 'px-0 pb-0 pt-0 text-md sm:text-lg';
-const linkStyle = 'block px-[12px] py-2 sm:py-3';
+const dropDownItemStyle = 'px-0 py-0 text-md sm:text-lg';
+const linkStyle = 'block px-3 py-2 sm:py-3';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { isGoogleLogin, clearUser } = useUserStore();
