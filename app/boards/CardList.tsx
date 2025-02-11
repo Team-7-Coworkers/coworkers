@@ -171,7 +171,27 @@ export default function CardList({
             </div>
           )
         ) : (
-          <p>로딩중...</p>
+          [...Array(pageSize)].map((_, index) => (
+            <div
+              key={index}
+              className="flex h-[175px] animate-pulse flex-row rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px]"
+            >
+              <div className="flex flex-1 flex-col justify-between">
+                <div>
+                  <div className="mb-2 h-[17px] w-3/4 rounded-md bg-gray-500"></div>
+                  <div className="mb-4 h-[17px] w-1/2 rounded-md bg-gray-500"></div>
+                </div>
+
+                <div className="mt-auto flex w-full justify-between">
+                  <div className="h-[14px] w-[80px] rounded-md bg-gray-500"></div>
+                </div>
+              </div>
+
+              <div className="ml-4 flex-shrink-0">
+                <div className="h-[72px] w-[72px] rounded-md bg-gray-500"></div>
+              </div>
+            </div>
+          ))
         )}
       </div>
 
