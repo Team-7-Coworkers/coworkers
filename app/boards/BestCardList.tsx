@@ -6,6 +6,7 @@ import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import MedalIcon from '@/public/images/icons/ic_medal.svg';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import Loading from '../components/Loading';
 
 export default function BestCardList() {
   const articles = Card({
@@ -70,7 +71,9 @@ export default function BestCardList() {
           </Link>
         ))
       ) : (
-        <p>로딩중...</p>
+        <div className="col-span-2 flex w-full items-center justify-center">
+          <Loading text="" />
+        </div>
       )}
     </div>
   );

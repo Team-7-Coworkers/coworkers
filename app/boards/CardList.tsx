@@ -174,7 +174,7 @@ export default function CardList({
           [...Array(pageSize)].map((_, index) => (
             <div
               key={index}
-              className="flex h-[175px] animate-pulse flex-row rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px]"
+              className="flex h-[175px] w-full animate-pulse flex-row rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px]"
             >
               <div className="flex flex-1 flex-col justify-between">
                 <div>

@@ -13,11 +13,13 @@ export default function BestPage() {
         className="h-auto w-[100px] pb-1"
       />
       <p className="pb-8 text-[30px] font-semibold">베스트 게시글</p>
-      <CardList
-        keyword=""
-        orderBy="like"
-        hideItem={true}
-      />
+      <div className="w-full">
+        <CardList
+          keyword=""
+          orderBy="like"
+          hideItem={true}
+        />
+      </div>
     </div>
   );
 }
