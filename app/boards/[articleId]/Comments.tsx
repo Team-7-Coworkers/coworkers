@@ -176,26 +176,18 @@ export default function Comment() {
                 )}
               </div>
               <div className="mt-3 flex items-center">
-                {comment.writer.image &&
-                comment.writer.image.startsWith('http') ? (
-                  <div className="h-[32px] w-[32px] overflow-hidden rounded-full">
-                    <Image
-                      src={comment.writer.image}
-                      alt="프로필"
-                      width={32}
-                      height={32}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <Image
-                    src={profile}
-                    alt="기본 프로필"
-                    width={32}
-                    height={32}
-                    className="rounded-full border-[2px] border-gray-200/10 bg-b-secondary"
-                  />
-                )}
+                <Image
+                  src={
+                    comment.writer.image?.startsWith('http')
+                      ? comment.writer.image
+                      : profile
+                  }
+                  alt="프로필"
+                  width={32}
+                  height={32}
+                  className="h-[32px] w-[32px] rounded-full border-[2px] border-gray-200/10 bg-b-secondary object-cover"
+                />
+
                 <p className="border-r border-gray-700 px-3 text-[14px]">
                   {comment.writer.nickname}
                 </p>
