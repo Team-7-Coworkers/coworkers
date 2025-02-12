@@ -1,14 +1,27 @@
 'use client';
 
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+
 export default function Pagination({
   currentPage,
   totalPages,
-  onPageChange,
 }: {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
 }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const onPageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+
+    const params = new URLSearchParams(searchParams);
+    params.set('page', page.toString());
+
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="mt-6 flex justify-center space-x-2 py-8">
       <button
