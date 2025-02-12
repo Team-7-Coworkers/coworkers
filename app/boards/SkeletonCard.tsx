@@ -11,7 +11,7 @@ export default function SkeletonCard({
     >
       <div className="flex flex-1 flex-col justify-between">
         {variant === 'best' && (
-          <div className="mb-2 h-[13px] w-1/4 rounded-md bg-gray-500" />
+          <div className="mb-[15px] mt-2 h-[13px] w-1/4 rounded-md bg-gray-500" />
         )}
 
         <div className="flex items-center gap-4">
