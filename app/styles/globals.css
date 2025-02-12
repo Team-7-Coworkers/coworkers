@@ -59,6 +59,8 @@
     --toastify-icon-color-success: var(--primary);
     --toastify-icon-color-warning: var(--orange);
     --toastify-icon-color-error: var(--danger);
+
+    color-scheme: dark;
   }
 
   body {

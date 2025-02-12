@@ -133,6 +133,7 @@ export default function MemberList({ groupId, members, role }: Props) {
       <Modal
         isOpen={memberModal}
         onClose={() => setMemberModal(false)}
+        isCloseOutsideClick={true}
       >
         <div className="flex flex-col items-center gap-6">
           <figure className={cn(styles.memberFigure, 'size-14')}>
