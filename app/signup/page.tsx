@@ -4,10 +4,11 @@ import React from 'react';
 import SignupForm from '@/app/signup/SignupForm';
 import { postAuthSignUp } from '../api/auth.api';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { SignUpFormDataType } from '../types/auth';
 import { useRouter } from 'next/navigation';
 import EasyLogin from '../login/EasyLogin';
+import { createErrorHandler } from '../utils/createErrorHandler';
+import { toast } from 'react-toastify';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -15,18 +16,10 @@ export default function SignupPage() {
   const signupMutation = useMutation({
     mutationFn: postAuthSignUp,
     onSuccess: () => {
-      alert('회원가입에 성공했습니다!');
+      toast('회원가입에 성공했습니다!');
       router.push('/login');
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data.message || '회원가입 중 오류가 발생했습니다.';
-        alert(`회원가입 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '회원가입 실패' }),
   });
 
   const handleSignupSubmit = (formData: SignUpFormDataType) => {
