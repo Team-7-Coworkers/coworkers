@@ -12,6 +12,7 @@ import useUserStore from '@/app/stores/userStore';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
+import SkeletonCard from './SkeletonCard';
 
 export default function CardList({
   keyword,
@@ -172,25 +173,11 @@ export default function CardList({
           )
         ) : (
           [...Array(pageSize)].map((_, index) => (
-            <div
+            <SkeletonCard
               key={index}
-              className="flex h-[175px] w-full animate-pulse flex-row rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[24px]"
-            >
-              <div className="flex flex-1 flex-col justify-between">
-                <div>
-                  <div className="mb-2 h-[17px] w-3/4 rounded-md bg-gray-500"></div>
-                  <div className="mb-4 h-[17px] w-1/2 rounded-md bg-gray-500"></div>
-                </div>
-
-                <div className="mt-auto flex w-full justify-between">
-                  <div className="h-[14px] w-[80px] rounded-md bg-gray-500"></div>
-                </div>
-              </div>
-
-              <div className="ml-4 flex-shrink-0">
-                <div className="h-[72px] w-[72px] rounded-md bg-gray-500"></div>
-              </div>
-            </div>
+              variant="list"
+              className="h-[175px] w-full flex-row"
+            />
           ))
         )}
       </div>

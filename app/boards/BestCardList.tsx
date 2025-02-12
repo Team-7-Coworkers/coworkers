@@ -6,6 +6,7 @@ import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import MedalIcon from '@/public/images/icons/ic_medal.svg';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import SkeletonCard from './SkeletonCard';
 
 export default function BestCardList() {
   const articles = Card({
@@ -72,34 +73,17 @@ export default function BestCardList() {
       ) : (
         <div className="flex w-full gap-5 overflow-hidden">
           {Array.from({ length: 3 }).map((_, index) => (
-            <div
+            <SkeletonCard
               key={index}
-              className={`flex h-[220px] w-full animate-pulse rounded-[12px] border border-gray-700 bg-b-secondary px-[32px] py-[29px] ${
+              variant="best"
+              className={`h-[220px] w-full ${
                 index >= 2
                   ? 'md:inline-flex hidden lg:inline-flex'
                   : index === 1
                     ? 'md:w-1/2 hidden sm:inline-flex'
                     : 'w-full'
               }`}
-            >
-              <div className="mb-2 flex flex-1 flex-col justify-between">
-                <div className="mb-2 h-[13px] w-1/4 rounded-md bg-gray-500"></div>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex flex-1 flex-col">
-                    <div className="mb-2 h-[17px] w-3/4 rounded-md bg-gray-500"></div>
-                    <div className="mb-4 h-[17px] w-1/2 rounded-md bg-gray-500"></div>
-                  </div>
-                  <div className="flex-shrink-0">
-                    <div className="h-[72px] w-[72px] rounded-md bg-gray-500"></div>
-                  </div>
-                </div>
-
-                <div className="mt-auto flex w-full justify-between">
-                  <div className="h-[14px] w-[80px] rounded-md bg-gray-500"></div>
-                </div>
-              </div>
-            </div>
+            />
           ))}
         </div>
       )}
