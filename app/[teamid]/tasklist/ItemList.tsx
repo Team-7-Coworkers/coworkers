@@ -228,7 +228,7 @@ export default function ItemList({
                         />
                         <h3
                           onClick={() => onTaskClick(item.id)}
-                          className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
+                          className={`hover:text-highlight ml-3 max-w-48 cursor-pointer truncate text-t-primary transition-transform duration-200 ease-in-out hover:scale-110 sm:max-w-full ${
                             checkedItems[item.id] ? 'line-through' : ''
                           }`}
                         >
