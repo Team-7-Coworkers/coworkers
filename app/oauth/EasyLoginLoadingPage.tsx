@@ -15,7 +15,7 @@ export default function EasyLoginLoadingPage({
 }: EasyLoginLoadingPageProps) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 py-40 sm:gap-6">
-      <div className="space-y-4 text-center sm:space-y-6">
+      <div className="text-center">
         <div className="flex items-center gap-2">
           <div className="relative h-10 w-10">
             <Image
@@ -29,9 +29,6 @@ export default function EasyLoginLoadingPage({
           <p className="text-2xl font-semibold sm:text-3xl">
             {`${loginType[type].name} 간편 로그인`}
           </p>
-        </div>
-        <div className="space-y-1 text-xs sm:text-md">
-          <p>처리중입니다. 잠시만 기다려주세요...</p>
         </div>
       </div>
       <Loading />
