@@ -22,7 +22,6 @@
     "paths": {
       "@/*": ["./*"],
       "@app/*": ["./app/*"],
-      "@app/types/*": ["./app/types/*"],
       "@components/*": ["./app/components/*"],
       "@api/*": ["./app/api/*"],
       "@hooks/*": ["./app/hooks/*"],
@@ -31,6 +30,7 @@
       "@styles/*": ["./styles/*"],
       "@images/*": ["./public/images/*"],
       "@stores/*": ["./app/stores/*"],
+      "@types/*": ["./app/types/*"],
       "@constants/*": ["./app/constants/*"]
     }
   },

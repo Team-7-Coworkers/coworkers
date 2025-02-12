@@ -1,7 +1,8 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import Image from 'next/image';
+
+import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
 
 export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {

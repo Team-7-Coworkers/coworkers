@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 
-import { postAuthSignUp } from '@api/auth.api';
 import type { SignUpFormDataType } from '@app/types/auth';
+import { postAuthSignUp } from '@api/auth.api';
 import EasyLogin from '@app/login/EasyLogin';
 import { createErrorHandler } from '@utils/createErrorHandler';
 import SignupForm from '@/app/signup/SignupForm';

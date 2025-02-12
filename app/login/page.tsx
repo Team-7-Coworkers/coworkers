@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import LoginForm from '@/app/login/LoginForm';
-import { postAuthSignIn } from '../api/auth.api';
-import { useMutation } from '@tanstack/react-query';
-import useUserStore from '../stores/userStore';
-import { AuthResponseType, LoginFormDataType } from '../types/auth';
 import Link from 'next/link';
-import EasyLogin from './EasyLogin';
 import { useRouter } from 'next/navigation';
-import { createErrorHandler } from '../utils/createErrorHandler';
+
+import { useMutation } from '@tanstack/react-query';
+
+import type { AuthResponseType, LoginFormDataType } from '@app/types/auth';
+import LoginForm from '@app/login/LoginForm';
+import { postAuthSignIn } from '@api/auth.api';
+import useUserStore from '@stores/userStore';
+import EasyLogin from '@app/login/EasyLogin';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 export default function LoginPage() {
   const { user, setAccessToken, setRefreshToken, setUser } = useUserStore();
