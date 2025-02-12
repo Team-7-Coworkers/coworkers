@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { getGroups, patchGroups } from '@/app/api/group.api';
 import useTeamStore from '@/app/stores/teamStore';
@@ -42,13 +43,11 @@ export default function ModifyTeamPage() {
   });
 
   const queryClient = useQueryClient();
-
+  // 그룹(팀) 수정 뮤테이션
   const { mutate } = useMutation({
     mutationFn: async () =>
       await patchGroups({ groupId: Number(teamid), name, image }),
     onSuccess: (data) => {
-      // TODO: 토스로 변경
-
       queryClient.invalidateQueries({
         queryKey: ['coworkers-teamList', user?.id],
       });
@@ -57,17 +56,19 @@ export default function ModifyTeamPage() {
         setCurrentTeam(data.id);
       }
 
-      alert('팀 정보를 수정하였습니다.');
+      toast.success('팀 정보를 수정하였습니다.');
       // console.log('--- patchGroups:data:', data);
       router.push(`/${data.id}`);
     },
     onError: (err) => {
-      // TODO: 토스로 변경
-      alert('팀 정보 수정에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+      toast.error(
+        '팀 정보 수정에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+      );
       console.error('--- patchGroups:error:', err);
     },
   });
 
+  // 수정 폼 서브밋
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

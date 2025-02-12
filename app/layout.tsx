@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
+import { Slide, ToastContainer } from 'react-toastify';
+
 import siteMetadata from '@/data/siteMetadata';
-import './styles/globals.css';
+import KakaoScript from './utils/KakaoScript';
+
 import GNB from './components/Gnb';
 import { Providers } from './libs/providers';
-import KakaoScript from './utils/KakaoScript';
+import './styles/globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -24,6 +27,12 @@ export default function RootLayout({
         <Providers>
           {children}
           <GNB />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            theme="dark"
+            transition={Slide}
+          />
           <KakaoScript />
         </Providers>
       </body>
