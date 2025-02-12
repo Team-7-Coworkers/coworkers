@@ -40,20 +40,21 @@ export default function ListCategory({
   const listRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
 
+  const formattedDate = `${selectedDate.getFullYear()}-${String(
+    selectedDate.getMonth() + 1
+  ).padStart(
+    2,
+    '0'
+  )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
+
   const {
     data: taskData,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['tasks', selectedCategory, selectedDate],
+    queryKey: ['tasks', groupId, selectedCategory, formattedDate],
     queryFn: async () => {
       if (!selectedCategory) return [];
-      const formattedDate = `${selectedDate.getFullYear()}-${String(
-        selectedDate.getMonth() + 1
-      ).padStart(
-        2,
-        '0'
-      )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
 
       return await getGroupsTaskListTasks({
         groupId,
@@ -61,7 +62,6 @@ export default function ListCategory({
         date: formattedDate,
       });
     },
-    enabled: !!selectedCategory,
   });
 
   useEffect(() => {
@@ -187,6 +187,7 @@ export default function ListCategory({
 
       <ItemList
         taskListId={selectedCategory || 0}
+        seletedDate={formattedDate}
         groupId={groupId}
         items={taskData ?? []}
         isLoading={isLoading}

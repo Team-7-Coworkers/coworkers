@@ -3,10 +3,21 @@ import { patchGroupsTaskListTasksOrder } from '@/app/api/task.api';
 import { TaskType } from '@/app/types/shared';
 import { DropResult } from '@hello-pangea/dnd';
 import { useState } from 'react';
+import { TaskListType } from '../types/taskList';
 
-export function useTaskReorder(taskListId: number, groupId: number) {
+export function useTaskReorder(
+  taskListId: number,
+  groupId: number,
+  selectedDate: string
+) {
   const queryClient = useQueryClient();
   const [isReordering, setIsReordering] = useState(false);
+
+  const TASKS_QUERY_KEY = (
+    groupId: number,
+    taskListId: number,
+    date: string
+  ) => ['tasks', groupId, taskListId, date];
 
   const reorderMutation = useMutation({
     mutationFn: async (params: {
@@ -18,40 +29,79 @@ export function useTaskReorder(taskListId: number, groupId: number) {
 
     onMutate: async (newOrder) => {
       await queryClient.cancelQueries({
-        queryKey: ['tasks', newOrder.taskListId],
+        queryKey: TASKS_QUERY_KEY(groupId, newOrder.taskListId, selectedDate),
       });
 
-      // 드래그 전 기존 할 일을 저장
+      const previousGroupTasks = queryClient.getQueryData<{
+        taskLists: TaskListType[];
+      }>(['groupTasks', groupId]);
+
       const previousTasks =
-        queryClient.getQueryData<TaskType[]>(['tasks', newOrder.taskListId]) ||
-        [];
+        queryClient.getQueryData<TaskType[]>(
+          TASKS_QUERY_KEY(groupId, newOrder.taskListId, selectedDate)
+        ) ?? [];
 
-      const updatedTasks = previousTasks.map((task) =>
-        task.id === newOrder.taskId
-          ? { ...task, displayIndex: newOrder.displayIndex }
-          : task
-      );
+      console.log('변경 전 tasks:', previousTasks);
 
-      queryClient.setQueryData(['tasks', newOrder.taskListId], updatedTasks);
+      const updatedTasks = previousTasks.length
+        ? previousTasks.map((task) =>
+            task.id === newOrder.taskId
+              ? { ...task, displayIndex: newOrder.displayIndex }
+              : task
+          )
+        : previousTasks;
 
-      return { previousTasks, taskListId: newOrder.taskListId };
+      if (updatedTasks.length > 0) {
+        queryClient.setQueryData(
+          TASKS_QUERY_KEY(groupId, newOrder.taskListId, selectedDate),
+          updatedTasks
+        );
+      } else {
+        console.warn('업데이트할 데이터 x');
+      }
+
+      if (previousGroupTasks) {
+        const updatedGroupTasks = {
+          ...previousGroupTasks,
+          taskLists: previousGroupTasks.taskLists.map((list) =>
+            list.id === newOrder.taskListId
+              ? { ...list, tasks: updatedTasks }
+              : list
+          ),
+        };
+
+        queryClient.setQueryData(['groupTasks', groupId], updatedGroupTasks);
+      }
+
+      console.log('변경 후(정렬x) tasks:', updatedTasks);
+
+      return {
+        previousTasks,
+        taskListId: newOrder.taskListId,
+        previousGroupTasks,
+      };
     },
 
     onError: (_, __, context) => {
-      // 에러 발생 시 이전 데이터 백업
       if (context?.previousTasks) {
         queryClient.setQueryData(
-          ['tasks', context.taskListId],
-          context.previousTasks
+          TASKS_QUERY_KEY(groupId, context.taskListId, selectedDate),
+          [...context.previousTasks]
+        );
+      }
+      if (context?.previousGroupTasks) {
+        queryClient.setQueryData(
+          ['groupTasks', groupId],
+          context.previousGroupTasks
         );
       }
     },
 
     onSettled: (_, __, ___, context) => {
-      // 최신 데이터 가져오기
       if (context?.taskListId) {
         queryClient.invalidateQueries({
-          queryKey: ['tasks', context.taskListId],
+          queryKey: TASKS_QUERY_KEY(groupId, context.taskListId, selectedDate),
+          refetchType: 'active',
         });
       }
     },
@@ -59,15 +109,22 @@ export function useTaskReorder(taskListId: number, groupId: number) {
 
   const handleDragEnd = (result: DropResult, items: TaskType[]) => {
     if (!result.destination || !items) return;
-
-    const sourceIndex = result.source.index; // 원래 위치
-    const destinationIndex = result.destination.index; // 사용자가 놓을 위치
-
-    if (sourceIndex === destinationIndex) return; // 드래그를 같은 위치에 두어 순서 변경이 없을 때
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+    if (sourceIndex === destinationIndex) return;
 
     const movedItem = items[sourceIndex];
 
-    setIsReordering(true);
+    const reorderedTasks = [...items];
+    reorderedTasks.splice(sourceIndex, 1);
+    reorderedTasks.splice(destinationIndex, 0, movedItem);
+
+    const updatedTasks = reorderedTasks.map((task, index) => ({
+      ...task,
+      displayIndex: index,
+    }));
+
+    console.log('변경 후 (정렬o) tasks:', updatedTasks);
 
     reorderMutation.mutate(
       {

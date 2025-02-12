@@ -20,6 +20,7 @@ type ItemListProps = {
   groupId: number;
   taskListId: number;
   isLoading: boolean;
+  seletedDate: string;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
   onTaskClick: (taskId: number) => void;
@@ -30,6 +31,7 @@ export default function ItemList({
   groupId,
   taskListId,
   isLoading,
+  seletedDate,
   onEditItem,
   onDeleteItem,
   onTaskClick,
@@ -37,7 +39,11 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { isReordering, handleDragEnd } = useTaskReorder(taskListId, groupId);
+  const { isReordering, handleDragEnd } = useTaskReorder(
+    taskListId,
+    groupId,
+    seletedDate
+  );
 
   const {
     tasks: rawTasks,
@@ -113,7 +119,7 @@ export default function ItemList({
 
   return (
     <DragDropContext onDragEnd={(result) => handleDragEnd(result, items)}>
-      <Droppable droppableId="taskList">
+      <Droppable droppableId={`taskList-${taskListId}-${items.length}`}>
         {(provided) => (
           <div
             {...provided.droppableProps}
