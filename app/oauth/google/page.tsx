@@ -1,10 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+
 import { useSession } from 'next-auth/react';
-import EasyLoginLoadingPage from '../EasyLoginLoadingPage';
-import { useEasySignIn } from '@/app/hooks/useEasySignIn';
-import useUserStore from '@/app/stores/userStore';
+import { toast } from 'react-toastify';
+
+import EasyLoginLoadingPage from '@app/oauth/EasyLoginLoadingPage';
+import { useEasySignIn } from '@hooks/useEasySignIn';
+import useUserStore from '@app/stores/userStore';
 
 const GoogleCallback = () => {
   const { data: session, status } = useSession();
@@ -30,7 +33,7 @@ const GoogleCallback = () => {
       const jwtToken = session?.idToken;
 
       if (!jwtToken) {
-        alert('JWT 토큰을 찾을 수 없습니다. 다시 로그인해주세요.');
+        toast.error('JWT 토큰을 찾을 수 없습니다. 다시 로그인해주세요.');
         return;
       }
 

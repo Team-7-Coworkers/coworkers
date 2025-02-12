@@ -1,8 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import EasyLoginLoadingPage from '../EasyLoginLoadingPage';
-import { useEasySignIn } from '@/app/hooks/useEasySignIn';
+
+import { toast } from 'react-toastify';
+
+import EasyLoginLoadingPage from '@app/oauth/EasyLoginLoadingPage';
+import { useEasySignIn } from '@hooks/useEasySignIn';
 
 const KakaoCallback = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -30,12 +33,14 @@ const KakaoCallback = () => {
     const storedState = localStorage.getItem('kakao_state');
 
     if (!code) {
-      alert('⚠️ 인가 코드가 없습니다. 다시 로그인해주세요.');
+      toast.error('⚠️ 인가 코드가 없습니다. 다시 로그인해주세요.');
+
       return;
     }
 
     if (!receivedState || receivedState !== storedState) {
-      alert('⚠️ CSRF 공격이 감지되었습니다. 다시 로그인해주세요.');
+      toast.error('⚠️ CSRF 공격이 감지되었습니다. 다시 로그인해주세요.');
+
       return;
     }
 

@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import Loading from '../components/Loading';
+
+import Loading from '@components/Loading';
 
 interface EasyLoginLoadingPageProps {
   type: 'kakao' | 'google';
