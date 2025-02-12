@@ -5,7 +5,6 @@ import { getUserHistory } from '../api/user.api';
 import { UserResponseType } from '../types/user';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-// import Loading from '../components/Loading';
 import FilterDropdown from './FilterDropdown';
 
 export default function MyHistoryPage() {
