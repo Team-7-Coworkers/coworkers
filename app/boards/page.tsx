@@ -3,7 +3,7 @@
 import BestCard from './BestCardList';
 import CardList from './CardList';
 import SearchBar from './SearchBar';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import Button from '@/app/components/Button';
 
@@ -28,7 +28,9 @@ export default function Boards() {
         </div>
         <BestCard />
         <SearchBar onSearch={handleSearch} />
-        <CardList keyword={searchKeyword} />
+        <Suspense fallback={<></>}>
+          <CardList keyword={searchKeyword} />
+        </Suspense>
       </div>
 
       <div className="right fixed bottom-20 right-[calc(50%-45%)] z-50 sm:right-[calc(50%-45%)] lg:right-[calc(50%-32.5%)]">

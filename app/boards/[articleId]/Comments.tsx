@@ -36,7 +36,6 @@ export default function Comment() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading: isQueryLoading,
   } = useInfiniteQuery({
     queryKey: ['articleComments', Number(articleId)],
     queryFn: async ({ pageParam }: { pageParam?: number }) => {
@@ -104,7 +103,6 @@ export default function Comment() {
     },
   });
 
-  if (isQueryLoading) return <p>로딩 중...</p>;
   if (!comments) return;
 
   return (
@@ -176,24 +174,18 @@ export default function Comment() {
                 )}
               </div>
               <div className="mt-3 flex items-center">
-                {comment.writer.image &&
-                comment.writer.image.startsWith('http') ? (
-                  <Image
-                    src={comment.writer.image}
-                    alt="프로필"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <Image
-                    src={profile}
-                    alt="기본 프로필"
-                    width={32}
-                    height={32}
-                    className="rounded-full border-[2px] border-gray-200/10 bg-b-secondary"
-                  />
-                )}
+                <Image
+                  src={
+                    comment.writer.image?.startsWith('http')
+                      ? comment.writer.image
+                      : profile
+                  }
+                  alt="프로필"
+                  width={32}
+                  height={32}
+                  className="h-[32px] w-[32px] rounded-full border-[2px] border-gray-200/10 bg-b-secondary object-cover"
+                />
+
                 <p className="border-r border-gray-700 px-3 text-[14px]">
                   {comment.writer.nickname}
                 </p>
