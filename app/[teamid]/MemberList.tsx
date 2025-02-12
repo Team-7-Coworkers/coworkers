@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { cn } from '../libs/utils';
 import { deleteGroupsMember, getGroupsInvitation } from '../api/group.api';
@@ -78,9 +79,8 @@ export default function MemberList({ groupId, members, role }: Props) {
   const handleEmailCopyClick = () => {
     const email = members[memberIdx].userEmail;
     navigator.clipboard.writeText(email);
-    // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
-    alert('이메일이 복사되었습니다.');
-    setMemberModal(false);
+    toast.success('이메일이 복사되었습니다.');
+    // setMemberModal(false);
   };
 
   // 멤버 초대 링크 복사 버튼 클릭 함수
@@ -89,15 +89,12 @@ export default function MemberList({ groupId, members, role }: Props) {
     // console.log('--- handleLinkCopyClick:result:', token);
 
     if (isError) {
-      // TODO: 복사 실패 alert 대신 토스트 뛰우기
-      alert('링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+      toast.error('링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
     } else {
-      // TODO: 문서나 UI로는 정확한 프로세스가 확인이 안됨
       const url = window.location.origin + '/invitation?t=' + token;
       navigator.clipboard.writeText(url);
-      // TODO: 복사 되었다고 alert 대신 토스트 뛰우기
-      alert('링크가 복사되었습니다.');
-      setAddMemberModal(false);
+      toast.success('링크가 복사되었습니다.');
+      // setAddMemberModal(false);
     }
   };
 
@@ -136,6 +133,7 @@ export default function MemberList({ groupId, members, role }: Props) {
       <Modal
         isOpen={memberModal}
         onClose={() => setMemberModal(false)}
+        isCloseOutsideClick={true}
       >
         <div className="flex flex-col items-center gap-6">
           <figure className={cn(styles.memberFigure, 'size-14')}>
