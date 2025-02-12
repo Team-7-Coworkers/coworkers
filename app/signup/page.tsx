@@ -1,14 +1,16 @@
 'use client';
 
 import React from 'react';
-import SignupForm from '@/app/signup/SignupForm';
-import { postAuthSignUp } from '../api/auth.api';
-import { useMutation } from '@tanstack/react-query';
-import { SignUpFormDataType } from '../types/auth';
 import { useRouter } from 'next/navigation';
-import EasyLogin from '../login/EasyLogin';
-import { createErrorHandler } from '../utils/createErrorHandler';
+
 import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
+
+import { postAuthSignUp } from '@api/auth.api';
+import type { SignUpFormDataType } from '@app/types/auth';
+import EasyLogin from '@app/login/EasyLogin';
+import { createErrorHandler } from '@utils/createErrorHandler';
+import SignupForm from '@/app/signup/SignupForm';
 
 export default function SignupPage() {
   const router = useRouter();
