@@ -6,6 +6,7 @@ import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import MedalIcon from '@/public/images/icons/ic_medal.svg';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import SkeletonCard from './SkeletonCard';
 
 export default function BestCardList() {
   const articles = Card({
@@ -15,7 +16,7 @@ export default function BestCardList() {
     keyword: '',
   });
   return (
-    <div className="flex justify-between gap-[20px]">
+    <div className="flex w-full justify-between gap-[20px]">
       {articles && articles.list.length > 0 ? (
         articles.list.map((article) => (
           <Link
@@ -70,7 +71,21 @@ export default function BestCardList() {
           </Link>
         ))
       ) : (
-        <p>로딩중...</p>
+        <div className="flex w-full gap-5 overflow-hidden">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonCard
+              key={index}
+              variant="best"
+              className={`h-[220px] w-full ${
+                index >= 2
+                  ? 'md:inline-flex hidden lg:inline-flex'
+                  : index === 1
+                    ? 'md:w-1/2 hidden sm:inline-flex'
+                    : 'w-full'
+              }`}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

@@ -14,6 +14,7 @@ import Modal, { ModalFooter } from '../components/Modal';
 import TaskListsItem from './TaskListsItem';
 
 import styles from './teampage.module.css';
+import { toast } from 'react-toastify';
 
 // 할 일 속성
 export type TaskProps = {
@@ -53,37 +54,46 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
     onSuccess: () => {
       // console.log('--- data', data);
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
+      toast.success('할 일 목록 생성에 성공하였습니다.');
       setModalOpen(false);
     },
     onError: (err) => {
       console.error('--- error', err);
-      alert('할 일 목록 생성에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+      toast.error(
+        '할 일 목록 생성에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+      );
     },
   });
   const { mutate: patchMutate, isPending: isPatchPending } = useMutation({
     mutationFn: async () =>
       await patchGroupsTaskLists({ groupId, taskListId, name }),
-    onSuccess: (data) => {
-      console.log('--- data', data);
+    onSuccess: () => {
+      // console.log('--- data', data);
+      toast.success('할 일 목록 수정에 성공하였습니다.');
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
       setModalOpen(false);
     },
     onError: (err) => {
       console.error('--- error', err);
-      alert('할 일 목록 수정에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+      toast.error(
+        '할 일 목록 수정에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+      );
     },
   });
   const { mutate: deleteMutate, isPending: isDeletePending } = useMutation({
     mutationFn: async () =>
       await deleteGroupsTaskLists({ groupId, taskListId }),
-    onSuccess: (data) => {
-      console.log('--- data', data);
+    onSuccess: () => {
+      // console.log('--- data', data);
+      toast.success('할 일 목록을 삭제하였습니다.');
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
       setDeleteModalOpen(false);
     },
     onError: (err) => {
       console.error('--- error', err);
-      alert('할 일 목록 삭제에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+      toast.error(
+        '할 일 목록 삭제에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+      );
     },
   });
   const mutate = {

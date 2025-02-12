@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { postGroupsAcceptInvitation } from '../api/group.api';
 import useUserStore from '../stores/userStore';
@@ -12,6 +12,7 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 
 import styles from '../styles/team.module.css';
+import useTeamStore from '../stores/teamStore';
 
 const InvitationContent = () => {
   const searchParams = useSearchParams();
@@ -19,15 +20,26 @@ const InvitationContent = () => {
 
   const [link, setLink] = useState(token || '');
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { user } = useUserStore();
+  const { currentTeam, setCurrentTeam } = useTeamStore();
 
   const validLink = link.length > 0;
 
   const { mutate } = useMutation({
-    mutationFn: (email: string) =>
-      postGroupsAcceptInvitation({ userEmail: email, token: link }),
+    mutationFn: async (email: string) =>
+      await postGroupsAcceptInvitation({ userEmail: email, token: link }),
     onSuccess: (data) => {
       router.push(`/${data.groupId}`);
+
+      queryClient.invalidateQueries({
+        queryKey: ['coworkers-teamList', user?.id],
+      });
+
+      if (currentTeam?.id === data.groupId) {
+        setCurrentTeam(data.groupId);
+      }
     },
     onError: (err) => {
       alert('팀 참여에 실패 하였습니다. 잠시 후 다시 시도해 주시요.');
