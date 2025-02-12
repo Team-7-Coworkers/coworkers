@@ -56,7 +56,7 @@ export default function TaskDetail({
           [taskId]: !!response.doneAt,
         }));
 
-        updateTask(taskId, response.name, response.description);
+        updateTask(taskListId, taskId, response.name, response.description);
       } catch (error) {
         console.error('할 일 데이터를 불러오는 중 오류 발생:', error);
       }
@@ -90,7 +90,7 @@ export default function TaskDetail({
         setTask((prevTask) =>
           prevTask ? { ...prevTask, name: title, description } : prevTask
         );
-        updateTask(selectedTask.id, title, description);
+        updateTask(taskListId, selectedTask.id, title, description);
         setIsEditModalOpen(false);
         onTaskUpdated();
       } catch (error) {
@@ -119,7 +119,7 @@ export default function TaskDetail({
           taskId: selectedTask.id,
         });
 
-        deleteTask(selectedTask.id);
+        deleteTask(taskListId, selectedTask.id);
         setIsDeleteModalOpen(false);
         onClose();
         onTaskUpdated();
@@ -148,7 +148,10 @@ export default function TaskDetail({
           <p className="mt-5 min-h-[20vh] whitespace-normal break-words text-md text-t-primary">
             {task.description}
           </p>
-          <TaskComment taskId={taskId} />
+          <TaskComment
+            taskListId={taskListId}
+            taskId={taskId}
+          />
           <CheckButton
             onTaskUpdated={onTaskUpdated}
             taskId={taskId}

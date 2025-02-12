@@ -20,10 +20,11 @@ import useUserStore from '@/app/stores/userStore';
 import { MAX_LENGTH } from '@/app/constants/form';
 
 interface TaskCommentProps {
+  taskListId: number;
   taskId: number;
 }
 
-export default function TaskComment({ taskId }: TaskCommentProps) {
+export default function TaskComment({ taskListId, taskId }: TaskCommentProps) {
   const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -37,7 +38,7 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
     queryKey: ['taskComments', taskId],
     queryFn: async () => {
       const data = await getTaskComments({ taskId });
-      updateCommentCount(taskId, data.length);
+      updateCommentCount(taskListId, taskId, data.length);
       return Array.isArray(data) ? data : [];
     },
     staleTime: 1000 * 60 * 5,

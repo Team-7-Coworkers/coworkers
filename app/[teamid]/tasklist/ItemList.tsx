@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Checkbox from './Checkbox';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
@@ -11,17 +11,9 @@ import FrequencyDisplay from './info-displays/FrequencyDisplay';
 import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
-import {
-  patchGroupsTaskListsTasks,
-  patchGroupsTaskListTasksOrder,
-} from '@/app/api/task.api';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from '@hello-pangea/dnd';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { useTaskReorder } from '@/app/hooks/useTaskReorder';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
@@ -45,91 +37,18 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const [isReordering, setIsReordering] = useState(false);
+  const { isReordering, handleDragEnd } = useTaskReorder(taskListId, groupId);
 
-  const tasks = useTaskStore((state) => state.tasks);
-  const { checkedItems, setTasks, toggleChecked, updateTask } = useTaskStore();
-
-  // 할 일 순서 변경
-  const reorderMutation = useMutation({
-    mutationFn: async (params: {
-      groupId: number;
-      taskListId: number;
-      taskId: number;
-      displayIndex: number;
-    }) => patchGroupsTaskListTasksOrder(params),
-
-    onMutate: async (newOrder) => {
-      await queryClient.cancelQueries({ queryKey: ['tasks', taskListId] });
-
-      // 드래그 전 기존 할 일 목록을 저장
-      const previousTasks = queryClient.getQueryData<TaskType[]>([
-        'tasks',
-        taskListId,
-      ]);
-
-      if (previousTasks) {
-        const updatedTasks = [...previousTasks];
-        const movedTaskIndex = updatedTasks.findIndex(
-          (task) => task.id === newOrder.taskId
-        );
-
-        if (movedTaskIndex !== -1) {
-          const [movedTask] = updatedTasks.splice(movedTaskIndex, 1); // 할 일을 이전 위치에서 제거
-          updatedTasks.splice(newOrder.displayIndex, 0, movedTask); // 새로운 위치에 삽입
-        }
-
-        queryClient.setQueryData(['tasks', taskListId], updatedTasks);
-        setTasks(updatedTasks);
-
-        return { previousTasks };
-      }
-
-      return { previousTasks: [] };
-    },
-
-    onError: (err, _, context) => {
-      // 에러 발생 시 이전 데이터 백업
-      if (context?.previousTasks) {
-        queryClient.setQueryData(['tasks', taskListId], context.previousTasks);
-        setTasks(context.previousTasks);
-      }
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
-    },
-  });
-
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination || !items) return; // 드래그가 취소되거나 없을 때를 대비
-
-    const sourceIndex = result.source.index; // 원래 위치
-    const destinationIndex = result.destination.index; // 사용자가 놓을 위치
-
-    if (sourceIndex === destinationIndex) return; // 같은 위치에 들었다 놓을 때를 대비
-
-    const movedItem = items[sourceIndex];
-
-    setIsReordering(true);
-
-    reorderMutation.mutate(
-      {
-        groupId,
-        taskListId,
-        taskId: movedItem.id,
-        displayIndex: destinationIndex,
-      },
-      {
-        onSettled: () => {
-          setTimeout(() => {
-            setIsReordering(false);
-          }, 300);
-        },
-      }
-    );
-  };
+  const {
+    tasks: rawTasks,
+    checkedItems,
+    toggleChecked,
+    updateTask,
+  } = useTaskStore();
+  const tasks = useMemo(
+    () => rawTasks[taskListId] || {},
+    [rawTasks, taskListId]
+  );
 
   const handleComplete = async (taskId: number, checked: boolean) => {
     try {
@@ -137,8 +56,8 @@ export default function ItemList({
         groupId,
         taskListId,
         taskId,
-        name: tasks[taskId].name,
-        description: tasks[taskId].description,
+        name: tasks[taskId]?.name,
+        description: tasks[taskId]?.description,
         done: checked,
       });
 
@@ -170,7 +89,7 @@ export default function ItemList({
   const handleEdit = (title: string, description: string) => {
     if (selectedItem) {
       onEditItem(selectedItem.id, title, description);
-      updateTask(selectedItem.id, title, description);
+      updateTask(taskListId, selectedItem.id, title, description);
       setIsEditModalOpen(false);
       setSelectedItem(null);
     }
@@ -193,7 +112,7 @@ export default function ItemList({
   }
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+    <DragDropContext onDragEnd={(result) => handleDragEnd(result, items)}>
       <Droppable droppableId="taskList">
         {(provided) => (
           <div
