@@ -6,6 +6,7 @@ import { UserResponseType } from '../types/user';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import FilterDropdown from './FilterDropdown';
+import LoadingMyhistory from './LoadingMyhistory';
 
 export default function MyHistoryPage() {
   // 정렬 기준 (doneAt, date)
@@ -72,16 +73,7 @@ export default function MyHistoryPage() {
         마이 히스토리
       </h1>
       {isLoading ? (
-        <div className="mt-[60px] space-y-10">
-          {[...Array(5)].map((_, i) => (
-            <div key={i}>
-              <div className="mb-4 h-[19px] w-[130px] animate-pulse rounded-lg bg-gray-500" />
-              <div className="mb-4 h-11 w-full animate-pulse rounded-lg bg-gray-700" />
-              <div className="mb-4 h-11 w-full animate-pulse rounded-lg bg-gray-700" />
-              <div className="h-11 w-full animate-pulse rounded-lg bg-gray-700" />
-            </div>
-          ))}
-        </div>
+        <LoadingMyhistory />
       ) : (
         <>
           {groupedTasksByDate.length === 0 ? (
