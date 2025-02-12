@@ -36,7 +36,6 @@ export default function Comment() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading: isQueryLoading,
   } = useInfiniteQuery({
     queryKey: ['articleComments', Number(articleId)],
     queryFn: async ({ pageParam }: { pageParam?: number }) => {
@@ -104,7 +103,6 @@ export default function Comment() {
     },
   });
 
-  if (isQueryLoading) return <p>로딩 중...</p>;
   if (!comments) return;
 
   return (
