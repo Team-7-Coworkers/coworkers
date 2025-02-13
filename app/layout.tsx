@@ -3,9 +3,11 @@ import { Slide, ToastContainer } from 'react-toastify';
 
 import siteMetadata from '@/data/siteMetadata';
 import KakaoScript from './utils/KakaoScript';
+import { Providers } from './libs/providers';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 import GNB from './components/Gnb';
-import { Providers } from './libs/providers';
+
 import './styles/globals.css';
 
 export const metadata: Metadata = {
@@ -29,7 +31,7 @@ export default function RootLayout({
           <GNB />
           <ToastContainer
             position="top-right"
-            autoClose={3000}
+            autoClose={TOAST_CLOSE_TIME.default}
             theme="dark"
             transition={Slide}
           />

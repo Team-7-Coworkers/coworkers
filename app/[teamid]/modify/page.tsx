@@ -15,6 +15,7 @@ import Button from '@/app/components/Button';
 import Loading from '@/app/components/Loading';
 
 import styles from '../../styles/team.module.css';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -56,7 +57,9 @@ export default function ModifyTeamPage() {
         setCurrentTeam(data.id);
       }
 
-      toast.success('팀 정보를 수정하였습니다.');
+      toast.success('팀 정보를 수정하였습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
       // console.log('--- patchGroups:data:', data);
       router.push(`/${data.id}`);
     },

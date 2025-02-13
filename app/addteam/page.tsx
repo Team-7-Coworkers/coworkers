@@ -15,6 +15,7 @@ import ImageUpload from '../components/ImageUpload';
 import Button from '../components/Button';
 
 import styles from '../styles/team.module.css';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 const MIN_NAME_LENGTH = 2;
 
@@ -42,7 +43,9 @@ export default function AddTeamPage() {
         queryKey: ['coworkers-teamList', user?.id],
       });
 
-      toast.success('팀을 생성하였습니다.');
+      toast.success('팀을 생성하였습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
       router.push(`/${data.id}`);
     },
     onError: (err) => {

@@ -13,6 +13,8 @@ import Button from '../components/Button';
 
 import GearIcon from '../components/icons/GearIcon';
 import styles from './teampage.module.css';
+import { toast } from 'react-toastify';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 interface Props extends GroupType {
   role: string;
@@ -40,7 +42,16 @@ export default function GroupInfo({ id, name, image, role }: Props) {
 
   // 팀 진짜로 삭제하기 버튼 클릭
   const handleRealDeleteClick = async () => {
-    const result = await deleteGroups({ groupId: id });
+    try {
+      const result = await deleteGroups({ groupId: id });
+      console.log('--- deleteGroups:result:', result);
+      toast.success('팀을 삭제하였습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
+    } catch (err) {
+      console.error('--- handleRealDeleteClick:err:', err);
+      toast.error('팀 삭제에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    }
 
     if (teamList.length)
       await queryClient.refetchQueries({
@@ -60,7 +71,6 @@ export default function GroupInfo({ id, name, image, role }: Props) {
       clearTeam();
     }
 
-    console.log('--- deleteGroups:result:', result);
     router.replace('/');
   };
 
