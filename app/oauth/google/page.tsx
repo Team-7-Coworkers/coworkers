@@ -44,7 +44,7 @@ const GoogleCallback = () => {
       const jwtToken = session?.idToken;
 
       if (!jwtToken) {
-        toast.error('JWT 토큰을 찾을 수 없습니다. 다시 로그인해주세요.');
+        toast.error('구글 로그인 중 문제가 발생했습니다. 다시 로그인해주세요.');
         router.push('/login');
 
         return;
