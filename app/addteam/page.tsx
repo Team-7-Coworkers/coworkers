@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { postGroups } from '../api/group.api';
 import useTeamStore from '../stores/teamStore';
@@ -41,15 +42,12 @@ export default function AddTeamPage() {
         queryKey: ['coworkers-teamList', user?.id],
       });
 
-      // TODO: 토스로 변경
-      alert('팀을 생성하였습니다.');
-
+      toast.success('팀을 생성하였습니다.');
       router.push(`/${data.id}`);
     },
     onError: (err) => {
       console.error('--- postGroup: err:', err);
-      // TODO: 모달이나 토스 팀 이름인 경우 setNameErrorMessage
-      alert('팀 생성에 실패하였습니다. 잠시 후 다시 시도해 주세요.');
+      toast.error('팀 생성에 실패하였습니다. 잠시 후 다시 시도해 주세요.');
     },
   });
 

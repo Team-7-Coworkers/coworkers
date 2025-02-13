@@ -5,8 +5,8 @@ import { getUserHistory } from '../api/user.api';
 import { UserResponseType } from '../types/user';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import Loading from '../components/Loading';
 import FilterDropdown from './FilterDropdown';
+import LoadingMyhistory from './LoadingMyhistory';
 
 export default function MyHistoryPage() {
   // 정렬 기준 (doneAt, date)
@@ -63,15 +63,6 @@ export default function MyHistoryPage() {
       .sort((a, b) => b.date.localeCompare(a.date));
   }, [userHistory, sortType]);
 
-  // 로딩 및 에러 처리
-  if (isLoading) {
-    return (
-      <div className="flex min-h-[80vh] items-center justify-center">
-        <Loading />
-      </div>
-    );
-  }
-
   if (isError) {
     alert('데이터를 받아오는 데 실패했습니다.');
   }
@@ -81,18 +72,24 @@ export default function MyHistoryPage() {
       <h1 className="mt-6 text-2lg font-bold text-t-primary lg:mt-10">
         마이 히스토리
       </h1>
-      {groupedTasksByDate.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center">
-          <p className="text-center text-md font-medium text-t-default">
-            아직 히스토리가 없습니다.
-          </p>
-        </div>
+      {isLoading ? (
+        <LoadingMyhistory />
       ) : (
-        <FilterDropdown
-          dailyTasks={groupedTasksByDate}
-          sortType={sortType}
-          setSortType={setSortType}
-        />
+        <>
+          {groupedTasksByDate.length === 0 ? (
+            <div className="flex flex-1 items-center justify-center">
+              <p className="text-center text-md font-medium text-t-default">
+                아직 히스토리가 없습니다.
+              </p>
+            </div>
+          ) : (
+            <FilterDropdown
+              dailyTasks={groupedTasksByDate}
+              sortType={sortType}
+              setSortType={setSortType}
+            />
+          )}
+        </>
       )}
     </div>
   );

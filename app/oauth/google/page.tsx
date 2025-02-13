@@ -1,48 +1,25 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { postAuthEasySignIn } from '../../api/auth.api'; // 백엔드와 통신하는 API 함수
-import useUserStore from '@/app/stores/userStore';
 import { useSession } from 'next-auth/react';
+import EasyLoginLoadingPage from '../EasyLoginLoadingPage';
+import { useEasySignIn } from '@/app/hooks/useEasySignIn';
+import useUserStore from '@/app/stores/userStore';
 
 const GoogleCallback = () => {
-  const router = useRouter();
   const { data: session, status } = useSession();
-
-  const { setAccessToken, setRefreshToken, setUser, setIsGoogleLogin } =
-    useUserStore();
+  const { setIsGoogleLogin } = useUserStore();
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // 인증 받은 구글 로그인 정보로 서비스에 로그인 요청
-  const googleLoginMutation = useMutation({
-    mutationFn: postAuthEasySignIn,
-    onSuccess: (data) => {
-      const { user, accessToken, refreshToken } = data;
-
-      setAccessToken(accessToken);
-      setRefreshToken(refreshToken);
-      setUser(user);
-      alert('구글 로그인 성공!');
-      router.push('/');
-    },
-    onError: (error) => {
-      console.error('구글 로그인 실패:', error);
-      alert('구글 로그인에 실패했습니다. 다시 시도해주세요.');
-    },
-  });
+  const easySignInMutation = useEasySignIn();
 
   const handleGoogleLogin = useCallback(
     (token: string) => {
-      googleLoginMutation.mutate({
+      easySignInMutation.mutate({
         token,
         provider: 'GOOGLE',
       });
-
-      console.log(token);
     },
-    [googleLoginMutation]
+    [easySignInMutation]
   );
 
   useEffect(() => {
@@ -50,7 +27,6 @@ const GoogleCallback = () => {
 
     if (status === 'authenticated') {
       setIsProcessing(true);
-
       const jwtToken = session?.idToken;
 
       if (!jwtToken) {
@@ -63,7 +39,7 @@ const GoogleCallback = () => {
     }
   }, [status, session, isProcessing, handleGoogleLogin, setIsGoogleLogin]);
 
-  return <div>구글 로그인 처리 중...</div>;
+  return <EasyLoginLoadingPage type="google" />;
 };
 
 export default GoogleCallback;

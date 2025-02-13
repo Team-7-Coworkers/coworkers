@@ -54,8 +54,8 @@
 }
 
 .member {
-  @apply flex w-full items-center rounded-xl bg-b-secondary px-4 py-3 text-left transition-colors hover:bg-b-tertiary/30 sm:px-6 sm:py-5;
+  @apply flex w-full items-center rounded-xl bg-b-secondary px-4 py-3 text-left sm:px-6 sm:py-5;
 }
 .memberFigure {
-  @apply flex flex-none items-center rounded-full border border-ic-inverse/10 bg-b-tertiary;
+  @apply relative flex flex-none items-center rounded-full border border-ic-inverse/10 bg-b-tertiary;
 }

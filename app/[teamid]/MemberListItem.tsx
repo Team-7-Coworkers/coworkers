@@ -1,13 +1,18 @@
+import Link from 'next/link';
+
 import { cn } from '../libs/utils';
 
 import type { MemberProps } from './MemberList';
 import Img from '../components/Img';
 
-// import KebabIcon from '../components/icons/KebabIcon';
+import CrownIcon from '../components/icons/CrownIcon';
+import TrashIcon from '../components/icons/TrashIcon';
 import styles from './teampage.module.css';
 
 interface Props extends MemberProps {
-  onClick: (userId: number) => void;
+  editable: boolean;
+  onDetailClick: (userId: number) => void;
+  onDeleteClick: (userId: number) => void;
 }
 
 export default function MemberListItem({
@@ -15,44 +20,63 @@ export default function MemberListItem({
   userImage,
   userName,
   userEmail,
-  onClick,
+  role,
+  editable = false,
+  onDetailClick,
+  onDeleteClick,
 }: Props) {
   // 멤버 클릭 함수
-  const handleClick = () => {
-    onClick(userId);
+  const handleNameClick = () => {
+    onDetailClick(userId);
+  };
+
+  // 맴버 제외 클릭 함수
+  const handleDeleteClick = () => {
+    onDeleteClick(userId);
   };
 
   return (
-    <li>
-      <button
-        type="button"
-        className={styles.member}
-        onClick={handleClick}
-      >
-        <figure className={cn(styles.memberFigure, 'size-8')}>
-          <Img
-            src={userImage}
-            baseImage="/images/icons/icon-base-user.svg"
-            width="26"
-            height="26"
-            alt=""
-            className="mx-auto"
-          />
-        </figure>
+    <li className={styles.member}>
+      <figure className={cn(styles.memberFigure, 'size-8')}>
+        <Img
+          src={userImage}
+          baseImage="/images/icons/icon-base-user.svg"
+          width={userImage ? 30 : 26}
+          height={userImage ? 30 : 26}
+          alt=""
+          className={cn(userImage && 'size-[30px]', 'mx-auto rounded-full')}
+        />
+        {role === 'ADMIN' && (
+          <CrownIcon classname="absolute text-tertiary size-4 -right-1 -top-1 rotate-[30deg]" />
+        )}
+      </figure>
 
-        <div className="ml-3 flex-1 overflow-hidden">
-          <div className="truncate text-md font-medium">{userName}</div>
-          <div className="mt-[2px] truncate text-sm text-t-secondary">
-            {userEmail}
-          </div>
-        </div>
+      <div className="ml-3 flex flex-1 flex-col items-start gap-1 overflow-hidden">
+        <button
+          className="text-button truncate text-left text-md font-medium"
+          onClick={handleNameClick}
+        >
+          {userName}
+        </button>
+        <Link
+          href={`mailto:${userEmail}`}
+          className="truncate text-sm text-t-secondary hover:underline"
+        >
+          {userEmail}
+        </Link>
+      </div>
 
-        {/* <div className="ml-auto">
-          <button className={styles.iconButton}>
-            <KebabIcon />
+      {editable && role !== 'ADMIN' && (
+        <div className="ml-auto">
+          <button
+            className={cn(styles.iconButton, 'tool-tip')}
+            onClick={handleDeleteClick}
+            aria-label="멤버 제외"
+          >
+            <TrashIcon classname="size-4" />
           </button>
-        </div> */}
-      </button>
+        </div>
+      )}
     </li>
   );
 }

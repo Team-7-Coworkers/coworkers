@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { GroupResponseType } from '../types/group';
 import { getGroups } from '../api/group.api';
@@ -76,8 +77,9 @@ export default function TeamPage() {
   }
 
   if (isError) {
-    // TODO: 토스트로 에러 보여주시
-    console.error('--- data fetch error');
+    toast.error(
+      '그룹 데이터를 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.'
+    );
     router.replace('/');
     return null;
   }
@@ -109,7 +111,10 @@ export default function TeamPage() {
 
   return (
     <div className="container flex flex-col py-6">
-      <GroupInfo {...group} />
+      <GroupInfo
+        {...group}
+        role={role}
+      />
 
       <TaskLists
         groupId={group.id}
