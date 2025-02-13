@@ -53,14 +53,14 @@ export default function MemberListItem({
 
       <div className="ml-3 flex flex-1 flex-col items-start gap-1 overflow-hidden">
         <button
-          className="text-button truncate text-left text-md font-medium"
+          className="text-button max-w-full truncate text-left text-md font-medium"
           onClick={handleNameClick}
         >
           {userName}
         </button>
         <Link
           href={`mailto:${userEmail}`}
-          className="truncate text-sm text-t-secondary hover:underline"
+          className="max-w-full truncate text-sm text-t-secondary hover:underline"
         >
           {userEmail}
         </Link>
