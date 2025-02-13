@@ -34,9 +34,11 @@ export default function BestCardList() {
               </div>
               <div className="flex items-start justify-between">
                 {/* Title */}
-                <p className="mr-[8px] line-clamp-2 max-h-[48px] break-all text-[18px] leading-[1.5] text-t-secondary">
-                  {article.title}
-                </p>
+                <div className="h-[72px]">
+                  <p className="mr-[8px] line-clamp-2 max-h-[48px] break-all text-[18px] leading-[1.5] text-t-secondary">
+                    {article.title}
+                  </p>
+                </div>
                 {/* Image */}
                 {article.image && (
                   <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
