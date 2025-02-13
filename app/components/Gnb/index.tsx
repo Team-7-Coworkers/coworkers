@@ -99,7 +99,12 @@ export default function GNB() {
                   teamList={teamList}
                   currentTeam={currentTeam || teamList[0]}
                 />
-                <Link href="/boards">자유게시판</Link>
+                <Link
+                  href="/boards"
+                  className={`${currentPath.includes('/boards') ? 'text-green-600' : 'hover:text-green-600'}`}
+                >
+                  자유게시판
+                </Link>
               </>
             )}
           </div>
