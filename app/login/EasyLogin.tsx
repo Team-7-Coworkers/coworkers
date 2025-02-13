@@ -8,12 +8,16 @@ import { toast } from 'react-toastify';
 export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {
   const handleKakaoLogin = () => {
     if (!window.Kakao) {
-      toast.error('카카오 SDK가 로드되지 않았습니다.');
+      toast.error(
+        '카카오 로그인을 사용할 수 없습니다. 사이트 재접속 후 다시 시도해주세요.'
+      );
 
       return;
     }
     if (!window.Kakao.Auth) {
-      toast.error('카카오 Auth 모듈이 로드되지 않았습니다.');
+      toast.error(
+        '카카오 로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'
+      );
 
       return;
     }
