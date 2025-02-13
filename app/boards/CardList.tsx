@@ -65,22 +65,27 @@ export default function CardList({
 
           <div>
             <Dropdown>
-              <Dropdown.Button
-                className={`flex w-full cursor-pointer items-center justify-between rounded-[11px] border-none bg-b-secondary px-6 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white`}
-              >
-                <span>
+              <Dropdown.Button className="flex w-auto min-w-[120px] cursor-pointer items-center justify-between whitespace-nowrap rounded-[11px] border-none bg-b-secondary px-6 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white">
+                <span className="flex w-full justify-between">
                   {orderByDropdown === 'recent' ? '최신순' : '좋아요순'}
-                  <span className="ml-4">▼</span>
+                  <span className="ml-2">▼</span>
                 </span>
               </Dropdown.Button>
+
               <Dropdown.Menu
                 animationType="scale"
-                className="z-30"
+                className="z-30 w-auto min-w-[120px]"
               >
-                <Dropdown.MenuItem onClick={() => handleOrderChange('recent')}>
+                <Dropdown.MenuItem
+                  className="w-full"
+                  onClick={() => handleOrderChange('recent')}
+                >
                   최신순
                 </Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => handleOrderChange('like')}>
+                <Dropdown.MenuItem
+                  className="w-full"
+                  onClick={() => handleOrderChange('like')}
+                >
                   좋아요순
                 </Dropdown.MenuItem>
               </Dropdown.Menu>
