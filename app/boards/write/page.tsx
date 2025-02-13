@@ -13,6 +13,7 @@ import {
 } from '@/app/api/article.api';
 import Loading from '@/app/components/Loading';
 import { MAX_LENGTH } from '@/app/constants/form';
+import { toast } from 'react-toastify';
 
 const WriteContent = () => {
   const router = useRouter();
@@ -51,24 +52,26 @@ const WriteContent = () => {
   const postMutation = useMutation({
     mutationFn: postArticles,
     onSuccess: () => {
+      toast.success('등록이 완료되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['articles'] });
       router.push('/boards');
     },
     onError: () => {
-      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+      toast.error('등록중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
 
   const patchMutation = useMutation({
     mutationFn: patchArticles,
     onSuccess: () => {
+      toast.success('수정이 완료되었습니다.');
       router.push(`/boards/${articleId}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['article', articleId] });
     },
     onError: () => {
-      alert('게시글 수정에 실패했습니다. 다시 시도해주세요.');
+      toast.error('수정중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
 

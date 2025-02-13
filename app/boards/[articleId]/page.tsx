@@ -34,7 +34,6 @@ export default function ArticleDetail() {
   });
 
   const handleDeleteSuccess = () => {
-    alert('삭제가 완료되었습니다!');
     router.push('/boards');
   };
 

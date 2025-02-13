@@ -137,10 +137,8 @@ export default function CardList({
                       {isOwner && (
                         <div className="dropdown pointer-events-auto ml-[16px] flex-shrink-0">
                           <PostActionDropdown
-                            onEdit={() => console.log(`수정: ${article.id}`)}
-                            onDeleteSuccess={() =>
-                              console.log('삭제 완료 후 상태 업데이트')
-                            }
+                            onEdit={() => {}}
+                            onDeleteSuccess={() => {}}
                             articleId={article.id}
                           />
                         </div>
