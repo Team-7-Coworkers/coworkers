@@ -48,11 +48,18 @@ export default function TeamListSideBar({
         <div className="border-t-[1px] border-t-slate-600" />
         <Link
           href="/boards"
-          className={`flex gap-1 font-bold transition-all duration-75 hover:scale-105 ${currentPath.includes('/boards') ? 'scale-105 rounded-lg bg-b-primary px-1 py-1.5 text-gray-200' : 'hover:text-green-500'}}`}
+          className={`flex gap-1 font-bold transition-all duration-75 hover:scale-105 ${currentPath.includes('/boards') ? 'scale-105 rounded-lg bg-b-primary px-1 py-1.5 text-gray-200' : ''}}`}
           onClick={onClose}
         >
           <p>{currentPath.includes('/boards') ? '▸ ' : ''}</p>
-          자유게시판
+          <p className="hover:text-green-500">자유게시판</p>
+        </Link>
+        <Link
+          className="block rounded-xl border-[1px] border-slate-50 py-3 text-center text-md font-medium transition-all hover:scale-95 hover:bg-b-tertiary"
+          href="/addteam"
+          onClick={onClose}
+        >
+          + 팀 생성하기
         </Link>
       </div>
     </nav>
