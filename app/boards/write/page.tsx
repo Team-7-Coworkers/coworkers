@@ -57,7 +57,7 @@ const WriteContent = () => {
       router.push('/boards');
     },
     onError: () => {
-      toast.error('등록중 오류가 발생했습니다. 다시 시도해주세요.');
+      toast.error('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
 
@@ -71,7 +71,7 @@ const WriteContent = () => {
       queryClient.invalidateQueries({ queryKey: ['article', articleId] });
     },
     onError: () => {
-      toast.error('수정중 오류가 발생했습니다. 다시 시도해주세요.');
+      toast.error('수정 중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
 
