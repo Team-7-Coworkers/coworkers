@@ -21,6 +21,7 @@ import useUserStore from '@/app/stores/userStore';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import { ArticleCommentType } from '@/app/types/articleComment';
 import Loading from '@/app/components/Loading';
+import { MAX_LENGTH } from '@constants/form';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
@@ -112,7 +113,15 @@ export default function Comment() {
         type="box"
         value={comment}
         placeholder="댓글을 입력해주세요."
-        onChange={(e) => setComment(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length > 300) {
+            alert(
+              `댓글은 최대 ${MAX_LENGTH.articleComment}자까지 입력 가능합니다.`
+            );
+            return;
+          }
+          setComment(e.target.value);
+        }}
         height={100}
       />
       <div className="pb-4" />

@@ -141,7 +141,15 @@ const WriteContent = () => {
         placeholder="내용을 입력해주세요."
         height={240}
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length > 2000) {
+            alert(
+              `내용은 최대 ${MAX_LENGTH.articleContent}자까지 입력 가능합니다.`
+            );
+            return;
+          }
+          setContent(e.target.value);
+        }}
         enterSubmit
       />
 
