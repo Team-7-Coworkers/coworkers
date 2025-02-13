@@ -9,7 +9,6 @@ export default function NoTeamPage() {
           <Image
             src="/images/bg-no-team.png"
             alt=""
-            layout="responsive"
             priority
             width={810}
             height={255}
