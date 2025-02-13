@@ -68,6 +68,9 @@
 
     &:has(dialog[open]) {
       overflow: hidden;
+      overscroll-behavior: contain;
+      position: relative;
+      pointer-events: none;
     }
   }
 }
