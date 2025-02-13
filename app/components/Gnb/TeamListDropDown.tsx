@@ -50,12 +50,14 @@ export default function TeamListDropDown({
               </Dropdown.MenuItem>
             );
           })}
-        <Link
-          className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-center text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
-          href="/addteam"
-        >
-          + 팀 생성하기
-        </Link>
+        <Dropdown.MenuItem className="flex justify-center px-0 pb-0 hover:bg-transparent">
+          <Link
+            className="block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-center text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
+            href="/addteam"
+          >
+            + 팀 생성하기
+          </Link>
+        </Dropdown.MenuItem>
       </Dropdown.Menu>
     </Dropdown>
   );
