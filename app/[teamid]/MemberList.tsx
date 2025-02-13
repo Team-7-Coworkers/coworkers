@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-import { cn } from '../libs/utils';
+import { cn, copyToClipboard } from '../libs/utils';
 import { deleteGroupsMember, getGroupsInvitation } from '../api/group.api';
 
 import Modal, { ModalFooter } from '../components/Modal';
@@ -78,9 +78,11 @@ export default function MemberList({ groupId, members, role }: Props) {
   // 이메일 복사 버튼 클릭 함수
   const handleEmailCopyClick = () => {
     const email = members[memberIdx].userEmail;
-    navigator.clipboard.writeText(email);
-    toast.success('이메일이 복사되었습니다.');
-    // setMemberModal(false);
+    copyToClipboard(
+      email,
+      '이메일을 복사하였습니다.',
+      '이메일 복사에 실패하였습니다. 잠시 후 다시 시도해 주세요.'
+    );
   };
 
   // 멤버 초대 링크 복사 버튼 클릭 함수
@@ -92,8 +94,11 @@ export default function MemberList({ groupId, members, role }: Props) {
       toast.error('링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
     } else {
       const url = window.location.origin + '/invitation?t=' + token;
-      navigator.clipboard.writeText(url);
-      toast.success('링크가 복사되었습니다.');
+      copyToClipboard(
+        url,
+        '링크가 복사되었습니다.',
+        '링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+      );
       // setAddMemberModal(false);
     }
   };
@@ -133,7 +138,7 @@ export default function MemberList({ groupId, members, role }: Props) {
       <Modal
         isOpen={memberModal}
         onClose={() => setMemberModal(false)}
-        isCloseOutsideClick={true}
+        isCloseOutsideClick
       >
         <div className="flex flex-col items-center gap-6">
           <figure className={cn(styles.memberFigure, 'size-14')}>
@@ -171,6 +176,7 @@ export default function MemberList({ groupId, members, role }: Props) {
         title="멤버 초대"
         isOpen={addMemberModal}
         onClose={() => setAddMemberModal(false)}
+        isCloseOutsideClick
       >
         <div className="text-center">
           그룹에 참여할 수 있는 링크를 복사합니다.
