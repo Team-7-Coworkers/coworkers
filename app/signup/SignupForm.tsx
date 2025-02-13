@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+
+import type { SignUpFormDataType } from '@app/types/auth';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
 import {
@@ -8,9 +11,7 @@ import {
   validateEmail,
   validateName,
   validatePassword,
-} from '@/app/utils/formValidators';
-import { SignUpFormDataType } from '../types/auth';
-import Link from 'next/link';
+} from '@utils/formValidators';
 
 interface SignupFormProps {
   onSubmit: (formData: SignUpFormDataType) => void;
@@ -27,7 +28,6 @@ export default function SignupForm({
   },
 }: SignupFormProps) {
   const [formData, setFormData] = useState(initialFormData);
-
   const [isValidated, setIsValidated] = useState(false);
 
   const validateForm = useCallback(() => {
@@ -39,7 +39,6 @@ export default function SignupForm({
         validateConfirmPassword(formData.confirmPassword.trim()) || '',
     };
 
-    // 에러가 하나라도 있으면 false 반환
     setIsValidated(!Object.values(newErrors).some((error) => error));
   }, [formData]);
 
