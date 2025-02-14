@@ -2,8 +2,8 @@
 
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
-import Dropdown from '../components/Dropdown';
-import DailyItemList from './DailyItemList';
+import Dropdown from '@components/Dropdown';
+import DailyItemList from '@app/myhistory/DailyItemList';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import Image from 'next/image';
