@@ -14,6 +14,7 @@ import {
 import Loading from '@/app/components/Loading';
 import { MAX_LENGTH } from '@/app/constants/form';
 import { toast } from 'react-toastify';
+import useUserStore from '@stores/userStore';
 
 const WriteContent = () => {
   const router = useRouter();
@@ -25,6 +26,15 @@ const WriteContent = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
 
+  const { user } = useUserStore();
+
+  //로그아웃 상태일 때 로그인 창으로
+  useEffect(() => {
+    if (!user) {
+      router.replace('/login');
+    }
+  }, [user, router]);
+
   //수정하기로 들어갔을 때 게시글 정보 가져옴
   useEffect(() => {
     const fetchArticle = async () => {
@@ -35,6 +45,14 @@ const WriteContent = () => {
 
         if ('message' in data) {
           alert('게시글 정보를 찾을 수 없습니다.');
+          router.replace('/boards');
+          return;
+        }
+
+        // 다른 사람 게시물일 때 수정 방지
+        if (user && data.writer.id !== user.id) {
+          alert('수정 권한이 없습니다.');
+          router.replace('/boards');
           return;
         }
 
@@ -43,11 +61,12 @@ const WriteContent = () => {
         setImage(data.image);
       } catch {
         alert('게시글 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.');
+        router.replace('/boards');
       }
     };
 
     fetchArticle();
-  }, [articleId]);
+  }, [articleId, user, router]);
 
   const postMutation = useMutation({
     mutationFn: postArticles,
