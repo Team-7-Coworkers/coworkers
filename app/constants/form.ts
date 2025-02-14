@@ -6,4 +6,6 @@ export const MAX_LENGTH = {
   taskMemo: 255, // 할 일 메모 255자 최대
   taskComment: 255, // 할 일 댓글 255자 최대
   articleName: 200,
+  articleContent: 2000,
+  articleComment: 300,
 };

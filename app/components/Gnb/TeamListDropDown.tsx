@@ -1,10 +1,11 @@
 'use client';
 
-import { GroupType } from '@/app/types/shared';
-import TeamListDropDownItem from './TeamListDropDownItem';
-import Dropdown from '../Dropdown';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { GroupType } from '@app/types/shared';
+import TeamListDropDownItem from '@components/Gnb/TeamListDropDownItem';
+import Dropdown from '@components/Dropdown';
 
 interface TeamListDropDownProps {
   teamList: GroupType[];
@@ -18,7 +19,7 @@ export default function TeamListDropDown({
   return (
     <Dropdown>
       <Dropdown.Button className="flex items-center gap-2">
-        <p className="sm:max-w-[206px] sm:truncate lg:max-w-full">
+        <p className="sm:max-w-[160px] sm:truncate">
           {currentTeam?.name || '팀 목록'}
         </p>
         <Image
@@ -50,12 +51,14 @@ export default function TeamListDropDown({
               </Dropdown.MenuItem>
             );
           })}
-        <Link
-          className="mx-auto mt-4 block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-center text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
-          href="/addteam"
-        >
-          + 팀 추가하기
-        </Link>
+        <Dropdown.MenuItem className="flex justify-center px-0 pb-0 hover:bg-transparent">
+          <Link
+            className="block w-[186px] rounded-xl border-[1px] border-slate-50 py-3.5 text-center text-lg font-medium transition-all hover:scale-95 hover:opacity-70"
+            href="/addteam"
+          >
+            + 팀 생성하기
+          </Link>
+        </Dropdown.MenuItem>
       </Dropdown.Menu>
     </Dropdown>
   );

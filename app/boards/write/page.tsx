@@ -13,6 +13,7 @@ import {
 } from '@/app/api/article.api';
 import Loading from '@/app/components/Loading';
 import { MAX_LENGTH } from '@/app/constants/form';
+import { toast } from 'react-toastify';
 
 const WriteContent = () => {
   const router = useRouter();
@@ -51,24 +52,26 @@ const WriteContent = () => {
   const postMutation = useMutation({
     mutationFn: postArticles,
     onSuccess: () => {
+      toast.success('등록이 완료되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['articles'] });
       router.push('/boards');
     },
     onError: () => {
-      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+      toast.error('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
 
   const patchMutation = useMutation({
     mutationFn: patchArticles,
     onSuccess: () => {
+      toast.success('수정이 완료되었습니다.');
       router.push(`/boards/${articleId}`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['article', articleId] });
     },
     onError: () => {
-      alert('게시글 수정에 실패했습니다. 다시 시도해주세요.');
+      toast.error('수정 중 오류가 발생했습니다. 다시 시도해주세요.');
     },
   });
 
@@ -113,7 +116,7 @@ const WriteContent = () => {
       </div>
 
       <p className="pb-4 pt-10">
-        <span className="text-tertiary">*</span>제목
+        <span className="text-tertiary">* </span>제목
       </p>
       <input
         id="title"
@@ -134,19 +137,27 @@ const WriteContent = () => {
       />
 
       <p className="pb-4 pt-8">
-        <span className="text-tertiary">*</span>내용
+        <span className="text-tertiary">* </span>내용
       </p>
       <TextField
         type="box"
         placeholder="내용을 입력해주세요."
         height={240}
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length > 2000) {
+            alert(
+              `내용은 최대 ${MAX_LENGTH.articleContent}자까지 입력 가능합니다.`
+            );
+            return;
+          }
+          setContent(e.target.value);
+        }}
         enterSubmit
       />
 
       <p className="pb-4 pt-8">
-        <span className="text-tertiary">*</span>이미지
+        이미지
         <span className="text-[14px] text-t-default"> (선택)</span>
       </p>
 

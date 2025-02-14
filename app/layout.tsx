@@ -3,9 +3,11 @@ import { Slide, ToastContainer } from 'react-toastify';
 
 import siteMetadata from '@/data/siteMetadata';
 import KakaoScript from './utils/KakaoScript';
+import { Providers } from './libs/providers';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 import GNB from './components/Gnb';
-import { Providers } from './libs/providers';
+
 import './styles/globals.css';
 
 export const metadata: Metadata = {
@@ -23,13 +25,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
+        />
+      </head>
       <body className="scroll-smooth pt-[var(--header-height)]">
         <Providers>
-          {children}
           <GNB />
+          {children}
           <ToastContainer
             position="top-right"
-            autoClose={3000}
+            autoClose={TOAST_CLOSE_TIME.default}
             theme="dark"
             transition={Slide}
           />

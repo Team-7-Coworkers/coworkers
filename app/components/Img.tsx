@@ -3,12 +3,17 @@ import NoImage from '@/public/images/icons/ic_image.svg';
 
 interface Props extends ImageProps {
   baseImage?: string;
+  isPlaceholder?: boolean;
 }
+
+const blurDataURL =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg==';
 
 export default function Img({
   baseImage = '',
   src,
   alt = '',
+  isPlaceholder = false,
   ...props
 }: Props) {
   // Error Handler
@@ -23,8 +28,8 @@ export default function Img({
       src={src || baseImage || NoImage}
       alt={alt}
       onError={handleError}
-      placeholder="blur"
-      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+      placeholder={isPlaceholder ? 'blur' : 'empty'}
+      {...(isPlaceholder && { blurDataURL: blurDataURL })}
       {...props}
     />
   );
