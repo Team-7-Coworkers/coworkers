@@ -15,7 +15,7 @@ import {
   patchComments,
 } from '@/app/api/articleComment.api';
 import dayjs from 'dayjs';
-import Image from 'next/image';
+
 import profile from '@/public/images/icons/icon-base-user.svg';
 import useUserStore from '@/app/stores/userStore';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
@@ -23,6 +23,7 @@ import { ArticleCommentType } from '@/app/types/articleComment';
 import Loading from '@/app/components/Loading';
 import { MAX_LENGTH } from '@constants/form';
 import { toast } from 'react-toastify';
+import Img from '@components/Img';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
@@ -185,7 +186,7 @@ export default function Comment() {
                 )}
               </div>
               <div className="mt-3 flex items-center">
-                <Image
+                <Img
                   src={
                     comment.writer.image?.startsWith('http')
                       ? comment.writer.image
