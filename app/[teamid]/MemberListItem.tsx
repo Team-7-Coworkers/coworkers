@@ -44,7 +44,10 @@ export default function MemberListItem({
           width={userImage ? 30 : 26}
           height={userImage ? 30 : 26}
           alt=""
-          className={cn(userImage && 'size-[30px]', 'mx-auto rounded-full')}
+          className={cn(
+            userImage && 'size-[30px]',
+            'mx-auto rounded-full object-cover'
+          )}
         />
         {role === 'ADMIN' && (
           <CrownIcon classname="absolute text-tertiary size-4 -right-1 -top-1 rotate-[30deg]" />

@@ -150,7 +150,7 @@ export default function MemberList({ groupId, members, role }: Props) {
               alt=""
               className={cn(
                 members[memberIdx].userImage && 'size-[54px]',
-                'mx-auto rounded-full'
+                'mx-auto rounded-full object-cover'
               )}
             />
           </figure>
