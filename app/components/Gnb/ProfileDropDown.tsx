@@ -1,13 +1,14 @@
 'use client';
 
-import { UserType } from '@/app/types/shared';
 import Image from 'next/image';
 import Link from 'next/link';
-import Dropdown from '../Dropdown';
-import useUserStore from '@/app/stores/userStore';
 
 import { signOut } from 'next-auth/react';
-import useTeamStore from '@/app/stores/teamStore';
+
+import useUserStore from '@stores/userStore';
+import useTeamStore from '@stores/teamStore';
+import { UserType } from '@app/types/shared';
+import Dropdown from '@components/Dropdown';
 
 interface ProfileDropDownProps {
   user: UserType;

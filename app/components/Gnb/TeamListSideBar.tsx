@@ -1,8 +1,9 @@
 'use client';
 
-import { GroupType } from '@/app/types/shared';
-import CloseIcon from '../Modal/CloseIcon';
 import Link from 'next/link';
+
+import CloseIcon from '@components/Modal/CloseIcon';
+import { GroupType } from '@app/types/shared';
 
 interface TeamListSideBarProps {
   teamList: GroupType[];

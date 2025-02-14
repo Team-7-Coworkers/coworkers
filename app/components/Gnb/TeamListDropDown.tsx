@@ -1,10 +1,11 @@
 'use client';
 
-import { GroupType } from '@/app/types/shared';
-import TeamListDropDownItem from './TeamListDropDownItem';
-import Dropdown from '../Dropdown';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { GroupType } from '@app/types/shared';
+import TeamListDropDownItem from '@components/Gnb/TeamListDropDownItem';
+import Dropdown from '@components/Dropdown';
 
 interface TeamListDropDownProps {
   teamList: GroupType[];

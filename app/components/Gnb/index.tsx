@@ -1,25 +1,26 @@
 'use client';
 
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
+
 import { useQuery } from '@tanstack/react-query';
 import isEqual from 'lodash.isequal';
 
-import TeamListDropDown from './TeamListDropDown';
-import TeamListSideBar from './TeamListSideBar';
-import ProfileDropDown from './ProfileDropDown';
-import LoginMenu from './LoginMenu';
-
-import useTeamStore from '@/app/stores/teamStore';
-import useUserStore from '@/app/stores/userStore';
-import { getUserGroups } from '@/app/api/user.api';
-import { usePathname } from 'next/navigation';
-import { extractTeamIdFromPath } from '@/app/utils/navigation';
+import { getUserGroups } from '@api/user.api';
+import { extractTeamIdFromPath } from '@utils/navigation';
+import useTeamStore from '@stores/teamStore';
+import useUserStore from '@stores/userStore';
+import TeamListDropDown from '@components/Gnb/TeamListDropDown';
+import TeamListSideBar from '@components/Gnb/TeamListSideBar';
+import ProfileDropDown from '@components/Gnb/ProfileDropDown';
+import LoginMenu from '@components/Gnb/LoginMenu';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
+
   const isLoginMenuHidden =
     currentPath === '/login' || currentPath === '/signup';
 
@@ -50,10 +51,6 @@ export default function GNB() {
     }
   }, [fetchedTeamList, teamId, currentTeam?.id, setTeamList, setCurrentTeam]);
 
-  useEffect(() => {
-    updateTeamInfo();
-  }, [updateTeamInfo]);
-
   const handleOpenSideBar = useCallback(() => {
     setIsSideBarOpen(true);
   }, []);
@@ -61,6 +58,10 @@ export default function GNB() {
   const handleCloseSideBar = useCallback(() => {
     setIsSideBarOpen(false);
   }, []);
+
+  useEffect(() => {
+    updateTeamInfo();
+  }, [updateTeamInfo]);
 
   return (
     <nav className="fixed left-0 top-0 z-10 w-full bg-b-secondary">

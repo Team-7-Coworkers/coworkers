@@ -1,5 +1,5 @@
-import { GroupType } from '@/app/types/shared';
-import Img from '../Img';
+import Img from '@components/Img';
+import { GroupType } from '@app/types/shared';
 
 interface TeamListDropDownItemProps {
   team: GroupType;
