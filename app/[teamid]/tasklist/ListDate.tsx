@@ -59,7 +59,7 @@ export default function ListDate({
 
   return (
     <div className="flex items-center text-lg font-medium text-t-primary">
-      <span className="truncate">{formatDate(selectedDate)}</span>
+      <span>{formatDate(selectedDate)}</span>
       <div className="ml-2 flex items-center sm:ml-3">
         <div className="flex items-center gap-1 sm:gap-2">
           <button

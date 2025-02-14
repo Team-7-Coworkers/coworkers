@@ -40,24 +40,24 @@ export default function ListHeader({
           </Link>
         </div>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
         <ListDate
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />
         <p
-          className="ml-3 cursor-pointer truncate text-md text-primary hover:text-i-hover sm:ml-5"
+          className="mt-1 cursor-pointer text-md text-primary hover:text-i-hover sm:ml-5 sm:mt-0"
           onClick={() => setIsModalOpen(true)}
         >
           + 새로운 목록 추가하기
         </p>
-        <AddListModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          groupId={groupId}
-          onListAdded={onListAdded}
-        />
       </div>
+      <AddListModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        groupId={groupId}
+        onListAdded={onListAdded}
+      />
     </div>
   );
 }
