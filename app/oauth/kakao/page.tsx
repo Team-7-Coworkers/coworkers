@@ -36,23 +36,35 @@ const KakaoCallback = () => {
     const receivedState = urlParams.get('state');
     const storedState = localStorage.getItem('kakao_state');
 
+    const redirectWithMessage = (message: string, error = true) => {
+      if (error) {
+        toast.error(message);
+      } else {
+        toast(message);
+      }
+      hasShownError.current = true;
+      router.push('/login');
+    };
+
     if (!code) {
-      toast.error(
+      redirectWithMessage(
         '⚠️ 인가 코드가 없습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
       );
-      hasShownError.current = true;
-
-      router.push('/login');
       return;
     }
 
-    if (!receivedState || receivedState !== storedState) {
-      toast.error(
+    if (!storedState) {
+      redirectWithMessage(
+        '카카오 브라우저로 접속하셨습니다. 카카오 로그인을 다시 진행해주세요.',
+        false
+      );
+      return;
+    }
+
+    if (receivedState !== storedState) {
+      redirectWithMessage(
         '⚠️ CSRF 공격이 감지되었습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
       );
-
-      hasShownError.current = true;
-      router.push('/login');
       return;
     }
 
