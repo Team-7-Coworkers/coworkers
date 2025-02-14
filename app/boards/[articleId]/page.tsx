@@ -13,6 +13,7 @@ import useUserStore from '@/app/stores/userStore';
 import Comment from './Comments';
 
 import Loading from '@/app/components/Loading';
+import { useState } from 'react';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -37,6 +38,19 @@ export default function ArticleDetail() {
     router.push('/boards');
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const openImageModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   if (isLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -55,7 +69,10 @@ export default function ArticleDetail() {
           </p>
 
           {article.image && (
-            <div className="relative ml-auto h-[150px] w-[150px] flex-shrink-0 overflow-hidden rounded-[8px]">
+            <div
+              className="relative ml-auto h-[150px] w-[150px] flex-shrink-0 cursor-pointer overflow-hidden rounded-[8px]"
+              onClick={() => openImageModal(article.image)}
+            >
               <Image
                 src={article.image}
                 alt={article.title}
@@ -105,6 +122,26 @@ export default function ArticleDetail() {
         {article.content}
       </p>
       <Comment />
+      {isModalOpen && selectedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+          onClick={closeImageModal}
+        >
+          <div
+            className="relative w-auto max-w-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative h-[600px] w-[800px] max-w-full">
+              <Image
+                src={selectedImage}
+                alt="게시글 이미지"
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
