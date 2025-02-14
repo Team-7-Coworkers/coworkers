@@ -108,7 +108,6 @@ export default function TodoModal({
 
   return (
     <Modal
-      position="top"
       isOpen={isOpen}
       title="할 일 만들기"
       isCloseOutsideClick
@@ -146,12 +145,12 @@ export default function TodoModal({
           htmlFor="start-date"
           className="text-lg font-medium text-t-primary"
         >
-          시작 날짜 및 시간
+          시작 날짜
         </label>
 
         <div
           id="start-date"
-          className={`mb-3 mt-3 cursor-pointer rounded-xl border p-4 text-lg text-t-default ${
+          className={`mb-3 mt-3 h-[43px] cursor-pointer rounded-xl border px-4 py-3 text-lg text-t-default sm:h-[53px] sm:py-4 ${
             isCalendarOpen ? 'border-primary' : 'border-bd-primary/10'
           }`}
           onClick={() => setIsCalendarOpen((prev) => !prev)}
