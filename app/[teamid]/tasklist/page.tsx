@@ -39,7 +39,7 @@ export default function ListPage() {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const router = useRouter();
 
-  const { selectedCategory } = useTaskStore();
+  const { selectedCategory, setSelectedCategory } = useTaskStore();
   const { user } = useUserStore();
   const queryClient = useQueryClient();
 
@@ -59,8 +59,10 @@ export default function ListPage() {
     queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
   };
 
-  const handleListAdded = () => {
+  const handleListAdded = (newTaskListId: number) => {
     queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
+    setSelectedTaskListId(newTaskListId);
+    setSelectedCategory(newTaskListId);
   };
 
   const handleIncorrectModalClose = () => {

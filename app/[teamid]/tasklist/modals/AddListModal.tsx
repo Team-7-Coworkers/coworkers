@@ -5,12 +5,14 @@ import InputField from '@/app/components/InputField';
 import { postGroupsTaskLists } from '@/app/api/taskList.api';
 import { TaskListParamsType } from '@/app/types/taskList';
 import { MAX_LENGTH } from '@/app/constants/form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTaskStore } from '@stores/taskStore';
 
 type AddListModalProps = {
   isOpen: boolean;
   onClose: () => void;
   groupId: number;
-  onListAdded: () => void;
+  onListAdded: (newTaskListId: number) => void;
 };
 
 export default function AddListModal({
@@ -20,27 +22,38 @@ export default function AddListModal({
   onListAdded,
 }: AddListModalProps) {
   const [listName, setListName] = useState('');
+  const queryClient = useQueryClient();
 
-  const handleAddList = async () => {
-    if (listName.trim() === '') {
-      return;
-    }
+  const { setSelectedCategory } = useTaskStore();
 
-    try {
-      const params: TaskListParamsType['postGroupsTaskLists'] = {
-        groupId,
-        name: listName,
-      };
+  const mutation = useMutation({
+    mutationFn: async (params: TaskListParamsType['postGroupsTaskLists']) =>
+      postGroupsTaskLists(params),
+    onSuccess: (newTaskList) => {
+      const newTaskListId = newTaskList?.id;
 
-      await postGroupsTaskLists(params);
+      if (newTaskListId) {
+        setSelectedCategory(newTaskListId);
+        onListAdded(newTaskListId);
+      }
 
+      queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
       setListName('');
       onClose();
-      onListAdded();
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error('목록 추가 중 오류 발생:', error);
       alert('목록 추가에 실패했습니다. 다시 시도해주세요.');
-    }
+    },
+  });
+
+  const handleAddList = () => {
+    if (listName.trim() === '') return;
+
+    mutation.mutate({
+      groupId,
+      name: listName,
+    });
   };
 
   return (

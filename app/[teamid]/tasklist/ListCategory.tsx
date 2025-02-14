@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ItemList from './ItemList';
 import styles from './ListCategory.module.css';
@@ -39,6 +39,11 @@ export default function ListCategory({
 
   const listRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
+
+  const taskListIds = useMemo(
+    () => taskLists.map((task) => task.id),
+    [taskLists]
+  );
 
   const formattedDate = `${selectedDate.getFullYear()}-${String(
     selectedDate.getMonth() + 1
@@ -81,7 +86,7 @@ export default function ListCategory({
         inline: 'center',
       });
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, taskListIds]);
 
   useEffect(() => {
     // 체크 상태 관리

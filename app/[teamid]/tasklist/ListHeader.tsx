@@ -9,7 +9,7 @@ type ListHeaderProps = {
   setSelectedDate: (date: Date) => void;
   groupId: number;
   groupName: string;
-  onListAdded: () => void;
+  onListAdded: (newTaskListId: number) => void;
 };
 
 export default function ListHeader({
