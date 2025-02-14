@@ -35,9 +35,9 @@ export default function BestCardList() {
               <div className="flex items-start justify-between">
                 {/* Title */}
                 <div className="h-[72px]">
-                  <p className="mr-[8px] line-clamp-2 max-h-[48px] break-all text-[18px] leading-[1.5] text-t-secondary">
+                  <h1 className="mr-[8px] line-clamp-2 max-h-[48px] break-all text-[18px] leading-[1.5] text-t-secondary">
                     {article.title}
-                  </p>
+                  </h1>
                 </div>
                 {/* Image */}
                 {article.image && (

@@ -124,9 +124,9 @@ export default function CardList({
                     }}
                   >
                     <div className="flex justify-between">
-                      <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden break-all text-[18px] leading-[1.5] text-t-secondary">
+                      <h1 className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden break-all text-[18px] leading-[1.5] text-t-secondary">
                         {article.title}
-                      </p>
+                      </h1>
 
                       {article.image && (
                         <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
