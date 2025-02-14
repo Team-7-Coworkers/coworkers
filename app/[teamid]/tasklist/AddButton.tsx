@@ -4,6 +4,7 @@ import Button from '@/app/components/Button';
 import Image from 'next/image';
 import { useState } from 'react';
 import TodoModal from './modals/TodoModal';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface AddButtonProps {
   groupId: number;
@@ -17,10 +18,15 @@ export default function AddButton({
   onSaveSuccess,
 }: AddButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleSaveSuccess = () => {
     setIsModalOpen(false);
     onSaveSuccess();
+
+    queryClient.invalidateQueries({
+      queryKey: ['tasks', groupId, taskListId],
+    });
   };
 
   return (

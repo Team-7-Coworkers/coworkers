@@ -40,20 +40,21 @@ export default function ListCategory({
   const listRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
 
+  const formattedDate = `${selectedDate.getFullYear()}-${String(
+    selectedDate.getMonth() + 1
+  ).padStart(
+    2,
+    '0'
+  )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
+
   const {
     data: taskData,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['tasks', selectedCategory, selectedDate],
+    queryKey: ['tasks', groupId, selectedCategory, formattedDate],
     queryFn: async () => {
       if (!selectedCategory) return [];
-      const formattedDate = `${selectedDate.getFullYear()}-${String(
-        selectedDate.getMonth() + 1
-      ).padStart(
-        2,
-        '0'
-      )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
 
       return await getGroupsTaskListTasks({
         groupId,
@@ -61,7 +62,6 @@ export default function ListCategory({
         date: formattedDate,
       });
     },
-    enabled: !!selectedCategory,
   });
 
   useEffect(() => {
@@ -86,14 +86,14 @@ export default function ListCategory({
   useEffect(() => {
     // 체크 상태 관리
     if (taskData) {
-      setTasks(taskData);
+      setTasks(selectedCategory ?? 0, taskData);
       const initialCheckedItems: { [key: number]: boolean } = {};
       taskData.forEach((task) => {
         initialCheckedItems[task.id] = !!task.doneAt;
       });
       setCheckedItems(initialCheckedItems);
     }
-  }, [taskData, setTasks, setCheckedItems]);
+  }, [taskData, setTasks, selectedCategory, setCheckedItems]);
 
   const handleCategoryChange = (
     taskList: TaskListResponseType['getGroupsTaskLists']
@@ -109,6 +109,7 @@ export default function ListCategory({
     name: string,
     description: string
   ) => {
+    if (selectedCategory === null) return;
     try {
       await patchGroupsTaskListsTasks({
         groupId,
@@ -116,7 +117,7 @@ export default function ListCategory({
         taskId,
         name,
         description,
-        done: !!tasks[taskId]?.doneAt,
+        done: !!tasks[selectedCategory]?.[taskId]?.doneAt,
       });
       refetch();
     } catch (error) {
@@ -125,14 +126,15 @@ export default function ListCategory({
   };
 
   const handleDeleteItem = async (taskId: number) => {
+    if (selectedCategory === null) return;
     try {
       if (checkedItems[taskId]) {
         await patchGroupsTaskListsTasks({
           groupId,
           taskListId: selectedCategory || 0,
           taskId,
-          name: tasks[taskId].name,
-          description: tasks[taskId].description,
+          name: tasks[selectedCategory]?.[taskId].name,
+          description: tasks[selectedCategory]?.[taskId].description,
           done: false,
         });
       }
@@ -143,7 +145,7 @@ export default function ListCategory({
         taskId,
       });
 
-      deleteTask(taskId);
+      deleteTask(selectedCategory ?? 0, taskId);
       refetch();
     } catch (error) {
       console.error('삭제 중 오류 발생:', error);
@@ -185,6 +187,7 @@ export default function ListCategory({
 
       <ItemList
         taskListId={selectedCategory || 0}
+        seletedDate={formattedDate}
         groupId={groupId}
         items={taskData ?? []}
         isLoading={isLoading}

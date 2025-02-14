@@ -3,26 +3,34 @@ import { TaskType } from '../types/shared';
 
 interface TaskState {
   checkedItems: { [key: number]: boolean }; // 체크 저장
-  tasks: { [key: number]: TaskType }; // task
+  tasks: { [taskListId: number]: { [taskId: number]: TaskType } }; // 목록별 Task 저장
   selectedCategory: number | null; // 선택한 목록
   setSelectedCategory: (taskListId: number) => void;
   toggleChecked: (taskId: number, checked: boolean) => void; // 특정 task 체크 상태 관리
   setCheckedItems: (
-    // 체크 상태 변경
     items:
       | { [key: number]: boolean }
       | ((prev: { [key: number]: boolean }) => { [key: number]: boolean })
   ) => void;
 
-  updateTask: (taskId: number, name: string, description: string) => void; // 수정
-  deleteTask: (taskId: number) => void; // 삭제
-  setTasks: (tasks: TaskType[]) => void; // tasks 관리
-  updateCommentCount: (taskId: number, count: number) => void; // 댓글 갯수 관리
+  updateTask: (
+    taskListId: number,
+    taskId: number,
+    name: string,
+    description: string
+  ) => void; // 목록별 수정
+  deleteTask: (taskListId: number, taskId: number) => void; //  삭제
+  setTasks: (taskListId: number, tasks: TaskType[]) => void; // 관리
+  updateCommentCount: (
+    taskListId: number,
+    taskId: number,
+    count: number
+  ) => void; // 댓글 갯수 관리
 }
 
 export const useTaskStore = create<TaskState>((set) => ({
   checkedItems: {},
-  tasks: {},
+  tasks: {}, // taskListId 별로 저장하도록 수정
   selectedCategory: null,
 
   setSelectedCategory: (taskListId) =>
@@ -44,50 +52,62 @@ export const useTaskStore = create<TaskState>((set) => ({
         typeof items === 'function' ? items(state.checkedItems) : items,
     })),
 
-  updateTask: (taskId, name, description) =>
+  updateTask: (taskListId, taskId, name, description) =>
     set((state) => ({
       tasks: {
         ...state.tasks,
-        [taskId]: { ...state.tasks[taskId], name, description },
+        [taskListId]: {
+          ...state.tasks[taskListId],
+          [taskId]: {
+            ...state.tasks[taskListId]?.[taskId],
+            name,
+            description,
+          },
+        },
       },
     })),
 
-  deleteTask: (taskId) =>
+  deleteTask: (taskListId, taskId) =>
     set((state) => {
-      const updatedTasks = { ...state.tasks };
+      const updatedTasks = { ...state.tasks[taskListId] };
       delete updatedTasks[taskId];
 
-      const updatedCheckedItems = { ...state.checkedItems };
-      delete updatedCheckedItems[taskId];
-
       return {
-        tasks: updatedTasks,
-        checkedItems: updatedCheckedItems,
+        tasks: {
+          ...state.tasks,
+          [taskListId]: updatedTasks,
+        },
       };
     }),
 
-  setTasks: (tasks) =>
-    set(() => {
-      const newTasks = tasks.reduce(
-        (acc, task) => {
-          acc[task.id] = task;
+  setTasks: (taskListId, tasks) =>
+    set((state) => {
+      const updatedTasks = tasks.reduce(
+        (acc, task, index) => {
+          acc[task.id] = { ...task, displayIndex: index };
           return acc;
         },
-        {} as { [key: number]: TaskType }
+        {} as Record<number, TaskType>
       );
 
       return {
-        tasks: newTasks,
+        tasks: {
+          ...state.tasks,
+          [taskListId]: updatedTasks,
+        },
       };
     }),
 
-  updateCommentCount: (taskId, count) =>
+  updateCommentCount: (taskListId, taskId, count) =>
     set((state) => ({
       tasks: {
         ...state.tasks,
-        [taskId]: {
-          ...state.tasks[taskId],
-          commentCount: count,
+        [taskListId]: {
+          ...state.tasks[taskListId],
+          [taskId]: {
+            ...state.tasks[taskListId]?.[taskId],
+            commentCount: count,
+          },
         },
       },
     })),
