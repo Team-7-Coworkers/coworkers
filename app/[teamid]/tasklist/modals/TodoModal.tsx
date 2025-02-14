@@ -112,6 +112,7 @@ export default function TodoModal({
     <Modal
       isOpen={isOpen}
       title="할 일 만들기"
+      position="top"
       isCloseOutsideClick
       onClose={onClose}
     >
