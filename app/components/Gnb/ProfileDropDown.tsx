@@ -1,14 +1,14 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { signOut } from 'next-auth/react';
 
 import useUserStore from '@stores/userStore';
 import useTeamStore from '@stores/teamStore';
-import { UserType } from '@app/types/shared';
 import Dropdown from '@components/Dropdown';
+import Img from '@components/Img';
+import { UserType } from '@app/types/shared';
 
 interface ProfileDropDownProps {
   user: UserType;
@@ -34,14 +34,18 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
 
   return (
     <Dropdown>
-      <Dropdown.Button>
+      <Dropdown.Button className="flex items-center rounded-lg px-2 py-0.5 lg:hover:bg-b-tertiary">
         <div className="flex items-center gap-2">
-          <Image
-            src={'/images/icons/ic_user.svg'}
-            width={24}
-            height={24}
-            alt="메뉴 버튼"
-          />
+          <div className="h-8 w-8 overflow-hidden rounded-lg p-1 hover:bg-b-tertiary lg:hover:bg-transparent">
+            <Img
+              src={user.image || ''}
+              baseImage="/images/icons/ic_user.svg"
+              alt="팀 이미지"
+              width={24}
+              height={24}
+              className="h-full w-full object-cover"
+            />
+          </div>
           <div className="hidden text-md lg:block">{user.nickname}</div>
         </div>
       </Dropdown.Button>
