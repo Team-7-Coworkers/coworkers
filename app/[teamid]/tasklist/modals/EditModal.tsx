@@ -59,7 +59,6 @@ export default function EditModal({
         <div className="help-message">
           할 일 제목은 최대 {MAX_LENGTH.taskName}자 입니다.
           {/*TODO: 카운터 추가해보기*/}
-          추가해보기
         </div>
       </section>
       <section className="mt-5">

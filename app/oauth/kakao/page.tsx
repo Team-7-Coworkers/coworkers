@@ -1,12 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import EasyLoginLoadingPage from '../EasyLoginLoadingPage';
-import { useEasySignIn } from '@/app/hooks/useEasySignIn';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { toast } from 'react-toastify';
+
+import EasyLoginLoadingPage from '@app/oauth/EasyLoginLoadingPage';
+import { useEasySignIn } from '@hooks/useEasySignIn';
+import { useRouter } from 'next/navigation';
 
 const KakaoCallback = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const easySignInMutation = useEasySignIn();
+
+  const router = useRouter();
+  const hasShownError = useRef(false);
 
   const handleKakaoLogin = useCallback(
     (code: string, receivedState: string) => {
@@ -22,7 +29,7 @@ const KakaoCallback = () => {
   );
 
   useEffect(() => {
-    if (isProcessing) return;
+    if (isProcessing || hasShownError.current) return;
 
     const urlParams = new URL(window.location.href).searchParams;
     const code = urlParams.get('code');
@@ -30,17 +37,27 @@ const KakaoCallback = () => {
     const storedState = localStorage.getItem('kakao_state');
 
     if (!code) {
-      alert('⚠️ 인가 코드가 없습니다. 다시 로그인해주세요.');
+      toast.error(
+        '⚠️ 인가 코드가 없습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
+      );
+      hasShownError.current = true;
+
+      router.push('/login');
       return;
     }
 
     if (!receivedState || receivedState !== storedState) {
-      alert('⚠️ CSRF 공격이 감지되었습니다. 다시 로그인해주세요.');
+      toast.error(
+        '⚠️ CSRF 공격이 감지되었습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
+      );
+
+      hasShownError.current = true;
+      router.push('/login');
       return;
     }
 
     handleKakaoLogin(code, receivedState);
-  }, [handleKakaoLogin, isProcessing]);
+  }, [handleKakaoLogin, isProcessing, router]);
 
   return <EasyLoginLoadingPage type="kakao" />;
 };

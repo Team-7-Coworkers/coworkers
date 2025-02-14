@@ -1,7 +1,7 @@
 'use client';
 
 import KebobDropdown from '../KebobDropdown';
-import CheckIcon from '../CheckIcon';
+import CheckIcon from '../task-icon/CheckIcon';
 import { TaskType } from '@/app/types/shared';
 import DateDisplay from '../info-displays/DateDisplay';
 import FrequencyDisplay from '../info-displays/FrequencyDisplay';
@@ -26,10 +26,7 @@ export default function TaskDetailHeader({
         <div>
           {isCompleted && (
             <div className="flex items-center gap-2 text-xs font-semibold text-tertiary">
-              <CheckIcon
-                classname="w-4 h-4"
-                color="#a3e635"
-              />
+              <CheckIcon classname="w-4 h-4" />
               완료
             </div>
           )}
