@@ -34,9 +34,10 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
 
   return (
     <Dropdown>
-      <Dropdown.Button className="flex items-center rounded-lg px-2 py-0.5 lg:hover:bg-b-tertiary">
+      <Dropdown.Button className="flex items-center rounded-lg px-2 py-1.5 lg:hover:bg-b-tertiary">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 overflow-hidden rounded-lg p-1 hover:bg-b-tertiary lg:hover:bg-transparent">
+          <div className="hidden text-md lg:block">{user.nickname}</div>
+          <div className="h-8 w-8 overflow-hidden rounded-lg hover:bg-b-tertiary lg:hover:bg-transparent">
             <Img
               src={user.image || ''}
               baseImage="/images/icons/ic_user.svg"
@@ -46,7 +47,6 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="hidden text-md lg:block">{user.nickname}</div>
         </div>
       </Dropdown.Button>
 
