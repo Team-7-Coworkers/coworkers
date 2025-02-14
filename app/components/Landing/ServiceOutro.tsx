@@ -18,7 +18,7 @@ export default function ServiceOut() {
           팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
         </p>
       </div>
-      <div className="h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
+      <div className="relative h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
         <Image
           src={landingBottom}
           className="object-cover"
