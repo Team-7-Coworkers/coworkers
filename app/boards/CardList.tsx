@@ -65,10 +65,16 @@ export default function CardList({
 
           <div>
             <Dropdown>
-              <Dropdown.Button className="flex w-auto min-w-[120px] cursor-pointer items-center justify-between whitespace-nowrap rounded-[11px] border-none bg-b-secondary px-6 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white">
+              <Dropdown.Button className="flex w-auto min-w-[120px] cursor-pointer items-center justify-between whitespace-nowrap rounded-[11px] border-none bg-b-secondary px-5 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white">
                 <span className="flex w-full justify-between">
                   {orderByDropdown === 'recent' ? '최신순' : '좋아요순'}
-                  <span className="ml-2">▼</span>
+                  <Image
+                    src="/images/icons/ic_toggle.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="ml-2"
+                  />
                 </span>
               </Dropdown.Button>
 
