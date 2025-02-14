@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Checkbox from './Checkbox';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
@@ -18,6 +18,7 @@ type ItemListProps = {
   groupId: number;
   taskListId: number;
   isLoading: boolean;
+  seletedDate: string;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
   onTaskClick: (taskId: number) => void;
@@ -35,9 +36,17 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const tasks = useTaskStore((state) => state.tasks);
 
-  const { checkedItems, toggleChecked, updateTask } = useTaskStore();
+  const {
+    tasks: rawTasks,
+    checkedItems,
+    toggleChecked,
+    updateTask,
+  } = useTaskStore();
+  const tasks = useMemo(
+    () => rawTasks[taskListId] || {},
+    [rawTasks, taskListId]
+  );
 
   const handleComplete = async (taskId: number, checked: boolean) => {
     try {
@@ -45,8 +54,8 @@ export default function ItemList({
         groupId,
         taskListId,
         taskId,
-        name: tasks[taskId].name,
-        description: tasks[taskId].description,
+        name: tasks[taskId]?.name,
+        description: tasks[taskId]?.description,
         done: checked,
       });
 
@@ -78,7 +87,7 @@ export default function ItemList({
   const handleEdit = (title: string, description: string) => {
     if (selectedItem) {
       onEditItem(selectedItem.id, title, description);
-      updateTask(selectedItem.id, title, description);
+      updateTask(taskListId, selectedItem.id, title, description);
       setIsEditModalOpen(false);
       setSelectedItem(null);
     }
@@ -104,7 +113,7 @@ export default function ItemList({
     <div className="mt-6">
       {items.map((item) => (
         <div
-          key={`${item.id}-${item.date}`}
+          key={item.id}
           className="mb-4 flex flex-col items-start rounded-lg bg-b-secondary px-3 py-[14px] text-white shadow-md"
         >
           <div className="relative flex w-full items-center justify-between">
@@ -117,7 +126,7 @@ export default function ItemList({
               />
               <h3
                 onClick={() => onTaskClick(item.id)}
-                className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
+                className={`hover:text-highlight ml-3 max-w-48 cursor-pointer truncate text-t-primary transition-transform duration-200 ease-in-out hover:scale-105 sm:max-w-full ${
                   checkedItems[item.id] ? 'line-through' : ''
                 }`}
               >

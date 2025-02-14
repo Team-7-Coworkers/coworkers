@@ -1,12 +1,8 @@
 interface Props {
   classname?: string;
-  color?: string;
 }
 
-export default function CheckIcon({
-  classname = '',
-  color = '#F8FAFC',
-}: Props) {
+export default function CheckIcon({ classname = '' }: Props) {
   return (
     <svg
       width="12"
@@ -18,7 +14,7 @@ export default function CheckIcon({
     >
       <path
         d="M4 7.14286L6.90909 10L12 5"
-        stroke={color}
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

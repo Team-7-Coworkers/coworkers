@@ -118,10 +118,8 @@ export default function ListPage() {
 
       {isMember && (
         <div className="w-full">
-          <h1 className="mb-7 mt-8 text-2lg font-bold text-t-primary sm:text-xl">
-            할 일
-          </h1>
           <ListHeader
+            groupName={data?.name || '팀'}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             groupId={Number(groupId)}

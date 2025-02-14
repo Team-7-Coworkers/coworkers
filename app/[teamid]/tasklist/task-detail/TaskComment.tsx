@@ -9,7 +9,7 @@ import {
   deleteTasksComments,
 } from '@/app/api/taskComment.api';
 import { TaskCommentType } from '@/app/types/taskComment';
-import SubmitIcon from './SubmitIcon';
+import SubmitIcon from '../task-icon/SubmitIcon';
 import TextField from '@/app/components/TextField';
 import { useTaskStore } from '@/app/stores/taskStore';
 import UserProfile from './UserProfile';
@@ -20,10 +20,11 @@ import useUserStore from '@/app/stores/userStore';
 import { MAX_LENGTH } from '@/app/constants/form';
 
 interface TaskCommentProps {
+  taskListId: number;
   taskId: number;
 }
 
-export default function TaskComment({ taskId }: TaskCommentProps) {
+export default function TaskComment({ taskListId, taskId }: TaskCommentProps) {
   const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -37,7 +38,7 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
     queryKey: ['taskComments', taskId],
     queryFn: async () => {
       const data = await getTaskComments({ taskId });
-      updateCommentCount(taskId, data.length);
+      updateCommentCount(taskListId, taskId, data.length);
       return Array.isArray(data) ? data : [];
     },
     staleTime: 1000 * 60 * 5,
@@ -110,8 +111,11 @@ export default function TaskComment({ taskId }: TaskCommentProps) {
           className="!text-md"
           onSubmit={handleAddComment}
         />
-        <button onClick={handleAddComment}>
-          <SubmitIcon color={newComment.trim() ? '#10B981' : '#64748B'} />
+        <button
+          onClick={handleAddComment}
+          className={newComment.trim() ? 'text-primary' : 'text-ic-primary'}
+        >
+          <SubmitIcon />
         </button>
       </div>
       <div className="pb-16 sm:pb-20">
