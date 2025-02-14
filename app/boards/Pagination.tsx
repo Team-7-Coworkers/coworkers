@@ -27,7 +27,7 @@ export default function Pagination({
       <button
         className={`rounded-md border px-3 py-2 ${
           currentPage === 1
-            ? 'cursor-not-allowed border-gray-600 bg-gray-700'
+            ? 'border-gray-600 bg-gray-700'
             : 'border-gray-700 bg-b-primary'
         }`}
         onClick={() => onPageChange(currentPage - 1)}
@@ -53,7 +53,7 @@ export default function Pagination({
       <button
         className={`rounded-md border px-3 py-2 ${
           currentPage === totalPages
-            ? 'cursor-not-allowed border-gray-600 bg-gray-700'
+            ? 'border-gray-600 bg-gray-700'
             : 'border-gray-700 bg-b-primary'
         }`}
         onClick={() => onPageChange(currentPage + 1)}
