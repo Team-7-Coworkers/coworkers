@@ -14,7 +14,6 @@ const postAuthSignIn = async (
   params: AuthParamsType['postAuthSignIn']
 ): Promise<AuthResponseType['postAuthSignIn']> => {
   const response = await instance.post(`auth/signIn`, params);
-  console.log(response.data);
   return response.data;
 };
 
