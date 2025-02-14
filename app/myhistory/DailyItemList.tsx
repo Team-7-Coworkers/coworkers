@@ -45,7 +45,7 @@ export default function DailyItemList({ dailyTasks }: DailyItemListProps) {
                     height={24}
                   />
                   <p
-                    className="cursor-pointer truncate text-md font-normal text-t-primary line-through"
+                    className="cursor-pointer truncate text-md font-normal text-t-primary line-through transition-transform duration-200 ease-in-out hover:scale-105"
                     onClick={() => setSelectedTaskId(id)}
                   >
                     {name}
