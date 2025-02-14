@@ -36,8 +36,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-start bg-b-primary px-4 py-6 sm:pt-[100px]">
-      <h2 className="mb-6 text-center text-2xl font-medium lg:text-4xl">
+    <div className="flex h-full flex-col items-center justify-start bg-b-primary px-4 pb-6 pt-[40px] sm:pt-[100px]">
+      <h2 className="mb-6 text-center text-2xl font-medium sm:text-3xl lg:text-4xl">
         회원가입
       </h2>
       <div className="w-full max-w-[460px] space-y-8 sm:pt-[80px]">
