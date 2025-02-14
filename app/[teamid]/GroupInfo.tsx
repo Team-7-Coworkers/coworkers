@@ -48,6 +48,7 @@ export default function GroupInfo({ id, name, image, role }: Props) {
       toast.success('팀을 삭제하였습니다.', {
         autoClose: TOAST_CLOSE_TIME.success,
       });
+      router.replace('/');
     } catch (err) {
       console.error('--- handleRealDeleteClick:err:', err);
       toast.error('팀 삭제에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
