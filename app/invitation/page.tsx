@@ -3,9 +3,11 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import { postGroupsAcceptInvitation } from '../api/group.api';
 import useUserStore from '../stores/userStore';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 import InputField from '../components/InputField';
 import Button from '../components/Button';
@@ -31,10 +33,13 @@ const InvitationContent = () => {
     mutationFn: async (email: string) =>
       await postGroupsAcceptInvitation({ userEmail: email, token: link }),
     onSuccess: (data) => {
+      toast.success('팀에 성공적으로 참여하셨습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
       router.push(`/${data.groupId}`);
 
       queryClient.invalidateQueries({
-        queryKey: ['coworkers-teamList', user?.id],
+        queryKey: ['coworkers-teamList', 'getGroupsById', user?.id],
       });
 
       if (currentTeam?.id === data.groupId) {
@@ -42,7 +47,7 @@ const InvitationContent = () => {
       }
     },
     onError: (err) => {
-      alert('팀 참여에 실패 하였습니다. 잠시 후 다시 시도해 주시요.');
+      toast.error('팀 참여에 실패 하였습니다. 잠시 후 다시 시도해 주시요.');
       console.error('--- useMutation:err:', err);
     },
   });
@@ -60,9 +65,10 @@ const InvitationContent = () => {
 
     // 사용자 정보 확인
     if (!user) {
-      alert(
+      toast.error(
         '사용자 정보를 가져오지 못했습니다. 잠시 뒤에 로그인 확인 후 다시 시도해 주세요.'
       );
+      router.push('/');
       return;
     }
     mutate(user.email);

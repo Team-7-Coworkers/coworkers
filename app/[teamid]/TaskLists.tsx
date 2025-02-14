@@ -15,6 +15,7 @@ import TaskListsItem from './TaskListsItem';
 
 import styles from './teampage.module.css';
 import { toast } from 'react-toastify';
+import { TOAST_CLOSE_TIME } from '@constants/times';
 
 // 할 일 속성
 export type TaskProps = {
@@ -54,7 +55,9 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
     onSuccess: () => {
       // console.log('--- data', data);
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
-      toast.success('할 일 목록 생성에 성공하였습니다.');
+      toast.success('할 일 목록 생성에 성공하였습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
       setModalOpen(false);
     },
     onError: (err) => {
@@ -69,7 +72,9 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
       await patchGroupsTaskLists({ groupId, taskListId, name }),
     onSuccess: () => {
       // console.log('--- data', data);
-      toast.success('할 일 목록 수정에 성공하였습니다.');
+      toast.success('할 일 목록 수정에 성공하였습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
       setModalOpen(false);
     },
@@ -85,7 +90,9 @@ export default function TaskLists({ groupId, taskLists = [] }: Props) {
       await deleteGroupsTaskLists({ groupId, taskListId }),
     onSuccess: () => {
       // console.log('--- data', data);
-      toast.success('할 일 목록을 삭제하였습니다.');
+      toast.success('할 일 목록을 삭제하였습니다.', {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
       setDeleteModalOpen(false);
     },
