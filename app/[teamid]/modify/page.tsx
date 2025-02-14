@@ -26,13 +26,14 @@ export default function ModifyTeamPage() {
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const { teamid } = useParams();
   const { user } = useUserStore();
-  const { teamList, currentTeam, setCurrentTeam } = useTeamStore();
+  const { currentTeam, setCurrentTeam } = useTeamStore();
   const router = useRouter();
-  // console.log('--- teamid:', teamid);
+  const queryClient = useQueryClient();
 
   // 최소 2글자 이상인지 확인
   const validName = name.trim().length >= MIN_NAME_LENGTH;
 
+  // 그룹 정보 가져오기
   const {
     data: group,
     isLoading,
@@ -42,15 +43,13 @@ export default function ModifyTeamPage() {
     queryFn: async () => await getGroups({ groupId: Number(teamid) }),
     enabled: !!teamid,
   });
-
-  const queryClient = useQueryClient();
   // 그룹(팀) 수정 뮤테이션
   const { mutate } = useMutation({
     mutationFn: async () =>
       await patchGroups({ groupId: Number(teamid), name, image }),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['coworkers-teamList', user?.id],
+        queryKey: ['coworkers-teamList', 'getGroupsById', user?.id],
       });
 
       if (currentTeam?.id === data.id) {
@@ -75,18 +74,9 @@ export default function ModifyTeamPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 같은 이름이 있는지 여부
-    const findTeamIndex = teamList.findIndex((group) => group.name === name);
-
     // disabled 에서 걸러지긴 하지만 그래도 넣어둠
     if (!validName) {
       setNameErrorMessage('팀 이름을 최소 2글자 이상 작성하셔야 합니다.');
-      return;
-    }
-
-    // 이름 중복 여부에 따른 처리
-    if (findTeamIndex > 0) {
-      setNameErrorMessage('이미 존재하는 이름입니다.');
       return;
     }
 
@@ -101,6 +91,11 @@ export default function ModifyTeamPage() {
   const handleImageUploadError = (err: Error) => {
     console.error('--- handleImageUploadError:', err);
     setImageErrorMessage('이미지 업로드에 실패하였습니다.');
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNameErrorMessage('');
+    setName(e.target.value);
   };
 
   useEffect(() => {
@@ -119,7 +114,9 @@ export default function ModifyTeamPage() {
   }
 
   if (isError) {
-    alert('팀 정보 가져오는데 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+    toast.error(
+      '팀 정보 가져오는데 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+    );
     router.back();
     return null;
   }
@@ -154,7 +151,7 @@ export default function ModifyTeamPage() {
           type="text"
           value={name}
           placeholder="팀 이름을 입력해주세요."
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleNameChange}
           errorMessage={nameErrorMessage}
         />
 
