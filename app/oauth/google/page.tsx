@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
@@ -8,7 +9,6 @@ import { toast } from 'react-toastify';
 import EasyLoginLoadingPage from '@app/oauth/EasyLoginLoadingPage';
 import { useEasySignIn } from '@hooks/useEasySignIn';
 import useUserStore from '@app/stores/userStore';
-import { useRouter } from 'next/navigation';
 
 const GoogleCallback = () => {
   const { setIsGoogleLogin } = useUserStore();
@@ -20,11 +20,17 @@ const GoogleCallback = () => {
   const easySignInMutation = useEasySignIn();
 
   const handleGoogleLogin = useCallback(
-    (token: string) => {
-      easySignInMutation.mutate({
+    async (token: string) => {
+      const data = await easySignInMutation.mutateAsync({
         token,
         provider: 'GOOGLE',
       });
+
+      if (data.user?.nickname && /^\d+$/.test(data.user.nickname)) {
+        toast.warn(
+          '닉네임 중복으로 임시 닉네임이 부여되었습니다. 계정 설정에서 닉네임을 변경해주세요!'
+        );
+      }
     },
     [easySignInMutation]
   );
@@ -52,7 +58,6 @@ const GoogleCallback = () => {
 
       handleGoogleLogin(jwtToken);
       setIsGoogleLogin(true);
-    } else {
     }
   }, [
     status,

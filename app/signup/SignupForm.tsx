@@ -66,11 +66,11 @@ export default function SignupForm({
     >
       <div className="space-y-6">
         <div className="space-y-3">
-          <label htmlFor="nickname">이름</label>
+          <label htmlFor="nickname">닉네임</label>
           <InputField
             id="nickname"
             type="text"
-            placeholder="이름을 입력해주세요."
+            placeholder="닉네임을 입력해주세요."
             value={formData.nickname}
             onChange={handleChange}
             validator={validateName}
