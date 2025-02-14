@@ -23,7 +23,7 @@ export default function NoTeamPage() {
   if (!accessToken) return;
 
   return (
-    <div className="mt-[190px] px-8 sm:px-[112px] lg:mx-auto">
+    <div className="flex min-h-[80vh] flex-col items-center justify-center px-8 sm:px-[112px]">
       <div className="flex flex-col items-center gap-8 sm:gap-12">
         <div className="w-full max-w-[810px]">
           <Image
