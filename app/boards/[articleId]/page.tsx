@@ -14,6 +14,7 @@ import Comment from './Comments';
 
 import Loading from '@/app/components/Loading';
 import { useState } from 'react';
+import Img from '@components/Img';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -73,7 +74,7 @@ export default function ArticleDetail() {
               className="relative ml-auto h-[150px] w-[150px] flex-shrink-0 cursor-pointer overflow-hidden rounded-[8px]"
               onClick={() => openImageModal(article.image)}
             >
-              <Image
+              <Img
                 src={article.image}
                 alt={article.title}
                 fill

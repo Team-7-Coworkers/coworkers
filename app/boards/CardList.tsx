@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import SkeletonCard from './SkeletonCard';
+import Img from '@components/Img';
 
 export default function CardList({
   keyword,
@@ -130,7 +131,7 @@ export default function CardList({
 
                       {article.image && (
                         <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
-                          <Image
+                          <Img
                             src={article.image}
                             alt={article.title}
                             fill
