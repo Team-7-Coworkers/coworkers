@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import LoginForm from '@/app/login/LoginForm';
-import { postAuthSignIn } from '../api/auth.api';
-import { useMutation } from '@tanstack/react-query';
-import useUserStore from '../stores/userStore';
-import { AuthResponseType, LoginFormDataType } from '../types/auth';
-import axios from 'axios';
 import Link from 'next/link';
-import EasyLogin from './EasyLogin';
 import { useRouter } from 'next/navigation';
+
+import { useMutation } from '@tanstack/react-query';
+
+import type { AuthResponseType, LoginFormDataType } from '@app/types/auth';
+import LoginForm from '@app/login/LoginForm';
+import { postAuthSignIn } from '@api/auth.api';
+import useUserStore from '@stores/userStore';
+import EasyLogin from '@app/login/EasyLogin';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 export default function LoginPage() {
   const { user, setAccessToken, setRefreshToken, setUser } = useUserStore();
@@ -28,19 +30,9 @@ export default function LoginPage() {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
       setUser(user);
-      alert('로그인에 성공했습니다!');
       router.push('/');
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          '오류가 발생했습니다. 다시 시도해주세요.';
-        alert(`로그인 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '로그인 실패' }),
   });
 
   const handleLoginSubmit = (formData: LoginFormDataType) => {

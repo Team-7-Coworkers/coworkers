@@ -10,7 +10,7 @@
 }
 
 .modal {
-  @apply fixed inset-0 z-50 h-screen w-full overflow-y-auto bg-black/50 backdrop-blur-sm sm:py-8;
+  @apply pointer-events-auto fixed inset-0 z-50 h-screen max-h-dvh w-full overflow-y-auto bg-black/50 backdrop-blur-sm sm:py-8;
 
   &[open] {
     animation: open 0.3s forwards;

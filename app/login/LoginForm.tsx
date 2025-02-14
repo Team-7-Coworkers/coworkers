@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
+
+import type { LoginFormDataType } from '@app/types/auth';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
-import { validateEmail, validatePassword } from '@/app/utils/formValidators';
-import { LoginFormDataType } from '../types/auth';
-import ResetPasswordEmailModal from './ResetPasswordEmailModal';
+import { validateEmail, validatePassword } from '@app/utils/formValidators';
+import ResetPasswordEmailModal from '@app/login/ResetPasswordEmailModal';
 
 interface LoginFormProps {
   onSubmit: (formData: LoginFormDataType) => void;
@@ -29,7 +30,6 @@ export default function LoginForm({
       password: validatePassword(formData.password.trim()) || '',
     };
 
-    // 에러가 하나라도 있으면 false 반환
     setIsValidated(!Object.values(newErrors).some((error) => error));
   }, [formData]);
 

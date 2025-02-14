@@ -1,4 +1,4 @@
-import CheckIcon from './CheckIcon';
+import CheckIcon from './task-icon/CheckIcon';
 
 export default function Checkbox({
   id,

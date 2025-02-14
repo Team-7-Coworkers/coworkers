@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import InputField from '../components/InputField';
-import Modal, { ModalFooter } from '../components/Modal';
-import { validateEmail } from '../utils/formValidators';
-import Button from '../components/Button';
+
 import { useMutation } from '@tanstack/react-query';
-import { postUserSendRestPasswordEmail } from '../api/user.api';
-import { UserResponseType } from '../types/user';
-import axios from 'axios';
+
+import type { UserResponseType } from '@app/types/user';
+import { postUserSendRestPasswordEmail } from '@api/user.api';
+import InputField from '@components/InputField';
+import Modal, { ModalFooter } from '@components/Modal';
+import Button from '@components/Button';
+import { validateEmail } from '@utils/formValidators';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 interface ResetPasswordEmailModalProps {
   isOpen: boolean;
@@ -25,16 +27,7 @@ export default function ResetPasswordEmailModal({
       const { message } = data;
       alert(message);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          '오류가 발생했습니다. 다시 시도해주세요.';
-        alert(`로그인 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '로그인 실패' }),
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

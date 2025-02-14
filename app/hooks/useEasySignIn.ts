@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { postAuthEasySignIn } from '@/app/api/auth.api';
 import useUserStore from '@/app/stores/userStore';
-import axios from 'axios';
+import { createErrorHandler } from '../utils/createErrorHandler';
 
 export interface EasySignInPayload {
   token: string;
@@ -27,16 +27,11 @@ export const useEasySignIn = () => {
       setUser(user);
       router.push('/');
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          '오류가 발생했습니다. 다시 시도해주세요.';
-        alert(`간편 로그인 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-      router.push('/login');
-    },
+    onError: createErrorHandler({
+      prefixMessage: '간편 로그인 실패',
+      onAfter: () => {
+        router.push('/login');
+      },
+    }),
   });
 };
