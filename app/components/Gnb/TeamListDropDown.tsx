@@ -19,7 +19,7 @@ export default function TeamListDropDown({
   return (
     <Dropdown>
       <Dropdown.Button className="flex items-center gap-2">
-        <p className="sm:max-w-[206px] sm:truncate lg:max-w-full">
+        <p className="sm:max-w-[160px] sm:truncate">
           {currentTeam?.name || '팀 목록'}
         </p>
         <Image
