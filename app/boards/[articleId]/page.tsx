@@ -128,10 +128,7 @@ export default function ArticleDetail() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
           onClick={closeImageModal}
         >
-          <div
-            className="relative w-auto max-w-4xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative w-auto max-w-4xl">
             <div className="relative h-[600px] max-h-[70vh] w-[800px] max-w-[70vw]">
               <Image
                 src={selectedImage}
