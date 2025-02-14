@@ -35,8 +35,8 @@ export default function RootLayout({
       </head>
       <body className="scroll-smooth pt-[var(--header-height)]">
         <Providers>
-          {children}
           <GNB />
+          {children}
           <ToastContainer
             position="top-right"
             autoClose={TOAST_CLOSE_TIME.default}
