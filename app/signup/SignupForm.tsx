@@ -113,7 +113,7 @@ export default function SignupForm({
         </div>
         <Link
           href="/login"
-          className="block cursor-pointer text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
+          className="block w-fit cursor-pointer place-self-end text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
         >
           로그인 페이지로
         </Link>
