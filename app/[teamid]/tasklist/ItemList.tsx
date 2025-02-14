@@ -103,7 +103,7 @@ export default function ItemList({
 
   if (items.length === 0) {
     return (
-      <p className="mt-24 text-center text-t-default">
+      <p className="flex h-[50vh] items-center justify-center text-center text-t-default">
         아직 할 일이 없습니다. <br /> 할 일을 추가해보세요.
       </p>
     );

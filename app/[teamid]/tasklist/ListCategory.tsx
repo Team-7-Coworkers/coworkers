@@ -154,7 +154,7 @@ export default function ListCategory({
 
   if (!isLoading && taskLists.length === 0) {
     return (
-      <p className="mt-40 text-center text-md font-medium text-t-default">
+      <p className="flex h-[50vh] items-center justify-center text-center text-md font-medium text-t-default">
         아직 할 일 목록이 없습니다. <br /> 새로운 목록을 추가해주세요.
       </p>
     );
