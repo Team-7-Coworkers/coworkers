@@ -25,8 +25,8 @@ export default function RootLayout({
     <html lang="ko">
       <body className="scroll-smooth pt-[var(--header-height)]">
         <Providers>
-          {children}
           <GNB />
+          {children}
           <ToastContainer
             position="top-right"
             autoClose={3000}
