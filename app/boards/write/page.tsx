@@ -116,7 +116,7 @@ const WriteContent = () => {
       </div>
 
       <p className="pb-4 pt-10">
-        <span className="text-tertiary">*</span>제목
+        <span className="text-tertiary">* </span>제목
       </p>
       <input
         id="title"
@@ -137,7 +137,7 @@ const WriteContent = () => {
       />
 
       <p className="pb-4 pt-8">
-        <span className="text-tertiary">*</span>내용
+        <span className="text-tertiary">* </span>내용
       </p>
       <TextField
         type="box"
@@ -157,7 +157,7 @@ const WriteContent = () => {
       />
 
       <p className="pb-4 pt-8">
-        <span className="text-tertiary">*</span>이미지
+        이미지
         <span className="text-[14px] text-t-default"> (선택)</span>
       </p>
 
