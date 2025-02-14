@@ -12,6 +12,7 @@ import { TaskParamsType } from '@/app/types/task';
 import { FrequencyType } from '@/app/types/shared';
 import axios from 'axios';
 import { MAX_LENGTH } from '@/app/constants/form';
+import { toast } from 'react-toastify';
 
 interface TodoModalProps {
   isOpen: boolean;
@@ -89,6 +90,7 @@ export default function TodoModal({
       }
 
       await postGroupsTaskListsTasks(taskParams);
+      toast.success(`"${todoTitle}" 할 일이 추가되었습니다.`);
       onSaveSuccess();
       onClose();
     } catch (error: unknown) {

@@ -12,6 +12,7 @@ import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
+import { toast } from 'react-toastify';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
@@ -62,7 +63,7 @@ export default function ItemList({
       toggleChecked(taskId, checked);
     } catch (error) {
       console.error('완료 처리 실패:', error);
-      alert('완료 처리에 실패했습니다.');
+      toast.error('완료 처리에 실패하였습니다.');
     }
   };
 
@@ -78,18 +79,34 @@ export default function ItemList({
 
   const handleDelete = async () => {
     if (selectedItem) {
-      await onDeleteItem(selectedItem.id);
-      setIsDeleteModalOpen(false);
-      setSelectedItem(null);
+      try {
+        await onDeleteItem(selectedItem.id);
+
+        toast.success(`"${selectedItem.name}" 할 일이 삭제되었습니다.`);
+
+        setIsDeleteModalOpen(false);
+        setSelectedItem(null);
+      } catch (error) {
+        console.error('삭제 실패:', error);
+        toast.error('할 일 삭제에 실패하였습니다.');
+      }
     }
   };
 
   const handleEdit = (title: string, description: string) => {
     if (selectedItem) {
-      onEditItem(selectedItem.id, title, description);
-      updateTask(taskListId, selectedItem.id, title, description);
-      setIsEditModalOpen(false);
-      setSelectedItem(null);
+      try {
+        onEditItem(selectedItem.id, title, description);
+        updateTask(taskListId, selectedItem.id, title, description);
+
+        toast.success(`"${title}" 할 일이 수정되었습니다.`);
+
+        setIsEditModalOpen(false);
+        setSelectedItem(null);
+      } catch (error) {
+        console.error('수정 실패:', error);
+        toast.error('할 일 수정에 실패하였습니다.');
+      }
     }
   };
 
