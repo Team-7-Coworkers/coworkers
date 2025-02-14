@@ -132,7 +132,7 @@ export default function ArticleDetail() {
             className="relative w-auto max-w-4xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative h-[600px] w-[800px] max-w-full">
+            <div className="relative h-[600px] max-h-[70vh] w-[800px] max-w-[70vw]">
               <Image
                 src={selectedImage}
                 alt="게시글 이미지"
