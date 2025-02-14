@@ -30,8 +30,8 @@
       "@images/*": ["./public/images/*"],
       "@stores/*": ["./app/stores/*"],
       "@constants/*": ["./app/constants/*"],
-      "@/*": ["./*"],
-      "@app/*": ["./app/*"]
+      "@app/*": ["./app/*"],
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
