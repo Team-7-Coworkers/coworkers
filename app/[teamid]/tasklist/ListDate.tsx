@@ -110,7 +110,7 @@ export default function ListDate({
             />
           </button>
           {isCalendarOpen && (
-            <div className="absolute left-0 top-full z-10 mt-2">
+            <div className="absolute left-1 top-full z-10 mt-2 -translate-x-1/2 sm:left-0">
               <CustomCalendar
                 selectedDate={selectedDate}
                 onDateSelect={handleDateSelect}
