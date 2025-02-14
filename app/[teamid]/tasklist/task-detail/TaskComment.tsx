@@ -112,6 +112,7 @@ export default function TaskComment({ taskListId, taskId }: TaskCommentProps) {
           onSubmit={handleAddComment}
         />
         <button
+          onClick={handleAddComment}
           className={newComment.trim() ? 'text-primary' : 'text-ic-primary'}
         >
           <SubmitIcon />
