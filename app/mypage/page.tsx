@@ -1,24 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ImageUpload from '../components/ImageUpload';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
 import { useMutation } from '@tanstack/react-query';
+
 import {
   deleteUser,
   getUser,
   patchUser,
   patchUserPassword,
-} from '../api/user.api';
-import useUserStore from '../stores/userStore';
-import axios from 'axios';
-import Button from '../components/Button';
-import UpdatePasswordModal from './UpdatePasswordModal';
-import InputField from '../components/InputField';
-import { validateName, validateUserUpdated } from '../utils/formValidators';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import ConFirmSecessionModal from './ConfirnSecessionModal';
-import useTeamStore from '../stores/teamStore';
+} from '@api/user.api';
+import { createErrorHandler } from '@utils/createErrorHandler';
+import useUserStore from '@stores/userStore';
+import useTeamStore from '@stores/teamStore';
+import Button from '@components/Button';
+import UpdatePasswordModal from '@app/mypage/UpdatePasswordModal';
+import ConFirmSecessionModal from '@app/mypage/ConfirnSecessionModal';
+import MyPageForm from '@app/mypage/MyPageForm';
 
 export interface PasswordFormDataTypes {
   password: string;
@@ -27,23 +27,17 @@ export interface PasswordFormDataTypes {
 
 export interface UserFormDataTypes {
   nickname: string;
+  email?: string;
   image: string;
 }
 
 export default function MyPage() {
   const { user, accessToken, updateUser, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
-
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordUpdateModalOpen, setPasswordUpdateModalOpen] =
     useState(false);
   const [isSecessionModalOpen, setIsSecessionModalOpen] = useState(false);
-  const [userFormData, setUserFormData] = useState<UserFormDataTypes>({
-    nickname: user?.nickname || '',
-    image: user?.image || '',
-  });
-  const [isChanged, setIsChanged] = useState(false);
-  const [isValidated, setIsValidated] = useState(false);
 
   const router = useRouter();
 
@@ -56,16 +50,7 @@ export default function MyPage() {
       alert('계정 정보가 변경되었습니다.');
       setIsEditing(false);
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          '오류가 발생했습니다. 다시 시도해주세요.';
-        alert(`비밀번호 업데이트 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '계정 정보 변경 실패' }),
   });
 
   const updatePasswordMutation = useMutation({
@@ -73,16 +58,7 @@ export default function MyPage() {
     onSuccess: () => {
       alert('비밀번호가 변경되었습니다.');
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          '오류가 발생했습니다. 다시 시도해주세요.';
-        alert(`비밀번호 업데이트 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '비밀번호 변경 실패' }),
   });
 
   const deleteUserSelfMutation = useMutation({
@@ -95,16 +71,7 @@ export default function MyPage() {
 
       router.push('/');
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message ||
-          '오류가 발생했습니다. 다시 시도해주세요.';
-        alert(`비밀번호 업데이트 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '회원 탈퇴 실패' }),
   });
 
   useEffect(() => {
@@ -116,38 +83,12 @@ export default function MyPage() {
     }
   }, [accessToken, router]);
 
-  useEffect(() => {
-    if (user) {
-      setUserFormData({
-        nickname: user.nickname,
-        image: user.image || '',
-      });
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    setIsChanged(validateUserUpdated(user, userFormData));
-    setIsValidated(!validateName(userFormData.nickname.trim()));
-  }, [userFormData, user]);
-
-  const handleUploadSuccess = (url: string) => {
-    setUserFormData((prev) => ({ ...prev, image: url }));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setUserFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleUpdateUserInfo = () => {
+  const handleUpdateUserInfo = (formData: UserFormDataTypes) => {
     const updatedParams: Partial<UserFormDataTypes> = {
-      ...(user?.nickname !== userFormData.nickname && {
-        nickname: userFormData.nickname,
+      ...(user?.nickname !== formData.nickname && {
+        nickname: formData.nickname,
       }),
-      ...(user?.image !== userFormData.image && { image: userFormData.image }),
+      ...(user?.image !== formData.image && { image: formData.image }),
     };
 
     updateUserMuation.mutate(updatedParams);
@@ -168,11 +109,9 @@ export default function MyPage() {
     deleteUserSelfMutation.mutate();
   };
 
-  if (!accessToken) return;
-
   return (
-    <div className="mx-auto max-w-[792px] space-y-4 px-4 py-6 sm:px-6">
-      <div className="space-y-6">
+    <div className="mx-auto max-w-[792px] space-y-8 px-4 pt-[6vh] sm:px-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <p className="text-2lg">계정 설정</p>
           {!isEditing ? (
@@ -192,63 +131,15 @@ export default function MyPage() {
             </Button>
           )}
         </div>
-        <form className={`space-y-6 ${isEditing ? '' : 'pointer-events-none'}`}>
-          <div className="mb flex">
-            <ImageUpload
-              url={user?.image || undefined}
-              onUploadSuccess={handleUploadSuccess}
-              onUploadError={() => {}}
-              variant="circle"
-              disabled={!isEditing}
-            />
-          </div>
-
-          <div className="space-y-3">
-            <p>이름</p>
-            <InputField
-              id="nickname"
-              type="text"
-              value={userFormData.nickname}
-              placeholder={user?.nickname || ''}
-              state={isEditing ? undefined : 'default-disabled'}
-              validator={validateName}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-3">
-            <div className="flex items-center space-x-4">
-              <p>이메일</p>
-              {isEditing && (
-                <p className="text-xs text-t-default">
-                  이메일은 변경할 수 없습니다.
-                </p>
-              )}
-            </div>
-            <InputField
-              id="email"
-              type="email"
-              placeholder={user?.email || ''}
-              state="default-disabled"
-              onChange={handleChange}
-            />
-          </div>
-
-          <div
-            className={`overflow-hidden transition-all duration-300 ${isEditing ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'} `}
-          >
-            <Button
-              type="button"
-              size="large"
-              classname="w-full"
-              onClick={handleUpdateUserInfo}
-              disabled={!isValidated || !isChanged}
-            >
-              변경 사항 저장
-            </Button>
-          </div>
-        </form>
+        <div className="border-t-[1px] border-gray-500 pb-2" />
+        <MyPageForm
+          isEditing={isEditing}
+          onSubmit={handleUpdateUserInfo}
+          user={user}
+        />
       </div>
-      <div className="flex items-center justify-between">
+
+      <div className="flex h-10 items-center justify-between border-t-[1px] border-gray-500 pb-4 pt-10">
         <p>비밀번호 변경</p>
         <Button
           type="button"
@@ -261,8 +152,8 @@ export default function MyPage() {
         </Button>
       </div>
 
-      <div
-        className="flex cursor-pointer items-center gap-2"
+      <button
+        className="flex items-center gap-2"
         onClick={() => setIsSecessionModalOpen(true)}
       >
         <Image
@@ -272,7 +163,7 @@ export default function MyPage() {
           alt=""
         />
         <p className="font-medium text-danger">회원 탈퇴하기</p>
-      </div>
+      </button>
 
       <UpdatePasswordModal
         isOpen={isPasswordUpdateModalOpen}
