@@ -90,6 +90,7 @@ export default function GNB() {
                   alt="coworkers"
                   width={102}
                   height={20}
+                  style={{ width: 'auto' }}
                   className="lg:h-15 lg:w-40"
                 />
               </Link>
