@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import {
   deleteUser,
@@ -19,7 +20,6 @@ import Button from '@components/Button';
 import UpdatePasswordModal from '@app/mypage/UpdatePasswordModal';
 import ConFirmSecessionModal from '@app/mypage/ConfirnSecessionModal';
 import MyPageForm from '@app/mypage/MyPageForm';
-import { toast } from 'react-toastify';
 
 export interface PasswordFormDataTypes {
   password: string;

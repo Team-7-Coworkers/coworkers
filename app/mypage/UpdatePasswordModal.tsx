@@ -1,14 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import InputField from '../components/InputField';
-import Modal, { ModalFooter } from '../components/Modal';
+
 import {
   validateConfirmPassword,
   validatePassword,
-} from '../utils/formValidators';
-import Button from '../components/Button';
-import { PasswordFormDataTypes } from './page';
+} from '@utils/formValidators';
+import InputField from '@components/InputField';
+import Modal, { ModalFooter } from '@components/Modal';
+import Button from '@components/Button';
+import { PasswordFormDataTypes } from '@app/mypage/page';
 
 interface UpdatePasswordModalProps {
   isOpen: boolean;
@@ -38,7 +39,6 @@ export default function UpdatePasswordModal({
         validateConfirmPassword(passwordFormData.confirmPassword.trim()) || '',
     };
 
-    // 에러가 하나라도 있으면 false 반환
     setIsValidated(!Object.values(newErrors).some((error) => error));
   }, [passwordFormData]);
 
