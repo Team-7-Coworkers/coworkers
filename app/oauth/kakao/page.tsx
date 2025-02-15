@@ -10,7 +10,8 @@ import { useRouter } from 'next/navigation';
 
 const KakaoCallback = () => {
   const [isProcessing, setIsProcessing] = useState(false);
-  const easySignInMutation = useEasySignIn();
+
+  const easySignInMutation = useEasySignIn({ provider: 'KAKAO' });
 
   const router = useRouter();
   const hasShownError = useRef(false);

@@ -8,16 +8,14 @@ import { toast } from 'react-toastify';
 
 import EasyLoginLoadingPage from '@app/oauth/EasyLoginLoadingPage';
 import { useEasySignIn } from '@hooks/useEasySignIn';
-import useUserStore from '@app/stores/userStore';
 
 const GoogleCallback = () => {
-  const { setIsGoogleLogin } = useUserStore();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const easySignInMutation = useEasySignIn();
+  const easySignInMutation = useEasySignIn({ provider: 'GOOGLE' });
 
   const handleGoogleLogin = useCallback(
     async (token: string) => {
@@ -57,16 +55,8 @@ const GoogleCallback = () => {
       }
 
       handleGoogleLogin(jwtToken);
-      setIsGoogleLogin(true);
     }
-  }, [
-    status,
-    session,
-    isProcessing,
-    handleGoogleLogin,
-    setIsGoogleLogin,
-    router,
-  ]);
+  }, [status, session, isProcessing, handleGoogleLogin, router]);
 
   return <EasyLoginLoadingPage type="google" />;
 };

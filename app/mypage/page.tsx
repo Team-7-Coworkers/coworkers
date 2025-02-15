@@ -32,7 +32,8 @@ export interface UserFormDataTypes {
 }
 
 export default function MyPage() {
-  const { user, updateUser, clearUser } = useUserStore();
+  const { user, isKakaoLogin, isGoogleLogin, updateUser, clearUser } =
+    useUserStore();
   const { clearTeam } = useTeamStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordUpdateModalOpen, setPasswordUpdateModalOpen] =
@@ -145,19 +146,21 @@ export default function MyPage() {
         />
       </div>
 
-      <div className="flex h-10 items-center justify-between border-t-[1px] border-gray-500 pb-4 pt-10">
-        <p>비밀번호 변경</p>
-        <Button
-          type="button"
-          size="X-small"
-          onClick={() => setPasswordUpdateModalOpen(true)}
-          state="default"
-          classname="text-xs"
-          disabled={isEditing}
-        >
-          변경하기
-        </Button>
-      </div>
+      {!(isKakaoLogin || isGoogleLogin) && (
+        <div className="flex h-10 items-center justify-between border-t-[1px] border-gray-500 pb-4 pt-10">
+          <p>비밀번호 변경</p>
+          <Button
+            type="button"
+            size="X-small"
+            onClick={() => setPasswordUpdateModalOpen(true)}
+            state="default"
+            classname="text-xs"
+            disabled={isEditing}
+          >
+            변경하기
+          </Button>
+        </div>
+      )}
 
       <button
         className="flex items-center gap-2 hover:opacity-70"
