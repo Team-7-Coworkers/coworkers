@@ -18,8 +18,8 @@ export default function TeamListDropDown({
 }: TeamListDropDownProps) {
   return (
     <Dropdown>
-      <Dropdown.Button className="flex items-center gap-2">
-        <p className="sm:max-w-[160px] sm:truncate">
+      <Dropdown.Button className="flex items-center gap-1">
+        <p className="text-md sm:max-w-[160px] sm:truncate lg:text-lg">
           {currentTeam?.name || '팀 목록'}
         </p>
         <Image
