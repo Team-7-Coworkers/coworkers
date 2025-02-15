@@ -26,11 +26,11 @@ const GoogleCallback = () => {
 
       if (data.user?.nickname && /^\d+$/.test(data.user.nickname)) {
         toast.warn(
-          '닉네임 중복으로 임시 닉네임이 부여되었습니다. 계정 설정에서 닉네임을 변경해주세요!'
+          `'${session?.user.name}'은 사용중인 닉네임 입니다. 계정 설정에서 닉네임을 변경해주세요!`
         );
       }
     },
-    [easySignInMutation]
+    [easySignInMutation, session?.user.name]
   );
 
   useEffect(() => {
