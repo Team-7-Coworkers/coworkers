@@ -83,15 +83,14 @@ export default function GNB() {
             <div className="flex">
               <Link
                 href="/"
-                className="flex"
+                className="relative h-[20px] w-[102px] lg:h-[30px] lg:w-[160px]"
               >
                 <Image
                   src="/images/logos/logo.svg"
                   alt="coworkers"
-                  width={102}
-                  height={20}
-                  style={{ width: 'auto' }}
-                  className="lg:h-15 lg:w-40"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  priority
                 />
               </Link>
             </div>

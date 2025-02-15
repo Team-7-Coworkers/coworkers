@@ -32,19 +32,19 @@ export default function TeamListDropDown({
 
       <Dropdown.Menu
         animationType="scale"
-        className="top-[52px] z-30 w-[218px] p-[8px] pb-4 sm:-left-[144px] lg:-left-[200px]"
+        className="top-[52px] z-30 w-[218px] p-[8px] pb-4 sm:-left-[126px] lg:-left-[200px]"
       >
         {[...teamList]
           .sort((a, b) => b.id - a.id)
           .map((team) => {
             return (
               <Dropdown.MenuItem
-                className="px-[0px] pb-[0] pt-[0]"
+                className="px-0 py-0"
                 key={team.id}
               >
                 <Link
                   href={`/${team.id}`}
-                  className="block px-[12px] pb-[8px] pt-[8px]"
+                  className="block px-3 py-2"
                 >
                   <TeamListDropDownItem team={team} />
                 </Link>
