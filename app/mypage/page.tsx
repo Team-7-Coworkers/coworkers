@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
@@ -79,15 +79,6 @@ export default function MyPage() {
     },
     onError: createErrorHandler({ prefixMessage: '회원 탈퇴 실패' }),
   });
-
-  useEffect(() => {
-    const { accessToken } = useUserStore.getState();
-
-    if (!accessToken) {
-      toast.error('로그인이 필요합니다!');
-      router.push('/');
-    }
-  }, [router]);
 
   const handleUpdateUserInfo = (formData: UserFormDataTypes) => {
     const updatedParams: Partial<UserFormDataTypes> = {
