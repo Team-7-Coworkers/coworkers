@@ -51,7 +51,7 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
       </Dropdown.Button>
 
       <Dropdown.Menu
-        className="right-0 w-[140px] p-[8px] py-[12px] sm:w-[152px]"
+        className="right-0 mt-3 w-[140px] px-[8px] py-[12px] sm:w-[152px]"
         animationType="scale"
       >
         <Dropdown.MenuItem className={dropDownItemStyle}>
