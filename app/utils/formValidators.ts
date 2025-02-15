@@ -1,10 +1,11 @@
 import { UserFormDataTypes } from '../mypage/page';
 import { UserType } from '../types/shared';
 
-export const validateName = (value: string) => {
+export const validateNickname = (value: string) => {
   if (!value.trim()) return '닉네임은 필수 입력입니다.';
   if (value.length < 2) return '이름은 최소 2자 이상이어야 합니다.';
   if (20 <= value.length) return '닉네임은 최대 20자까지 가능합니다.';
+  if (/^\d+$/.test(value)) return '닉네임은 숫자로만 구성될 수 없습니다.';
   return undefined;
 };
 

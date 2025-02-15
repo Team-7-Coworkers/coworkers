@@ -7,7 +7,7 @@ import type { UserType } from '@app/types/shared';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
 import ImageUpload from '@components/ImageUpload';
-import { validateName, validateUserUpdated } from '@app/utils/formValidators';
+import { validateNickname, validateUserUpdated } from '@app/utils/formValidators';
 
 export interface MyPageFormProps {
   initialFormData: UserFormDataTypes;
@@ -29,7 +29,7 @@ export default function MyPageForm({
 
   const validateForm = useCallback(() => {
     const trimmedName = formData.nickname.trim();
-    const error = validateName(trimmedName);
+    const error = validateNickname(trimmedName);
     setIsValidated(!error);
   }, [formData.nickname]);
 
@@ -74,7 +74,7 @@ export default function MyPageForm({
         image: formData.image,
       })
     );
-    setIsValidated(!validateName(formData.nickname.trim()));
+    setIsValidated(!validateNickname(formData.nickname.trim()));
   }, [user, formData.nickname, formData.image]);
 
   return (
@@ -101,7 +101,7 @@ export default function MyPageForm({
           placeholder="이름을 입력해주세요."
           value={formData.nickname}
           onChange={handleChange}
-          validator={validateName}
+          validator={validateNickname}
           state={isEditing ? undefined : 'default-disabled'}
         />
       </div>
