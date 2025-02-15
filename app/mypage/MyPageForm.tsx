@@ -1,31 +1,32 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
+
+import type { UserFormDataTypes } from '@app/mypage/page';
+import type { UserType } from '@app/types/shared';
 import InputField from '@components/InputField';
 import Button from '@components/Button';
 import ImageUpload from '@components/ImageUpload';
 import { validateName, validateUserUpdated } from '@app/utils/formValidators';
-import type { UserFormDataTypes } from '@app/mypage/page';
-import type { UserType } from '@app/types/shared';
 
 export interface MyPageFormProps {
+  initialFormData: UserFormDataTypes;
   isEditing: boolean;
   onSubmit: (formData: UserFormDataTypes) => void;
   user: UserType | null;
 }
 
 export default function MyPageForm({
+  initialFormData,
   isEditing,
   onSubmit,
   user,
 }: MyPageFormProps) {
-  const [formData, setFormData] = useState<UserFormDataTypes>({
-    nickname: user?.nickname || '',
-    email: user?.email || '',
-    image: user?.image || '',
-  });
   const [isValidated, setIsValidated] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+
+  const [formData, setFormData] = useState(initialFormData);
+
   const validateForm = useCallback(() => {
     const trimmedName = formData.nickname.trim();
     const error = validateName(trimmedName);
@@ -56,13 +57,16 @@ export default function MyPageForm({
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (user) {
+      setFormData({
+        nickname: user.nickname,
+        image: user.image || '',
+      });
+    }
+  }, [user]);
 
-    setFormData({
-      nickname: formData.nickname,
-      email: formData.email,
-      image: formData.image || '',
-    });
+  useEffect(() => {
+    if (!user) return;
 
     setIsChanged(
       validateUserUpdated(user, {
@@ -71,7 +75,7 @@ export default function MyPageForm({
       })
     );
     setIsValidated(!validateName(formData.nickname.trim()));
-  }, [user, formData.nickname, formData.image, formData.email]);
+  }, [user, formData.nickname, formData.image]);
 
   return (
     <form
@@ -103,29 +107,37 @@ export default function MyPageForm({
       </div>
 
       <div className="space-y-3">
-        <label htmlFor="email">이메일</label>
+        <div className="flex items-center space-x-4">
+          <label htmlFor="email">이메일</label>
+          {isEditing && (
+            <p className="text-xs text-t-default">
+              이메일은 변경할 수 없습니다.
+            </p>
+          )}
+        </div>
         <InputField
           id="email"
           type="email"
-          placeholder="이메일은 변경할 수 없습니다."
-          value={formData.email}
+          placeholder={user?.email || ''}
           onChange={handleChange}
           state="default-disabled"
         />
       </div>
 
-      {isEditing && (
-        <div className="overflow-hidden transition-all duration-300">
-          <Button
-            type="submit"
-            size="large"
-            classname="w-full"
-            disabled={!isValidated || !isChanged}
-          >
-            변경 사항 저장
-          </Button>
-        </div>
-      )}
+      <div
+        className={`overflow-hidden transition-all duration-300 ${
+          isEditing ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <Button
+          type="submit"
+          size="large"
+          classname="w-full"
+          disabled={!isValidated || !isChanged}
+        >
+          변경 사항 저장
+        </Button>
+      </div>
     </form>
   );
 }

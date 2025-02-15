@@ -19,6 +19,7 @@ import Button from '@components/Button';
 import UpdatePasswordModal from '@app/mypage/UpdatePasswordModal';
 import ConFirmSecessionModal from '@app/mypage/ConfirnSecessionModal';
 import MyPageForm from '@app/mypage/MyPageForm';
+import { toast } from 'react-toastify';
 
 export interface PasswordFormDataTypes {
   password: string;
@@ -27,12 +28,11 @@ export interface PasswordFormDataTypes {
 
 export interface UserFormDataTypes {
   nickname: string;
-  email?: string;
   image: string;
 }
 
 export default function MyPage() {
-  const { user, accessToken, updateUser, clearUser } = useUserStore();
+  const { user, updateUser, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isPasswordUpdateModalOpen, setPasswordUpdateModalOpen] =
@@ -41,13 +41,18 @@ export default function MyPage() {
 
   const router = useRouter();
 
+  const initialFormData = {
+    nickname: user?.nickname || '',
+    image: user?.image || '',
+  };
+
   const updateUserMuation = useMutation({
     mutationFn: patchUser,
     onSuccess: async () => {
       const { nickname, image } = await getUser();
 
       updateUser({ nickname, image });
-      alert('계정 정보가 변경되었습니다.');
+      toast.success('계정 정보가 변경되었습니다.');
       setIsEditing(false);
     },
     onError: createErrorHandler({ prefixMessage: '계정 정보 변경 실패' }),
@@ -56,7 +61,7 @@ export default function MyPage() {
   const updatePasswordMutation = useMutation({
     mutationFn: patchUserPassword,
     onSuccess: () => {
-      alert('비밀번호가 변경되었습니다.');
+      toast.success('비밀번호가 변경되었습니다.');
     },
     onError: createErrorHandler({ prefixMessage: '비밀번호 변경 실패' }),
   });
@@ -67,7 +72,7 @@ export default function MyPage() {
       clearUser();
       clearTeam();
 
-      alert('회원 탈퇴가 정상 처리되었습니다.');
+      toast('회원 탈퇴가 정상 처리되었습니다.');
 
       router.push('/');
     },
@@ -75,13 +80,13 @@ export default function MyPage() {
   });
 
   useEffect(() => {
-    const { accessToken: isAthenticated } = useUserStore.getState();
+    const { accessToken } = useUserStore.getState();
 
-    if (!isAthenticated) {
-      alert('로그인이 필요합니다!');
+    if (!accessToken) {
+      toast.error('로그인이 필요합니다!');
       router.push('/');
     }
-  }, [accessToken, router]);
+  }, [router]);
 
   const handleUpdateUserInfo = (formData: UserFormDataTypes) => {
     const updatedParams: Partial<UserFormDataTypes> = {
@@ -133,6 +138,7 @@ export default function MyPage() {
         </div>
         <div className="border-t-[1px] border-gray-500 pb-2" />
         <MyPageForm
+          initialFormData={initialFormData}
           isEditing={isEditing}
           onSubmit={handleUpdateUserInfo}
           user={user}
@@ -147,13 +153,14 @@ export default function MyPage() {
           onClick={() => setPasswordUpdateModalOpen(true)}
           state="default"
           classname="text-xs"
+          disabled={isEditing}
         >
           변경하기
         </Button>
       </div>
 
       <button
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 hover:opacity-70"
         onClick={() => setIsSecessionModalOpen(true)}
       >
         <Image
