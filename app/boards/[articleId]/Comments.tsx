@@ -87,6 +87,7 @@ export default function Comment() {
         content: comment,
       });
       setComment('');
+      toast.success('등록이 완료되었습니다.');
       if (articleId) {
         queryClient.invalidateQueries({
           queryKey: ['articleComments', Number(articleId)],
