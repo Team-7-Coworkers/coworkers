@@ -8,6 +8,7 @@ import { MAX_LENGTH } from '@/app/constants/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTaskStore } from '@stores/taskStore';
 import { toast } from 'react-toastify';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 type AddListModalProps = {
   isOpen: boolean;
@@ -43,10 +44,9 @@ export default function AddListModal({
       setListName('');
       onClose();
     },
-    onError: (error) => {
-      console.error('목록 추가 중 오류 발생:', error);
-      toast.error('목록 추가에 실패했습니다. 다시 시도해주세요.');
-    },
+    onError: createErrorHandler({
+      prefixMessage: '목록 추가 실패',
+    }),
   });
 
   const handleAddList = () => {

@@ -15,6 +15,7 @@ import TaskDetailHeader from './TaskDetailHeader';
 import TaskComment from './TaskComment';
 import Loading from '@/app/components/Loading';
 import { toast } from 'react-toastify';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 interface TaskDetailProps {
   taskId: number;
@@ -96,8 +97,9 @@ export default function TaskDetail({
         onTaskUpdated();
         toast.success(`"${title}" 할 일이 수정되었습니다.`);
       } catch (error) {
-        console.error('수정 중 오류 발생:', error);
-        toast.error('할 일 수정에 실패했습니다.');
+        createErrorHandler({
+          prefixMessage: '할 일 수정 실패',
+        })(error);
       }
     }
   };
@@ -128,8 +130,9 @@ export default function TaskDetail({
         onTaskUpdated();
         toast.success(`"${selectedTask.name}" 할 일이 삭제되었습니다.`);
       } catch (error) {
-        console.error('삭제 중 오류 발생:', error);
-        toast.error('할 일 삭제에 실패했습니다.');
+        createErrorHandler({
+          prefixMessage: '할 일 삭제 실패',
+        })(error);
       }
     }
   };

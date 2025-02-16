@@ -10,9 +10,9 @@ import Button from '@/app/components/Button';
 import { postGroupsTaskListsTasks } from '@/app/api/task.api';
 import { TaskParamsType } from '@/app/types/task';
 import { FrequencyType } from '@/app/types/shared';
-import axios from 'axios';
 import { MAX_LENGTH } from '@/app/constants/form';
 import { toast } from 'react-toastify';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 interface TodoModalProps {
   isOpen: boolean;
@@ -93,16 +93,10 @@ export default function TodoModal({
       toast.success(`"${todoTitle}" 할 일이 추가되었습니다.`);
       onSaveSuccess();
       onClose();
-    } catch (error: unknown) {
-      console.error('할 일 생성 실패:', error);
-
-      if (axios.isAxiosError(error)) {
-        setErrorMessage(
-          error.response?.data.message || '서버 오류가 발생했습니다.'
-        );
-      } else {
-        setErrorMessage('알 수 없는 오류가 발생했습니다.');
-      }
+    } catch (error) {
+      createErrorHandler({
+        prefixMessage: '할 일 추가 실패',
+      })(error);
     }
   };
 

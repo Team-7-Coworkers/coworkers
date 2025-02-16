@@ -13,6 +13,7 @@ import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { toast } from 'react-toastify';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
@@ -62,8 +63,7 @@ export default function ItemList({
 
       toggleChecked(taskId, checked);
     } catch (error) {
-      console.error('완료 처리 실패:', error);
-      toast.error('완료 처리에 실패하였습니다.');
+      createErrorHandler({ prefixMessage: '완료 처리 실패' })(error);
     }
   };
 
@@ -87,8 +87,7 @@ export default function ItemList({
         setIsDeleteModalOpen(false);
         setSelectedItem(null);
       } catch (error) {
-        console.error('삭제 실패:', error);
-        toast.error('할 일 삭제에 실패하였습니다.');
+        createErrorHandler({ prefixMessage: '할 일 삭제 실패' })(error);
       }
     }
   };
@@ -104,8 +103,7 @@ export default function ItemList({
         setIsEditModalOpen(false);
         setSelectedItem(null);
       } catch (error) {
-        console.error('수정 실패:', error);
-        toast.error('할 일 수정에 실패하였습니다.');
+        createErrorHandler({ prefixMessage: '할 일 수정 실패' })(error);
       }
     }
   };
