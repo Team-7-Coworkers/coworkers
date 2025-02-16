@@ -3,6 +3,7 @@
 import Link from 'next/link';
 
 import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 import useUserStore from '@stores/userStore';
 import useTeamStore from '@stores/teamStore';
@@ -15,21 +16,24 @@ interface ProfileDropDownProps {
 }
 
 const dropDownItemStyle = 'px-0 py-0 text-md sm:text-lg';
-const linkStyle = 'block px-3 py-2 sm:py-3';
+const itemStyle = 'block px-3 py-2 sm:py-3';
 
 export default function ProfileDropDown({ user }: ProfileDropDownProps) {
   const { isGoogleLogin, clearUser } = useUserStore();
   const { clearTeam } = useTeamStore();
 
+  const router = useRouter();
+
   const handleLogout = () => {
     clearUser();
     clearTeam();
+    document.cookie = 'accessToken=; path=/; max-age=0';
 
     if (isGoogleLogin) {
       signOut();
-
-      return;
     }
+
+    router.push('/');
   };
 
   return (
@@ -57,7 +61,7 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         <Dropdown.MenuItem className={dropDownItemStyle}>
           <Link
             href="/myhistory"
-            className={linkStyle}
+            className={itemStyle}
           >
             마이 히스토리
           </Link>
@@ -66,7 +70,7 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         <Dropdown.MenuItem className={dropDownItemStyle}>
           <Link
             href="/mypage"
-            className={linkStyle}
+            className={itemStyle}
           >
             계정 설정
           </Link>
@@ -75,22 +79,19 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
         <Dropdown.MenuItem className={dropDownItemStyle}>
           <Link
             href="/invitation"
-            className={linkStyle}
+            className={itemStyle}
           >
             팀 참여
           </Link>
         </Dropdown.MenuItem>
 
-        <Dropdown.MenuItem
-          className={dropDownItemStyle}
-          onClick={handleLogout}
-        >
-          <Link
-            href="/"
-            className={linkStyle}
+        <Dropdown.MenuItem className={dropDownItemStyle}>
+          <div
+            className={itemStyle}
+            onClick={handleLogout}
           >
             로그아웃
-          </Link>
+          </div>
         </Dropdown.MenuItem>
       </Dropdown.Menu>
     </Dropdown>
