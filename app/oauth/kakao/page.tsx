@@ -10,20 +10,28 @@ import { useRouter } from 'next/navigation';
 
 const KakaoCallback = () => {
   const [isProcessing, setIsProcessing] = useState(false);
-  const easySignInMutation = useEasySignIn();
+
+  const easySignInMutation = useEasySignIn({ provider: 'KAKAO' });
 
   const router = useRouter();
   const hasShownError = useRef(false);
 
   const handleKakaoLogin = useCallback(
-    (code: string, receivedState: string) => {
+    async (code: string, receivedState: string) => {
       setIsProcessing(true);
-      easySignInMutation.mutate({
+
+      const data = await easySignInMutation.mutateAsync({
         token: code,
         provider: 'KAKAO',
         state: receivedState,
         redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI,
       });
+
+      if (data.user?.nickname && /^\d+$/.test(data.user.nickname)) {
+        toast.warn(
+          '카카오 임시 닉네임을 사용중입니다. 계정 설정에서 닉네임을 변경해주세요!'
+        );
+      }
     },
     [easySignInMutation]
   );

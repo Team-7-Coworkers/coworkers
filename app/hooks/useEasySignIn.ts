@@ -6,6 +6,8 @@ import { postAuthEasySignIn } from '@/app/api/auth.api';
 import useUserStore from '@/app/stores/userStore';
 import { createErrorHandler } from '../utils/createErrorHandler';
 
+type ProviderType = 'GOOGLE' | 'KAKAO';
+
 export interface EasySignInPayload {
   token: string;
   provider: 'GOOGLE' | 'KAKAO';
@@ -13,9 +15,15 @@ export interface EasySignInPayload {
   redirectUri?: string;
 }
 
-export const useEasySignIn = () => {
+export const useEasySignIn = ({ provider }: { provider: ProviderType }) => {
   const router = useRouter();
-  const { setAccessToken, setRefreshToken, setUser } = useUserStore();
+  const {
+    setAccessToken,
+    setRefreshToken,
+    setUser,
+    setIsKakaoLogin,
+    setIsGoogleLogin,
+  } = useUserStore();
 
   return useMutation({
     mutationFn: postAuthEasySignIn,
@@ -25,6 +33,13 @@ export const useEasySignIn = () => {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
       setUser(user);
+
+      if (provider === 'GOOGLE') {
+        setIsGoogleLogin(true);
+      } else if (provider === 'KAKAO') {
+        setIsKakaoLogin(true);
+      }
+
       router.push('/');
     },
     onError: createErrorHandler({

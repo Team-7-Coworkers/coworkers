@@ -1,5 +1,5 @@
-import Button from '../components/Button';
-import Modal, { ModalFooter } from '../components/Modal';
+import Button from '@components/Button';
+import Modal, { ModalFooter } from '@components/Modal';
 
 interface ConFirmSecessionModalProps {
   isOpen: boolean;
