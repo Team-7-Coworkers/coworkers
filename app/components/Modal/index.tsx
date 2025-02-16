@@ -82,4 +82,4 @@ export default function Modal({
   );
 }
 
-export { ModalFooter };
+export { type ModalProps, ModalFooter };
