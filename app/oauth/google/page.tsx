@@ -1,32 +1,36 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 
 import EasyLoginLoadingPage from '@app/oauth/EasyLoginLoadingPage';
 import { useEasySignIn } from '@hooks/useEasySignIn';
-import useUserStore from '@app/stores/userStore';
-import { useRouter } from 'next/navigation';
 
 const GoogleCallback = () => {
-  const { setIsGoogleLogin } = useUserStore();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const easySignInMutation = useEasySignIn();
+  const easySignInMutation = useEasySignIn({ provider: 'GOOGLE' });
 
   const handleGoogleLogin = useCallback(
-    (token: string) => {
-      easySignInMutation.mutate({
+    async (token: string) => {
+      const data = await easySignInMutation.mutateAsync({
         token,
         provider: 'GOOGLE',
       });
+
+      if (data.user?.nickname && /^\d+$/.test(data.user.nickname)) {
+        toast.warn(
+          `'${session?.user.name}'은 사용중인 닉네임 입니다. 계정 설정에서 닉네임을 변경해주세요!`
+        );
+      }
     },
-    [easySignInMutation]
+    [easySignInMutation, session?.user.name]
   );
 
   useEffect(() => {
@@ -51,17 +55,8 @@ const GoogleCallback = () => {
       }
 
       handleGoogleLogin(jwtToken);
-      setIsGoogleLogin(true);
-    } else {
     }
-  }, [
-    status,
-    session,
-    isProcessing,
-    handleGoogleLogin,
-    setIsGoogleLogin,
-    router,
-  ]);
+  }, [status, session, isProcessing, handleGoogleLogin, router]);
 
   return <EasyLoginLoadingPage type="google" />;
 };

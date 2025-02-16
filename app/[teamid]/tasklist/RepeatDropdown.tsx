@@ -75,9 +75,9 @@ export default function RepeatDropdown({
         반복 설정
       </label>
       <div className="mt-3">
-        <Dropdown>
-          <Dropdown.Button>
-            <div className="flex h-11 w-[110px] cursor-pointer items-center justify-center gap-1 rounded-[11px] bg-b-primary px-[10px] pb-[11px] pt-[12px] text-md font-medium text-t-default">
+        <Dropdown className="w-[110px]">
+          <Dropdown.Button className="w-full">
+            <div className="flex h-11 cursor-pointer items-center justify-center gap-1 rounded-[11px] bg-b-primary px-[10px] pb-[11px] pt-[12px] text-md font-medium text-t-default">
               {selectedValue}
               <Image
                 src="/images/icons/ic_down-arrow.svg"
@@ -88,7 +88,7 @@ export default function RepeatDropdown({
             </div>
           </Dropdown.Button>
           <Dropdown.Menu
-            className="top-[50px] w-28"
+            className="top-[50px] w-full"
             animationType="slide"
           >
             {Object.keys(repeatOptionMap).map((label) => (

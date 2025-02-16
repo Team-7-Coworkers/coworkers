@@ -29,7 +29,7 @@ const DropdownMenu = ({
 
   return (
     <div
-      className={`border-b-tertiarytertiary absolute w-[120px] overflow-hidden rounded-[12px] border-[1px] border-[#334155] bg-b-secondary p-[2px] ${className} ${animationClass}`}
+      className={`border-b-tertiarytertiary absolute z-40 w-[120px] overflow-hidden rounded-[12px] border-[1px] border-[#334155] bg-b-secondary p-[2px] ${className} ${animationClass}`}
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.type === DropdownMenuItem) {

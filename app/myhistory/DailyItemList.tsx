@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import CloseIcon from '@/app/components/Modal/CloseIcon';
+import CloseIcon from '@components/Modal/CloseIcon';
 import TaskDetail from '@/app/[teamid]/tasklist/task-detail/TaskDetail';
 import { useParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
@@ -45,7 +45,7 @@ export default function DailyItemList({ dailyTasks }: DailyItemListProps) {
                     height={24}
                   />
                   <p
-                    className="cursor-pointer truncate text-md font-normal text-t-primary line-through"
+                    className="cursor-pointer truncate text-md font-normal text-t-primary line-through transition-transform duration-200 ease-in-out hover:scale-105"
                     onClick={() => setSelectedTaskId(id)}
                   >
                     {name}

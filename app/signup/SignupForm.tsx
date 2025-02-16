@@ -9,7 +9,7 @@ import Button from '@components/Button';
 import {
   validateConfirmPassword,
   validateEmail,
-  validateName,
+  validateNickname,
   validatePassword,
 } from '@utils/formValidators';
 
@@ -32,7 +32,7 @@ export default function SignupForm({
 
   const validateForm = useCallback(() => {
     const newErrors = {
-      nickname: validateName(formData.nickname.trim()) || '',
+      nickname: validateNickname(formData.nickname.trim()) || '',
       email: validateEmail(formData.email.trim()) || '',
       password: validatePassword(formData.password.trim()) || '',
       confirmPassword:
@@ -66,14 +66,14 @@ export default function SignupForm({
     >
       <div className="space-y-6">
         <div className="space-y-3">
-          <label htmlFor="nickname">이름</label>
+          <label htmlFor="nickname">닉네임</label>
           <InputField
             id="nickname"
             type="text"
-            placeholder="이름을 입력해주세요."
+            placeholder="닉네임을 입력해주세요."
             value={formData.nickname}
             onChange={handleChange}
-            validator={validateName}
+            validator={validateNickname}
           />
         </div>
         <div className="space-y-3">
@@ -113,7 +113,7 @@ export default function SignupForm({
         </div>
         <Link
           href="/login"
-          className="block cursor-pointer text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
+          className="block w-fit cursor-pointer place-self-end text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
         >
           로그인 페이지로
         </Link>

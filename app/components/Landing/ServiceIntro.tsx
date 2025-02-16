@@ -21,13 +21,15 @@ export default function ServiceIntro() {
 
   return (
     <div className="relative w-full overflow-hidden text-center">
-      <div className="h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
+      <div className="relative h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
         <Image
           className="object-cover"
           fill
           src={landingMain}
           alt=""
           priority
+          placeholder="blur"
+          blurDataURL="/images/landing/landing-main-low.png"
           sizes={IMAGE_SIZES}
         />
       </div>
