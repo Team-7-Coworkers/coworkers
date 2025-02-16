@@ -15,6 +15,7 @@ import Loading from '@/app/components/Loading';
 import { MAX_LENGTH } from '@/app/constants/form';
 import { toast } from 'react-toastify';
 import useUserStore from '@stores/userStore';
+import Modal, { ModalFooter } from '@components/Modal';
 
 const WriteContent = () => {
   const router = useRouter();
@@ -25,34 +26,51 @@ const WriteContent = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { user } = useUserStore();
 
-  //로그아웃 상태일 때 로그인 창으로
+  const handleIncorrectModalClose = () => {
+    setIsModalOpen(false);
+    setShouldRedirect(true);
+  };
+
   useEffect(() => {
-    if (!user) {
+    if (shouldRedirect) {
+      router.replace('/boards');
+    }
+  }, [shouldRedirect, router]);
+
+  useEffect(() => {
+    if (user !== undefined) {
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!isLoading && user === null) {
       router.replace('/login');
     }
-  }, [user, router]);
+  }, [isLoading, user, router]);
 
   //수정하기로 들어갔을 때 게시글 정보 가져옴
   useEffect(() => {
-    const fetchArticle = async () => {
-      if (!articleId) return;
+    if (!articleId) return;
 
+    const fetchArticle = async () => {
       try {
         const data = await getDetailsArticle({ articleId: Number(articleId) });
 
         if ('message' in data) {
-          alert('게시글 정보를 찾을 수 없습니다.');
-          router.replace('/boards');
+          toast.error('게시글 정보를 찾을 수 없습니다.');
+          setShouldRedirect(true);
           return;
         }
 
-        // 다른 사람 게시물일 때 수정 방지
         if (user && data.writer.id !== user.id) {
-          alert('수정 권한이 없습니다.');
-          router.replace('/boards');
+          setIsModalOpen(true);
           return;
         }
 
@@ -60,13 +78,13 @@ const WriteContent = () => {
         setContent(data.content);
         setImage(data.image);
       } catch {
-        alert('게시글 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.');
-        router.replace('/boards');
+        toast.error('게시글 정보를 불러오는 데 실패했습니다.');
+        setShouldRedirect(true);
       }
     };
 
     fetchArticle();
-  }, [articleId, user, router]);
+  }, [articleId, user]);
 
   const postMutation = useMutation({
     mutationFn: postArticles,
@@ -118,8 +136,34 @@ const WriteContent = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loading classname="" />
+      </div>
+    );
+  }
+
   return (
     <div className="relative mx-auto flex w-[90%] flex-col items-start pb-12 sm:w-[90%] lg:w-[65%]">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        hasCloseButton={false}
+        icon="danger"
+        title="수정 권한이 없습니다."
+      >
+        <p className="text-center">게시판 목록으로 돌아갑니다.</p>
+        <ModalFooter>
+          <Button
+            state="danger"
+            onClick={handleIncorrectModalClose}
+          >
+            확인
+          </Button>
+        </ModalFooter>
+      </Modal>
+
       <div className="flex w-full items-center justify-between border-b border-gray-700 pb-8 pt-12">
         <p className="pb-6 text-[20px] font-bold">
           {articleId ? '게시글 수정' : '게시글 쓰기'}
