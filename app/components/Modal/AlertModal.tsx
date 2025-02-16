@@ -4,17 +4,20 @@ import Modal, { type ModalProps, ModalFooter } from './index';
 import Button from '@components/Button';
 
 export interface AlertModalProps extends ModalProps {
+  buttonText: string;
   onOkClick: () => void;
 }
 
 interface AlertModalConfig {
   title?: string;
+  buttonText?: string;
   onOkClick?: () => void;
 }
 
 const initProps = {
   isOpen: false,
   title: '알림',
+  buttonText: '확인',
   children: 'message',
   onClose: () => {},
   onOkClick: () => {},
@@ -23,6 +26,7 @@ const initProps = {
 const AlertModal = ({
   isOpen,
   title,
+  buttonText,
   onOkClick,
   children,
 }: AlertModalProps) => {
@@ -35,7 +39,7 @@ const AlertModal = ({
     >
       <p className="text-center">{children}</p>
       <ModalFooter>
-        <Button onClick={() => onOkClick()}>확인</Button>
+        <Button onClick={() => onOkClick()}>{buttonText}</Button>
       </ModalFooter>
     </Modal>
   );
@@ -50,11 +54,16 @@ const useAlertModal = () => {
 
   const alertModalOpen = (
     message: string,
-    { title = config.title, onOkClick }: AlertModalConfig
+    {
+      title = config.title,
+      buttonText = config.buttonText,
+      onOkClick,
+    }: AlertModalConfig
   ) => {
     setConfig({
       isOpen: true,
       title,
+      buttonText,
       children: message,
       onClose,
       onOkClick: () => {

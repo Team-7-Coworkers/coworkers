@@ -14,7 +14,8 @@ export default function Home() {
   const handleClick = () => {
     alertModalOpen('테스트 알림 모달 입니다.', {
       title: '알림',
-      onOkClick: () => console.log('확인을 눌렀어요.'),
+      buttonText: 'OK',
+      onOkClick: () => console.log('OK 눌렀어요.'),
     });
   };
 
