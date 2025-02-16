@@ -51,6 +51,7 @@ const WriteContent = () => {
 
   useEffect(() => {
     if (!isLoading && user === null) {
+      toast.error('로그인이 필요합니다.');
       router.replace('/login');
     }
   }, [isLoading, user, router]);
