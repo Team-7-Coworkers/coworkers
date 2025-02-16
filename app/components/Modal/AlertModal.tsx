@@ -68,7 +68,7 @@ const useAlertModal = () => {
     return <AlertModal {...config} />;
   };
 
-  return { AlertModalContainer, alertModalOpen };
+  return { AlertModalContainer, config, alertModalOpen };
 };
 
 export default AlertModal;
