@@ -7,6 +7,7 @@ import MedalIcon from '@/public/images/icons/ic_medal.svg';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import SkeletonCard from './SkeletonCard';
+import Img from '@components/Img';
 
 export default function BestCardList() {
   const articles = Card({
@@ -42,7 +43,7 @@ export default function BestCardList() {
                 {/* Image */}
                 {article.image && (
                   <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
-                    <Image
+                    <Img
                       src={article.image}
                       alt={article.title}
                       fill
