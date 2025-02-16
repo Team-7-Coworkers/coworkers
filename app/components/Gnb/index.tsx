@@ -66,48 +66,48 @@ export default function GNB() {
   return (
     <nav className="fixed left-0 top-0 z-20 w-full bg-b-secondary">
       <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container">
-        <div className="flex space-x-10">
+        <div className="flex space-x-6 lg:space-x-10">
           <div className="flex items-center gap-4">
-            {user && (
-              <div
-                className="cursor-pointer sm:hidden"
-                onClick={handleOpenSideBar}
-              >
-                <Image
-                  src="/images/icons/ic_gnb-menu.svg"
-                  width={24}
-                  height={24}
-                  alt="메뉴 버튼"
-                />
-              </div>
-            )}
+            <div
+              className="cursor-pointer sm:hidden"
+              onClick={handleOpenSideBar}
+            >
+              <Image
+                src="/images/icons/ic_gnb-menu.svg"
+                width={24}
+                height={24}
+                alt="메뉴 버튼"
+              />
+            </div>
 
-            <div className="relative flex h-[20px] w-[102px] lg:h-[60px] lg:w-[158px]">
-              <Link href="/">
+            <div className="flex">
+              <Link
+                href="/"
+                className="relative h-[20px] w-[102px] lg:h-[30px] lg:w-[160px]"
+              >
                 <Image
                   src="/images/logos/logo.svg"
                   alt="coworkers"
                   fill
                   style={{ objectFit: 'contain' }}
+                  priority
                 />
               </Link>
             </div>
           </div>
-          <div className="hidden items-center space-x-10 sm:flex">
+          <div className="hidden items-center space-x-4 sm:flex lg:space-x-10">
             {user && (
-              <>
-                <TeamListDropDown
-                  teamList={teamList}
-                  currentTeam={currentTeam || teamList[0]}
-                />
-                <Link
-                  href="/boards"
-                  className={`${currentPath.includes('/boards') ? 'text-green-600' : 'hover:text-green-600'}`}
-                >
-                  자유게시판
-                </Link>
-              </>
+              <TeamListDropDown
+                teamList={teamList}
+                currentTeam={currentTeam || teamList[0]}
+              />
             )}
+            <Link
+              href="/boards"
+              className={`${currentPath.includes('/boards') ? 'text-green-600' : 'hover:text-green-600'} hidden text-md sm:block lg:text-lg`}
+            >
+              자유게시판
+            </Link>
           </div>
         </div>
 

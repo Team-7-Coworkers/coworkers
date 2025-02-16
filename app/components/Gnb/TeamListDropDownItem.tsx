@@ -19,7 +19,7 @@ export default function TeamListDropDownItem({
           className="object-cover"
         />
       </div>
-      <p className="truncate text-lg">{team.name}</p>
+      <p className="truncate text-md lg:text-lg">{team.name}</p>
     </div>
   );
 }

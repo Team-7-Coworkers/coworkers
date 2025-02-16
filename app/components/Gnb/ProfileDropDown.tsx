@@ -34,10 +34,10 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
 
   return (
     <Dropdown>
-      <Dropdown.Button className="flex items-center rounded-lg px-2 py-1.5 lg:hover:bg-b-tertiary">
-        <div className="flex items-center gap-2">
+      <Dropdown.Button className="flex items-center rounded-lg p-1 hover:bg-b-tertiary lg:px-2 lg:py-1.5">
+        <div className="flex items-center gap-2 p-0.5 lg:p-0">
           <div className="hidden text-md lg:block">{user.nickname}</div>
-          <div className="h-8 w-8 overflow-hidden rounded-lg hover:bg-b-tertiary lg:hover:bg-transparent">
+          <div className="h-[36px] w-[36px] overflow-hidden rounded-lg">
             <Img
               src={user.image || ''}
               baseImage="/images/icons/ic_user.svg"
@@ -51,7 +51,7 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
       </Dropdown.Button>
 
       <Dropdown.Menu
-        className="right-0 w-[140px] p-[8px] py-[12px] sm:w-[152px]"
+        className="right-0 mt-3 w-[140px] px-[8px] py-[12px] sm:w-[152px]"
         animationType="scale"
       >
         <Dropdown.MenuItem className={dropDownItemStyle}>
