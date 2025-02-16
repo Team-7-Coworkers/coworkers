@@ -12,6 +12,8 @@ import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
+import { toast } from 'react-toastify';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
@@ -61,8 +63,7 @@ export default function ItemList({
 
       toggleChecked(taskId, checked);
     } catch (error) {
-      console.error('완료 처리 실패:', error);
-      alert('완료 처리에 실패했습니다.');
+      createErrorHandler({ prefixMessage: '완료 처리 실패' })(error);
     }
   };
 
@@ -78,18 +79,32 @@ export default function ItemList({
 
   const handleDelete = async () => {
     if (selectedItem) {
-      await onDeleteItem(selectedItem.id);
-      setIsDeleteModalOpen(false);
-      setSelectedItem(null);
+      try {
+        await onDeleteItem(selectedItem.id);
+
+        toast.success(`"${selectedItem.name}" 할 일이 삭제되었습니다.`);
+
+        setIsDeleteModalOpen(false);
+        setSelectedItem(null);
+      } catch (error) {
+        createErrorHandler({ prefixMessage: '할 일 삭제 실패' })(error);
+      }
     }
   };
 
   const handleEdit = (title: string, description: string) => {
     if (selectedItem) {
-      onEditItem(selectedItem.id, title, description);
-      updateTask(taskListId, selectedItem.id, title, description);
-      setIsEditModalOpen(false);
-      setSelectedItem(null);
+      try {
+        onEditItem(selectedItem.id, title, description);
+        updateTask(taskListId, selectedItem.id, title, description);
+
+        toast.success(`"${title}" 할 일이 수정되었습니다.`);
+
+        setIsEditModalOpen(false);
+        setSelectedItem(null);
+      } catch (error) {
+        createErrorHandler({ prefixMessage: '할 일 수정 실패' })(error);
+      }
     }
   };
 
@@ -103,7 +118,7 @@ export default function ItemList({
 
   if (items.length === 0) {
     return (
-      <p className="mt-24 text-center text-t-default">
+      <p className="flex h-[50vh] items-center justify-center text-center text-t-default">
         아직 할 일이 없습니다. <br /> 할 일을 추가해보세요.
       </p>
     );

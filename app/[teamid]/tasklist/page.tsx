@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import AddButton from './AddButton';
 import ListCategory from './ListCategory';
@@ -35,46 +35,41 @@ export default function ListPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTaskListId, setSelectedTaskListId] = useState<number | null>(
     null
-  ); // TODO: 전역 상태를 추가했으므로 해당 state 관련 작업들 리팩토링하기
+  );
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [isMember, setIsMember] = useState(true);
   const router = useRouter();
 
-  const { selectedCategory } = useTaskStore();
+  const { selectedCategory, setSelectedCategory } = useTaskStore();
   const { user } = useUserStore();
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery<GroupDataType, Error>({
     queryKey: ['groupTasks', groupId],
-    queryFn: async () => {
-      const response = await getGroups({ groupId: Number(groupId) });
-      // 멤버의 아이디에 현재 로그인된 유저 아이디가 있는 지 판별
-      if (user) {
-        const isUserMember = response.members.some(
-          (member) => member.userId === user.id
-        );
-        setIsMember(isUserMember);
-      }
-      return response;
-    },
-    enabled: !!groupId && !!user,
+    queryFn: async () => getGroups({ groupId: Number(groupId) }),
+    enabled: !!groupId && user !== undefined,
     initialData: () => queryClient.getQueryData(['groupTasks', groupId]),
   });
+
+  const isMember = useMemo(() => {
+    if (!data || !user) return null;
+    return data.members.some((member) => member.userId === user.id);
+  }, [data, user]);
 
   const handleTaskUpdated = (taskListId: number) => {
     queryClient.invalidateQueries({ queryKey: ['tasks', taskListId] });
   };
 
-  const handleListAdded = () => {
+  const handleListAdded = (newTaskListId: number) => {
     queryClient.invalidateQueries({ queryKey: ['groupTasks', groupId] });
+    setSelectedTaskListId(newTaskListId);
+    setSelectedCategory(newTaskListId);
   };
 
   const handleIncorrectModalClose = () => {
     router.push('/');
   };
 
-  if (isLoading || !user) {
-    // 로딩 코드
+  if (isLoading || isMember === null) {
     return (
       <div className="flex min-h-[80vh] items-center justify-center">
         <Loading />
@@ -97,7 +92,7 @@ export default function ListPage() {
   return (
     <div className="container relative min-h-[80vh] pb-10">
       <Modal
-        isOpen={!isMember}
+        isOpen={isMember === false}
         title="해당 팀의 멤버가 아닙니다."
         onClose={handleIncorrectModalClose}
         hasCloseButton={false}

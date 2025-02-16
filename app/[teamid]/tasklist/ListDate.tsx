@@ -59,7 +59,7 @@ export default function ListDate({
 
   return (
     <div className="flex items-center text-lg font-medium text-t-primary">
-      <span className="truncate">{formatDate(selectedDate)}</span>
+      <span>{formatDate(selectedDate)}</span>
       <div className="ml-2 flex items-center sm:ml-3">
         <div className="flex items-center gap-1 sm:gap-2">
           <button
@@ -110,7 +110,7 @@ export default function ListDate({
             />
           </button>
           {isCalendarOpen && (
-            <div className="absolute left-0 top-full z-10 mt-2">
+            <div className="absolute left-1 top-full z-10 mt-2 -translate-x-1/2 sm:left-0">
               <CustomCalendar
                 selectedDate={selectedDate}
                 onDateSelect={handleDateSelect}
