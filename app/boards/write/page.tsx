@@ -103,6 +103,8 @@ const WriteContent = () => {
     mutationFn: patchArticles,
     onSuccess: () => {
       toast.success('수정이 완료되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['article', articleId] });
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
       router.push(`/boards/${articleId}`);
     },
     onSettled: () => {
