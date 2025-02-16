@@ -4,8 +4,8 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 회원가입 페이지나 정적 파일은 검증하지 않음
-  if (/\.(png|jpg|css|js|ico|svg)$/.test(pathname)) {
+  // 정적 파일은 검증하지 않음
+  if (/\.(png|jpg|css|ts|ico|svg)$/.test(pathname)) {
     return NextResponse.next();
   }
 
@@ -26,10 +26,12 @@ export function middleware(request: NextRequest) {
   // 로그인이 필요한 페이지인 경우, state와 redirect를 파라미터에 추가하여 로그인 페이지로 이동
   const segments = pathname.split('/'); // ex: "/1829/tasklist" → ["", "1829", "tasklist"]
   const firstSegment = segments[1];
+
   if (
     /^\d+$/.test(firstSegment) ||
     pathname.startsWith('/mypage') ||
     pathname.startsWith('/invitation') ||
+    pathname.startsWith('/addteam') ||
     pathname.startsWith('/myhistory') ||
     pathname.startsWith('/boards/write')
   ) {
