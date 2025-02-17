@@ -122,6 +122,23 @@ export default function TaskDetail({
   const deleteMutation = useMutation<void, unknown, void>({
     mutationFn: async () => {
       if (!task) return;
+
+      if (checkedItems[task.id]) {
+        await patchGroupsTaskListsTasks({
+          groupId,
+          taskListId,
+          taskId: task.id,
+          name: task.name,
+          description: task.description,
+          done: false,
+        });
+
+        setCheckedItems((prev) => ({
+          ...prev,
+          [task.id]: false,
+        }));
+      }
+
       await deleteGroupsTaskListsTasks({
         groupId,
         taskListId,

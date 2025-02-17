@@ -76,6 +76,19 @@ export default function ItemList({
     if (!selectedItem) return;
 
     try {
+      if (checkedItems[selectedItem.id]) {
+        await patchGroupsTaskListsTasks({
+          groupId,
+          taskListId,
+          taskId: selectedItem.id,
+          name: selectedItem.name,
+          description: selectedItem.description,
+          done: false,
+        });
+
+        toggleChecked(selectedItem.id, false);
+      }
+
       await deleteGroupsTaskListsTasks({
         groupId,
         taskListId,
