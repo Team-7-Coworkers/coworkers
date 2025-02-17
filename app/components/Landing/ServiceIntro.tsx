@@ -42,8 +42,6 @@ export default function ServiceIntro() {
             src={landingMain}
             alt=""
             priority
-            placeholder="blur"
-            blurDataURL="/images/landing/landing-main-low.png"
             sizes={IMAGE_SIZES}
           />
         </motion.div>
