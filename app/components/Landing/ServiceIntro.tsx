@@ -28,24 +28,22 @@ export default function ServiceIntro() {
 
   return (
     <div className="relative w-full overflow-hidden text-center">
-      <div className="relative h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
-        <motion.div
-          className="relative h-full w-full"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <Image
-            className="object-cover"
-            fill
-            src={landingMain}
-            alt=""
-            priority
-            sizes={IMAGE_SIZES}
-          />
-        </motion.div>
-      </div>
+      <motion.div
+        className="relative h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <Image
+          className="object-cover"
+          fill
+          src={landingMain}
+          alt=""
+          priority
+          sizes={IMAGE_SIZES}
+        />
+      </motion.div>
       <div className="absolute top-[55px] flex w-full flex-col items-center gap-1 sm:top-[100px] sm:gap-2 lg:top-[84px] lg:gap-5">
         <div className="flex items-center gap-1 sm:gap-4 lg:gap-6">
           <h1 className="text-2xl font-semibold text-t-primary sm:text-4xl lg:text-[48px] lg:leading-[57.28px]">
