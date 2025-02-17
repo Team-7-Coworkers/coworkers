@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ResetPasswordForm from '@/app/reset-password/ResetPasswordForm';
+
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { patchUserResetPassword } from '../api/user.api';
+
+import { patchUserResetPassword } from '@api/user.api';
+import { createErrorHandler } from '@utils/createErrorHandler';
+import ResetPasswordForm from '@app/reset-password/ResetPasswordForm';
 
 export default function ResetPasswordPage() {
   const [token, setToken] = useState('');
@@ -27,16 +29,7 @@ export default function ResetPasswordPage() {
       alert('비밀번호가 성공적으로 변경되었습니다!');
       window.location.href = '/login';
     },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data.message ||
-          '비밀번호 재설정 중 오류가 발생했습니다.';
-        alert(`비밀번호 재설정 실패: ${errorMessage}`);
-      } else {
-        alert('예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
-    },
+    onError: createErrorHandler({ prefixMessage: '비밀번호 재설정 실패' }),
   });
 
   const handleResetPasswordSubmit = (formData: {
