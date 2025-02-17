@@ -2,11 +2,22 @@
 
 import { useState } from 'react';
 import Modal, { ModalFooter } from '../../components/Modal';
+import { useAlertModal } from '@components/Modal/AlertModal';
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [bigModalOpen, setBigModalOpen] = useState(false);
+
+  const { AlertModalContainer, alertModalOpen } = useAlertModal();
+
+  const handleClick = () => {
+    alertModalOpen('테스트 알림 모달 입니다.', {
+      title: '알림',
+      buttonText: 'OK',
+      onOkClick: () => console.log('OK 눌렀어요.'),
+    });
+  };
 
   return (
     <>
@@ -35,6 +46,14 @@ export default function Home() {
           onClick={() => setBigModalOpen(true)}
         >
           큰 모달 열기
+        </button>
+
+        <button
+          type="button"
+          className="rounded-xl bg-primary px-4 py-[14px] text-lg font-semibold text-t-inverse"
+          onClick={handleClick}
+        >
+          alert modal open
         </button>
       </div>
 
@@ -96,6 +115,8 @@ export default function Home() {
           </button>
         </ModalFooter>
       </Modal>
+
+      <AlertModalContainer />
     </>
   );
 }
