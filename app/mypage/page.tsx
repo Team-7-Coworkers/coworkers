@@ -72,9 +72,8 @@ export default function MyPage() {
     onSuccess: () => {
       clearUser();
       clearTeam();
-
       toast('회원 탈퇴가 정상 처리되었습니다.');
-
+      document.cookie = 'accessToken=; path=/; max-age=0';
       router.push('/');
     },
     onError: createErrorHandler({ prefixMessage: '회원 탈퇴 실패' }),
