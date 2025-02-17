@@ -4,12 +4,11 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 정적 파일은 검증하지 않음
   if (/\.(png|jpg|css|ts|ico|svg)$/.test(pathname)) {
     return NextResponse.next();
   }
 
-  // 요청 쿠키에서 accessToken 추출
+  // 쿠키에서 accessToken 추출
   const token = request.cookies.get('accessToken')?.value;
 
   // 로그인 페이지 접근 시, 이미 토큰이 있다면 메인 리다이렉트
@@ -33,7 +32,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/invitation') ||
     pathname.startsWith('/addteam') ||
     pathname.startsWith('/myhistory') ||
-    pathname.startsWith('/boards/write')
+    pathname.startsWith('/boards/write') ||
+    pathname.startsWith('/noteam')
   ) {
     if (!token) {
       const url = request.nextUrl.clone();
