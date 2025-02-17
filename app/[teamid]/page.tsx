@@ -39,6 +39,8 @@ export default function TeamPage() {
   });
 
   useEffect(() => {
+    if (!user) return;
+
     if (group) {
       // 사용자 검증 및 역할 받아 설정
       const member = group.members.find((member) => member.userId === user?.id);
