@@ -24,14 +24,12 @@ export default function ModifyTeamPage() {
   const [name, setName] = useState('');
   const [imageErrorMessage, setImageErrorMessage] = useState('');
   const [nameErrorMessage, setNameErrorMessage] = useState('');
+
   const { teamid } = useParams();
   const { user } = useUserStore();
   const { currentTeam, setCurrentTeam } = useTeamStore();
   const router = useRouter();
   const queryClient = useQueryClient();
-
-  // 최소 2글자 이상인지 확인
-  const validName = name.trim().length >= MIN_NAME_LENGTH;
 
   // 그룹 정보 가져오기
   const {
@@ -43,6 +41,7 @@ export default function ModifyTeamPage() {
     queryFn: async () => await getGroups({ groupId: Number(teamid) }),
     enabled: !!teamid,
   });
+
   // 그룹(팀) 수정 뮤테이션
   const { mutate } = useMutation({
     mutationFn: async () =>
@@ -69,6 +68,9 @@ export default function ModifyTeamPage() {
       console.error('--- patchGroups:error:', err);
     },
   });
+
+  // 최소 2글자 이상인지 확인
+  const validName = name.trim().length >= MIN_NAME_LENGTH;
 
   // 수정 폼 서브밋
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -99,11 +101,22 @@ export default function ModifyTeamPage() {
   };
 
   useEffect(() => {
-    if (group) {
-      setName(group.name);
-      setImage(group.image);
+    if (!group) return;
+
+    // 관리자 확인
+    const isAdminUser =
+      user?.id ===
+      group?.members.find((member) => member.role === 'ADMIN')?.userId;
+
+    // 관리자 아닐 경우
+    if (!isAdminUser) {
+      toast.error('잘못된 접근입니다. 팀 페이지로 돌아갑니다.');
+      return router.replace(`/${group.id}`);
     }
-  }, [group]);
+
+    setName(group.name);
+    setImage(group.image);
+  }, [group, user, router]);
 
   if (isLoading) {
     return (
