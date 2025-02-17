@@ -49,13 +49,6 @@ const WriteContent = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (!isLoading && user === null) {
-      toast.error('로그인이 필요합니다.');
-      router.replace('/login');
-    }
-  }, [isLoading, user, router]);
-
   //수정하기로 들어갔을 때 게시글 정보 가져옴
   useEffect(() => {
     if (!articleId) return;
