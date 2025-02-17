@@ -58,7 +58,7 @@ const useAlertModal = () => {
       title = config.title,
       buttonText = config.buttonText,
       onOkClick,
-    }: AlertModalConfig
+    }: AlertModalConfig = {}
   ) => {
     setConfig({
       isOpen: true,
