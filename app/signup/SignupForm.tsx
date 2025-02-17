@@ -131,16 +131,15 @@ export default function SignupForm({
         </Button>
         {!isValidated && (
           <div className="mt-2 text-sm text-danger">
-            {Object.values(formData).every((val) => val.trim() !== '') &&
-              !isValidated && (
-                <div className="mt-2 text-sm text-danger">
-                  {Object.keys(errors)
-                    .filter((key) => errors[key as keyof typeof errors])
-                    .map((key, idx) => (
-                      <p key={idx}>{errors[key as keyof typeof errors]}</p>
-                    ))}
-                </div>
-              )}
+            {Object.values(formData).every((val) => val.trim() !== '') && (
+              <div className="mt-2 text-sm text-danger">
+                {Object.keys(errors)
+                  .filter((key) => errors[key as keyof typeof errors])
+                  .map((key, idx) => (
+                    <p key={idx}>{errors[key as keyof typeof errors]}</p>
+                  ))}
+              </div>
+            )}
           </div>
         )}
         <Link
