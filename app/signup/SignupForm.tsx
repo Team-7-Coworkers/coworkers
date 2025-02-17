@@ -111,17 +111,6 @@ export default function SignupForm({
             isPassword={true}
           />
         </div>
-      </div>
-      <div className="space-y-6">
-        <Button
-          type="submit"
-          styleType="solid"
-          size="py-3.5 w-full text-md"
-          state="default"
-          disabled={!isValidated}
-        >
-          회원가입
-        </Button>
         <Link
           href="/login"
           className="block w-fit cursor-pointer place-self-end text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
@@ -129,6 +118,15 @@ export default function SignupForm({
           로그인 페이지로
         </Link>
       </div>
+      <Button
+        type="submit"
+        styleType="solid"
+        size="py-3.5 w-full text-md"
+        state="default"
+        disabled={!isValidated}
+      >
+        회원가입
+      </Button>
     </form>
   );
 }
