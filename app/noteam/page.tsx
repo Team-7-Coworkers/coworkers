@@ -1,9 +1,29 @@
+'use client';
+
 import Image from 'next/image';
 import Button from '../components/Button';
+import { useEffect } from 'react';
+import useUserStore from '@stores/userStore';
+import { useRouter } from 'next/navigation';
+import useTeamStore from '@stores/teamStore';
 
 export default function NoTeamPage() {
+  const { accessToken } = useUserStore.getState();
+  const { currentTeam } = useTeamStore.getState();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!accessToken) {
+      router.push('/login');
+    } else if (currentTeam) {
+      router.push(`/${currentTeam?.id}`);
+    }
+  }, [accessToken, currentTeam, router]);
+
+  if (!accessToken) return;
+
   return (
-    <div className="mt-[190px] px-8 sm:px-[112px] lg:mx-auto">
+    <div className="flex min-h-[80vh] flex-col items-center justify-center px-8 sm:px-[112px]">
       <div className="flex flex-col items-center gap-8 sm:gap-12">
         <div className="w-full max-w-[810px]">
           <Image
