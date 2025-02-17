@@ -25,6 +25,10 @@ export default function ListDate({
     setSelectedDate(calculateDate(selectedDate, 1));
   };
 
+  const handleToday = () => {
+    setSelectedDate(new Date());
+  };
+
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
     setIsCalendarOpen(false);
@@ -50,13 +54,14 @@ export default function ListDate({
     };
   }, [isCalendarOpen]);
 
-  const arrowButtonClass = 'rounded-full bg-b-secondary hover:bg-b-tertiary';
+  const arrowButtonClass =
+    'rounded-full flex items-center justify-center bg-b-secondary hover:bg-b-tertiary';
 
   return (
     <div className="flex items-center text-lg font-medium text-t-primary">
-      <span className="truncate">{formatDate(selectedDate)}</span>
+      <span>{formatDate(selectedDate)}</span>
       <div className="ml-2 flex items-center sm:ml-3">
-        <div className="flex gap-1 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <button
             aria-label="이전 날짜"
             className={arrowButtonClass}
@@ -68,6 +73,13 @@ export default function ListDate({
               width={16}
               height={16}
             />
+          </button>
+          <button
+            aria-label="오늘 날짜"
+            className="rounded-full bg-b-secondary px-3 py-1 text-sm text-ic-primary hover:bg-b-tertiary hover:text-t-secondary"
+            onClick={handleToday}
+          >
+            Today
           </button>
           <button
             aria-label="다음 날짜"
@@ -98,7 +110,7 @@ export default function ListDate({
             />
           </button>
           {isCalendarOpen && (
-            <div className="absolute left-0 top-full z-10 mt-2">
+            <div className="absolute left-1 top-full z-10 mt-2 -translate-x-1/2 sm:left-0">
               <CustomCalendar
                 selectedDate={selectedDate}
                 onDateSelect={handleDateSelect}

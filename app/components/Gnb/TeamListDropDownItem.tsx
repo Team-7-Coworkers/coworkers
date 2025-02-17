@@ -1,5 +1,5 @@
-import { GroupType } from '@/app/types/shared';
-import Img from '../Img';
+import Img from '@components/Img';
+import { GroupType } from '@app/types/shared';
 
 interface TeamListDropDownItemProps {
   team: GroupType;
@@ -19,7 +19,7 @@ export default function TeamListDropDownItem({
           className="object-cover"
         />
       </div>
-      <p className="truncate text-lg">{team.name}</p>
+      <p className="truncate text-md lg:text-lg">{team.name}</p>
     </div>
   );
 }

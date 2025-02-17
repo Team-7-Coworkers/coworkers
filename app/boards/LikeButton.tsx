@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { postArticlesLike, deleteArticlesLike } from '@/app/api/article.api';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface LikeButtonProps {
   articleId: number;
@@ -14,6 +15,7 @@ export default function LikeButton({
   initialLikeCount,
   initialIsLiked,
 }: LikeButtonProps) {
+  const queryClient = useQueryClient();
   const [likeCount, setLikeCount] = useState<number>(initialLikeCount);
   const [isLiked, setIsLiked] = useState<boolean>(initialIsLiked);
   const [isLiking, setIsLiking] = useState<boolean>(false);
@@ -36,9 +38,11 @@ export default function LikeButton({
       }
 
       setIsLiked((prev) => !prev);
-
       setAnimate(true);
       setTimeout(() => setAnimate(false), 200);
+
+      queryClient.invalidateQueries({ queryKey: ['articles'] });
+      queryClient.invalidateQueries({ queryKey: ['article', articleId] });
     } finally {
       setIsLiking(false);
     }

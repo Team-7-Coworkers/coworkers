@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import SkeletonCard from './SkeletonCard';
+import Img from '@components/Img';
 
 export default function CardList({
   keyword,
@@ -65,22 +66,33 @@ export default function CardList({
 
           <div>
             <Dropdown>
-              <Dropdown.Button
-                className={`flex w-full cursor-pointer items-center justify-between rounded-[11px] border-none bg-b-secondary px-6 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white`}
-              >
-                <span>
+              <Dropdown.Button className="flex w-auto min-w-[120px] cursor-pointer items-center justify-between whitespace-nowrap rounded-[11px] border-none bg-b-secondary px-5 py-3 text-md transition-all duration-200 hover:bg-primary/90 hover:text-white">
+                <span className="flex w-full justify-between">
                   {orderByDropdown === 'recent' ? '최신순' : '좋아요순'}
-                  <span className="ml-4">▼</span>
+                  <Image
+                    src="/images/icons/ic_toggle.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="ml-2"
+                  />
                 </span>
               </Dropdown.Button>
+
               <Dropdown.Menu
                 animationType="scale"
-                className="z-30"
+                className="z-30 w-auto min-w-[120px]"
               >
-                <Dropdown.MenuItem onClick={() => handleOrderChange('recent')}>
+                <Dropdown.MenuItem
+                  className="w-full"
+                  onClick={() => handleOrderChange('recent')}
+                >
                   최신순
                 </Dropdown.MenuItem>
-                <Dropdown.MenuItem onClick={() => handleOrderChange('like')}>
+                <Dropdown.MenuItem
+                  className="w-full"
+                  onClick={() => handleOrderChange('like')}
+                >
                   좋아요순
                 </Dropdown.MenuItem>
               </Dropdown.Menu>
@@ -113,13 +125,13 @@ export default function CardList({
                     }}
                   >
                     <div className="flex justify-between">
-                      <p className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden break-all text-[18px] leading-[1.5] text-t-secondary">
+                      <h1 className="mr-[8px] line-clamp-2 max-h-[48px] flex-grow overflow-hidden break-all text-[18px] leading-[1.5] text-t-secondary">
                         {article.title}
-                      </p>
+                      </h1>
 
                       {article.image && (
                         <div className="relative ml-[16px] h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
-                          <Image
+                          <Img
                             src={article.image}
                             alt={article.title}
                             fill
@@ -132,10 +144,8 @@ export default function CardList({
                       {isOwner && (
                         <div className="dropdown pointer-events-auto ml-[16px] flex-shrink-0">
                           <PostActionDropdown
-                            onEdit={() => console.log(`수정: ${article.id}`)}
-                            onDeleteSuccess={() =>
-                              console.log('삭제 완료 후 상태 업데이트')
-                            }
+                            onEdit={() => {}}
+                            onDeleteSuccess={() => {}}
                             articleId={article.id}
                           />
                         </div>

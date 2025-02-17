@@ -7,6 +7,7 @@ import MedalIcon from '@/public/images/icons/ic_medal.svg';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import SkeletonCard from './SkeletonCard';
+import Img from '@components/Img';
 
 export default function BestCardList() {
   const articles = Card({
@@ -34,13 +35,15 @@ export default function BestCardList() {
               </div>
               <div className="flex items-start justify-between">
                 {/* Title */}
-                <p className="mr-[8px] line-clamp-2 max-h-[48px] break-all text-[18px] leading-[1.5] text-t-secondary">
-                  {article.title}
-                </p>
+                <div className="h-[72px]">
+                  <h1 className="mr-[8px] line-clamp-2 max-h-[48px] break-all text-[18px] leading-[1.5] text-t-secondary">
+                    {article.title}
+                  </h1>
+                </div>
                 {/* Image */}
                 {article.image && (
                   <div className="relative h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[8px]">
-                    <Image
+                    <Img
                       src={article.image}
                       alt={article.title}
                       fill

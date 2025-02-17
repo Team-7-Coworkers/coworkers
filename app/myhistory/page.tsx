@@ -1,12 +1,12 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getUserHistory } from '../api/user.api';
-import { UserResponseType } from '../types/user';
+import { getUserHistory } from '@api/user.api';
+import { UserResponseType } from '@app/types/user';
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import FilterDropdown from './FilterDropdown';
-import LoadingMyhistory from './LoadingMyhistory';
+import FilterDropdown from '@app/myhistory/FilterDropdown';
+import LoadingMyhistory from '@app/myhistory/LoadingMyhistory';
 
 export default function MyHistoryPage() {
   // 정렬 기준 (doneAt, date)

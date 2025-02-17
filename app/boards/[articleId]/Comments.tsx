@@ -15,12 +15,15 @@ import {
   patchComments,
 } from '@/app/api/articleComment.api';
 import dayjs from 'dayjs';
-import Image from 'next/image';
+
 import profile from '@/public/images/icons/icon-base-user.svg';
 import useUserStore from '@/app/stores/userStore';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import { ArticleCommentType } from '@/app/types/articleComment';
 import Loading from '@/app/components/Loading';
+import { MAX_LENGTH } from '@constants/form';
+import { toast } from 'react-toastify';
+import Img from '@components/Img';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
@@ -84,6 +87,7 @@ export default function Comment() {
         content: comment,
       });
       setComment('');
+      toast.success('등록이 완료되었습니다.');
       if (articleId) {
         queryClient.invalidateQueries({
           queryKey: ['articleComments', Number(articleId)],
@@ -97,6 +101,7 @@ export default function Comment() {
       if (!editedContent.trim()) return;
       await patchComments({ commentId, content: editedContent });
       setEditingCommentId(null);
+      toast.success('수정이 완료되었습니다.');
       queryClient.invalidateQueries({
         queryKey: ['articleComments', Number(articleId)],
       });
@@ -107,25 +112,37 @@ export default function Comment() {
 
   return (
     <div className="pb-20 pt-20">
-      <p className="pb-6 text-[20px] font-bold">댓글달기</p>
-      <TextField
-        type="box"
-        value={comment}
-        placeholder="댓글을 입력해주세요."
-        onChange={(e) => setComment(e.target.value)}
-        height={100}
-      />
-      <div className="pb-4" />
-      <div className="flex justify-end">
-        <Button
-          styleType="solid"
-          size="w-[184px] h-[42px]"
-          onClick={() => mutation.mutate()}
-          disabled={mutation.status === 'pending'}
-        >
-          {mutation.status === 'pending' ? '등록 중...' : '등록'}
-        </Button>
-      </div>
+      {user && (
+        <div>
+          <p className="pb-6 text-[20px] font-bold">댓글달기</p>
+          <TextField
+            type="box"
+            value={comment}
+            placeholder="댓글을 입력해주세요."
+            onChange={(e) => {
+              if (e.target.value.length > 300) {
+                alert(
+                  `댓글은 최대 ${MAX_LENGTH.articleComment}자까지 입력 가능합니다.`
+                );
+                return;
+              }
+              setComment(e.target.value);
+            }}
+            height={100}
+          />
+          <div className="pb-4" />
+          <div className="flex justify-end">
+            <Button
+              styleType="solid"
+              size="w-[184px] h-[42px]"
+              onClick={() => mutation.mutate()}
+              disabled={mutation.status === 'pending'}
+            >
+              {mutation.status === 'pending' ? '등록 중...' : '등록'}
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="pt-20">
         {comments?.pages
           .flatMap((page) => page?.list || [])
@@ -174,7 +191,7 @@ export default function Comment() {
                 )}
               </div>
               <div className="mt-3 flex items-center">
-                <Image
+                <Img
                   src={
                     comment.writer.image?.startsWith('http')
                       ? comment.writer.image

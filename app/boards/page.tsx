@@ -6,8 +6,10 @@ import SearchBar from './SearchBar';
 import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import Button from '@/app/components/Button';
+import useUserStore from '@stores/userStore';
 
 export default function Boards() {
+  const { user } = useUserStore();
   const [searchKeyword, setSearchKeyword] = useState('');
 
   const handleSearch = (keyword: string) => {
@@ -33,16 +35,18 @@ export default function Boards() {
         </Suspense>
       </div>
 
-      <div className="right fixed bottom-20 right-[calc(50%-45%)] z-50 sm:right-[calc(50%-45%)] lg:right-[calc(50%-32.5%)]">
-        <Button
-          styleType="solid"
-          size="w-[100px] h-[45px]"
-          classname="transition-all duration-300 ease-in-out hover:translate-y-[-10px] rounded-[50px]"
-          href="/boards/write"
-        >
-          + 글쓰기
-        </Button>
-      </div>
+      {user && (
+        <div className="right fixed bottom-20 right-[calc(50%-45%)] z-50 sm:right-[calc(50%-45%)] lg:right-[calc(50%-32.5%)]">
+          <Button
+            styleType="solid"
+            size="w-[100px] h-[45px]"
+            classname="transition-all duration-300 ease-in-out hover:translate-y-[-10px] rounded-[50px]"
+            href="/boards/write"
+          >
+            + 글쓰기
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

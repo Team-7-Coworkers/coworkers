@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Checkbox from './Checkbox';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
@@ -12,12 +12,15 @@ import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
+import { toast } from 'react-toastify';
+import { createErrorHandler } from '@utils/createErrorHandler';
 
 type ItemListProps = {
   items: TaskType[] | undefined;
   groupId: number;
   taskListId: number;
   isLoading: boolean;
+  seletedDate: string;
   onEditItem: (taskId: number, name: string, description: string) => void;
   onDeleteItem: (taskId: number) => void;
   onTaskClick: (taskId: number) => void;
@@ -35,9 +38,17 @@ export default function ItemList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const tasks = useTaskStore((state) => state.tasks);
 
-  const { checkedItems, toggleChecked, updateTask } = useTaskStore();
+  const {
+    tasks: rawTasks,
+    checkedItems,
+    toggleChecked,
+    updateTask,
+  } = useTaskStore();
+  const tasks = useMemo(
+    () => rawTasks[taskListId] || {},
+    [rawTasks, taskListId]
+  );
 
   const handleComplete = async (taskId: number, checked: boolean) => {
     try {
@@ -45,15 +56,14 @@ export default function ItemList({
         groupId,
         taskListId,
         taskId,
-        name: tasks[taskId].name,
-        description: tasks[taskId].description,
+        name: tasks[taskId]?.name,
+        description: tasks[taskId]?.description,
         done: checked,
       });
 
       toggleChecked(taskId, checked);
     } catch (error) {
-      console.error('완료 처리 실패:', error);
-      alert('완료 처리에 실패했습니다.');
+      createErrorHandler({ prefixMessage: '완료 처리 실패' })(error);
     }
   };
 
@@ -69,18 +79,32 @@ export default function ItemList({
 
   const handleDelete = async () => {
     if (selectedItem) {
-      await onDeleteItem(selectedItem.id);
-      setIsDeleteModalOpen(false);
-      setSelectedItem(null);
+      try {
+        await onDeleteItem(selectedItem.id);
+
+        toast.success(`"${selectedItem.name}" 할 일이 삭제되었습니다.`);
+
+        setIsDeleteModalOpen(false);
+        setSelectedItem(null);
+      } catch (error) {
+        createErrorHandler({ prefixMessage: '할 일 삭제 실패' })(error);
+      }
     }
   };
 
   const handleEdit = (title: string, description: string) => {
     if (selectedItem) {
-      onEditItem(selectedItem.id, title, description);
-      updateTask(selectedItem.id, title, description);
-      setIsEditModalOpen(false);
-      setSelectedItem(null);
+      try {
+        onEditItem(selectedItem.id, title, description);
+        updateTask(taskListId, selectedItem.id, title, description);
+
+        toast.success(`"${title}" 할 일이 수정되었습니다.`);
+
+        setIsEditModalOpen(false);
+        setSelectedItem(null);
+      } catch (error) {
+        createErrorHandler({ prefixMessage: '할 일 수정 실패' })(error);
+      }
     }
   };
 
@@ -94,7 +118,7 @@ export default function ItemList({
 
   if (items.length === 0) {
     return (
-      <p className="mt-24 text-center text-t-default">
+      <p className="flex h-[50vh] items-center justify-center text-center text-t-default">
         아직 할 일이 없습니다. <br /> 할 일을 추가해보세요.
       </p>
     );
@@ -104,7 +128,7 @@ export default function ItemList({
     <div className="mt-6">
       {items.map((item) => (
         <div
-          key={`${item.id}-${item.date}`}
+          key={item.id}
           className="mb-4 flex flex-col items-start rounded-lg bg-b-secondary px-3 py-[14px] text-white shadow-md"
         >
           <div className="relative flex w-full items-center justify-between">
@@ -117,7 +141,7 @@ export default function ItemList({
               />
               <h3
                 onClick={() => onTaskClick(item.id)}
-                className={`ml-3 max-w-48 cursor-pointer truncate text-t-primary sm:max-w-full ${
+                className={`hover:text-highlight ml-3 max-w-48 cursor-pointer truncate text-t-primary transition-transform duration-200 ease-in-out hover:scale-105 sm:max-w-full ${
                   checkedItems[item.id] ? 'line-through' : ''
                 }`}
               >

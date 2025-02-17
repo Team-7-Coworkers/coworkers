@@ -2,8 +2,8 @@
 
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
-import Dropdown from '../components/Dropdown';
-import DailyItemList from './DailyItemList';
+import Dropdown from '@components/Dropdown';
+import DailyItemList from '@app/myhistory/DailyItemList';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isBetween from 'dayjs/plugin/isBetween';
 import Image from 'next/image';
@@ -76,11 +76,11 @@ export default function FilterDropdown({
 
   return (
     <div>
-      <div className="mb-4 flex justify-between">
+      <div className="my-4 flex justify-between">
         <div className="" />
         <div className="flex gap-2">
           <Dropdown>
-            <Dropdown.Button className="flex w-[120px] cursor-pointer items-center justify-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary">
+            <Dropdown.Button className="flex min-w-[125px] cursor-pointer items-center justify-center whitespace-nowrap rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary">
               {sortType === 'doneAt' ? '완료한 날짜' : '목표 날짜'}{' '}
               <Image
                 src="/images/icons/ic_toggle.svg"
@@ -104,7 +104,7 @@ export default function FilterDropdown({
           </Dropdown>
           <Dropdown>
             <Dropdown.Button
-              className={`flex w-[115px] cursor-pointer items-center justify-center rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary`}
+              className={`flex min-w-[115px] cursor-pointer items-center justify-center whitespace-nowrap rounded-[11px] border-none bg-b-secondary px-4 py-3 text-md transition-all duration-200 hover:bg-b-tertiary`}
             >
               {dropdownText}{' '}
               <Image

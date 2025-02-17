@@ -52,15 +52,13 @@ export default function Modal({
     }
   };
 
-  const containerClass = cn(styles.container, position === 'top' && styles.top);
-
   return (
     <dialog
       className={styles.modal}
       open={isOpen}
       onClick={handleBackdropClick}
     >
-      <div className={containerClass}>
+      <div className={cn(styles.container, position === 'top' && styles.top)}>
         {icon === 'danger' && (
           <AlertIcon classname="mx-auto mb-4 text-danger" />
         )}

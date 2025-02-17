@@ -1,25 +1,26 @@
 'use client';
 
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
+
 import { useQuery } from '@tanstack/react-query';
 import isEqual from 'lodash.isequal';
 
-import TeamListDropDown from './TeamListDropDown';
-import TeamListSideBar from './TeamListSideBar';
-import ProfileDropDown from './ProfileDropDown';
-import LoginMenu from './LoginMenu';
-
-import useTeamStore from '@/app/stores/teamStore';
-import useUserStore from '@/app/stores/userStore';
-import { getUserGroups } from '@/app/api/user.api';
-import { usePathname } from 'next/navigation';
-import { extractTeamIdFromPath } from '@/app/utils/navigation';
+import { getUserGroups } from '@api/user.api';
+import { extractTeamIdFromPath } from '@utils/navigation';
+import useTeamStore from '@stores/teamStore';
+import useUserStore from '@stores/userStore';
+import TeamListDropDown from '@components/Gnb/TeamListDropDown';
+import TeamListSideBar from '@components/Gnb/TeamListSideBar';
+import ProfileDropDown from '@components/Gnb/ProfileDropDown';
+import LoginMenu from '@components/Gnb/LoginMenu';
 
 export default function GNB() {
   const currentPath = usePathname() || '';
   const teamId = extractTeamIdFromPath(currentPath);
+
   const isLoginMenuHidden =
     currentPath === '/login' || currentPath === '/signup';
 
@@ -50,10 +51,6 @@ export default function GNB() {
     }
   }, [fetchedTeamList, teamId, currentTeam?.id, setTeamList, setCurrentTeam]);
 
-  useEffect(() => {
-    updateTeamInfo();
-  }, [updateTeamInfo]);
-
   const handleOpenSideBar = useCallback(() => {
     setIsSideBarOpen(true);
   }, []);
@@ -62,46 +59,55 @@ export default function GNB() {
     setIsSideBarOpen(false);
   }, []);
 
-  return (
-    <nav className="fixed left-0 top-0 z-10 w-full bg-b-secondary">
-      <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container">
-        <div className="flex space-x-10">
-          <div className="flex items-center gap-4">
-            {user && (
-              <div
-                className="cursor-pointer sm:hidden"
-                onClick={handleOpenSideBar}
-              >
-                <Image
-                  src="/images/icons/ic_gnb-menu.svg"
-                  width={24}
-                  height={24}
-                  alt="메뉴 버튼"
-                />
-              </div>
-            )}
+  useEffect(() => {
+    updateTeamInfo();
+  }, [updateTeamInfo]);
 
-            <div className="relative flex h-[20px] w-[102px] lg:h-[60px] lg:w-[158px]">
-              <Link href="/">
+  return (
+    <nav className="fixed left-0 top-0 z-20 w-full bg-b-secondary">
+      <div className="flex h-[60px] w-full items-center justify-between px-4 py-3.5 text-lg font-medium text-t-primary lg:container">
+        <div className="flex space-x-6 lg:space-x-10">
+          <div className="flex items-center gap-4">
+            <div
+              className="cursor-pointer sm:hidden"
+              onClick={handleOpenSideBar}
+            >
+              <Image
+                src="/images/icons/ic_gnb-menu.svg"
+                width={24}
+                height={24}
+                alt="메뉴 버튼"
+              />
+            </div>
+
+            <div className="flex">
+              <Link
+                href="/"
+                className="relative h-[20px] w-[102px] lg:h-[30px] lg:w-[160px]"
+              >
                 <Image
                   src="/images/logos/logo.svg"
                   alt="coworkers"
                   fill
                   style={{ objectFit: 'contain' }}
+                  priority
                 />
               </Link>
             </div>
           </div>
-          <div className="hidden items-center space-x-10 sm:flex">
+          <div className="hidden items-center space-x-4 sm:flex lg:space-x-10">
             {user && (
-              <>
-                <TeamListDropDown
-                  teamList={teamList}
-                  currentTeam={currentTeam || teamList[0]}
-                />
-                <Link href="/boards">자유게시판</Link>
-              </>
+              <TeamListDropDown
+                teamList={teamList}
+                currentTeam={currentTeam || teamList[0]}
+              />
             )}
+            <Link
+              href="/boards"
+              className={`${currentPath.includes('/boards') ? 'text-green-600' : 'hover:text-green-600'} hidden text-md sm:block lg:text-lg`}
+            >
+              자유게시판
+            </Link>
           </div>
         </div>
 

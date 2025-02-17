@@ -1,9 +1,10 @@
 'use client';
 
 import Button from '@/app/components/Button';
-import CheckIcon from '../CheckIcon';
+import CheckIcon from '../task-icon/CheckIcon';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
+import { toast } from 'react-toastify';
 
 interface CheckButtonProps {
   taskId: number;
@@ -33,7 +34,7 @@ export default function CheckButton({
       onTaskUpdated();
     } catch (error) {
       console.error('완료 처리 실패:', error);
-      alert('완료 처리에 실패했습니다.');
+      toast.error('완료 처리에 실패하였습니다.');
     }
   };
 

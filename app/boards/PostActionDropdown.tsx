@@ -8,6 +8,7 @@ import { deleteComments } from '@/app/api/articleComment.api';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 interface PostActionDropdownProps {
   onEdit: () => void;
@@ -33,13 +34,15 @@ export default function PostActionDropdown({
       if (articleId) {
         await deleteArticles({ articleId });
         queryClient.invalidateQueries({ queryKey: ['articles'] });
+        toast.success('삭제가 완료되었습니다.');
       } else if (commentId) {
         await deleteComments({ commentId });
         queryClient.invalidateQueries({ queryKey: ['articleComments'] });
+        toast.success('삭제가 완료되었습니다.');
       }
       onDeleteSuccess?.();
     } catch {
-      alert('삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+      toast.error('삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsDeleting(false);
     }
@@ -64,7 +67,7 @@ export default function PostActionDropdown({
       </Dropdown.Button>
       <Dropdown.Menu
         animationType="scale"
-        className="absolute right-0 sm:left-0 sm:right-auto"
+        className="absolute left-auto right-0 lg:left-0 lg:right-auto"
       >
         <Dropdown.MenuItem onClick={handleEdit}>수정하기</Dropdown.MenuItem>
         <Dropdown.MenuItem onClick={handleDelete}>
