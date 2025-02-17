@@ -43,6 +43,7 @@ const KakaoCallback = () => {
     const code = urlParams.get('code');
     const receivedState = urlParams.get('state');
     const storedState = localStorage.getItem('kakao_state');
+    const isKakaoBrowser = /KAKAOTALK/i.test(navigator.userAgent);
 
     const redirectWithMessage = (message: string, error = true) => {
       if (error) {
@@ -58,21 +59,24 @@ const KakaoCallback = () => {
       redirectWithMessage(
         '⚠️ 인가 코드가 없습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
       );
+
       return;
     }
 
-    if (!storedState) {
+    if (isKakaoBrowser) {
       redirectWithMessage(
         '카카오 브라우저로 접속하셨습니다. 카카오 로그인을 다시 진행해주세요.',
         false
       );
+
       return;
     }
 
-    if (receivedState !== storedState) {
+    if (!receivedState || receivedState !== storedState) {
       redirectWithMessage(
         '⚠️ CSRF 공격이 감지되었습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
       );
+
       return;
     }
 
