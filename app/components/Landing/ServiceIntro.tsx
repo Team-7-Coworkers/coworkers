@@ -8,10 +8,12 @@ import { motion } from 'framer-motion';
 import useUserStore from '@/app/stores/userStore';
 import useTeamStore from '@/app/stores/teamStore';
 import { IMAGE_SIZES } from '@/app/constants/image';
+import { useEffect, useState } from 'react';
 
 export default function ServiceIntro() {
   const { user } = useUserStore();
   const { teamList, currentTeam } = useTeamStore();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const getRedirectPath = () => {
     if (!user) return '/login';
@@ -19,20 +21,31 @@ export default function ServiceIntro() {
     return `${currentTeam?.id}`;
   };
 
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
   return (
     <div className="relative w-full overflow-hidden text-center">
-      <div className="relative h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]">
+      <motion.div
+        className="relative h-[640px] overflow-hidden sm:h-[940px] lg:h-[1080px]"
+        initial={{ opacity: 0, y: 20 }}
+        animate={isImageLoaded ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
         <Image
           className="object-cover"
           fill
           src={landingMain}
           alt=""
           priority
-          placeholder="blur"
-          blurDataURL="/images/landing/landing-main-low.png"
           sizes={IMAGE_SIZES}
+          onLoadingComplete={() => setIsImageLoaded(true)}
         />
-      </div>
+      </motion.div>
       <div className="absolute top-[55px] flex w-full flex-col items-center gap-1 sm:top-[100px] sm:gap-2 lg:top-[84px] lg:gap-5">
         <div className="flex items-center gap-1 sm:gap-4 lg:gap-6">
           <h1 className="text-2xl font-semibold text-t-primary sm:text-4xl lg:text-[48px] lg:leading-[57.28px]">
