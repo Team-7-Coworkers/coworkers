@@ -2,11 +2,11 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import ItemList from './ItemList';
-import styles from './ListCategory.module.css';
 import { getGroupsTaskListTasks } from '@/app/api/task.api';
 import { TaskListResponseType } from '@/app/types/taskList';
 import { useTaskStore } from '@/app/stores/taskStore';
+import ItemList from './ItemList';
+import styles from './ListCategory.module.css';
 
 type ListCategoryProps = {
   selectedDate: Date;

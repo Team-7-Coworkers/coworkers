@@ -9,15 +9,15 @@ import {
   deleteTasksComments,
 } from '@/app/api/taskComment.api';
 import { TaskCommentType } from '@/app/types/taskComment';
-import SubmitIcon from '../task-icon/SubmitIcon';
 import TextField from '@/app/components/TextField';
 import { useTaskStore } from '@/app/stores/taskStore';
-import UserProfile from './UserProfile';
-import KebobDropdown from '../KebobDropdown';
 import Button from '@/app/components/Button';
 import { formatCommentDate } from '@/app/utils/date';
 import useUserStore from '@/app/stores/userStore';
 import { MAX_LENGTH } from '@/app/constants/form';
+import SubmitIcon from '../task-icon/SubmitIcon';
+import KebobDropdown from '../KebobDropdown';
+import UserProfile from './UserProfile';
 
 interface TaskCommentProps {
   taskListId: number;

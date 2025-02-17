@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import CheckButton from './CheckButton';
+import { toast } from 'react-toastify';
 import { TaskType } from '@/app/types/shared';
 import {
   deleteGroupsTaskListsTasks,
@@ -10,13 +10,13 @@ import {
   patchGroupsTaskListsTasks,
 } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
+import { createErrorHandler } from '@utils/createErrorHandler';
+import Loading from '@/app/components/Loading';
 import DeleteModal from '../modals/DeleteModal';
 import EditModal from '../modals/EditModal';
 import TaskDetailHeader from './TaskDetailHeader';
 import TaskComment from './TaskComment';
-import Loading from '@/app/components/Loading';
-import { toast } from 'react-toastify';
-import { createErrorHandler } from '@utils/createErrorHandler';
+import CheckButton from './CheckButton';
 
 interface TaskDetailProps {
   taskId: number;

@@ -1,24 +1,24 @@
 'use client';
 
-import Image from 'next/image';
-import Checkbox from './Checkbox';
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import DeleteModal from './modals/DeleteModal';
-import EditModal from './modals/EditModal';
+import { toast } from 'react-toastify';
 import { TaskType } from '@/app/types/shared';
 import { useTaskStore } from '@/app/stores/taskStore';
-import FrequencyDisplay from './info-displays/FrequencyDisplay';
-import KebobDropdown from './KebobDropdown';
-import DateDisplay from './info-displays/DateDisplay';
-import Loading from '@/app/components/Loading';
 import {
   patchGroupsTaskListsTasks,
   deleteGroupsTaskListsTasks,
   getGroupsTaskListTasks,
 } from '@/app/api/task.api';
-import { toast } from 'react-toastify';
 import { createErrorHandler } from '@utils/createErrorHandler';
+import Loading from '@/app/components/Loading';
+import Checkbox from './Checkbox';
+import DeleteModal from './modals/DeleteModal';
+import EditModal from './modals/EditModal';
+import FrequencyDisplay from './info-displays/FrequencyDisplay';
+import KebobDropdown from './KebobDropdown';
+import DateDisplay from './info-displays/DateDisplay';
 
 type ItemListProps = {
   groupId: number;
@@ -72,16 +72,6 @@ export default function ItemList({
     }
   };
 
-  const openDeleteModal = (item: TaskType) => {
-    setSelectedItem(item);
-    setIsDeleteModalOpen(true);
-  };
-
-  const openEditModal = (item: TaskType) => {
-    setSelectedItem(item);
-    setIsEditModalOpen(true);
-  };
-
   const handleDelete = async () => {
     if (!selectedItem) return;
 
@@ -126,6 +116,16 @@ export default function ItemList({
     } catch (error) {
       createErrorHandler({ prefixMessage: '할 일 수정 실패' })(error);
     }
+  };
+
+  const openDeleteModal = (item: TaskType) => {
+    setSelectedItem(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const openEditModal = (item: TaskType) => {
+    setSelectedItem(item);
+    setIsEditModalOpen(true);
   };
 
   if (isLoading) {

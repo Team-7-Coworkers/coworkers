@@ -1,10 +1,10 @@
 'use client';
 
-import Button from '@/app/components/Button';
-import CheckIcon from '../task-icon/CheckIcon';
+import { toast } from 'react-toastify';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
-import { toast } from 'react-toastify';
+import Button from '@/app/components/Button';
+import CheckIcon from '../task-icon/CheckIcon';
 
 interface CheckButtonProps {
   taskId: number;

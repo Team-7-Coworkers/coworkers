@@ -1,8 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import ProfileImg from '@/public/images/icons/icon-base-user.svg';
-import { useState } from 'react';
 
 interface UserProfileProps {
   image?: string | null;

@@ -1,7 +1,7 @@
-import Dropdown from '@/app/components/Dropdown';
-import { TaskParamsType } from '@/app/types/task';
-import Image from 'next/image';
 import { useState } from 'react';
+import Image from 'next/image';
+import { TaskParamsType } from '@/app/types/task';
+import Dropdown from '@/app/components/Dropdown';
 
 interface RepeatDropdownProps {
   onSelectRepeatOption: (
