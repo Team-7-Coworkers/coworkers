@@ -106,6 +106,10 @@ export default function TaskDetail({
         queryKey: ['tasks', groupId, taskListId],
       });
 
+      queryClient.invalidateQueries({
+        queryKey: ['userHistory'],
+      });
+
       setIsEditModalOpen(false);
     },
     onError: createErrorHandler({ prefixMessage: '할 일 수정 실패' }),
@@ -141,6 +145,10 @@ export default function TaskDetail({
 
       queryClient.invalidateQueries({
         queryKey: ['tasks', groupId, taskListId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['userHistory'],
       });
 
       deleteTask(taskListId, taskId);
