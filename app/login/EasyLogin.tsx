@@ -22,14 +22,18 @@ export default function EasyLogin({ page }: { page: 'login' | 'signup' }) {
       return;
     }
 
-    const state = Math.random().toString(36).substring(2, 10);
+    const stateValue = Math.random().toString(36).substring(2, 10);
+    const stateObj = {
+      value: stateValue,
+      timestamp: Date.now(),
+    };
 
     window.Kakao.Auth.authorize({
       redirectUri: process.env.NEXT_PUBLIC_KAKAO_LOGIN_REDIRECT_URI!,
-      state: state,
+      state: stateValue,
     });
 
-    localStorage.setItem('kakao_state', state);
+    localStorage.setItem('kakao_state', JSON.stringify(stateObj));
   };
 
   const handleGoogleLogin = () => {
