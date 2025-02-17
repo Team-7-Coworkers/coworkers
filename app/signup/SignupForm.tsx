@@ -29,6 +29,12 @@ export default function SignupForm({
 }: SignupFormProps) {
   const [formData, setFormData] = useState(initialFormData);
   const [isValidated, setIsValidated] = useState(false);
+  const [errors, setErrors] = useState({
+    nickname: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   const validateForm = useCallback(() => {
     const newErrors = {
@@ -39,6 +45,7 @@ export default function SignupForm({
         validateConfirmPassword(formData.confirmPassword.trim()) || '',
     };
 
+    setErrors(newErrors);
     setIsValidated(!Object.values(newErrors).some((error) => error));
   }, [formData]);
 
@@ -111,6 +118,31 @@ export default function SignupForm({
             isPassword={true}
           />
         </div>
+      </div>
+      <div className="space-y-6">
+        <Button
+          type="submit"
+          styleType="solid"
+          size="py-3.5 w-full text-md"
+          state="default"
+          disabled={!isValidated}
+        >
+          회원가입
+        </Button>
+        {!isValidated && (
+          <div className="mt-2 text-sm text-danger">
+            {Object.values(formData).every((val) => val.trim() !== '') &&
+              !isValidated && (
+                <div className="mt-2 text-sm text-danger">
+                  {Object.keys(errors)
+                    .filter((key) => errors[key as keyof typeof errors])
+                    .map((key, idx) => (
+                      <p key={idx}>{errors[key as keyof typeof errors]}</p>
+                    ))}
+                </div>
+              )}
+          </div>
+        )}
         <Link
           href="/login"
           className="block w-fit cursor-pointer place-self-end text-right text-md text-emerald-500 underline hover:opacity-50 sm:text-lg"
@@ -118,15 +150,6 @@ export default function SignupForm({
           로그인 페이지로
         </Link>
       </div>
-      <Button
-        type="submit"
-        styleType="solid"
-        size="py-3.5 w-full text-md"
-        state="default"
-        disabled={!isValidated}
-      >
-        회원가입
-      </Button>
     </form>
   );
 }
