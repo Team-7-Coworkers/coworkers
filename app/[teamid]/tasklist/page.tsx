@@ -161,9 +161,6 @@ export default function ListPage() {
               groupId={Number(groupId)}
               taskListId={selectedTaskListId || 0}
               onClose={() => setSelectedTaskId(null)}
-              onTaskUpdated={() =>
-                selectedTaskListId && handleTaskUpdated(selectedTaskListId)
-              }
             />
           </div>
         </>

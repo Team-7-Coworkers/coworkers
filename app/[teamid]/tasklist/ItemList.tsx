@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Checkbox from './Checkbox';
 import { useMemo, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import DeleteModal from './modals/DeleteModal';
 import EditModal from './modals/EditModal';
 import { TaskType } from '@/app/types/shared';
@@ -11,40 +12,41 @@ import FrequencyDisplay from './info-displays/FrequencyDisplay';
 import KebobDropdown from './KebobDropdown';
 import DateDisplay from './info-displays/DateDisplay';
 import Loading from '@/app/components/Loading';
-import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
+import {
+  patchGroupsTaskListsTasks,
+  deleteGroupsTaskListsTasks,
+  getGroupsTaskListTasks,
+} from '@/app/api/task.api';
 import { toast } from 'react-toastify';
 import { createErrorHandler } from '@utils/createErrorHandler';
 
 type ItemListProps = {
-  items: TaskType[] | undefined;
   groupId: number;
   taskListId: number;
-  isLoading: boolean;
-  seletedDate: string;
-  onEditItem: (taskId: number, name: string, description: string) => void;
-  onDeleteItem: (taskId: number) => void;
+  selectedDate: string;
   onTaskClick: (taskId: number) => void;
 };
 
 export default function ItemList({
-  items,
   groupId,
   taskListId,
-  isLoading,
-  onEditItem,
-  onDeleteItem,
+  selectedDate,
   onTaskClick,
 }: ItemListProps) {
+  const queryClient = useQueryClient();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TaskType | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const {
-    tasks: rawTasks,
-    checkedItems,
-    toggleChecked,
-    updateTask,
-  } = useTaskStore();
+  const { tasks: rawTasks, checkedItems, toggleChecked } = useTaskStore();
+
+  const { data: items, isLoading } = useQuery({
+    queryKey: ['tasks', groupId, taskListId, selectedDate],
+    queryFn: () =>
+      getGroupsTaskListTasks({ groupId, taskListId, date: selectedDate }),
+    enabled: !!taskListId,
+  });
+
   const tasks = useMemo(
     () => rawTasks[taskListId] || {},
     [rawTasks, taskListId]
@@ -62,6 +64,9 @@ export default function ItemList({
       });
 
       toggleChecked(taskId, checked);
+      queryClient.invalidateQueries({
+        queryKey: ['tasks', groupId, taskListId, selectedDate],
+      });
     } catch (error) {
       createErrorHandler({ prefixMessage: '완료 처리 실패' })(error);
     }
@@ -78,47 +83,62 @@ export default function ItemList({
   };
 
   const handleDelete = async () => {
-    if (selectedItem) {
-      try {
-        await onDeleteItem(selectedItem.id);
+    if (!selectedItem) return;
 
-        toast.success(`"${selectedItem.name}" 할 일이 삭제되었습니다.`);
+    try {
+      await deleteGroupsTaskListsTasks({
+        groupId,
+        taskListId,
+        taskId: selectedItem.id,
+      });
 
-        setIsDeleteModalOpen(false);
-        setSelectedItem(null);
-      } catch (error) {
-        createErrorHandler({ prefixMessage: '할 일 삭제 실패' })(error);
-      }
+      toast.success(`"${selectedItem.name}" 할 일이 삭제되었습니다.`);
+      queryClient.invalidateQueries({
+        queryKey: ['tasks', groupId, taskListId, selectedDate],
+      });
+      setIsDeleteModalOpen(false);
+      setSelectedItem(null);
+    } catch (error) {
+      createErrorHandler({ prefixMessage: '할 일 삭제 실패' })(error);
     }
   };
 
-  const handleEdit = (title: string, description: string) => {
-    if (selectedItem) {
-      try {
-        onEditItem(selectedItem.id, title, description);
-        updateTask(taskListId, selectedItem.id, title, description);
+  const handleEdit = async (title: string, description: string) => {
+    if (!selectedItem) return;
 
-        toast.success(`"${title}" 할 일이 수정되었습니다.`);
+    try {
+      await patchGroupsTaskListsTasks({
+        groupId,
+        taskListId,
+        taskId: selectedItem.id,
+        name: title,
+        description,
+        done: !!checkedItems[selectedItem.id],
+      });
 
-        setIsEditModalOpen(false);
-        setSelectedItem(null);
-      } catch (error) {
-        createErrorHandler({ prefixMessage: '할 일 수정 실패' })(error);
-      }
+      toast.success(`"${title}" 할 일이 수정되었습니다.`);
+      queryClient.invalidateQueries({
+        queryKey: ['tasks', groupId, taskListId, selectedDate],
+      });
+
+      setIsEditModalOpen(false);
+      setSelectedItem(null);
+    } catch (error) {
+      createErrorHandler({ prefixMessage: '할 일 수정 실패' })(error);
     }
   };
 
-  if (isLoading || items === undefined) {
+  if (isLoading) {
     return (
-      <div className="flex min-h-[250px] items-center justify-center">
+      <div className="flex min-h-[300px] items-center justify-center">
         <Loading />
       </div>
     );
   }
 
-  if (items.length === 0) {
+  if (!items || items.length === 0) {
     return (
-      <p className="flex h-[50vh] items-center justify-center text-center text-t-default">
+      <p className="flex h-[50vh] items-center justify-center text-center text-md text-t-default">
         아직 할 일이 없습니다. <br /> 할 일을 추가해보세요.
       </p>
     );
@@ -137,7 +157,7 @@ export default function ItemList({
                 id={item.id}
                 checked={!!checkedItems[item.id]}
                 onChange={(id, checked) => handleComplete(id, checked)}
-                aria-label={`Mark "${item.name}" as completed`}
+                aria-label={`할 일 완료: ${item.name}`}
               />
               <h3
                 onClick={() => onTaskClick(item.id)}
@@ -174,19 +194,13 @@ export default function ItemList({
         <>
           <DeleteModal
             isOpen={isDeleteModalOpen}
-            onClose={() => {
-              setIsDeleteModalOpen(false);
-              setSelectedItem(null);
-            }}
+            onClose={() => setIsDeleteModalOpen(false)}
             onConfirm={handleDelete}
             itemName={selectedItem.name}
           />
           <EditModal
             isOpen={isEditModalOpen}
-            onClose={() => {
-              setIsEditModalOpen(false);
-              setSelectedItem(null);
-            }}
+            onClose={() => setIsEditModalOpen(false)}
             onConfirm={handleEdit}
             initialTitle={selectedItem.name}
             initialDescription={selectedItem.description}

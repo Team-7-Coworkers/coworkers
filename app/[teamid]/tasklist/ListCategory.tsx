@@ -1,14 +1,10 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ItemList from './ItemList';
 import styles from './ListCategory.module.css';
-import {
-  getGroupsTaskListTasks,
-  deleteGroupsTaskListsTasks,
-  patchGroupsTaskListsTasks,
-} from '@/app/api/task.api';
+import { getGroupsTaskListTasks } from '@/app/api/task.api';
 import { TaskListResponseType } from '@/app/types/taskList';
 import { useTaskStore } from '@/app/stores/taskStore';
 
@@ -27,50 +23,28 @@ export default function ListCategory({
   onCategoryChange,
   onTaskClick,
 }: ListCategoryProps) {
-  const {
-    selectedCategory,
-    setSelectedCategory,
-    setTasks,
-    checkedItems,
-    setCheckedItems,
-    deleteTask,
-    tasks,
-  } = useTaskStore();
+  const { selectedCategory, setSelectedCategory, setTasks, setCheckedItems } =
+    useTaskStore();
 
   const listRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
 
-  const taskListIds = useMemo(
-    () => taskLists.map((task) => task.id),
-    [taskLists]
-  );
+  const formattedDate = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
 
-  const formattedDate = `${selectedDate.getFullYear()}-${String(
-    selectedDate.getMonth() + 1
-  ).padStart(
-    2,
-    '0'
-  )}-${String(selectedDate.getDate()).padStart(2, '0')}T00:00:00Z`;
-
-  const {
-    data: taskData,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: taskData } = useQuery({
     queryKey: ['tasks', groupId, selectedCategory, formattedDate],
     queryFn: async () => {
       if (!selectedCategory) return [];
-
       return await getGroupsTaskListTasks({
         groupId,
         taskListId: selectedCategory,
         date: formattedDate,
       });
     },
+    enabled: !!selectedCategory,
   });
 
   useEffect(() => {
-    // 카테고리 선택
     if (taskLists.length > 0 && selectedCategory === null) {
       setSelectedCategory(taskLists[0].id);
       onCategoryChange(taskLists[0].id);
@@ -78,7 +52,6 @@ export default function ListCategory({
   }, [taskLists, selectedCategory, setSelectedCategory, onCategoryChange]);
 
   useEffect(() => {
-    // 스크롤 이동
     if (selectedCategory !== null && buttonRefs.current[selectedCategory]) {
       buttonRefs.current[selectedCategory]?.scrollIntoView({
         behavior: 'smooth',
@@ -86,10 +59,9 @@ export default function ListCategory({
         inline: 'center',
       });
     }
-  }, [selectedCategory, taskListIds]);
+  }, [selectedCategory, taskLists]);
 
   useEffect(() => {
-    // 체크 상태 관리
     if (taskData) {
       setTasks(selectedCategory ?? 0, taskData);
       const initialCheckedItems: { [key: number]: boolean } = {};
@@ -100,64 +72,7 @@ export default function ListCategory({
     }
   }, [taskData, setTasks, selectedCategory, setCheckedItems]);
 
-  const handleCategoryChange = (
-    taskList: TaskListResponseType['getGroupsTaskLists']
-  ) => {
-    if (selectedCategory !== taskList.id) {
-      setSelectedCategory(taskList.id);
-      onCategoryChange(taskList.id);
-    }
-  };
-
-  const handleEditItem = async (
-    taskId: number,
-    name: string,
-    description: string
-  ) => {
-    if (selectedCategory === null) return;
-    try {
-      await patchGroupsTaskListsTasks({
-        groupId,
-        taskListId: selectedCategory || 0,
-        taskId,
-        name,
-        description,
-        done: !!tasks[selectedCategory]?.[taskId]?.doneAt,
-      });
-      refetch();
-    } catch (error) {
-      console.error('수정 중 오류 발생:', error);
-    }
-  };
-
-  const handleDeleteItem = async (taskId: number) => {
-    if (selectedCategory === null) return;
-    try {
-      if (checkedItems[taskId]) {
-        await patchGroupsTaskListsTasks({
-          groupId,
-          taskListId: selectedCategory || 0,
-          taskId,
-          name: tasks[selectedCategory]?.[taskId].name,
-          description: tasks[selectedCategory]?.[taskId].description,
-          done: false,
-        });
-      }
-
-      await deleteGroupsTaskListsTasks({
-        groupId,
-        taskListId: selectedCategory || 0,
-        taskId,
-      });
-
-      deleteTask(selectedCategory ?? 0, taskId);
-      refetch();
-    } catch (error) {
-      console.error('삭제 중 오류 발생:', error);
-    }
-  };
-
-  if (!isLoading && taskLists.length === 0) {
+  if (taskLists.length === 0) {
     return (
       <p className="flex h-[50vh] items-center justify-center text-center text-md font-medium text-t-default">
         아직 할 일 목록이 없습니다. <br /> 새로운 목록을 추가해주세요.
@@ -177,7 +92,10 @@ export default function ListCategory({
             ref={(el) => {
               if (el) buttonRefs.current[taskList.id] = el;
             }}
-            onClick={() => handleCategoryChange(taskList)}
+            onClick={() => {
+              setSelectedCategory(taskList.id);
+              onCategoryChange(taskList.id);
+            }}
             className={`pb-2 ${
               selectedCategory === taskList.id
                 ? 'rounded-sm border-b-2 border-white text-white'
@@ -192,13 +110,9 @@ export default function ListCategory({
 
       <ItemList
         taskListId={selectedCategory || 0}
-        seletedDate={formattedDate}
+        selectedDate={formattedDate}
         groupId={groupId}
-        items={taskData ?? []}
-        isLoading={isLoading}
         onTaskClick={onTaskClick}
-        onEditItem={handleEditItem}
-        onDeleteItem={handleDeleteItem}
       />
     </div>
   );
