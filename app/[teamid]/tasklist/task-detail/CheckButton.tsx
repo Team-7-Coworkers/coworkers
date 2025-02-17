@@ -1,23 +1,21 @@
 'use client';
 
-import Button from '@/app/components/Button';
-import CheckIcon from '../task-icon/CheckIcon';
+import { toast } from 'react-toastify';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
-import { toast } from 'react-toastify';
+import Button from '@/app/components/Button';
+import CheckIcon from '../task-icon/CheckIcon';
 
 interface CheckButtonProps {
   taskId: number;
   groupId: number;
   taskListId: number;
-  onTaskUpdated: () => void;
 }
 
 export default function CheckButton({
   taskId,
   groupId,
   taskListId,
-  onTaskUpdated,
 }: CheckButtonProps) {
   const { checkedItems, toggleChecked } = useTaskStore();
   const isCompleted = !!checkedItems[taskId];
@@ -31,7 +29,6 @@ export default function CheckButton({
         done: !isCompleted,
       });
       toggleChecked(taskId, !isCompleted);
-      onTaskUpdated();
     } catch (error) {
       console.error('완료 처리 실패:', error);
       toast.error('완료 처리에 실패하였습니다.');

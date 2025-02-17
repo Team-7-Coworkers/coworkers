@@ -1,20 +1,24 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import AddButton from './AddButton';
-import ListCategory from './ListCategory';
-import TaskDetail from './task-detail/TaskDetail';
-import ListHeader from './ListHeader';
+
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { getGroups } from '@/app/api/group.api';
-import CloseIcon from '@/app/components/Modal/CloseIcon';
+import { TaskListType } from '@/app/types/taskList';
+import useUserStore from '@/app/stores/userStore';
+import { useTaskStore } from '@/app/stores/taskStore';
+
 import Loading from '@/app/components/Loading';
 import Modal, { ModalFooter } from '@/app/components/Modal';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import useUserStore from '@/app/stores/userStore';
-import { TaskListType } from '@/app/types/taskList';
 import Button from '@/app/components/Button';
-import { useTaskStore } from '@/app/stores/taskStore';
+import CloseIcon from '@/app/components/Modal/CloseIcon';
+
+import ListHeader from './ListHeader';
+import ListCategory from './ListCategory';
+import AddButton from './AddButton';
+import TaskDetail from './task-detail/TaskDetail';
 
 interface Member {
   userId: number;
@@ -161,9 +165,6 @@ export default function ListPage() {
               groupId={Number(groupId)}
               taskListId={selectedTaskListId || 0}
               onClose={() => setSelectedTaskId(null)}
-              onTaskUpdated={() =>
-                selectedTaskListId && handleTaskUpdated(selectedTaskListId)
-              }
             />
           </div>
         </>
