@@ -9,14 +9,14 @@ import axios from 'axios';
 import { postGroupsAcceptInvitation } from '../api/group.api';
 import useUserStore from '../stores/userStore';
 import { TOAST_CLOSE_TIME } from '@constants/times';
+import useTeamStore from '../stores/teamStore';
 
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
+import Modal, { ModalFooter } from '@components/Modal';
 
 import styles from '../styles/team.module.css';
-import useTeamStore from '../stores/teamStore';
-import Modal, { ModalFooter } from '@components/Modal';
 
 const InvitationContent = () => {
   const searchParams = useSearchParams();
@@ -41,9 +41,7 @@ const InvitationContent = () => {
         autoClose: TOAST_CLOSE_TIME.success,
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ['coworkers-teamList', 'getGroupsById', user?.id],
-      });
+      queryClient.invalidateQueries();
 
       if (currentTeam?.id === data.groupId) {
         setCurrentTeam(data.groupId);
