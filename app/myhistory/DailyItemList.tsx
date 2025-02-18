@@ -3,7 +3,6 @@ import { useState } from 'react';
 import CloseIcon from '@components/Modal/CloseIcon';
 import TaskDetail from '@/app/[teamid]/tasklist/task-detail/TaskDetail';
 import { useParams } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
 
 interface DailyTask {
   date: string;
@@ -18,13 +17,8 @@ export default function DailyItemList({ dailyTasks }: DailyItemListProps) {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
   const { teamid: groupId } = useParams<{ teamid: string }>();
-  const queryClient = useQueryClient();
 
   const selectedTaskListId = null;
-
-  const handleTaskUpdated = () => {
-    queryClient.invalidateQueries({ queryKey: ['userHistory'] });
-  };
 
   return (
     <div className="mb-10 flex flex-col gap-10">
@@ -76,7 +70,6 @@ export default function DailyItemList({ dailyTasks }: DailyItemListProps) {
               groupId={Number(groupId)}
               taskListId={selectedTaskListId || 0}
               onClose={() => setSelectedTaskId(null)}
-              onTaskUpdated={() => handleTaskUpdated()}
             />
           </div>
         </>
