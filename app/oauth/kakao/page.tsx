@@ -63,7 +63,7 @@ const KakaoCallback = () => {
       return;
     }
 
-    const validDuration = 3 * 60 * 1000; // 3분
+    const validDuration = 15 * 1000; // 15초
     let storedStateObj: { value: string; timestamp: number } | null = null;
 
     try {
