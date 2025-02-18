@@ -103,7 +103,9 @@ export default function ArticleDetail() {
 
           <p className="text-t-secondary">
             {dayjs(article.updatedAt).format('YYYY.MM.DD')}
-            {article.createdAt !== article.updatedAt && ' (수정)'}
+            <span className="text-[14px] text-t-default">
+              {article.createdAt !== article.updatedAt && ' (수정)'}
+            </span>
           </p>
         </div>
 

@@ -210,8 +210,10 @@ export default function Comment() {
                 {/* 🔥 createdAt과 updatedAt이 다르면 (수정) 표시 */}
                 <p className="pl-3 text-[14px] text-i-inactive">
                   {dayjs(comment.updatedAt).format('YYYY.MM.DD')}
-                  {comment.createdAt !== comment.updatedAt && ' (수정)'}
                 </p>
+                <span className="text-[14px] text-t-default">
+                  {comment.createdAt !== comment.updatedAt && ' (수정)'}
+                </span>
               </div>
             </div>
           ))}
