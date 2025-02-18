@@ -31,7 +31,7 @@ const WriteContent = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   //수정 여부 확인용
-  const [originalTitle, setOriginalTitle] = useState('');
+  const [hasOriginalTitle, sethasOriginalTitle] = useState('');
   const [originalContent, setOriginalContent] = useState('');
   const [originalImage, setOriginalImage] = useState('');
 
@@ -77,7 +77,7 @@ const WriteContent = () => {
         setContent(data.content);
         setImage(data.image);
 
-        setOriginalTitle(data.title);
+        sethasOriginalTitle(data.title);
         setOriginalContent(data.content);
         setOriginalImage(data.image);
       } catch {
@@ -150,7 +150,7 @@ const WriteContent = () => {
   }
 
   const isModified =
-    title.trim() !== originalTitle.trim() ||
+    title.trim() !== hasOriginalTitle.trim() ||
     content.trim() !== originalContent.trim() ||
     image !== originalImage;
 
