@@ -49,7 +49,7 @@ export default function Comment() {
       });
 
       if ('message' in data) {
-        alert(data.message || '댓글을 불러오는 중 문제가 발생했습니다.');
+        toast.error(data.message || '댓글을 불러오는 중 문제가 발생했습니다.');
         return null;
       }
 
@@ -121,7 +121,7 @@ export default function Comment() {
             placeholder="댓글을 입력해주세요."
             onChange={(e) => {
               if (e.target.value.length > 300) {
-                alert(
+                toast.error(
                   `댓글은 최대 ${MAX_LENGTH.articleComment}자까지 입력 가능합니다.`
                 );
                 return;

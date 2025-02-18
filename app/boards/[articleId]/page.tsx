@@ -15,6 +15,7 @@ import Comment from './Comments';
 import Loading from '@/app/components/Loading';
 import { useState } from 'react';
 import Img from '@components/Img';
+import { toast } from 'react-toastify';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -27,7 +28,9 @@ export default function ArticleDetail() {
       const data = await getDetailsArticle({ articleId: Number(articleId) });
 
       if ('message' in data) {
-        alert(data.message || '게시글을 불러오는 중 문제가 발생했습니다.');
+        toast.error(
+          data.message || '게시글을 불러오는 중 문제가 발생했습니다.'
+        );
         return null;
       }
       return data;

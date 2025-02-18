@@ -126,7 +126,7 @@ const WriteContent = () => {
 
   const handleSubmit = () => {
     if (!title.trim() || !content.trim()) {
-      alert('제목과 내용을 입력해주세요.');
+      toast.error('제목과 내용을 입력해주세요.');
       return;
     }
 
@@ -206,7 +206,7 @@ const WriteContent = () => {
         value={title}
         onChange={(e) => {
           if (e.target.value.length > 200) {
-            alert(
+            toast.error(
               `제목은 최대 ${MAX_LENGTH.articleName}자까지 입력 가능합니다.`
             );
 
@@ -227,7 +227,7 @@ const WriteContent = () => {
         value={content}
         onChange={(e) => {
           if (e.target.value.length > 2000) {
-            alert(
+            toast.error(
               `내용은 최대 ${MAX_LENGTH.articleContent}자까지 입력 가능합니다.`
             );
             return;
