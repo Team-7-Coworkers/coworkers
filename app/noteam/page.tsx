@@ -14,12 +14,23 @@ export default function NoTeamPage() {
   const router = useRouter();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setShouldRedirect(true);
+  };
 
   useEffect(() => {
-    if (currentTeam) {
+    if (currentTeam && !modalOpen) {
       setModalOpen(true);
     }
-  }, [currentTeam]);
+  }, [currentTeam, modalOpen]);
+
+  if (shouldRedirect && currentTeam) {
+    router.replace(`/${currentTeam?.id}`);
+    setShouldRedirect(false);
+  }
 
   if (!accessToken) return;
 
@@ -40,8 +51,7 @@ export default function NoTeamPage() {
             <Button
               state="danger"
               onClick={() => {
-                router.replace(`/${currentTeam?.id}`);
-                setModalOpen(false);
+                handleModalClose();
               }}
             >
               확인
