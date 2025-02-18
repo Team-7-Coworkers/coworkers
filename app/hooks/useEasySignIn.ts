@@ -33,6 +33,7 @@ export const useEasySignIn = ({ provider }: { provider: ProviderType }) => {
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
       setUser(user);
+      document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24}`;
 
       if (provider === 'GOOGLE') {
         setIsGoogleLogin(true);
