@@ -30,6 +30,11 @@ const WriteContent = () => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  //수정 여부 확인용
+  const [originalTitle, setOriginalTitle] = useState('');
+  const [originalContent, setOriginalContent] = useState('');
+  const [originalImage, setOriginalImage] = useState('');
+
   const { user } = useUserStore();
 
   const handleIncorrectModalClose = () => {
@@ -78,6 +83,10 @@ const WriteContent = () => {
         setTitle(data.title);
         setContent(data.content);
         setImage(data.image);
+
+        setOriginalTitle(data.title);
+        setOriginalContent(data.content);
+        setOriginalImage(data.image);
       } catch {
         toast.error('게시글 정보를 불러오는 데 실패했습니다.');
         setShouldRedirect(true);
@@ -147,6 +156,11 @@ const WriteContent = () => {
     );
   }
 
+  const isModified =
+    title.trim() !== originalTitle.trim() ||
+    content.trim() !== originalContent.trim() ||
+    image !== originalImage;
+
   return (
     <div className="relative mx-auto flex w-[90%] flex-col items-start pb-12 sm:w-[90%] lg:w-[65%]">
       <Modal
@@ -176,6 +190,7 @@ const WriteContent = () => {
           size="w-[184px] h-[42px]"
           classname="hidden sm:inline-block"
           onClick={handleSubmit}
+          disabled={articleId ? !isModified : false}
         >
           {articleId ? '수정' : '등록'}
         </Button>
