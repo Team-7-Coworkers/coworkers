@@ -97,8 +97,10 @@ export default function ArticleDetail() {
         <div className="flex items-center space-x-2">
           <p className="pr-3">{article.writer.nickname}</p>
           <span className="h-4 border-l border-gray-700"></span>
+
           <p className="text-t-secondary">
-            {dayjs(article.createdAt).format('YYYY.MM.DD')}
+            {dayjs(article.updatedAt).format('YYYY.MM.DD')}
+            {article.createdAt !== article.updatedAt && ' (수정)'}
           </p>
         </div>
 
