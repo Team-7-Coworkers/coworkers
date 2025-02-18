@@ -34,6 +34,8 @@ export default function Comment() {
   const { user } = useUserStore();
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  const [originalContent, setOriginalContent] = useState('');
+
   const {
     data: comments,
     fetchNextPage,
@@ -166,7 +168,10 @@ export default function Comment() {
                         styleType="solid"
                         size="X-small"
                         onClick={() => editMutation.mutate(comment.id)}
-                        disabled={editMutation.status === 'pending'}
+                        disabled={
+                          editMutation.status === 'pending' ||
+                          editedContent.trim() === originalContent.trim()
+                        }
                       >
                         {editMutation.status === 'pending'
                           ? '수정 중...'
@@ -182,6 +187,7 @@ export default function Comment() {
                         onEdit={() => {
                           setEditingCommentId(comment.id);
                           setEditedContent(comment.content);
+                          setOriginalContent(comment.content);
                         }}
                         onDeleteSuccess={() => {}}
                         commentId={comment.id}
@@ -207,7 +213,6 @@ export default function Comment() {
                   {comment.writer.nickname}
                 </p>
 
-                {/* 🔥 createdAt과 updatedAt이 다르면 (수정) 표시 */}
                 <p className="pl-3 text-[14px] text-i-inactive">
                   {dayjs(comment.updatedAt).format('YYYY.MM.DD')}
                 </p>
