@@ -7,10 +7,9 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 요청 타임아웃 설정 (10초)
+  timeout: 10000,
 });
 
-// 토큰 갱신 함수
 const refreshAccessToken = async (): Promise<string | null> => {
   const { refreshToken, clearUser, setAccessToken } = useUserStore.getState();
   const { clearTeam } = useTeamStore.getState();
@@ -31,21 +30,18 @@ const refreshAccessToken = async (): Promise<string | null> => {
     );
 
     const { accessToken } = response.data;
-    setAccessToken(accessToken); // 새로운 액세스 토큰 저장
+    setAccessToken(accessToken);
 
     return accessToken;
-  } catch (error) {
-    console.error('토큰 갱신 실패:', error);
-    alert('인증이 만료되었습니다. 다시 로그인해주세요.');
-    clearUser(); // 상태 초기화
+  } catch {
+    clearUser();
     clearTeam();
-    window.location.href = '/login'; // 로그인 페이지로 리다이렉트
+    window.location.href = '/login';
 
     return null;
   }
 };
 
-// 요청 인터셉터
 instance.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
@@ -64,25 +60,23 @@ instance.interceptors.request.use(
   }
 );
 
-// 응답 인터셉터
 instance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const { response, config } = error;
     const status = response?.status;
 
-    // 인증 실패: 토큰 만료 가능성
     if (status === 401) {
       const originalRequest = config;
 
       if (!originalRequest._retry) {
-        originalRequest._retry = true; // 재시도 플래그 설정
+        originalRequest._retry = true;
 
         const newAccessToken = await refreshAccessToken();
         if (newAccessToken) {
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-          return instance(originalRequest); // 새 토큰으로 요청 재시도
+          return instance(originalRequest);
         }
       }
     } else if (status === 403) {
