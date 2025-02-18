@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 import { GroupResponseType } from '../types/group';
@@ -26,6 +26,7 @@ export default function TeamPage() {
   const [incorrectModal, setIncorrectModal] = useState(false);
 
   const { user } = useUserStore();
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const {
@@ -36,37 +37,37 @@ export default function TeamPage() {
     queryKey: ['getGroupsById', teamid],
     queryFn: async () => await getGroups({ groupId: Number(teamid) }),
     enabled: !!teamid,
+    refetchInterval: 3000,
   });
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !group) return;
 
-    if (group) {
-      // 사용자 검증 및 역할 받아 설정
-      const member = group.members.find((member) => member.userId === user?.id);
-      // console.log('--- member:', member);
-      if (member) {
-        setRole(member.role);
-      } else {
-        setIncorrectModal(true);
-      }
-
-      // 할 일 전체와 완료된 할 일 갯수 받기
-      let total = 0;
-      let complete = 0;
-      group.taskLists.forEach((taskList) => {
-        total += taskList.tasks.length;
-        complete += taskList.tasks.filter(
-          (task) => task.doneAt !== null
-        ).length;
-      });
-      setTotalTasks(total);
-      setCompletedTasks(complete);
+    // 사용자 검증 및 역할 받아 설정
+    const member = group.members.find((member) => member.userId === user.id);
+    // console.log('--- member:', member);
+    if (member) {
+      setRole(member.role);
+    } else {
+      setIncorrectModal(true);
     }
+
+    // 할 일 전체와 완료된 할 일 갯수 받기
+    let total = 0;
+    let complete = 0;
+    group.taskLists.forEach((taskList) => {
+      total += taskList.tasks.length;
+      complete += taskList.tasks.filter((task) => task.doneAt !== null).length;
+    });
+    setTotalTasks(total);
+    setCompletedTasks(complete);
   }, [group, user]);
 
   // 팀 검증 실패 모달에서 메인페이지로 이동시킴
   const handleIncorrectModalClose = () => {
+    queryClient.invalidateQueries({
+      queryKey: ['coworkers-teamList', 'getGroupsById'],
+    });
     router.replace('/');
   };
 
