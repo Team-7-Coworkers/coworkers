@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import { postGroupsAcceptInvitation } from '../api/group.api';
 import useUserStore from '../stores/userStore';
@@ -15,12 +16,15 @@ import Loading from '../components/Loading';
 
 import styles from '../styles/team.module.css';
 import useTeamStore from '../stores/teamStore';
+import Modal, { ModalFooter } from '@components/Modal';
 
 const InvitationContent = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('t');
 
   const [link, setLink] = useState(token || '');
+  const [modal, setModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -36,7 +40,6 @@ const InvitationContent = () => {
       toast.success('팀에 성공적으로 참여하셨습니다.', {
         autoClose: TOAST_CLOSE_TIME.success,
       });
-      router.push(`/${data.groupId}`);
 
       queryClient.invalidateQueries({
         queryKey: ['coworkers-teamList', 'getGroupsById', user?.id],
@@ -45,10 +48,17 @@ const InvitationContent = () => {
       if (currentTeam?.id === data.groupId) {
         setCurrentTeam(data.groupId);
       }
+
+      router.push(`/${data.groupId}`);
     },
     onError: (err) => {
-      toast.error('팀 참여에 실패 하였습니다. 잠시 후 다시 시도해 주시요.');
       console.error('--- useMutation:err:', err);
+      if (axios.isAxiosError(err) && err.response) {
+        setErrorMessage(err.response.data.message);
+        setModal(true);
+      } else {
+        toast.error('팀 참여에 실패 하였습니다. 잠시 후 다시 시도해 주시요.');
+      }
     },
   });
 
@@ -104,6 +114,23 @@ const InvitationContent = () => {
           공유받은 팀 링크를 입력해 참여할 수 있어요.
         </div>
       </form>
+
+      <Modal
+        isOpen={modal}
+        icon="danger"
+        title={errorMessage}
+        onClose={() => setModal(false)}
+      >
+        <p className="text-center">메인페이지로 돌아갑니다.</p>
+        <ModalFooter>
+          <Button
+            href="/"
+            state="danger"
+          >
+            확인
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };

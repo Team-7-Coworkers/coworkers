@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       'picsum.photos',
       'lh3.googleusercontent.com',
     ],
-    deviceSizes: [640, 1024],
+    deviceSizes: [640, 1024, 1280, 2048],
     formats: ['image/avif', 'image/webp'],
   },
 };
