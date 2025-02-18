@@ -66,13 +66,13 @@ const KakaoCallback = () => {
     const validDuration = 3 * 60 * 1000; // 3분
     let storedStateObj: { value: string; timestamp: number } | null = null;
 
-    if (isKakaoBrowser) {
-      try {
-        storedStateObj = storedState ? JSON.parse(storedState) : null;
-      } catch {
-        storedStateObj = null;
-      }
+    try {
+      storedStateObj = storedState ? JSON.parse(storedState) : null;
+    } catch {
+      storedStateObj = null;
+    }
 
+    if (isKakaoBrowser) {
       if (
         !storedStateObj ||
         Date.now() - storedStateObj.timestamp > validDuration
