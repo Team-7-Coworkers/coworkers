@@ -34,7 +34,7 @@ export default function Comment() {
   const { user } = useUserStore();
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const [originalContent, setOriginalContent] = useState('');
+  const [hasOriginalContent, setHasOriginalContent] = useState('');
 
   const {
     data: comments,
@@ -170,7 +170,7 @@ export default function Comment() {
                         onClick={() => editMutation.mutate(comment.id)}
                         disabled={
                           editMutation.status === 'pending' ||
-                          editedContent.trim() === originalContent.trim()
+                          editedContent.trim() === hasOriginalContent.trim()
                         }
                       >
                         {editMutation.status === 'pending'
@@ -187,7 +187,7 @@ export default function Comment() {
                         onEdit={() => {
                           setEditingCommentId(comment.id);
                           setEditedContent(comment.content);
-                          setOriginalContent(comment.content);
+                          setHasOriginalContent(comment.content);
                         }}
                         onDeleteSuccess={() => {}}
                         commentId={comment.id}

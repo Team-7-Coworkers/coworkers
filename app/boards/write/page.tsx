@@ -31,9 +31,9 @@ const WriteContent = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   //수정 여부 확인용
-  const [hasOriginalTitle, sethasOriginalTitle] = useState('');
-  const [originalContent, setOriginalContent] = useState('');
-  const [originalImage, setOriginalImage] = useState('');
+  const [hasOriginalTitle, setHasOriginalTitle] = useState('');
+  const [hasOriginalContent, setHasOriginalContent] = useState('');
+  const [hasOriginalImage, setHasOriginalImage] = useState('');
 
   const { user } = useUserStore();
 
@@ -77,9 +77,9 @@ const WriteContent = () => {
         setContent(data.content);
         setImage(data.image);
 
-        sethasOriginalTitle(data.title);
-        setOriginalContent(data.content);
-        setOriginalImage(data.image);
+        setHasOriginalTitle(data.title);
+        setHasOriginalContent(data.content);
+        setHasOriginalImage(data.image);
       } catch {
         toast.error('게시글 정보를 불러오는 데 실패했습니다.');
         setShouldRedirect(true);
@@ -151,8 +151,8 @@ const WriteContent = () => {
 
   const isModified =
     title.trim() !== hasOriginalTitle.trim() ||
-    content.trim() !== originalContent.trim() ||
-    image !== originalImage;
+    content.trim() !== hasOriginalContent.trim() ||
+    image !== hasOriginalImage;
 
   return (
     <div className="relative mx-auto flex w-[90%] flex-col items-start pb-12 sm:w-[90%] lg:w-[65%]">
