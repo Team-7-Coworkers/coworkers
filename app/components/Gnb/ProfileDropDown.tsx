@@ -28,6 +28,7 @@ export default function ProfileDropDown({ user }: ProfileDropDownProps) {
     clearUser();
     clearTeam();
     document.cookie = 'accessToken=; path=/; max-age=0';
+    localStorage.removeItem('kakao_state');
 
     if (isGoogleLogin) {
       signOut();
