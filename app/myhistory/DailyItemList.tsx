@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { useState } from 'react';
-import CloseIcon from '@components/Modal/CloseIcon';
-import TaskDetail from '@/app/[teamid]/tasklist/task-detail/TaskDetail';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import TaskDetail from '@/app/[teamid]/tasklist/task-detail/TaskDetail';
+import CloseIcon from '@components/Modal/CloseIcon';
 
 interface DailyTask {
   date: string;

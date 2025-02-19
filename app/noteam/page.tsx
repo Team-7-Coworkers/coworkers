@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
-import Button from '../components/Button';
 import { useEffect } from 'react';
-import useUserStore from '@stores/userStore';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import useUserStore from '@stores/userStore';
 import useTeamStore from '@stores/teamStore';
+import Button from '../components/Button';
 
 export default function NoTeamPage() {
   const { accessToken } = useUserStore.getState();

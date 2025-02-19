@@ -1,10 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import landingMockup01 from '@/public/images/landing/landing-mockup-01.png';
-import folderIcon from '@/public/images/icons/ic_folder.svg';
 import { motion } from 'framer-motion';
 import { IMAGE_SIZES } from '@/app/constants/image';
+import landingMockup01 from '@/public/images/landing/landing-mockup-01.png';
+import folderIcon from '@/public/images/icons/ic_folder.svg';
 
 export default function Section1() {
   return (
