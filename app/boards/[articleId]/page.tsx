@@ -1,20 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+
+import Image from 'next/image';
+
 import { getDetailsArticle } from '@/app/api/article.api';
 import type { DetailedArticleType } from '@/app/types/article';
-import commentIcon from '@/public/images/icons/ic_comment.svg';
-import Image from 'next/image';
-import dayjs from 'dayjs';
+import useUserStore from '@/app/stores/userStore';
+import Img from '@components/Img';
+import Loading from '@/app/components/Loading';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import LikeButton from '@/app/boards/LikeButton';
-import useUserStore from '@/app/stores/userStore';
+
 import Comment from './Comments';
 
-import Loading from '@/app/components/Loading';
-import { useState } from 'react';
-import Img from '@components/Img';
+import commentIcon from '@/public/images/icons/ic_comment.svg';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();
@@ -27,7 +31,9 @@ export default function ArticleDetail() {
       const data = await getDetailsArticle({ articleId: Number(articleId) });
 
       if ('message' in data) {
-        alert(data.message || '게시글을 불러오는 중 문제가 발생했습니다.');
+        toast.error(
+          data.message || '게시글을 불러오는 중 문제가 발생했습니다.'
+        );
         return null;
       }
       return data;
@@ -97,8 +103,12 @@ export default function ArticleDetail() {
         <div className="flex items-center space-x-2">
           <p className="pr-3">{article.writer.nickname}</p>
           <span className="h-4 border-l border-gray-700"></span>
+
           <p className="text-t-secondary">
-            {dayjs(article.createdAt).format('YYYY.MM.DD')}
+            {dayjs(article.updatedAt).format('YYYY.MM.DD')}
+            <span className="text-[14px] text-t-default">
+              {article.createdAt !== article.updatedAt && ' (수정)'}
+            </span>
           </p>
         </div>
 

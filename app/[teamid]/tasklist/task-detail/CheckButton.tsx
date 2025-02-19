@@ -1,6 +1,7 @@
 'use client';
 
 import { toast } from 'react-toastify';
+import { useQueryClient } from '@tanstack/react-query';
 import { patchGroupsTaskListsTasks } from '@/app/api/task.api';
 import { useTaskStore } from '@/app/stores/taskStore';
 import Button from '@/app/components/Button';
@@ -17,6 +18,7 @@ export default function CheckButton({
   groupId,
   taskListId,
 }: CheckButtonProps) {
+  const queryClient = useQueryClient();
   const { checkedItems, toggleChecked } = useTaskStore();
   const isCompleted = !!checkedItems[taskId];
 
@@ -29,6 +31,7 @@ export default function CheckButton({
         done: !isCompleted,
       });
       toggleChecked(taskId, !isCompleted);
+      queryClient.invalidateQueries({ queryKey: ['userHistory'] });
     } catch (error) {
       console.error('완료 처리 실패:', error);
       toast.error('완료 처리에 실패하였습니다.');

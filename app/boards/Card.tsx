@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
 import { getArticles } from '@/app/api/article.api';
 import { ArticleResponseType } from '@/app/types/article';
-import { useQuery } from '@tanstack/react-query';
 
 export default function Card({
   isBest,
