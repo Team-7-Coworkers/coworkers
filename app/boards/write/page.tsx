@@ -3,18 +3,19 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Button from '@/app/components/Button';
-import ImageUpload from '@/app/components/ImageUpload';
-import TextField from '@/app/components/TextField';
+import { toast } from 'react-toastify';
+
 import {
   postArticles,
   patchArticles,
   getDetailsArticle,
 } from '@/app/api/article.api';
-import Loading from '@/app/components/Loading';
-import { MAX_LENGTH } from '@/app/constants/form';
-import { toast } from 'react-toastify';
 import useUserStore from '@stores/userStore';
+import { MAX_LENGTH } from '@/app/constants/form';
+import Button from '@/app/components/Button';
+import ImageUpload from '@/app/components/ImageUpload';
+import TextField from '@/app/components/TextField';
+import Loading from '@/app/components/Loading';
 import Modal, { ModalFooter } from '@components/Modal';
 
 const WriteContent = () => {

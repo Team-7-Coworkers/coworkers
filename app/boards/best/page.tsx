@@ -1,9 +1,11 @@
 'use client';
 
-import CardList from '../CardList';
-import bestIcon from '@/public/images/icons/ic_medal.svg';
-import Image from 'next/image';
 import { Suspense } from 'react';
+import Image from 'next/image';
+
+import CardList from '../CardList';
+
+import bestIcon from '@/public/images/icons/ic_medal.svg';
 
 export default function BestPage() {
   return (

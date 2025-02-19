@@ -1,12 +1,14 @@
 'use client';
 
+import { Suspense, useState } from 'react';
+import Link from 'next/link';
+
+import Button from '@/app/components/Button';
+import useUserStore from '@stores/userStore';
+
 import BestCard from './BestCardList';
 import CardList from './CardList';
 import SearchBar from './SearchBar';
-import { Suspense, useState } from 'react';
-import Link from 'next/link';
-import Button from '@/app/components/Button';
-import useUserStore from '@stores/userStore';
 
 export default function Boards() {
   const { user } = useUserStore();

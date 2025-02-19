@@ -1,21 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+
+import Image from 'next/image';
+
 import { getDetailsArticle } from '@/app/api/article.api';
 import type { DetailedArticleType } from '@/app/types/article';
-import commentIcon from '@/public/images/icons/ic_comment.svg';
-import Image from 'next/image';
-import dayjs from 'dayjs';
+import useUserStore from '@/app/stores/userStore';
+import Img from '@components/Img';
+import Loading from '@/app/components/Loading';
 import PostActionDropdown from '@/app/boards/PostActionDropdown';
 import LikeButton from '@/app/boards/LikeButton';
-import useUserStore from '@/app/stores/userStore';
+
 import Comment from './Comments';
 
-import Loading from '@/app/components/Loading';
-import { useState } from 'react';
-import Img from '@components/Img';
-import { toast } from 'react-toastify';
+import commentIcon from '@/public/images/icons/ic_comment.svg';
 
 export default function ArticleDetail() {
   const { articleId } = useParams();

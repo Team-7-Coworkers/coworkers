@@ -1,29 +1,31 @@
 'use client';
 
-import TextField from '@/app/components/TextField';
-import Button from '@/app/components/Button';
 import { useState, useRef, useCallback } from 'react';
+import { useParams } from 'next/navigation';
+
 import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
 } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+
 import {
   getArticlesComment,
   postArticlesComments,
   patchComments,
 } from '@/app/api/articleComment.api';
-import dayjs from 'dayjs';
+import useUserStore from '@/app/stores/userStore';
+import { ArticleCommentType } from '@/app/types/articleComment';
+import { MAX_LENGTH } from '@constants/form';
+import Img from '@components/Img';
+import TextField from '@/app/components/TextField';
+import Button from '@/app/components/Button';
+import Loading from '@/app/components/Loading';
+import PostActionDropdown from '@/app/boards/PostActionDropdown';
 
 import profile from '@/public/images/icons/icon-base-user.svg';
-import useUserStore from '@/app/stores/userStore';
-import PostActionDropdown from '@/app/boards/PostActionDropdown';
-import { ArticleCommentType } from '@/app/types/articleComment';
-import Loading from '@/app/components/Loading';
-import { MAX_LENGTH } from '@constants/form';
-import { toast } from 'react-toastify';
-import Img from '@components/Img';
 
 export default function Comment() {
   const [comment, setComment] = useState('');
