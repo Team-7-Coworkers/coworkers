@@ -1,8 +1,8 @@
 'use client';
 
+import { TaskType } from '@/app/types/shared';
 import KebobDropdown from '../KebobDropdown';
 import CheckIcon from '../task-icon/CheckIcon';
-import { TaskType } from '@/app/types/shared';
 import DateDisplay from '../info-displays/DateDisplay';
 import FrequencyDisplay from '../info-displays/FrequencyDisplay';
 import UserProfile from './UserProfile';
