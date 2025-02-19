@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 import { postImagesUpload } from '@/app/api/image.api';
+import { toast } from 'react-toastify';
 
 interface FileUploadProps {
   onUploadSuccess: (url: string) => void; // 업로드 성공 시 실행할 함수
@@ -39,7 +40,7 @@ function ImageUpload({
       // 서버에서 문제가 발생한 경우
       setPreviewUrl(null);
       onUploadError(error as Error);
-      alert('서버에서 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      toast.error('서버에서 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       URL.revokeObjectURL(localPreviewUrl);
     }

@@ -1,13 +1,16 @@
 'use client';
 
-import Card from './Card';
+import Link from 'next/link';
 import Image from 'next/image';
+import dayjs from 'dayjs';
+
+import Img from '@components/Img';
+
+import Card from './Card';
+import SkeletonCard from './SkeletonCard';
+
 import HeartIcon from '@/public/images/icons/ic-heart.svg';
 import MedalIcon from '@/public/images/icons/ic_medal.svg';
-import dayjs from 'dayjs';
-import Link from 'next/link';
-import SkeletonCard from './SkeletonCard';
-import Img from '@components/Img';
 
 export default function BestCardList() {
   const articles = Card({

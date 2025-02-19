@@ -3,18 +3,19 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Button from '@/app/components/Button';
-import ImageUpload from '@/app/components/ImageUpload';
-import TextField from '@/app/components/TextField';
+import { toast } from 'react-toastify';
+
 import {
   postArticles,
   patchArticles,
   getDetailsArticle,
 } from '@/app/api/article.api';
-import Loading from '@/app/components/Loading';
-import { MAX_LENGTH } from '@/app/constants/form';
-import { toast } from 'react-toastify';
 import useUserStore from '@stores/userStore';
+import { MAX_LENGTH } from '@/app/constants/form';
+import Button from '@/app/components/Button';
+import ImageUpload from '@/app/components/ImageUpload';
+import TextField from '@/app/components/TextField';
+import Loading from '@/app/components/Loading';
 import Modal, { ModalFooter } from '@components/Modal';
 
 const WriteContent = () => {
@@ -29,6 +30,11 @@ const WriteContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  //수정 여부 확인용
+  const [hasOriginalTitle, setHasOriginalTitle] = useState('');
+  const [hasOriginalContent, setHasOriginalContent] = useState('');
+  const [hasOriginalImage, setHasOriginalImage] = useState('');
 
   const { user } = useUserStore();
 
@@ -71,6 +77,10 @@ const WriteContent = () => {
         setTitle(data.title);
         setContent(data.content);
         setImage(data.image);
+
+        setHasOriginalTitle(data.title);
+        setHasOriginalContent(data.content);
+        setHasOriginalImage(data.image);
       } catch {
         toast.error('게시글 정보를 불러오는 데 실패했습니다.');
         setShouldRedirect(true);
@@ -110,7 +120,7 @@ const WriteContent = () => {
 
   const handleSubmit = () => {
     if (!title.trim() || !content.trim()) {
-      alert('제목과 내용을 입력해주세요.');
+      toast.error('제목과 내용을 입력해주세요.');
       return;
     }
 
@@ -139,6 +149,11 @@ const WriteContent = () => {
       </div>
     );
   }
+
+  const isModified =
+    title.trim() !== hasOriginalTitle.trim() ||
+    content.trim() !== hasOriginalContent.trim() ||
+    image !== hasOriginalImage;
 
   return (
     <div className="relative mx-auto flex w-[90%] flex-col items-start pb-12 sm:w-[90%] lg:w-[65%]">
@@ -169,6 +184,7 @@ const WriteContent = () => {
           size="w-[184px] h-[42px]"
           classname="hidden sm:inline-block"
           onClick={handleSubmit}
+          disabled={articleId ? !isModified : false}
         >
           {articleId ? '수정' : '등록'}
         </Button>
@@ -184,7 +200,7 @@ const WriteContent = () => {
         value={title}
         onChange={(e) => {
           if (e.target.value.length > 200) {
-            alert(
+            toast.error(
               `제목은 최대 ${MAX_LENGTH.articleName}자까지 입력 가능합니다.`
             );
 
@@ -205,7 +221,7 @@ const WriteContent = () => {
         value={content}
         onChange={(e) => {
           if (e.target.value.length > 2000) {
-            alert(
+            toast.error(
               `내용은 최대 ${MAX_LENGTH.articleContent}자까지 입력 가능합니다.`
             );
             return;
