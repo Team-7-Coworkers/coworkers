@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import '@styles/globals.css';
+import '../app/styles/globals.css';
 
 const queryClient = new QueryClient();
 
