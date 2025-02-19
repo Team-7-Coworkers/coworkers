@@ -79,14 +79,6 @@ instance.interceptors.response.use(
           return instance(originalRequest);
         }
       }
-    } else if (status === 403) {
-      console.error('권한이 없습니다. 관리자에게 문의하세요.');
-    } else if (status === 500) {
-      console.error('서버 에러가 발생했습니다. 잠시 후 다시 시도하세요.');
-    } else if (!response) {
-      console.error('네트워크 에러 또는 서버와의 연결이 끊어졌습니다.');
-    } else {
-      console.error(`Error ${status}:`, response?.data || error.message);
     }
 
     return Promise.reject(error);
