@@ -57,7 +57,7 @@ const KakaoCallback = () => {
 
     if (!code) {
       redirectWithMessage(
-        '⚠️ 인가 코드가 없습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
+        '카카오톡 인증에 실패했습니다. 정상적인 경로로 다시 접근해주세요.'
       );
 
       return;
@@ -88,7 +88,7 @@ const KakaoCallback = () => {
 
     if (!receivedState || receivedState !== storedStateObj?.value) {
       redirectWithMessage(
-        '⚠️ CSRF 공격이 감지되었습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
+        '일시적인 오류가 발생했습니다. 카카오톡 간편 로그인을 다시 진행해주세요.'
       );
 
       return;
