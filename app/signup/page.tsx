@@ -18,7 +18,7 @@ export default function SignupPage() {
   const signupMutation = useMutation({
     mutationFn: postAuthSignUp,
     onSuccess: () => {
-      toast('회원가입에 성공했습니다!');
+      toast.success('회원가입에 성공했습니다!');
       router.push('/login');
     },
     onError: createErrorHandler({ prefixMessage: '회원가입 실패' }),
