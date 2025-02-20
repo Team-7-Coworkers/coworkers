@@ -17,6 +17,7 @@ import EditModal from '../modals/EditModal';
 import TaskDetailHeader from './TaskDetailHeader';
 import TaskComment from './TaskComment';
 import CheckButton from './CheckButton';
+import DeletedTaskModal from '../modals/DeletedTaskModal';
 
 interface TaskDetailProps {
   taskId: number;
@@ -184,6 +185,16 @@ export default function TaskDetail({
       <div className="flex min-h-[60vh] items-center justify-center">
         <Loading />
       </div>
+    );
+  }
+
+  if (!task || !task.writer) {
+    return (
+      <DeletedTaskModal
+        isOpen={true}
+        onClose={onClose}
+        onDelete={handleDelete}
+      />
     );
   }
 
