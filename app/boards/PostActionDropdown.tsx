@@ -1,14 +1,17 @@
 'use client';
 
-import Dropdown from '@/app/components/Dropdown';
-import Image from 'next/image';
-import kebab from '@/public/images/icons/ic_kebab.svg';
-import { deleteArticles } from '@/app/api/article.api';
-import { deleteComments } from '@/app/api/articleComment.api';
-import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+
+import Image from 'next/image';
+
+import Dropdown from '@/app/components/Dropdown';
+import { deleteArticles } from '@/app/api/article.api';
+import { deleteComments } from '@/app/api/articleComment.api';
+
+import kebab from '@/public/images/icons/ic_kebab.svg';
 
 interface PostActionDropdownProps {
   onEdit: () => void;

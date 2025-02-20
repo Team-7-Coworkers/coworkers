@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { postArticlesLike, deleteArticlesLike } from '@/app/api/article.api';
 import { useQueryClient } from '@tanstack/react-query';
+
+import { postArticlesLike, deleteArticlesLike } from '@/app/api/article.api';
 
 interface LikeButtonProps {
   articleId: number;

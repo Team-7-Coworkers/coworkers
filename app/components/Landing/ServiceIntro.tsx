@@ -1,14 +1,14 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import landingMain from '@/public/images/landing/landing-main.png';
-import RepairIcon from '@/public/images/icons/ic_repair.svg';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import useUserStore from '@/app/stores/userStore';
 import useTeamStore from '@/app/stores/teamStore';
 import { IMAGE_SIZES } from '@/app/constants/image';
-import { useEffect, useState } from 'react';
+import landingMain from '@/public/images/landing/landing-main.png';
+import RepairIcon from '@/public/images/icons/ic_repair.svg';
 
 export default function ServiceIntro() {
   const { user } = useUserStore();

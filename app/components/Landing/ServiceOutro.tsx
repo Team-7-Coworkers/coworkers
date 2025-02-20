@@ -1,7 +1,8 @@
 'use client';
+
 import Image from 'next/image';
-import landingBottom from '@/public/images/landing/landing-bottom.png';
 import { IMAGE_SIZES } from '@/app/constants/image';
+import landingBottom from '@/public/images/landing/landing-bottom.png';
 
 export default function ServiceOut() {
   return (
