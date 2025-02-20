@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { postImagesUpload } from '@/app/api/image.api';
 import { toast } from 'react-toastify';
 
@@ -22,6 +22,18 @@ function ImageUpload({
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -51,6 +63,8 @@ function ImageUpload({
       fileInputRef.current.click();
     }
   };
+
+  const imageSize = isMobile ? 160 : 234;
 
   return (
     <div className="flex flex-col items-center">
@@ -126,10 +140,25 @@ function ImageUpload({
       ) : (
         // Square 영역
         <div
-          className="relative flex h-[160px] w-[160px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[3px] border-gray-200/10 bg-b-primary sm:h-[240px] sm:w-[240px]"
+          className="relative flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-[3px] border-gray-200/10 bg-b-primary"
+          style={{
+            width: `${imageSize}px`,
+            height: `${imageSize}px`,
+          }}
           onClick={triggerFileInput}
         >
-          {!previewUrl && !url ? (
+          {url || previewUrl ? (
+            <Image
+              src={previewUrl || url}
+              alt="업로드된 이미지 미리보기"
+              fill
+              style={{
+                objectFit: 'cover',
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          ) : (
             <>
               <Image
                 src="/images/icons/ic_plus.svg"
@@ -142,14 +171,6 @@ function ImageUpload({
                 이미지 등록
               </div>
             </>
-          ) : (
-            <Image
-              src={previewUrl || url}
-              alt="업로드된 이미지 미리보기"
-              width={160}
-              height={160}
-              className="absolute inset-0 h-full w-full object-cover sm:h-[240px] sm:w-[240px]"
-            />
           )}
         </div>
       )}

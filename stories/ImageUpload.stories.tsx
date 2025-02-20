@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import ImageUpload from '@/app/components/ImageUpload';
 
+const MOCK_IMAGE_URL =
+  'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/Coworkers/user/1314/images.jpg';
+
 const meta: Meta<typeof ImageUpload> = {
   title: 'Components/ImageUpload',
   component: ImageUpload,
@@ -71,9 +74,10 @@ export const Square: Story = {
 };
 
 // Circle with Preview
-export const CircleWithPreview: Story = {
+export const CircleWithMockPreview: Story = {
   args: {
     variant: 'circle',
+    url: MOCK_IMAGE_URL,
     onUploadSuccess: (url: string) => console.log('업로드 성공:', url),
     onUploadError: (error: Error) => console.error('업로드 실패:', error),
   },
@@ -85,9 +89,10 @@ export const CircleWithPreview: Story = {
 };
 
 // Square with Preview
-export const SquareWithPreview: Story = {
+export const SquareWithMockPreview: Story = {
   args: {
     variant: 'square',
+    url: MOCK_IMAGE_URL,
     onUploadSuccess: (url: string) => console.log('업로드 성공:', url),
     onUploadError: (error: Error) => console.error('업로드 실패:', error),
   },
