@@ -43,11 +43,15 @@ export default function TeamPage() {
   useEffect(() => {
     if (!user || !group) return;
 
+    // console.log('user:', user);
+    // console.log('group', group);
     // 사용자 검증 및 역할 받아 설정
     const member = group.members.find((member) => member.userId === user.id);
     // console.log('--- member:', member);
+
     if (member) {
       setRole(member.role);
+      setIncorrectModal(false);
     } else {
       setIncorrectModal(true);
     }
@@ -66,7 +70,7 @@ export default function TeamPage() {
   // 팀 검증 실패 모달에서 메인페이지로 이동시킴
   const handleIncorrectModalClose = () => {
     queryClient.invalidateQueries({
-      queryKey: ['coworkers-teamList', 'getGroupsById'],
+      queryKey: ['coworkers-teamList'],
     });
     router.replace('/');
   };

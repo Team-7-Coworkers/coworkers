@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 import { cn, copyToClipboard } from '../libs/utils';
 import { deleteGroupsMember, getGroupsInvitation } from '../api/group.api';
@@ -8,10 +9,9 @@ import { deleteGroupsMember, getGroupsInvitation } from '../api/group.api';
 import Modal, { ModalFooter } from '../components/Modal';
 import MemberListItem from './MemberListItem';
 import Button from '../components/Button';
+import Img from '../components/Img';
 
 import styles from './teampage.module.css';
-import Img from '../components/Img';
-import Link from 'next/link';
 
 export type MemberProps = {
   userId: number;
@@ -36,6 +36,7 @@ export default function MemberList({ groupId, members, role }: Props) {
   const [dropMemberModal, setDropMemberModal] = useState(false);
   const [memberIdx, setMemberIdx] = useState(0);
   const [userId, setUserId] = useState(0);
+  const [inviteToken, setInviteToken] = useState('');
 
   const queryClient = useQueryClient();
   const { refetch } = useQuery({
@@ -47,7 +48,6 @@ export default function MemberList({ groupId, members, role }: Props) {
     mutationFn: async (userId: number) =>
       await deleteGroupsMember({ memberUserId: userId, groupId }),
     onSuccess: () => {
-      // console.log('success', data);
       setDropMemberModal(false);
       queryClient.invalidateQueries({ queryKey: ['getGroupsById'] });
     },
@@ -85,22 +85,30 @@ export default function MemberList({ groupId, members, role }: Props) {
     );
   };
 
+  const handleInviteMemberClick = async () => {
+    const { data: token, isError } = await refetch();
+
+    if (isError || !token) {
+      toast.error('링크를 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+
+      return;
+    }
+
+    setInviteToken(token);
+    setAddMemberModal(true);
+  };
+
   // 멤버 초대 링크 복사 버튼 클릭 함수
   const handleLinkCopyClick = async () => {
-    const { data: token, isError } = await refetch();
-    // console.log('--- handleLinkCopyClick:result:', token);
+    const url = window.location.origin + '/invitation?t=' + inviteToken;
 
-    if (isError) {
-      toast.error('링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
-    } else {
-      const url = window.location.origin + '/invitation?t=' + token;
-      copyToClipboard(
-        url,
-        '링크가 복사되었습니다.',
-        '링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
-      );
-      // setAddMemberModal(false);
-    }
+    copyToClipboard(
+      url,
+      '링크가 복사되었습니다.',
+      '링크 복사에 실패 하였습니다. 잠시 후 다시 시도해 주세요.'
+    );
+
+    setAddMemberModal(false);
   };
 
   return (
@@ -115,7 +123,7 @@ export default function MemberList({ groupId, members, role }: Props) {
           {role === 'ADMIN' && (
             <button
               className="text-button ml-auto text-md"
-              onClick={() => setAddMemberModal(true)}
+              onClick={handleInviteMemberClick}
             >
               + 새로운 멤버 초대하기
             </button>

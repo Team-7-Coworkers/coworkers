@@ -10,18 +10,20 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // 클립보드에 문자열 복사하기 함수
-export const copyToClipboard = async (
+export const copyToClipboard = (
   copyText: string,
   successMessage: string = '복사에 성공하였습니다.',
   failMessage: string = '복사에 실패하였습니다.'
 ) => {
-  try {
-    await navigator.clipboard.writeText(copyText);
-    toast.success(successMessage, {
-      autoClose: TOAST_CLOSE_TIME.success,
+  navigator.clipboard
+    .writeText(copyText)
+    .then(() => {
+      toast.success(successMessage, {
+        autoClose: TOAST_CLOSE_TIME.success,
+      });
+    })
+    .catch((err) => {
+      console.error(failMessage, err);
+      toast.error(failMessage);
     });
-  } catch (err) {
-    toast.error(failMessage);
-    console.error(failMessage, err);
-  }
 };
