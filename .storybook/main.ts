@@ -1,5 +1,6 @@
 import path from 'path';
 import type { StorybookConfig } from '@storybook/nextjs';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 const config: StorybookConfig = {
   stories: [
@@ -17,17 +18,25 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'], // POSIX 스타일 경로 유지
-  webpackFinal: async (config) => {
+  webpackFinal: async (webpackConfig) => {
     // config.resolve가 없을 경우 초기화
-    config.resolve = config.resolve || { alias: {} };
+    webpackConfig.resolve = webpackConfig.resolve || { alias: {} };
 
     // next/image를 모킹 파일로 대체
-    config.resolve.alias = {
-      ...config.resolve.alias,
+    webpackConfig.resolve.alias = {
+      ...webpackConfig.resolve.alias,
       'next/image': path.resolve(__dirname, '../__mock__/next/image'),
     };
 
-    return config;
+    // tsconfig 경로(alias)를 위한 플러그인 추가
+    webpackConfig.resolve.plugins = [
+      ...(webpackConfig.resolve.plugins || []),
+      new TsconfigPathsPlugin({
+        extensions: webpackConfig.resolve.extensions,
+      }),
+    ];
+
+    return webpackConfig;
   },
 };
 
