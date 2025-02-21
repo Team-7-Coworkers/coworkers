@@ -2,13 +2,22 @@ import type { Config } from 'tailwindcss';
 
 export default {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './stories/**/*.{js,ts,jsx,tsx,mdx}',
+    './.storybook/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    screens: {
+      sm: '640px',
+      lg: '1024px',
+    },
     container: {
       center: true,
+      padding: '1rem',
+      screens: {
+        sm: '100%',
+        lg: '1248px',
+      },
     },
     extend: {
       colors: {
@@ -64,7 +73,29 @@ export default {
           'sans-serif',
         ],
       },
+      animation: {
+        gradientMove: 'gradientMove 5s linear infinite',
+      },
+      keyframes: {
+        gradientMove: {
+          '0%': {
+            backgroundPosition: '200% 0',
+          },
+          '100%': {
+            backgroundPosition: '-200% 0',
+          },
+        },
+      },
     },
   },
+  safelist: [
+    'border-purple',
+    'border-blue',
+    'border-cyan',
+    'border-pink',
+    'border-rose',
+    'border-orange',
+    'border-yellow',
+  ],
   plugins: [],
 } satisfies Config;

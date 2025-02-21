@@ -9,15 +9,26 @@
     "lint": "next lint",
     "prepare": "husky install",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "npx chromatic"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.64.1",
+    "@tanstack/react-query-devtools": "^5.64.2",
     "axios": "^1.7.9",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
+    "framer-motion": "^12.0.6",
+    "lodash.isequal": "^4.5.0",
     "next": "15.1.4",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
+    "react-datepicker": "^7.6.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
+    "react-toastify": "^11.0.3",
+    "tailwind-merge": "^2.6.0",
     "zod": "^3.24.1",
     "zustand": "^5.0.3"
   },
@@ -33,6 +44,8 @@
     "@storybook/nextjs": "^8.5.0",
     "@storybook/react": "^8.5.0",
     "@storybook/test": "^8.5.0",
+    "@types/jest": "^29.5.14",
+    "@types/lodash.isequal": "^4.5.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -53,6 +66,7 @@
     "prettier-plugin-tailwindcss": "^0.6.10",
     "storybook": "^8.5.0",
     "tailwindcss": "^3.4.1",
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5"
   },
   "lint-staged": {

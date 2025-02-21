@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@layer base {
+  :root {
+    --primary: #10b981;
+    --secondary: #34d399;
+    --tertiary: #a3e635;
+    --purple: #a855f7;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+    --pink: #ec4899;
+    --rose: #f43f5e;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --b-primary: #0f172a;
+    --b-secondary: #1e293b;
+    --b-tertiary: #334155;
+    --b-inverse: #ffffff;
+    --i-inactive: #94a3b8;
+    --i-hover: #059669;
+    --i-pressed: #047857;
+    --i-focus: #10b981;
+    --bd-primary: #f8fafc80;
+    --t-primary: #f8fafc;
+    --t-secondary: #cbd5e1;
+    --t-tertiary: #e2e8f0;
+    --t-default: #64748b;
+    --t-inverse: #ffffff;
+    --t-disabled: #94a3b8;
+    --danger: #dc2626;
+    --ic-primary: #64748b;
+    --ic-inverse: #f8fafc;
+
+    --header-height: 60px;
+
+    /* 토스트 스타일 변수값 설정 */
+    --toastify-toast-bd-radius: 12px;
+    --toastify-color-progress-dark: var(--primary);
+    --toastify-color-dark: var(--b-primary);
+    --toastify-font-family: theme(fontFamily.sans);
+    --toastify-color-info: var(--cyan);
+    --toastify-color-success: var(--primary);
+    --toastify-color-warning: var(--orange);
+    --toastify-color-error: var(--danger);
+    --toastify-icon-color-info: var(--cyan);
+    --toastify-icon-color-success: var(--primary);
+    --toastify-icon-color-warning: var(--orange);
+    --toastify-icon-color-error: var(--danger);
+
+    color-scheme: dark;
+  }
+
+  body {
+    scrollbar-gutter: stable;
+    color: var(--t-primary);
+    background-color: var(--b-primary);
+
+    &:has(dialog[open]) {
+      overflow: hidden;
+      overscroll-behavior: contain;
+      position: relative;
+      pointer-events: none;
+    }
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-tertiary;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-button {
+    @apply text-primary transition-colors hover:text-i-hover;
+  }
+
+  .spin {
+    animation: 1.5s spin infinite;
+  }
+
+  .help-message {
+    @apply mt-2 text-md font-medium text-t-secondary;
+  }
+
+  .tool-tip {
+    @apply relative;
+
+    &::after {
+      content: attr(aria-label);
+      @apply absolute right-0 top-0 -translate-y-full translate-x-1/2 whitespace-nowrap rounded-xl border border-bd-primary/50 bg-b-primary px-3 py-2 text-sm font-medium text-t-primary opacity-0 transition-opacity;
+    }
+    &:hover::after {
+      @apply opacity-100;
+    }
+  }
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+}
+
+/* 토스트 스타일 수정 */
+.Toastify__toast {
+  @apply pr-5 text-md;
+}

@@ -1,0 +1,39 @@
+@keyframes open {
+  from {
+    transform: translate(0, -20px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.modal {
+  @apply pointer-events-auto fixed inset-0 z-50 h-screen max-h-dvh w-full overflow-y-auto bg-black/50 backdrop-blur-sm sm:py-8;
+
+  &[open] {
+    animation: open 0.3s forwards;
+  }
+
+  .container {
+    @apply fixed inset-0 m-auto mb-0 h-fit max-h-[calc(100%-24px)] w-[384px] max-w-full overflow-y-auto rounded-xl rounded-b-none bg-b-secondary px-[52px] pb-8 pt-12 text-md font-medium text-t-secondary sm:mb-auto sm:max-h-none sm:rounded-b-xl;
+
+    &.top {
+      @apply sm:relative;
+    }
+  }
+  .title {
+    @apply mb-2 text-center text-lg font-medium text-t-primary;
+  }
+  .btnClose {
+    @apply absolute right-4 top-4 text-ic-primary transition-colors hover:text-ic-inverse;
+  }
+  .footer {
+    @apply mt-6 flex gap-2;
+
+    & > * {
+      @apply flex-1;
+    }
+  }
+}

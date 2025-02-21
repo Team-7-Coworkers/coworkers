@@ -1,6 +1,14 @@
 import type { Metadata } from 'next';
+import { Slide, ToastContainer } from 'react-toastify';
+
 import siteMetadata from '@/data/siteMetadata';
-import './globals.css';
+import KakaoScript from './utils/KakaoScript';
+import { Providers } from './libs/providers';
+import { TOAST_CLOSE_TIME } from '@constants/times';
+
+import GNB from './components/Gnb';
+
+import './styles/globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +25,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="scroll-smooth">{children}</body>
+      <head>
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
+        />
+      </head>
+      <body className="scroll-smooth pt-[var(--header-height)]">
+        <Providers>
+          <GNB />
+          {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={TOAST_CLOSE_TIME.default}
+            theme="dark"
+            transition={Slide}
+          />
+          <KakaoScript />
+        </Providers>
+      </body>
     </html>
   );
 }
