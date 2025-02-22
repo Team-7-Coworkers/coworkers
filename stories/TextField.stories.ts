@@ -4,6 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 const meta: Meta<typeof TextField> = {
   title: 'Components/TextField',
   component: TextField,
+  tags: ['autodocs'],
   argTypes: {
     type: {
       control: { type: 'radio' },

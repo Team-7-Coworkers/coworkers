@@ -7,6 +7,7 @@ const meta = {
   component: CircleGraph,
   tags: ['autodocs'],
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
         component: '원형 그래프 컴포넌트',
