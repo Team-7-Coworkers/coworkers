@@ -24,7 +24,9 @@ export const Default: Story = {
     const DropDownStoryBook = () => {
       return (
         <Dropdown>
-          <Dropdown.Button>드롭다운 버튼</Dropdown.Button>
+          <Dropdown.Button className="text-black">
+            드롭다운 버튼
+          </Dropdown.Button>
           <Dropdown.Menu
             className="right-0 top-[30px]"
             animationType={undefined}
