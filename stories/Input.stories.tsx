@@ -40,7 +40,7 @@ export const Default: Story = {
     type: 'text',
     placeholder: '기본 인풋입니다.',
     value: '',
-    errorMessage: '유효하지 않은 입력입니다.',
+    // errorMessage: '유효하지 않은 입력입니다.',
   },
 };
 
