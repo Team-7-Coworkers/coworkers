@@ -60,58 +60,47 @@ npm run dev
   <tbody>
     <tr>
       <td align="center" style="vertical-align: top; padding: 10px;">
-        <a href="https://github.com/Donghunn-Lee">
           <img src="https://avatars.githubusercontent.com/Donghunn-Lee" width="100" height="100"/>
-        </a>
       </td>
       <td style="vertical-align: top; padding: 10px;">
-        <strong>이동훈 (팀장, FrontEnd)</strong><br><br>
+        <strong><a href="https://github.com/Donghunn-Lee">이동훈 (팀장, FrontEnd)</a></strong><br><br>
         GNB/SideBar, 로그인/회원가입, 계정 설정 페이지
       </td>
     </tr>
     <tr>
       <td align="center" style="vertical-align: top; padding: 10px;">
-        <a href="https://github.com/1022gusl">
           <img src="https://avatars.githubusercontent.com/1022gusl" width="100" height="100"/>
-        </a>
       </td>
       <td style="vertical-align: top; padding: 10px;">
-        <strong>박연학 (FrontEnd)</strong><br><br>
+        <strong><a href="https://github.com/1022gusl">박연학 (FrontEnd)</a></strong><br><br>
         버튼 컴포넌트, 인풋 컴포넌트, 할 일 목록 페이지
       </td>
     </tr>
     <tr>
       <td align="center" style="vertical-align: top; padding: 10px;">
-        <a href="https://github.com/Jiwoo11111">
           <img src="https://avatars.githubusercontent.com/Jiwoo11111" width="100" height="100"/>
-        </a>
       </td>
       <td style="vertical-align: top; padding: 10px;">
-        <strong>석지우 (FrontEnd)</strong><br><br>
+        <strong><a href="https://github.com/Jiwoo11111">석지우 (FrontEnd)</a></strong><br><br>
         전체 API 함수, 이미지 업로드 컴포넌트, 자유게시판 페이지
       </td>
     </tr>
     <tr>
       <td align="center" style="vertical-align: top; padding: 10px;">
-        <a href="https://github.com/haksoo0918">
           <img src="https://avatars.githubusercontent.com/haksoo0918" width="100" height="100"/>
-        </a>
       </td>
       <td style="vertical-align: top; padding: 10px;">
-        <strong>이학수 (FrontEnd)</strong><br><br>
+        <strong><a href="https://github.com/haksoo0918">이학수 (FrontEnd)</a></strong><br><br>
         공통 스타일 설정, 모달 컴포넌트, 팀페이지 (추가, 수정, 초대)
       </td>
     </tr>
     <tr>
       <td align="center" style="vertical-align: top; padding: 10px;">
-        <a href="https://github.com/Jeongbin1">
           <img src="https://avatars.githubusercontent.com/Jeongbin1" width="100" height="100"/>
-        </a>
       </td>
       <td style="vertical-align: top; padding: 10px;">
-        <strong>한정빈 (FrontEnd)</strong><br><br>
-        textfield 컴포넌트, 드롭다운, 랜딩페이지, 히스토리페이지
-        , 팀 소속 없음 페이지
+        <strong><a href="https://github.com/Jeongbin1">한정빈 (FrontEnd)</a></strong><br><br>
+        textfield 컴포넌트, 드롭다운, 랜딩페이지, 히스토리페이지, 팀 소속 없음 페이지
       </td>
     </tr>
   </tbody>
